@@ -1,6 +1,6 @@
 
 
-library(transport)
+library(transport) # contains wasserstein1d
 library(eva)
 
 
@@ -26,8 +26,8 @@ wasserstein.test.sp<-function(x,y,seedex,permnum){
     z<-c(x,y)
     nsample<-length(z)
     bsn<-permnum
-    shuffle <- sapply(1:bsn, function(j) sample(z, nsample, replace = FALSE))
     
+    shuffle <- sapply(1:bsn, function(j) sample(z, nsample, replace = FALSE))
     wass.val<-sapply(1:bsn,function (k) {wasserstein1d(shuffle[1:length(x),k],shuffle[(length(x)+1):nsample,k],p=2)})
     wass.val<-wass.val^2
     
@@ -195,8 +195,8 @@ wasserstein.test.sp<-function(x,y,seedex,permnum){
 ########asymptotic
 
 ##load asymptotic reference distribution
-load("/Users/schefzik/Desktop/Simulations/L2_Asymptotics/ref_distr.dat")
-
+#load("/Users/schefzik/Desktop/Simulations/L2_Asymptotics/ref_distr.dat")
+load("/home/julian/Desktop/scrna-diffexpr/diffexpR/ref_distr.dat")
 
 ##function for p-value for one-sided test (as test statistic is always >=0)
 #pval.one<-function(d){
@@ -227,7 +227,7 @@ wasserstein.test.asy<-function(x,y){
     
     trf.int<-(1/length(pr))*sum(parts.trf)
     test.stat<-(length(x)*length(y)/(length(x)+length(y)))*trf.int
-    
+    print(test.stat)
     #pvalue.wass<-pval.one(test.stat)
     pvalue.wass<-1-empcdf.ref(test.stat)
     
@@ -331,5 +331,5 @@ v<-rnorm(500)
 w<-rnorm(500,1,2)
 
 wasserstein.test(v,w,method="SP")
-wasserstein.test(v,w,seedex=34,permnum=1000,method="SP")
+wasserstein.test(v,w,seedex=34,permnum=10000,method="SP")
 wasserstein.test(v,w,method="asy")
