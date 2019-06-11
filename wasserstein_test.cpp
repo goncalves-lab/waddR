@@ -1,12 +1,15 @@
+// [[Rcpp::depends(RcppArmadillo)]]
 #include <algorithm>
 #include <iostream>
-#include <Rcpp.h> 
 #include <math.h>
+#include <RcppArmadillo.h>
+#include <RcppArmadilloExtensions/sample.h>
 
 using namespace std;
 using namespace Rcpp;
 
 #define END "\n";
+
 
 /*
 Returns the size of an R NumericVector object or -1 if it is null.
@@ -55,6 +58,7 @@ NumericVector numericVectorRep(int n, double e)
 
 	return x;
 }
+
 
 /*
 Returns the average of a NumericVector object that is not Null
@@ -114,8 +118,70 @@ double numericVectorSum(NumericVector x)
 
 }
 
+
+/*
+Returns a random permutation of a given input Vector.
+@param x :	Numericvector
+@param replace :	boolean representing the use of inplace-permutation
+@param prob :	Probability Vector, assigning to each element of input vector x
+				a probability of selecting it in a pseudo-random sample
+*/
+// [[Rcpp::export]]
+NumericVector permutate(NumericVector x, 
+						bool replace=false,
+						NumericVector prob = NumericVector::create())
+{
+
+	int size = x.size();
+	NumericVector out = RcppArmadillo::sample(x, size, replace, prob);
+
+	return out;
+}
+
+
+/*
+Returns a given number of permutations of a given input NumericVector
+object. 
+@param x :	NumericVector representing a vector that is to be permutated
+@param num_permutations : 	Int representing the number of permutations
+							that are to be performed.
+*/
+// [[Rcpp::export]]
+List permutations(NumericVector x, int num_permutations) 
+{
+    
+	// Store permutations in List with predefined length
+    List permutations_list(num_permutations);
+
+    /* dont use names for perfomance
+    // Vector for column names
+    CharacterVector namevec;
+    string col_name_prefix = "PERM";
+    */
+
+    bool replace = false;
+    NumericVector prob = NumericVector::create();
+
+    for (int i=0; i<num_permutations; i++){
+
+    	permutations_list[i] = permutate(x, replace, prob);
+    	/* dont use column names for performance
+    	namevec.push_back(col_name_prefix + string(0,(char) i ));
+    	*/
+    }
+
+    /*
+    permutations_list.attr("names") = namevec;
+    */
+    return permutations_list;
+}
+
+
 /*
 Returns the Wasserstein Metric of two input vectors a and b.
+Reimplementation in Cpp of the function wasserstein1d in the package transport.
+
+
 @param a : NumericVector a representing a distribution
 @param b : NumericVector b representing a distribution
 @param p : int p representing the exponent in the root mean squared difference
@@ -146,7 +212,9 @@ double wasserstein_metric(NumericVector a,
 		// in R: mean(abs(sort(b) - sort(a))^p)^(1/p)
 		NumericVector sorted_a = a.sort();
 		NumericVector sorted_b = b.sort();
-		NumericVector sq_abs_diff = pow(numericVectorAbs(sorted_b - sorted_a), p);
+		NumericVector sq_abs_diff = pow(
+			numericVectorAbs(sorted_b - sorted_a),
+			p);
 		double mrsad = pow(numericVectorMean(sq_abs_diff), 1/p);
 		return mrsad;
 	
@@ -172,11 +240,4 @@ double wasserstein_metric(NumericVector a,
 	NumericVector ua(m);
 	ua = (wa / numericVectorSum(wa));
 
-}
-
-
-// [[Rcpp::export]]
-NumericVector applyToPermutations(NumericVector x, Function f) {
-    NumericVector res = f(x);
-    return res;
 }
