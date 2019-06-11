@@ -1,0 +1,11 @@
+Package: wasserstein_test
+Type: Package
+Title: What the Package Does in One 'Title Case' Line
+Version: 1.0
+Date: 2019-06-11
+Author: Roman Schefzik
+Maintainer: Roman Schefzik <your@email.com>
+Description: One paragraph description of what the package does as one or more full sentences.
+License: MIT
+Imports: methods, Rcpp (>= 1.0.1)
+LinkingTo: Rcpp
