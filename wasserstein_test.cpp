@@ -1,10 +1,11 @@
 // [[Rcpp::depends(RcppArmadillo)]]
-#include <algorithm>
 #include <iostream>
+#include <armadillo>
 #include <math.h>
 #include <RcppArmadillo.h>
 #include <RcppArmadilloExtensions/sample.h>
 
+using namespace arma;
 using namespace std;
 using namespace Rcpp;
 
@@ -46,9 +47,8 @@ bool is_empty(Nullable<NumericVector> x_)
 Returns a NumericVector object of size n, filled with e.
 @param n : size of the NumericVector that is to be created
 @param e : element to initialize the ne NumericVector object with
-*/
 // [[Rcpp::export]]
-NumericVector numericVectorRep(int n, double e)
+NumericVector rep(int n, double e)
 {
 	NumericVector x(n);
 
@@ -57,15 +57,14 @@ NumericVector numericVectorRep(int n, double e)
 	}
 
 	return x;
-}
-
+}*/
 
 /*
 Returns the average of a NumericVector object that is not Null
 @param x : NumericVector object
 */
 // [[Rcpp::export]]
-double numericVectorMean(NumericVector x)
+double mean(NumericVector x)
 {	
 	int vector_size = x.size();
 	double sum = 0;
@@ -88,7 +87,7 @@ a given input vector.
 @param x : NumericVector object, not Null
 */
 // [[Rcpp::export]]
-NumericVector numericVectorAbs(NumericVector x) 
+NumericVector abs(NumericVector x) 
 {	
 	NumericVector abs_vector(x.size());
 	for (int i=0; i<x.size(); i++)
@@ -103,9 +102,8 @@ NumericVector numericVectorAbs(NumericVector x)
 /*
 Returns the sum of all elements in a NumericVector object.
 @param x : NumericVector object
-*/
 // [[Rcpp::export]]
-double numericVectorSum(NumericVector x)
+double sum(NumericVector x)
 {
 	double total = 0;
 
@@ -117,63 +115,116 @@ double numericVectorSum(NumericVector x)
 	return total;
 
 }
+*/
 
 
 /*
-Returns a random permutation of a given input Vector.
-@param x :	Numericvector
-@param replace :	boolean representing the use of inplace-permutation
-@param prob :	Probability Vector, assigning to each element of input vector x
-				a probability of selecting it in a pseudo-random sample
-*/
+Returns the sum of all elements in a NumericVector object.
+@param x : NumericVector object
 // [[Rcpp::export]]
-NumericVector permutate(NumericVector x, 
-						bool replace=false,
-						NumericVector prob = NumericVector::create())
+double sum(IntegerVector x)
 {
+	double total = 0;
 
-	int size = x.size();
-	NumericVector out = RcppArmadillo::sample(x, size, replace, prob);
+	IntegerVector::iterator it;
+	for(it = x.begin(); it != x.end(); ++it) {
+		total += *it;
+	}
+
+	return total;
+
+}*/
+
+
+/* Returns the cumulative sums of a NumericalVector object.
+@param x :	NumericalVector
+*/
+NumericVector cumSum(NumericVector x)
+{
+	NumericVector out(x.size());
+
+	for (int i=0; i<x.size(); i++){
+		if (i==0){
+			out[i] = x[i];
+		} else {
+			out[i] = x[i] + x[i-1];
+		}
+	}
 
 	return out;
 }
 
 
 /*
-Returns a given number of permutations of a given input NumericVector
+Returns permutations of a given NumericVector as columns in a NumericMatrix
 object. 
 @param x :	NumericVector representing a vector that is to be permutated
 @param num_permutations : 	Int representing the number of permutations
 							that are to be performed.
 */
 // [[Rcpp::export]]
-List permutations(NumericVector x, int num_permutations) 
+NumericMatrix permutations(NumericVector x, const int num_permutations) 
 {
-    
-	// Store permutations in List with predefined length
-    List permutations_list(num_permutations);
 
-    /* dont use names for perfomance
-    // Vector for column names
-    CharacterVector namevec;
-    string col_name_prefix = "PERM";
-    */
+    // Matrix to store all permutations as columns
+    int n_rows = x.size();
+    int n_cols = num_permutations;
+    NumericMatrix m(n_rows, n_cols);
 
-    bool replace = false;
-    NumericVector prob = NumericVector::create();
+	// create permutations
+    for (int i=0; i<n_cols; i++){
 
-    for (int i=0; i<num_permutations; i++){
+    	m(_, i) = sample(x, n_rows, false);
 
-    	permutations_list[i] = permutate(x, replace, prob);
-    	/* dont use column names for performance
-    	namevec.push_back(col_name_prefix + string(0,(char) i ));
-    	*/
     }
 
-    /*
-    permutations_list.attr("names") = namevec;
-    */
-    return permutations_list;
+    return m;
+}
+
+
+/*
+Return a given number of permutations of a given Vector object as 
+columns in a Matrix.
+@param x :	arma::vec oject
+*/
+mat permutations_internal(vec x, const int num_permutations)
+{
+
+	// Matrix to store all permutations as columns
+	const int n_rows = x.size();
+	const int n_cols = num_permutations;
+	mat m(n_rows, n_cols);
+
+	for (int i=0; i<n_cols; i++){
+		m.col(i) = shuffle(x);
+	}
+
+	return m;
+}
+
+
+/*
+Wrapper around permutations_internal for testing in R.
+*/
+// [[Rcpp::export]]
+NumericMatrix permutations_internal_test_export(
+	NumericVector x, const int num_permutations)
+{
+	// convert input NumericVector to arma::vec
+	vec input_vec(x.size());
+	for (int i=0; i<x.size(); i++) {input_vec[i] = x[i];}
+
+	// convert outpu arma::mat to NumericMatrix
+	mat result_mat(x.size(), num_permutations);
+	result_mat = permutations_internal(input_vec, num_permutations);
+
+	NumericMatrix output_matrix(x.size(), num_permutations);
+	for (int i=0; i<x.size(); i++){
+		for (int j=0; j<num_permutations; j++){
+			output_matrix(i,j) = result_mat(i,j);
+		}
+	}
+	return output_matrix;
 }
 
 
@@ -213,9 +264,9 @@ double wasserstein_metric(NumericVector a,
 		NumericVector sorted_a = a.sort();
 		NumericVector sorted_b = b.sort();
 		NumericVector sq_abs_diff = pow(
-			numericVectorAbs(sorted_b - sorted_a),
+			abs(sorted_b - sorted_a),
 			p);
-		double mrsad = pow(numericVectorMean(sq_abs_diff), 1/p);
+		double mrsad = pow(mean(sq_abs_diff), 1/p);
 		return mrsad;
 	
 	}
@@ -226,18 +277,31 @@ double wasserstein_metric(NumericVector a,
 	NumericVector wa;
 	NumericVector wb;
 	if (wa_.isNull()) {
-
-		wa = numericVectorRep(m, default_weight);
-		wb = NumericVector(wb_);
-	
-	} else { // wb_ is null
-
-		wa = NumericVector(wa_);
-		wb = numericVectorRep(n, default_weight);
-	
+		wa = rep(m, default_weight);
+	} 
+	if (wb_.isNull()) {
+		wb = rep(n, default_weight);
 	}
 	
-	NumericVector ua(m);
-	ua = (wa / numericVectorSum(wa));
+	NumericVector 	ua(m),
+					ub(n),
+					cua(m),
+					cub(n);
+	IntegerVector arep(m), brep(n);
+
+	ua = (wa / sum(wa));//.erase(m);
+	ub = (wb / sum(wb));//.erase(n);
+	
+	cua = cumSum(ua);
+	cub = cumSum(ub);
+	
+	arep = table(ua);
+	brep = table(ub);
+
+	int len_aa = sum(arep);
+	int len_bb = sum(brep);
+
+
+	return (double) 0.1;
 
 }
