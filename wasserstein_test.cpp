@@ -232,7 +232,6 @@ NumericMatrix permutations_internal_test_export(
 Returns the Wasserstein Metric of two input vectors a and b.
 Reimplementation in Cpp of the function wasserstein1d in the package transport.
 
-
 @param a : NumericVector a representing a distribution
 @param b : NumericVector b representing a distribution
 @param p : int p representing the exponent in the root mean squared difference
