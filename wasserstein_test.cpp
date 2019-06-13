@@ -44,22 +44,6 @@ bool is_empty(Nullable<NumericVector> x_)
 
 
 /*
-Returns a NumericVector object of size n, filled with e.
-@param n : size of the NumericVector that is to be created
-@param e : element to initialize the ne NumericVector object with
-// [[Rcpp::export]]
-NumericVector rep(int n, double e)
-{
-	NumericVector x(n);
-
-	for(int i=0; i<x.size(); i++) {
-		x[i] = e;
-	}
-
-	return x;
-}*/
-
-/*
 Returns the average of a NumericVector object that is not Null
 @param x : NumericVector object
 */
@@ -99,51 +83,18 @@ NumericVector abs(NumericVector x)
 }
 
 
-/*
-Returns the sum of all elements in a NumericVector object.
-@param x : NumericVector object
-// [[Rcpp::export]]
-double sum(NumericVector x)
-{
-	double total = 0;
-
-	NumericVector::iterator it;
-	for(it = x.begin(); it != x.end(); ++it) {
-		total += *it;
-	}
-
-	return total;
-
-}
-*/
-
-
-/*
-Returns the sum of all elements in a NumericVector object.
-@param x : NumericVector object
-// [[Rcpp::export]]
-double sum(IntegerVector x)
-{
-	double total = 0;
-
-	IntegerVector::iterator it;
-	for(it = x.begin(); it != x.end(); ++it) {
-		total += *it;
-	}
-
-	return total;
-
-}*/
-
-
 /* Returns the cumulative sums of a NumericalVector object.
 @param x :	NumericalVector
 */
-NumericVector cumSum(NumericVector x)
+NumericVector cumSum(NumericVector x, const int last_index=0)
 {
-	NumericVector out(x.size());
+	const int upper = ((last_index > 0) && (last_index <= x.size()) 
+						? last_index
+						: x.size());
 
-	for (int i=0; i<x.size(); i++){
+	NumericVector out(upper);
+
+	for (int i=0; i<upper; i++){
 		if (i==0){
 			out[i] = x[i];
 		} else {
@@ -154,6 +105,110 @@ NumericVector cumSum(NumericVector x)
 	return out;
 }
 
+
+/* Returns a weighted NumericVector of a given input vector.
+@param x :	NumericVector object with the elements that are to be weighted
+@param cua :	NumericVector object with cumulative distribution values of
+				the weights for x
+@param cub :	NumericVector object with cumulative distribution values of
+				the weights for a reference vector y
+*/
+// [[Rcpp::export]]
+NumericVector rep_weighted(NumericVector x,
+						   IntegerVector freq_table,
+						   int len_x=-1)
+{
+	// build a new vector x_weighted, that repeats every element at position i
+	// in x according to the frequency given at position i in freq_table
+	int length = (len_x != -1) ? len_x : sum(freq_table);
+	NumericVector x_weighted(length);
+
+	// iterate over all fields of the new weighted vector
+	NumericVector::iterator it = x_weighted.begin();
+	NumericVector::iterator it_end = x_weighted.end();
+
+	if(it != it_end) {
+
+    	// iterator over all elements in the original vector
+    	for(int i=0; i<x.size(); i++) {
+
+    		// iterator over the number of repeats assigned 
+    		// to each element in the original vector
+    		for (int n=0; n<freq_table[i]; n++) {
+    			
+    			// copy value from original vector
+    			*it = x[i];
+
+    			// increment the iterator
+    			++it;
+    		}
+    	}
+    }
+
+    return x_weighted;
+
+}
+
+
+/* Given a NumericVector x and a NumericVector of interval breaks,
+a table with the number of elements in x that fall into each of the
+intervals is returned.
+@param datavec :	NumericVector with elements
+@param interval_breaks : 	NumericVector with n interval_borders that are
+					interpreted as interval breaks: 
+					(-Inf, breaks[0]], (breaks[0], breaks[1]), ... , (breaks(n), Inf) 
+*/
+// [[Rcpp::export]]
+IntegerVector interval_table(NumericVector datavec,
+							NumericVector interval_breaks,
+							const int init_value=0)
+{
+	// count the elements in cua that occur
+	// in the intervals defined by cub
+	IntegerVector freq_table(interval_breaks.size()+1, init_value);
+
+	double lower_bound(- numeric_limits<double>::infinity());
+	double upper_bound = interval_breaks[0];
+	int data_i = 0, interval_i=0;
+
+	// iteration over the intervals (lower_bond, upper_bound]
+	// defined by interval_breaks
+	for (; interval_i<interval_breaks.size()+1; interval_i++){
+
+
+		// iteration over the elements in cua, to count
+		// how many elemtents fall into each of the intervals
+		// defined by interval_breaks
+		while (data_i < datavec.size()) {
+
+			// if value at data_i in cua lies in interval
+			// (lower_bound, upper_bound] 
+			if ((datavec[data_i] > lower_bound) 
+				&& (datavec[data_i] <= upper_bound)){ 
+
+				// => increment the freq_table count for that interval
+				// and don't check value at data_i in cua again
+				++data_i;
+				++freq_table[interval_i];
+
+			} else {
+				break;
+			}
+		}
+
+		// update the interval:
+		if (interval_i == interval_breaks.size()-1) {
+			upper_bound = - numeric_limits<double>::infinity();
+			lower_bound = interval_breaks[interval_breaks.size()];
+		}
+		else {
+			upper_bound = interval_breaks[interval_i + 1];
+			lower_bound = interval_breaks[interval_i];
+		}
+	}
+
+	return freq_table;
+}
 
 /*
 Returns permutations of a given NumericVector as columns in a NumericMatrix
@@ -282,23 +337,28 @@ double wasserstein_metric(NumericVector a,
 		wb = rep(n, default_weight);
 	}
 	
-	NumericVector 	ua(m),
-					ub(n),
-					cua(m),
-					cub(n);
-	IntegerVector arep(m), brep(n);
+	NumericVector 	ua(m), ub(n), cua(m-1), cub(n-1);
+	IntegerVector a_rep, b_rep;
 
-	ua = (wa / sum(wa));//.erase(m);
-	ub = (wb / sum(wb));//.erase(n);
+	// normalize the weights to add up to 1
+	ua = (wa / sum(wa));
+	ub = (wb / sum(wb));
 	
-	cua = cumSum(ua);
-	cub = cumSum(ub);
+	// cumulative distribution without the last value
+	// => last value will be considered as an open interval to Infinity
+	cua = cumSum(ua, m-1);
+	cub = cumSum(ub, n-1);
 	
-	arep = table(ua);
-	brep = table(ub);
+	a_rep = interval_table(cub, cua, 1);
+	b_rep = interval_table(cua, cub, 1);
 
-	int len_aa = sum(arep);
-	int len_bb = sum(brep);
+	const int len_a_weighted = sum(a_rep);
+	const int len_b_weighted = sum(b_rep);
+	NumericVector a_weighted(len_b_weighted);
+	NumericVector b_weighted(len_a_weighted);
+	//a_weighted = rep_weighted(a, a_rep);
+	//b_weighted = rep_weighted(b, b_rep);
+
 
 
 	return (double) 0.1;
