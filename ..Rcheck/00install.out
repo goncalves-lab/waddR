@@ -1,0 +1,14 @@
+* installing *source* package ‘wassersteinTest’ ...
+** using staged installation
+** libs
+Warning: no source files found
+** R
+** data
+** byte-compile and prepare package for lazy loading
+Warning in readChar(con, 5L, useBytes = TRUE) :
+  cannot open compressed file '/home/julian/Desktop/scrna-diffexpr/diffexpR/ref_distr.dat', probable reason 'No such file or directory'
+Error in readChar(con, 5L, useBytes = TRUE) : cannot open the connection
+Error: unable to load R code in package ‘wassersteinTest’
+Execution halted
+ERROR: lazy loading failed for package ‘wassersteinTest’
+* removing ‘/home/julian/Desktop/scrna-diffexpr/diffexpR/..Rcheck/wassersteinTest’
