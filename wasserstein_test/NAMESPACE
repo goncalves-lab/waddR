@@ -1,3 +1,0 @@
-useDynLib(wasserstein_test, .registration=TRUE)
-exportPattern("^[[:alpha:]]+")
-import(methods, Rcpp)

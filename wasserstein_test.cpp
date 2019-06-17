@@ -86,6 +86,7 @@ NumericVector abs(NumericVector x)
 /* Returns the cumulative sums of a NumericalVector object.
 @param x :	NumericalVector
 */
+//[[Rcpp::export]]
 NumericVector cumSum(NumericVector x, const int last_index=0)
 {
 	const int upper = ((last_index > 0) && (last_index <= x.size()) 
@@ -98,7 +99,7 @@ NumericVector cumSum(NumericVector x, const int last_index=0)
 		if (i==0){
 			out[i] = x[i];
 		} else {
-			out[i] = x[i] + x[i-1];
+			out[i] = x[i] + out[i-1];
 		}
 	}
 
@@ -149,6 +150,32 @@ NumericVector rep_weighted(NumericVector x,
 
 }
 
+
+/* Returns a NumericVector that represents the concatenation of two input vectors
+@param x : 	NumericVector
+@param y :	NumericVector
+*/
+//[[Rcpp::export]]
+NumericVector concat(NumericVector x, NumericVector y)
+{
+	NumericVector out(x.size() + y.size());
+
+	NumericVector::iterator x_it = x.begin();
+	NumericVector::iterator x_it_end = x.end();
+	NumericVector::iterator y_it = y.begin();
+	NumericVector::iterator y_it_end = y.end();
+	NumericVector::iterator out_it = out.begin();
+	NumericVector::iterator out_it_end = out.end();
+
+	for(; x_it != x_it_end; ++x_it, ++out_it){
+		*out_it = *x_it;
+	}
+	for(; y_it != y_it_end; ++y_it, ++out_it){
+		*out_it = *y_it;
+	}
+
+	return out;
+}
 
 /* Given a NumericVector x and a NumericVector of interval breaks,
 a table with the number of elements in x that fall into each of the
@@ -299,9 +326,9 @@ double wasserstein_metric(NumericVector a,
 						  Nullable<NumericVector> wa_=R_NilValue, 
 						  Nullable<NumericVector> wb_=R_NilValue) {
 
-	int m = nullable_size(a);
-	int n = nullable_size(b);
-
+	const int m = nullable_size(a);
+	const int n = nullable_size(b);
+  
 	if (m < 1) {
 		throw "Invalid input! a must not be empty";
 	}
@@ -327,16 +354,16 @@ double wasserstein_metric(NumericVector a,
 
 	// At least one weight vector is given
 	// If only one weight vector is undefined, set all its weights to 1
-	int default_weight = 1;
-	NumericVector wa;
-	NumericVector wb;
-	if (wa_.isNull()) {
-		wa = rep(m, default_weight);
-	} 
-	if (wb_.isNull()) {
-		wb = rep(n, default_weight);
+	const int default_weight = 1;
+	NumericVector wa(a.size(), default_weight);
+	NumericVector wb(b.size(), default_weight);
+	if (!wa_.isNull()) {
+		wa = wa_;
 	}
-	
+	if (!wb_.isNull()) {
+  	wb = wb_;
+	}
+
 	NumericVector 	ua(m), ub(n), cua(m-1), cub(n-1);
 	IntegerVector a_rep, b_rep;
 
@@ -356,11 +383,23 @@ double wasserstein_metric(NumericVector a,
 	const int len_b_weighted = sum(b_rep);
 	NumericVector a_weighted(len_b_weighted);
 	NumericVector b_weighted(len_a_weighted);
-	//a_weighted = rep_weighted(a, a_rep);
-	//b_weighted = rep_weighted(b, b_rep);
+	a_weighted = rep_weighted(a.sort(), a_rep);
+	b_weighted = rep_weighted(b.sort(), b_rep);
 
+	NumericVector uu0(cua.size() + cub.size());
+	NumericVector uu1(cua.size() + cub.size());
 
+	uu0 = concat(cua, cub);
+	uu0.insert(0,0);
+	uu1 = concat(cua, cub);
+	uu1.push_back(1);
 
-	return (double) 0.1;
+	double wsum = sum( (uu1 - uu0) * pow(abs(b_weighted - a_weighted), p));
+	double areap = pow(wsum, (1/p));
 
+	cout << "(uu1 - uu0) = " << NumericVector(uu1 - uu0) << END;
+	cout << "b_weighted - a_weighted = " << NumericVector(b_weighted - a_weighted) << END;
+	cout << "(uu1 - uu0) * abs(b_weighted - a_weighted) = " << NumericVector((uu1 - uu0) * abs(b_weighted - a_weighted)) << END;
+	cout << "sum( (uu1 - uu0) * pow(abs(b_weighted - a_weighted), p) = "<< sum( (uu1 - uu0) * pow(abs(b_weighted - a_weighted), p)) << END;
+	return areap;
 }
