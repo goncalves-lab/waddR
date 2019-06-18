@@ -1,14 +1,18 @@
-
-library(transport) # contains wasserstein1d
 library(eva)
-sourceCpp("wasserstein_test.cpp")
+library(Rcpp)
+#sourceCpp(system.file("src/wasserstein_test.cpp", package = "diffexpR"))
+sourceCpp("src/wasserstein_test.cpp")
 
 
+# load asymptotic reference distribution
+# contains:
+#   value.integral  : a distribution
+#   empcdf.ref      : an empirical cumulative distribution function
+#                     based on the values in value.integral
+#load(system.file("data/ref_distr.dat", package = "diffexpR"))
+load("data/ref_distr.dat")
 
-###########################################
-########################################
-########semi-parametric
-
+# Semi-parametric wasserstein test
 wasserstein.test.sp<-function(x,y,seedex,permnum){
   
   set.seed(seedex)  
@@ -28,7 +32,8 @@ wasserstein.test.sp<-function(x,y,seedex,permnum){
     bsn<-permnum
 
     shuffle <- permutations(z, n = bsn)
-    wass.val<-sapply(1:bsn,function (k) {wasserstein1d(shuffle[1:length(x),k],shuffle[(length(x)+1):nsample,k],p=2)})
+    #wass.val<-sapply(1:bsn,function (k) {wasserstein1d(shuffle[1:length(x),k],shuffle[(length(x)+1):nsample,k],p=2)})
+    wass.val <- apply(shuffle, 2, function (k) {wasserstein_metric(k[1:length(x)], k[(length(x)+1):5], p=2)})
     wass.val<-wass.val^2
     
     
@@ -177,26 +182,7 @@ wasserstein.test.sp<-function(x,y,seedex,permnum){
 }
 
 
-
-
-###########################################
-########################################
-########asymptotic
-
-##load asymptotic reference distribution
-#load("/Users/schefzik/Desktop/Simulations/L2_Asymptotics/ref_distr.dat")
-load("/home/julian/Desktop/scrna-diffexpr/diffexpR/ref_distr.dat")
-
-##function for p-value for one-sided test (as test statistic is always >=0)
-#pval.one<-function(d){
-#  output<-1-empcdf.ref(d)
-#  return(output)    
-#}
-
-
-
-
-
+# Asymptotic wasserstein test
 wasserstein.test.asy<-function(x,y){
   
   set.seed(24)  
@@ -286,9 +272,8 @@ wasserstein.test.asy<-function(x,y){
 
 
 
-###################################
-#######overall function
-
+# Wasserstein test wrapper function, exposed for this package
+#' @export
 wasserstein.test<-function(x,y,seedex=24,permnum=10000,method){
   if(method=="SP")
     RES<-wasserstein.test.sp(x,y,seedex,permnum)
@@ -298,27 +283,3 @@ wasserstein.test<-function(x,y,seedex=24,permnum=10000,method){
 }
 
 
-
-
-####################################
-##################test example 1
-
-v<-rnorm(500)
-w<-rnorm(500)
-
-wasserstein.test(v,w,method="SP")
-wasserstein.test(v,w,seedex=34,permnum=1000,method="SP")
-wasserstein.test(v,w,method="asy")
-
-
-
-
-
-##################test example 2
-
-v<-rnorm(500)
-w<-rnorm(500,1,2)
-
-wasserstein.test(v,w,method="SP")
-wasserstein.test(v,w,seedex=34,permnum=10000,method="SP")
-wasserstein.test(v,w,method="asy")
