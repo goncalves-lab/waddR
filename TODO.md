@@ -1,7 +1,7 @@
 # TODO
 
 ## URGENT
-- [DONE] Substitute SourceCpp calls in the package. => (A) RCppExports.R (B) Vignettes
+- [x] Substitute SourceCpp calls in the package. => (A) RCppExports.R (B) Vignettes
 	* RCppExport.R references to functions is currently broken
 - [ ] Wasserstein Metric Rcpp implementation differs from wasserstein1d
 
