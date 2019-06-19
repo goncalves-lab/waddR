@@ -1,6 +1,12 @@
 # always keep buildignore
 !Rbuildignore
 
+# Rcpp compiled files
+src/*.o
+src/*.so
+src/*.dll
+src/symbols.rds
+
 # History files
 .Rhistory
 .Rapp.history
