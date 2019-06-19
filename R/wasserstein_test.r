@@ -1,8 +1,10 @@
 library(eva)
 
-source("./RcppExports.R")
+# testing which one works ....
+#source("~/Desktop/scrna-diffexpr/diffexpR/R/RcppExports.R")
+#source(system.file("R/RcppExports.R", package="diffexpR"))
 #library("Rcpp")
-#sourceCpp("../src/wasserstein_test.cpp")
+#sourceCpp(system.file("src","wasserstein_test.cpp", package="diffexpR"), package="diffexpR")
 
 
 # load asymptotic reference distribution
@@ -11,7 +13,7 @@ source("./RcppExports.R")
 #   empcdf.ref      : an empirical cumulative distribution function
 #                     based on the values in value.integral
 #load(system.file("data/ref_distr.dat", package = "diffexpR"))
-load("data/ref_distr.dat")
+load(system.file("data/ref_distr.dat", package="diffexpR"))
 
 # Semi-parametric wasserstein test
 wasserstein.test.sp<-function(x,y,seedex,permnum){
