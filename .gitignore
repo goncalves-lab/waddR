@@ -7,6 +7,10 @@ src/*.so
 src/*.dll
 src/symbols.rds
 
+# package builds
+build/*
+*.tar.gz
+
 # History files
 .Rhistory
 .Rapp.history
