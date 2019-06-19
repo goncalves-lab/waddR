@@ -1,9 +1,9 @@
 library("testthat")
-library("Rcpp")
-library("RcppArmadillo")
 
-
-sourceCpp("../src/wasserstein_test.cpp")
+source("../R/RcppExports.R")
+#library("Rcpp")
+#library("RcppArmadillo")
+#sourceCpp("../src/wasserstein_test.cpp")
 
 ##########################################################################
 ##            NUMERIC VECTOR FUNCTIONS EXPOSED TO R                     ##
@@ -196,7 +196,7 @@ test_that("wasserstein metric", {
 ##                    FUNCTIONS AVAILABLE ONLY FROM CPP                 ##
 ##########################################################################
 #### PERMUTATIONS OF ARMADILLO DATA STRUCTURES
-test_that("permutations internal datatypes",{
+test_that("permutations on cpp stl datatypes",{
   a <- rnorm(100)
   n <- 100
   df <- sapply(1:n, function(e) sample(a, replace = FALSE))

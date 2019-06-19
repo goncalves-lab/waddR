@@ -1,8 +1,8 @@
 library(eva)
-library(Rcpp)
 
-
-sourceCpp("src/wasserstein_test.cpp")
+source("./RcppExports.R")
+#library("Rcpp")
+#sourceCpp("../src/wasserstein_test.cpp")
 
 
 # load asymptotic reference distribution
