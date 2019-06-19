@@ -1,6 +1,7 @@
 library(eva)
 library(Rcpp)
-#sourceCpp(system.file("src/wasserstein_test.cpp", package = "diffexpR"))
+
+
 sourceCpp("src/wasserstein_test.cpp")
 
 
@@ -22,7 +23,7 @@ wasserstein.test.sp<-function(x,y,seedex,permnum){
   
   if (length(x)!=0&length(y)!=0){
     
-    value<-wasserstein1d(x,y,p=2)
+    value<-wasserstein_metric(x,y,p=2)
     value.sq<-value^2
     
     

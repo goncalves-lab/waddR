@@ -1,10 +1,6 @@
-
-
 library(BiocParallel)
-library(transport)
 library(eva)
-
-
+sourceCpp("src/wasserstein_test.cpp")
 
 
 ######
@@ -51,7 +47,7 @@ wasserstein.test.sp<-function(x,y,seedex,permnum){
   
   if (length(x)!=0&length(y)!=0){
     
-    value<-wasserstein1d(x,y,p=2)
+    value<-wasserstein_metric(x,y,p=2)
     value.sq<-value^2
     
     
@@ -59,9 +55,9 @@ wasserstein.test.sp<-function(x,y,seedex,permnum){
     z<-c(x,y)
     nsample<-length(z)
     bsn<-permnum
-    shuffle <- sapply(1:bsn, function(j) sample(z, nsample, replace = FALSE))
     
-    wass.val<-sapply(1:bsn,function (k) {wasserstein1d(shuffle[1:length(x),k],shuffle[(length(x)+1):nsample,k],p=2)})
+    shuffle <- permutations(z, n = bsn)
+    wass.val <- apply(shuffle, 2, function (k) {wasserstein_metric(k[1:length(x)], k[(length(x)+1):5], p=2)})
     wass.val<-wass.val^2
     
     
