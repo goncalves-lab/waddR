@@ -1,6 +1,7 @@
 library("testthat")
+library("diffexpR")
 
-source("../R/RcppExports.R")
+source(system.file("R/RcppExports.R", package="diffexpR"))
 #library("Rcpp")
 #library("RcppArmadillo")
 #sourceCpp("../src/wasserstein_test.cpp")

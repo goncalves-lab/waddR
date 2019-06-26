@@ -1,6 +1,5 @@
 library("testthat")
-
-source("/home/julian/Desktop/scrna-diffexpr/wasserstein_test.r")
+library("diffexpR")
 
 test_that("Example Run of Wasserstein Test", {
   v<-rnorm(500)
