@@ -27,41 +27,30 @@ int nullable_size(Nullable<NumericVector> x_ = R_NilValue)
 
 
 /*
-Returns true if a given NumericVector object contains fewer than 1
-elements or is of type R_Nilvalue.
-@param x_ : NumericVector object or R_NilValue
-*/
-bool is_empty(Nullable<NumericVector> x_)
-{
-	int size = nullable_size(x_);
-
-	if (size < 1) {
-		return true;
-	} else {
-		return false;
-	}
-}
-
-
-/*
 Returns the average of a NumericVector object that is not Null
 @param x : NumericVector object
 */
 // [[Rcpp::export]]
-double mean(NumericVector x)
+double mean(Nullable<NumericVector> x_)
 {	
-	int vector_size = x.size();
-	double sum = 0;
-	double result = 0;
 
-	for (int i = 0; i < vector_size; i++)
-	{
-		sum += x[i];
+	if(x_.isNull()) {
+		stop("Input Vector is Null");
+	} else {
+		NumericVector x (x_.get());
+		int vector_size = x.size();
+		double sum = 0;
+		double result = 0;
+
+		for (int i = 0; i < vector_size; i++)
+		{
+			sum += x[i];
+		}
+
+		result = sum / vector_size;
+		
+		return result;
 	}
-
-	result = sum / vector_size;
-	
-	return result;
 }
 
 
@@ -71,15 +60,22 @@ a given input vector.
 @param x : NumericVector object, not Null
 */
 // [[Rcpp::export]]
-NumericVector abs(NumericVector x) 
+NumericVector abs(Nullable<NumericVector> x_) 
 {	
-	NumericVector abs_vector(x.size());
-	for (int i=0; i<x.size(); i++)
-	{	
-		abs_vector[i] =  abs(x[i]);
+	if(x_.isNull()) {
+		stop("Input Vector is Null");
+	} else {
+		
+		NumericVector x (x_.get());
+		NumericVector abs_vector(x.size());
+		for (int i=0; i<x.size(); i++)
+		{	
+			abs_vector[i] =  abs(x[i]);
+		}
+		
+		return abs_vector;
 	}
-	
-	return abs_vector;
+
 }
 
 
@@ -87,23 +83,29 @@ NumericVector abs(NumericVector x)
 @param x :	NumericalVector
 */
 //[[Rcpp::export]]
-NumericVector cumSum(NumericVector x, const int last_index=0)
+NumericVector cumSum(Nullable<NumericVector> x_, const int last_index=0)
 {
-	const int upper = ((last_index > 0) && (last_index <= x.size()) 
-						? last_index
-						: x.size());
+	if(x_.isNull()) {
+		stop("Input Vector is Null");
+	} else {
 
-	NumericVector out(upper);
+		NumericVector x (x_.get());
+		const int upper = ((last_index > 0) && (last_index <= x.size()) 
+							? last_index
+							: x.size());
 
-	for (int i=0; i<upper; i++){
-		if (i==0){
-			out[i] = x[i];
-		} else {
-			out[i] = x[i] + out[i-1];
+		NumericVector out(upper);
+
+		for (int i=0; i<upper; i++){
+			if (i==0){
+				out[i] = x[i];
+			} else {
+				out[i] = x[i] + out[i-1];
+			}
 		}
-	}
 
-	return out;
+		return out;
+	}
 }
 
 
@@ -156,25 +158,35 @@ NumericVector rep_weighted(NumericVector x,
 @param y :	NumericVector
 */
 //[[Rcpp::export]]
-NumericVector concat(NumericVector x, NumericVector y)
-{
-	NumericVector out(x.size() + y.size());
+NumericVector concat(Nullable<NumericVector> x_, Nullable<NumericVector> y_)
+{	
+	if (x_.isNull()){
+		return y_.get();
+	} else if (y_.isNull()){
+		return x_.get();
+	} else { // both x_ and y_ are not null
 
-	NumericVector::iterator x_it = x.begin();
-	NumericVector::iterator x_it_end = x.end();
-	NumericVector::iterator y_it = y.begin();
-	NumericVector::iterator y_it_end = y.end();
-	NumericVector::iterator out_it = out.begin();
-	NumericVector::iterator out_it_end = out.end();
+		NumericVector x(x_.get());
+		NumericVector y(y_.get());
 
-	for(; x_it != x_it_end; ++x_it, ++out_it){
-		*out_it = *x_it;
+		NumericVector out(x.size() + y.size());
+
+		NumericVector::iterator x_it = x.begin();
+		NumericVector::iterator x_it_end = x.end();
+		NumericVector::iterator y_it = y.begin();
+		NumericVector::iterator y_it_end = y.end();
+		NumericVector::iterator out_it = out.begin();
+		NumericVector::iterator out_it_end = out.end();
+
+		for(; x_it != x_it_end; ++x_it, ++out_it){
+			*out_it = *x_it;
+		}
+		for(; y_it != y_it_end; ++y_it, ++out_it){
+			*out_it = *y_it;
+		}
+
+		return out;
 	}
-	for(; y_it != y_it_end; ++y_it, ++out_it){
-		*out_it = *y_it;
-	}
-
-	return out;
 }
 
 /* Given a NumericVector x and a NumericVector of interval breaks,
@@ -328,7 +340,7 @@ double wasserstein_metric(NumericVector a,
 
 	const int m = nullable_size(a);
 	const int n = nullable_size(b);
-  
+
 	if (m < 1) {
 		throw "Invalid input! a must not be empty";
 	}
@@ -347,7 +359,7 @@ double wasserstein_metric(NumericVector a,
 		NumericVector sq_abs_diff = pow(
 			abs(sorted_b - sorted_a),
 			p);
-		double mrsad = pow(mean(sq_abs_diff), 1/p);
+		double mrsad = std::pow((double) mean(sq_abs_diff), (double) 1/p);
 		return mrsad;
 	
 	}
@@ -361,7 +373,7 @@ double wasserstein_metric(NumericVector a,
 		wa = wa_;
 	}
 	if (!wb_.isNull()) {
-  	wb = wb_;
+		wb = wb_;
 	}
 
 	NumericVector 	ua(m), ub(n), cua(m-1), cub(n-1);
@@ -395,7 +407,7 @@ double wasserstein_metric(NumericVector a,
 	uu1.push_back(1);
 
 	double wsum = sum( (uu1 - uu0) * pow(abs(b_weighted - a_weighted), p));
-	double areap = pow(wsum, (1/p));
+	double areap = std::pow((double) wsum, (double) (1/p));
 
 	//cout << "(uu1 - uu0) = " << NumericVector(uu1 - uu0) << END;
 	//cout << "b_weighted - a_weighted = " << NumericVector(b_weighted - a_weighted) << END;
