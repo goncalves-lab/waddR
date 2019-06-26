@@ -1,7 +1,5 @@
 library(BiocParallel)
 library(eva)
-#library(Rcpp)
-#sourceCpp("src/wasserstein_test.cpp")
 
 
 ######

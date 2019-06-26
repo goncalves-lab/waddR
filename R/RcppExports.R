@@ -5,10 +5,6 @@ mean_export <- function(x_) {
     .Call(`_diffexpR_mean_export`, x_)
 }
 
-abs <- function(x_) {
-    .Call(`_diffexpR_abs`, x_)
-}
-
 abs_export <- function(x_) {
     .Call(`_diffexpR_abs_export`, x_)
 }

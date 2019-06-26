@@ -17,17 +17,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// abs
-NumericVector abs(Nullable<NumericVector> x_);
-RcppExport SEXP _diffexpR_abs(SEXP x_SEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Nullable<NumericVector> >::type x_(x_SEXP);
-    rcpp_result_gen = Rcpp::wrap(abs(x_));
-    return rcpp_result_gen;
-END_RCPP
-}
 // abs_export
 NumericVector abs_export(Nullable<NumericVector> x_);
 RcppExport SEXP _diffexpR_abs_export(SEXP x_SEXP) {
@@ -131,7 +120,6 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_diffexpR_mean_export", (DL_FUNC) &_diffexpR_mean_export, 1},
-    {"_diffexpR_abs", (DL_FUNC) &_diffexpR_abs, 1},
     {"_diffexpR_abs_export", (DL_FUNC) &_diffexpR_abs_export, 1},
     {"_diffexpR_cumSum", (DL_FUNC) &_diffexpR_cumSum, 2},
     {"_diffexpR_rep_weighted", (DL_FUNC) &_diffexpR_rep_weighted, 3},

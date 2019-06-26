@@ -68,7 +68,6 @@ Returns a NumericVector object with the absolute values from
 a given input vector.
 @param x : NumericVector object, not Null
 */
-// [[Rcpp::export]]
 NumericVector abs(Nullable<NumericVector> x_) 
 {	
 	if(x_.isNull()) {

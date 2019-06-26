@@ -1,12 +1,5 @@
 library(eva)
 
-# testing which one works ....
-#source("~/Desktop/scrna-diffexpr/diffexpR/R/RcppExports.R")
-#source(system.file("R/RcppExports.R", package="diffexpR"))
-#library("Rcpp")
-#sourceCpp(system.file("src","wasserstein_test.cpp", package="diffexpR"), package="diffexpR")
-
-
 # load asymptotic reference distribution
 # contains:
 #   value.integral  : a distribution
@@ -192,7 +185,7 @@ wasserstein.test.asy<-function(x,y){
   
   if (length(x)!=0&length(y)!=0){
     
-    value<-wasserstein1d(x,y,p=2)
+    value<-wasserstein_metric(x,y,p=2)
     value.sq<-value^2
     
     ###compute p-value based on asymptotoc theory (brownian bridge)
