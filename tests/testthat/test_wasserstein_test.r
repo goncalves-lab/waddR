@@ -1,7 +1,12 @@
 library("testthat")
 library("diffexpR")
 
-test_that("Example Run of Wasserstein Test", {
+
+##########################################################################
+##                    WASSERSTEIN.TEST FUNCTION                         ##
+##########################################################################
+
+test_that("Example Run of Wasserstein Test (I)", {
   v<-rnorm(500)
   w<-rnorm(500)
   
@@ -12,7 +17,7 @@ test_that("Example Run of Wasserstein Test", {
 })
 
 
-test_that("Example Run of Wasserstein Test. (II)", {
+test_that("Example Run of Wasserstein Test (II)", {
   
   v<-rnorm(500)
   w<-rnorm(500,1,2)
