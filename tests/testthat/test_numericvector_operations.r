@@ -12,8 +12,8 @@ test_that("NumericVectorAbs", {
   v1 <- c(0,2.3,2,3,4,-3,-134)
   empty <- c()
   
-  expect_equal(abs(v1), abs(v1))
-  expect_error(abs(empty))
+  expect_equal(abs_export(v1), abs_export(v1))
+  expect_error(abs_export(empty))
 })
 
 #### NUMERIC VECTOR MEAN
@@ -23,8 +23,8 @@ test_that("numericVectorMeans", {
   v <- rnorm(100)
   v2 <- c(-1,3.5,100)
   
-  expect_equal(diffexpR::mean(v), base::mean(v))
-  expect_equal(diffexpR::mean(v2), base::mean(v2))
+  expect_equal(diffexpR::mean_export(v), base::mean(v))
+  expect_equal(diffexpR::mean_export(v2), base::mean(v2))
 })
 
 #### PERMUTATIONS OF NUMERIC VECTOR

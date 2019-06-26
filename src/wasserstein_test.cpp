@@ -30,7 +30,6 @@ int nullable_size(Nullable<NumericVector> x_ = R_NilValue)
 Returns the average of a NumericVector object that is not Null
 @param x : NumericVector object
 */
-// [[Rcpp::export]]
 double mean(Nullable<NumericVector> x_)
 {	
 
@@ -55,6 +54,16 @@ double mean(Nullable<NumericVector> x_)
 
 
 /*
+Wrapper around the Rcpp function `mean` for export into R and testing.
+The function `mean` is not exported due to name conflicts with R base.
+*/
+// [[Rcpp::export]]
+double mean_export(Nullable<NumericVector> x_)
+{
+	return mean(x_);
+}
+
+/*
 Returns a NumericVector object with the absolute values from
 a given input vector.
 @param x : NumericVector object, not Null
@@ -76,6 +85,17 @@ NumericVector abs(Nullable<NumericVector> x_)
 		return abs_vector;
 	}
 
+}
+
+
+/*
+Wrapper around the function `abs` for export into R and testing.
+The function `abs` is not exported due to name conflicts with R base.
+*/
+// [[Rcpp::export]]
+NumericVector abs_export(Nullable<NumericVector> x_)
+{
+	return abs(x_);
 }
 
 
