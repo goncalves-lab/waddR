@@ -8,7 +8,7 @@
 ## IMPORTANT
 - [ ] Write Man pages
 - [ ] Biological application
-- [ ] Fix tests to run with devtools::test()
+- [x] Fix tests to run with devtools::test()
 - [ ] Upload to CRAN / Bioconductor
 
 ## FEATURES
