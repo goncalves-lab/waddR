@@ -5,7 +5,6 @@ library(eva)
 #   value.integral  : a distribution
 #   empcdf.ref      : an empirical cumulative distribution function
 #                     based on the values in value.integral
-#load(system.file("data/ref_distr.dat", package = "diffexpR"))
 load(system.file("data/ref_distr.dat", package="diffexpR"))
 
 # Semi-parametric wasserstein test
@@ -28,10 +27,8 @@ wasserstein.test.sp<-function(x,y,seedex,permnum){
     bsn<-permnum
 
     shuffle <- permutations(z, n = bsn)
-    #wass.val<-sapply(1:bsn,function (k) {wasserstein1d(shuffle[1:length(x),k],shuffle[(length(x)+1):nsample,k],p=2)})
-    wass.val <- apply(shuffle, 2, function (k) {wasserstein_metric(k[1:length(x)], k[(length(x)+1):5], p=2)})
+    wass.val <- apply(shuffle, 2, function (k) {wasserstein_metric(k[1:length(x)], k[(length(x)+1):length(z)], p=2)})
     wass.val<-wass.val^2
-    
     
     
     ###list of possible exceedance thresholds (decreasing)
@@ -45,8 +42,10 @@ wasserstein.test.sp<-function(x,y,seedex,permnum){
     
     
     ###algorithm
-    
+    print(wass.val)
+    print(value.sq)
     num.extr<-sum(wass.val>=value.sq)
+    print(num.extr)
     pvalue.ecdf<-num.extr/bsn
     pvalue.ecdf.pseudo<-(1+num.extr)/(bsn+1)
     
@@ -170,6 +169,7 @@ wasserstein.test.sp<-function(x,y,seedex,permnum){
   
   ##create output
   output<-c(value,value.sq,wass.comp.sq,wass.comp,location,size,shape,rho.xy,pvalue.wass,perc.loc,perc.size,perc.shape,decomp.error)
+  ## missing in the wasserstein.test.sp sc implementation 
   names(output)<-c("d.transport","d.transport^2","d.comp^2","d.comp","location","size","shape","rho","pval","p.ad.gpd","N.exc","perc.loc","perc.size","perc.shape","decomp.error")
   
   
@@ -198,7 +198,7 @@ wasserstein.test.asy<-function(x,y){
     
     trf.int<-(1/length(pr))*sum(parts.trf)
     test.stat<-(length(x)*length(y)/(length(x)+length(y)))*trf.int
-    print(test.stat)
+    #print(test.stat)
     #pvalue.wass<-pval.one(test.stat)
     pvalue.wass<-1-empcdf.ref(test.stat)
     
@@ -271,10 +271,13 @@ wasserstein.test.asy<-function(x,y){
 # Wasserstein test wrapper function, exposed for this package
 #' @export
 wasserstein.test<-function(x,y,seedex=24,permnum=10000,method){
-  if(method=="SP")
+  if(toupper(method)=="SP"){
     RES<-wasserstein.test.sp(x,y,seedex,permnum)
-  if(method=="asy")  
+  } else if(toupper(method)=="ASY") {
     RES<-wasserstein.test.asy(x,y)  
+  } else {
+    stop("Argument 'method' must be one of {SP, ASY} : ", method)
+  }
   return(RES) 
 }
 

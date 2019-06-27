@@ -80,3 +80,14 @@ test_that("wasserstein metric", {
   expect_equal(wasserstein_metric(a,c,p), wasserstein1d(a,c,p))
 })
 
+
+test_that("test against itself", {
+  # test consistency of results
+  # check against a weird behaviour where NaN's were produced seemingly randomly
+  x <- c(2, 1, 3) 
+  y <- c(3, 3, 2, 6)
+  results <- 1:100000
+  for (i in results) { results[i] =  wasserstein_metric(x, y, p=2)}
+  first = results[1]
+  expect_true(all(results == first))
+} )
