@@ -10,6 +10,7 @@
 - [ ] Biological application
 - [x] Fix tests to run with devtools::test()
 - [ ] Upload to CRAN / Bioconductor
+- [ ] Make use of Cpp references
 
 ## FEATURES
 - [ ] CI Testing

@@ -1,4 +1,5 @@
-library(eva)
+library("eva")
+library("transport")
 
 # load asymptotic reference distribution
 # contains:
@@ -17,7 +18,8 @@ wasserstein.test.sp<-function(x,y,seedex,permnum){
   
   if (length(x)!=0&length(y)!=0){
     
-    value<-wasserstein_metric(x,y,p=2)
+    value <- wasserstein1d(x,y,p=2)
+    #value<-wasserstein_metric(x,y,p=2)
     value.sq<-value^2
     
     
@@ -27,7 +29,8 @@ wasserstein.test.sp<-function(x,y,seedex,permnum){
     bsn<-permnum
 
     shuffle <- permutations(z, n = bsn)
-    wass.val <- apply(shuffle, 2, function (k) {wasserstein_metric(k[1:length(x)], k[(length(x)+1):length(z)], p=2)})
+    wass.val <- apply(shuffle, 2, function (k) {wasserstein1d(k[1:length(x)], k[(length(x)+1):length(z)], p=2)})
+    #wass.val <- apply(shuffle, 2, function (k) {wasserstein_metric(k[1:length(x)], k[(length(x)+1):length(z)], p=2)})
     wass.val<-wass.val^2
     
     
@@ -42,10 +45,7 @@ wasserstein.test.sp<-function(x,y,seedex,permnum){
     
     
     ###algorithm
-    print(wass.val)
-    print(value.sq)
     num.extr<-sum(wass.val>=value.sq)
-    print(num.extr)
     pvalue.ecdf<-num.extr/bsn
     pvalue.ecdf.pseudo<-(1+num.extr)/(bsn+1)
     
