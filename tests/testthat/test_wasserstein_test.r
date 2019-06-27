@@ -43,8 +43,8 @@ test_that("Example Run of Wasserstein Test", {
                    "perc.size","perc.shape","decomp.error","pval.adj")
  
   
-  expect_named(wasserstein.test(v,w,method="SP"), expected=names, ignore.order=TRUE)
-  expect_named(wasserstein.test(v,w,seedex=34,permnum=1000,method="SP"), expected=names, ignore.order=TRUE)
+  expect_named(wasserstein.test(v,w,method="SP"), expected=names.sp, ignore.order=TRUE)
+  expect_named(wasserstein.test(v,w,seedex=34,permnum=1000,method="SP"), expected=names.sp, ignore.order=TRUE)
   expect_named(wasserstein.test(v,w,method="asy"), expected=names.asy, ignore.order=TRUE)
   
   # test missing for wasserstein.test.sc( ... method="OS")
