@@ -63,15 +63,15 @@ if (!requireNamespace("transport", quietly = TRUE)) {
 test_that("wasserstein metric", {
   # test versus an R implementation 
   
-  a <- c(13,21,34,23)
-  b <- c(1,1,1,2.3)
+  a <- c(13, 21, 34, 23)
+  b <- c(1,  1,  1,  2.3)
   p <- 2
   # case with equally long vectors a and b
   expect_equal(wasserstein_metric(a,b,p), wasserstein1d(a,b,p))
   expect_equal(wasserstein_metric(a,b), wasserstein1d(a,b))
   
   # vectors of different lengths
-  c <- c(34,4343,3090,1309,23.2)
+  c <- c(34, 4343, 3090, 1309, 23.2)
   set.seed(42)
   a2 <- rnorm(100,10,1)
   set.seed(24)
