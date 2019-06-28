@@ -34,20 +34,9 @@ test_that("Example Run of Wasserstein Test", {
   names.asy <- c("d.transport","d.transport^2","d.comp^2","d.comp",
                  "location","size","shape","rho","pval","perc.loc",
                  "perc.size","perc.shape","decomp.error")
-  names.sc.os <- c("d.transport","d.transport^2","d.comp^2","d.comp","location",
-                "size","shape","rho","p.nonzero","p.ad.gpd","N.exc","perc.loc",
-                "perc.size","perc.shape","decomp.error","p.zero","p.combined",
-                "p.adj.nonzero","p.adj.zero","p.adj.combined")
-  names.sc.ts <- c("d.transport","d.transport^2","d.comp^2","d.comp","location",
-                   "size","shape","rho","pval","p.ad.gpd","N.exc","perc.loc",
-                   "perc.size","perc.shape","decomp.error","pval.adj")
- 
   
   expect_named(wasserstein.test(v,w,method="SP"), expected=names.sp, ignore.order=TRUE)
   expect_named(wasserstein.test(v,w,seedex=34,permnum=1000,method="SP"), expected=names.sp, ignore.order=TRUE)
   expect_named(wasserstein.test(v,w,method="asy"), expected=names.asy, ignore.order=TRUE)
-  
-  # test missing for wasserstein.test.sc( ... method="OS")
-  # test missing for wasserstein.test.sc( ... method="TS")
 
 })
