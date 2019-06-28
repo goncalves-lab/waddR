@@ -19,3 +19,4 @@ Suggests:
 LinkingTo:
 	Rcpp,
 	RcppArmadillo,
+RoxygenNote: 6.1.1
