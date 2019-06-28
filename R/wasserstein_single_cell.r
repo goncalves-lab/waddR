@@ -116,16 +116,31 @@ testWass<-function(dat, condition,seedex,permnum, inclZero=TRUE){
 
 
 
-# Testing procedure for single-cell data based on the wasserstein distance.
-#@param dat       : single cell expression values for two conditions
-#@param condition :
-#@param seedex    : seed for generating reproducable distributions
-#@param permnum   : number of permutations that should be produced in calculating
-#                   the p-values
-#@param method    : one of "OS" or "TS", describing wether a one-stage ("OS") or 
-#                   two-stage ("TS") test should be performed. With TS, the distribution of 
-#                   the expression level 0 (zero) is investigated independently 
-#                   with test for differential proportions of zeroes
+#' Testing procedure for single-cell data based on the wasserstein distance
+#'
+#' wasserstein.sc wraps around the testWass function to provide a interface for calling
+#' wasserstein distance based test of differential expression in sigle cell RNA data ...
+#'
+#' @param dat single cell expression values for two conditions
+#' @param condition vector of the same length as dat, describing which \cr
+#'  condition every datapoint is associated to
+#' @param seedex seed for generating reproducable distributions
+#' @param permnum number of permutations that should be produced in calculating the p-values
+#' @param method one of "OS" or "TS", describing wether a one-stage ("OS") or
+#'  two-stage ("TS") test should be performed. \cr
+#'  TS - the distribution of the zero values is
+#'  independently tested for differential proportions of zeroes \cr
+#'  OS - all datapoints are tested with the wasserstein distance derived model
+#'
+#' @return Test statistics 
+#'
+#' @examples 
+#' dat <- c(100, 120, 100, 90, 0, 0, 90, 80, 10, 50))
+#' condition <- c(1, 2, 1, 2, 1, 2, 1, 2, 1, 2)
+#' wasserstein.sc(dat, condition, 24, 10000, "OS")
+#'
+#'
+#' @export
 wasserstein.sc<-function(dat,condition,seedex,permnum,method){
   if(method=="OS")
     RES<-testWass(dat, condition,seedex,permnum, inclZero=TRUE)
