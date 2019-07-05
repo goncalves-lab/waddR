@@ -66,7 +66,7 @@ double mean_export(Nullable<NumericVector> x_)
 /*
 Returns a NumericVector object with the absolute values from
 a given input vector.
-@param x : NumericVector object, not Null
+@param x NumericVector object, not Null
 */
 NumericVector abs(Nullable<NumericVector> x_) 
 {	
@@ -99,7 +99,7 @@ NumericVector abs_export(Nullable<NumericVector> x_)
 
 
 /* Returns the cumulative sums of a NumericalVector object.
-@param x :	NumericalVector
+@param x NumericalVector
 */
 //[[Rcpp::export]]
 NumericVector cumSum(Nullable<NumericVector> x_, const int last_index=0)
@@ -128,21 +128,25 @@ NumericVector cumSum(Nullable<NumericVector> x_, const int last_index=0)
 }
 
 
-/* Returns a weighted NumericVector of a given input vector.
-@param x :	NumericVector object with the elements that are to be weighted
-@param cua :	NumericVector object with cumulative distribution values of
-				the weights for x
-@param cub :	NumericVector object with cumulative distribution values of
-				the weights for a reference vector y
-*/
+//' Repeat weighted
+//'
+//' Returns a weighted NumericVector of a given input vector.
+//' Each element x[i] in the given input vector x is repeated according
+//' to the weight vector at position i
+//'
+//' @param x NumericVector object with the elements that are to be weighted
+//' @param freq_table NumericVector object representing a weight vector.
+//'		Each element in x is repeated accoring to its weight in freq_table
+//'
+//' @return the weight-repeated NumericVector of x
+//'
 // [[Rcpp::export]]
 NumericVector rep_weighted(NumericVector x,
-						   IntegerVector freq_table,
-						   int len_x=-1)
+						   IntegerVector freq_table)
 {
 	// build a new vector x_weighted, that repeats every element at position i
 	// in x according to the frequency given at position i in freq_table
-	int length = (len_x != -1) ? len_x : sum(freq_table);
+	int length = sum(freq_table);
 	NumericVector x_weighted(length);
 
 	// iterate over all fields of the new weighted vector
@@ -172,10 +176,17 @@ NumericVector rep_weighted(NumericVector x,
 }
 
 
-/* Returns a NumericVector that represents the concatenation of two input vectors
-@param x : 	NumericVector
-@param y :	NumericVector
-*/
+//' Concatenate Numeric Vectors
+//'
+//' `concat` returns a NumericVector that represents the concatenation of two input vectors.
+//' The elements of the second given vector are written to the output vector after the elements
+//' in the first vector
+//'
+//' @param x NumericVector first vector to be written to the output
+//' @param y NumericVector second vector to be written to the output
+//'
+//' @return concatenation of y after x
+//'
 //[[Rcpp::export]]
 NumericVector concat(Nullable<NumericVector> x_, Nullable<NumericVector> y_)
 {	
@@ -208,15 +219,24 @@ NumericVector concat(Nullable<NumericVector> x_, Nullable<NumericVector> y_)
 	}
 }
 
-/* Given a NumericVector x and a NumericVector of interval breaks,
-a table with the number of elements in x that fall into each of the
-intervals is returned.
-@param datavec :	NumericVector with elements
-@param interval_breaks : 	NumericVector with n interval_borders that are
-					interpreted as interval breaks: 
-					(-Inf, breaks[0]], (breaks[0], breaks[1]), ... , (breaks(n), Inf) 
-*/
-// [[Rcpp::export]]
+
+//' Interval Table
+//'
+//' Given a NumericVector datavec and a NumericVector of interval breaks,
+//' a table with the number of elements in datavec that fall into each of the
+//' intervals is returned.
+//'
+//' @param datavec NumericVector with elements to be distributed over the intervals
+//' @param interval_breaks NumericVector with n interval_borders that are
+//'		interpreted as interval breaks:\cr 
+//'		(-Inf, breaks[0]], (breaks[0], breaks[1]), ... , (breaks(n), Inf)
+//' @param ini_value Default frequency that is assigned to each interval_breaks.
+//'		Counted interval frequencies are added to the default frequency.
+//'
+//' @return The frequency with which elements of datavec fall into each of the intervals defined
+//' 		by the second argument interval_breaks
+//'
+//[[Rcpp::export]]
 IntegerVector interval_table(NumericVector datavec,
 							NumericVector interval_breaks,
 							const int init_value=0)
