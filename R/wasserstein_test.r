@@ -1,12 +1,6 @@
+#' @useDynLib diffexpR
 library("eva")
 library("transport")
-
-# load asymptotic reference distribution
-# contains:
-#   value.integral  : a distribution
-#   empcdf.ref      : an empirical cumulative distribution function
-#                     based on the values in value.integral
-load(system.file("data/ref_distr.dat", package="diffexpR"))
 
 # Semi-parametric wasserstein test
 
@@ -353,6 +347,8 @@ wasserstein.test.asy<-function(x,y){
 #'wasserstein.test
 #'
 #'Two-sample test to check for differences between two distributions (conditions) using the 2-Wasserstein distance, either using the semi-parametric permutation testing procedure with GPD approximation to estimate small p-values accurately or the test based on asymptotic theory
+#'
+#'@name wasserstein.test
 #'@details Details concerning the two testing procedures (i.e. the permutation testing procedure with GPD approximation to estimate small p-values accurately and the test based on asymptotic theory) can be found in Schefzik and Goncalves (2019).
 #'
 #'@param x		univariate sample (vector) representing the distribution of condition A

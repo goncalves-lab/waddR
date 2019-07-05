@@ -57,6 +57,7 @@ double mean(Nullable<NumericVector> x_)
 Wrapper around the Rcpp function `mean` for export into R and testing.
 The function `mean` is not exported due to name conflicts with R base.
 */
+//' @export
 // [[Rcpp::export]]
 double mean_export(Nullable<NumericVector> x_)
 {
@@ -91,6 +92,7 @@ NumericVector abs(Nullable<NumericVector> x_)
 Wrapper around the function `abs` for export into R and testing.
 The function `abs` is not exported due to name conflicts with R base.
 */
+//' @export
 // [[Rcpp::export]]
 NumericVector abs_export(Nullable<NumericVector> x_)
 {
@@ -101,6 +103,7 @@ NumericVector abs_export(Nullable<NumericVector> x_)
 /* Returns the cumulative sums of a NumericalVector object.
 @param x :	NumericalVector
 */
+//' @export
 //[[Rcpp::export]]
 NumericVector cumSum(Nullable<NumericVector> x_, const int last_index=0)
 {
@@ -135,6 +138,7 @@ NumericVector cumSum(Nullable<NumericVector> x_, const int last_index=0)
 @param cub :	NumericVector object with cumulative distribution values of
 				the weights for a reference vector y
 */
+//' @export
 // [[Rcpp::export]]
 NumericVector rep_weighted(NumericVector x,
 						   IntegerVector freq_table,
@@ -176,6 +180,7 @@ NumericVector rep_weighted(NumericVector x,
 @param x : 	NumericVector
 @param y :	NumericVector
 */
+//' @export
 //[[Rcpp::export]]
 NumericVector concat(Nullable<NumericVector> x_, Nullable<NumericVector> y_)
 {	
@@ -216,6 +221,7 @@ intervals is returned.
 					interpreted as interval breaks: 
 					(-Inf, breaks[0]], (breaks[0], breaks[1]), ... , (breaks(n), Inf) 
 */
+//' @export
 // [[Rcpp::export]]
 IntegerVector interval_table(NumericVector datavec,
 							NumericVector interval_breaks,
@@ -275,6 +281,7 @@ object.
 @param num_permutations : 	Int representing the number of permutations
 							that are to be performed.
 */
+//' @export
 // [[Rcpp::export]]
 NumericMatrix permutations(NumericVector x, const int num_permutations) 
 {
@@ -319,6 +326,7 @@ mat permutations_internal(vec x, const int num_permutations)
 /*
 Wrapper around permutations_internal for testing in R.
 */
+//' @export
 // [[Rcpp::export]]
 NumericMatrix permutations_internal_test_export(
 	NumericVector x, const int num_permutations)
@@ -351,6 +359,7 @@ Reimplementation in Cpp of the function wasserstein1d in the package transport.
 @param wa : NumericVector wa representing a weight matrix for vector a
 @param wb : NumericVector wb representing a weight matrix for vector b
 */
+//' @export
 // [[Rcpp::export]]
 double wasserstein_metric(NumericVector a, 
 						  NumericVector b, float p=1, 

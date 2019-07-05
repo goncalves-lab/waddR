@@ -7,6 +7,7 @@ Author: Roman Schefzik <r.schefzik@dkfz-heidelberg.de>
 Maintainer: Julian Flesch <j.flesch@dkfz-heidelberg.de> 
 Description: One paragraph description of what the package does as one or more full sentences.
 License: MIT
+Encoding: UTF-8
 Imports: 
 	Rcpp (>= 1.0.1),
 	eva (>= 0.2.5),	
@@ -15,7 +16,8 @@ Depends:
 	R (>= 3.6.0)
 Suggests:
 	devtools,
-	testthat
+	testthat,
+	roxygen2
 LinkingTo:
 	Rcpp,
 	RcppArmadillo,
