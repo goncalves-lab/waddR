@@ -41,15 +41,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // rep_weighted
-NumericVector rep_weighted(NumericVector x, IntegerVector freq_table, int len_x);
-RcppExport SEXP _diffexpR_rep_weighted(SEXP xSEXP, SEXP freq_tableSEXP, SEXP len_xSEXP) {
+NumericVector rep_weighted(NumericVector x, IntegerVector freq_table);
+RcppExport SEXP _diffexpR_rep_weighted(SEXP xSEXP, SEXP freq_tableSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type freq_table(freq_tableSEXP);
-    Rcpp::traits::input_parameter< int >::type len_x(len_xSEXP);
-    rcpp_result_gen = Rcpp::wrap(rep_weighted(x, freq_table, len_x));
+    rcpp_result_gen = Rcpp::wrap(rep_weighted(x, freq_table));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -122,7 +121,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_diffexpR_mean_export", (DL_FUNC) &_diffexpR_mean_export, 1},
     {"_diffexpR_abs_export", (DL_FUNC) &_diffexpR_abs_export, 1},
     {"_diffexpR_cumSum", (DL_FUNC) &_diffexpR_cumSum, 2},
-    {"_diffexpR_rep_weighted", (DL_FUNC) &_diffexpR_rep_weighted, 3},
+    {"_diffexpR_rep_weighted", (DL_FUNC) &_diffexpR_rep_weighted, 2},
     {"_diffexpR_concat", (DL_FUNC) &_diffexpR_concat, 2},
     {"_diffexpR_interval_table", (DL_FUNC) &_diffexpR_interval_table, 3},
     {"_diffexpR_permutations", (DL_FUNC) &_diffexpR_permutations, 2},

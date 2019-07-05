@@ -11,26 +11,82 @@ abs_export <- function(x_) {
     .Call('_diffexpR_abs_export', PACKAGE = 'diffexpR', x_)
 }
 
+#' Cumulative Sum
+#' 
+#' Returns the cumulative sums of a NumericalVector object.
+#'
+#' @param x NumericalVector
+#'
+#' @return a vector containing cumulative sums of the values
+#'		in the input vector 
+#'
 #' @export
 cumSum <- function(x_, last_index = 0L) {
     .Call('_diffexpR_cumSum', PACKAGE = 'diffexpR', x_, last_index)
 }
 
+#' Repeat weighted
+#'
+#' Returns a weighted NumericVector of a given input vector.
+#' Each element x[i] in the given input vector x is repeated according
+#' to the weight vector at position i
+#'
+#' @param x NumericVector object with the elements that are to be weighted
+#' @param freq_table NumericVector object representing a weight vector.
+#'		Each element in x is repeated accoring to its weight in freq_table
+#'
+#' @return the weight-repeated NumericVector of x
+#'
 #' @export
-rep_weighted <- function(x, freq_table, len_x = -1L) {
-    .Call('_diffexpR_rep_weighted', PACKAGE = 'diffexpR', x, freq_table, len_x)
+rep_weighted <- function(x, freq_table) {
+    .Call('_diffexpR_rep_weighted', PACKAGE = 'diffexpR', x, freq_table)
 }
 
+#' Concatenate Numeric Vectors
+#'
+#' `concat` returns a NumericVector that represents the concatenation of two input vectors.
+#' The elements of the second given vector are written to the output vector after the elements
+#' in the first vector
+#'
+#' @param x NumericVector first vector to be written to the output
+#' @param y NumericVector second vector to be written to the output
+#'
+#' @return concatenation of y after x
+#'
 #' @export
 concat <- function(x_, y_) {
     .Call('_diffexpR_concat', PACKAGE = 'diffexpR', x_, y_)
 }
 
+#' Interval Table
+#'
+#' Given a NumericVector datavec and a NumericVector of interval breaks,
+#' a table with the number of elements in datavec that fall into each of the
+#' intervals is returned.
+#'
+#' @param datavec NumericVector with elements to be distributed over the intervals
+#' @param interval_breaks NumericVector with n interval_borders that are
+#'		interpreted as interval breaks:\cr 
+#'		(-Inf, breaks[0]], (breaks[0], breaks[1]), ... , (breaks(n), Inf)
+#' @param ini_value Default frequency that is assigned to each interval_breaks.
+#'		Counted interval frequencies are added to the default frequency.
+#'
+#' @return The frequency with which elements of datavec fall into each of the intervals defined
+#' 		by the second argument interval_breaks
+#'
 #' @export
 interval_table <- function(datavec, interval_breaks, init_value = 0L) {
     .Call('_diffexpR_interval_table', PACKAGE = 'diffexpR', datavec, interval_breaks, init_value)
 }
 
+#' Permutations
+#' Returns permutations of a given NumericVector as columns in a NumericMatrix
+#' object. 
+#' @param x :	NumericVector representing a vector that is to be permutated
+#' @param num_permutations : 	Int representing the number of permutations
+#'							that are to be performed.
+#' @return a matrix containing in every column one permutations of the input vector
+#'
 #' @export
 permutations <- function(x, num_permutations) {
     .Call('_diffexpR_permutations', PACKAGE = 'diffexpR', x, num_permutations)
@@ -41,6 +97,20 @@ permutations_internal_test_export <- function(x, num_permutations) {
     .Call('_diffexpR_permutations_internal_test_export', PACKAGE = 'diffexpR', x, num_permutations)
 }
 
+#' Wasserstein Metric
+#'
+#' Returns the Wasserstein Metric of two input vectors a and b.
+#' Reimplementation in Cpp of the function wasserstein1d in the package transport.
+#'
+#' @param a : NumericVector a representing a distribution
+#' @param b : NumericVector b representing a distribution
+#' @param p : int p representing the exponent in the root mean squared difference
+#' @param wa : NumericVector wa representing a weight matrix for vector a
+#' @param wb : NumericVector wb representing a weight matrix for vector b
+#'
+#' @return a floating point number representing the wasserstein distance or metric
+#'		between the given input distributions
+#'
 #' @export
 wasserstein_metric <- function(a, b, p = 1, wa_ = NULL, wb_ = NULL) {
     .Call('_diffexpR_wasserstein_metric', PACKAGE = 'diffexpR', a, b, p, wa_, wb_)
