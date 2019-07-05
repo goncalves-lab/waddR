@@ -57,6 +57,7 @@ double mean(Nullable<NumericVector> x_)
 Wrapper around the Rcpp function `mean` for export into R and testing.
 The function `mean` is not exported due to name conflicts with R base.
 */
+//' @export
 // [[Rcpp::export]]
 double mean_export(Nullable<NumericVector> x_)
 {
@@ -91,6 +92,7 @@ NumericVector abs(Nullable<NumericVector> x_)
 Wrapper around the function `abs` for export into R and testing.
 The function `abs` is not exported due to name conflicts with R base.
 */
+//' @export
 // [[Rcpp::export]]
 NumericVector abs_export(Nullable<NumericVector> x_)
 {
@@ -98,9 +100,16 @@ NumericVector abs_export(Nullable<NumericVector> x_)
 }
 
 
-/* Returns the cumulative sums of a NumericalVector object.
-@param x NumericalVector
-*/
+//' Cumulative Sum
+//' 
+//' Returns the cumulative sums of a NumericalVector object.
+//'
+//' @param x NumericalVector
+//'
+//' @return a vector containing cumulative sums of the values
+//'		in the input vector 
+//'
+//' @export
 //[[Rcpp::export]]
 NumericVector cumSum(Nullable<NumericVector> x_, const int last_index=0)
 {
@@ -140,6 +149,7 @@ NumericVector cumSum(Nullable<NumericVector> x_, const int last_index=0)
 //'
 //' @return the weight-repeated NumericVector of x
 //'
+//' @export
 // [[Rcpp::export]]
 NumericVector rep_weighted(NumericVector x,
 						   IntegerVector freq_table)
@@ -187,6 +197,7 @@ NumericVector rep_weighted(NumericVector x,
 //'
 //' @return concatenation of y after x
 //'
+//' @export
 //[[Rcpp::export]]
 NumericVector concat(Nullable<NumericVector> x_, Nullable<NumericVector> y_)
 {	
@@ -236,7 +247,8 @@ NumericVector concat(Nullable<NumericVector> x_, Nullable<NumericVector> y_)
 //' @return The frequency with which elements of datavec fall into each of the intervals defined
 //' 		by the second argument interval_breaks
 //'
-//[[Rcpp::export]]
+//' @export
+// [[Rcpp::export]]
 IntegerVector interval_table(NumericVector datavec,
 							NumericVector interval_breaks,
 							const int init_value=0)
@@ -288,13 +300,16 @@ IntegerVector interval_table(NumericVector datavec,
 	return freq_table;
 }
 
-/*
-Returns permutations of a given NumericVector as columns in a NumericMatrix
-object. 
-@param x :	NumericVector representing a vector that is to be permutated
-@param num_permutations : 	Int representing the number of permutations
-							that are to be performed.
-*/
+
+//' Permutations
+//' Returns permutations of a given NumericVector as columns in a NumericMatrix
+//' object. 
+//' @param x :	NumericVector representing a vector that is to be permutated
+//' @param num_permutations : 	Int representing the number of permutations
+//'							that are to be performed.
+//' @return a matrix containing in every column one permutations of the input vector
+//'
+//' @export
 // [[Rcpp::export]]
 NumericMatrix permutations(NumericVector x, const int num_permutations) 
 {
@@ -339,6 +354,7 @@ mat permutations_internal(vec x, const int num_permutations)
 /*
 Wrapper around permutations_internal for testing in R.
 */
+//' @export
 // [[Rcpp::export]]
 NumericMatrix permutations_internal_test_export(
 	NumericVector x, const int num_permutations)
@@ -361,16 +377,21 @@ NumericMatrix permutations_internal_test_export(
 }
 
 
-/*
-Returns the Wasserstein Metric of two input vectors a and b.
-Reimplementation in Cpp of the function wasserstein1d in the package transport.
-
-@param a : NumericVector a representing a distribution
-@param b : NumericVector b representing a distribution
-@param p : int p representing the exponent in the root mean squared difference
-@param wa : NumericVector wa representing a weight matrix for vector a
-@param wb : NumericVector wb representing a weight matrix for vector b
-*/
+//' Wasserstein Metric
+//'
+//' Returns the Wasserstein Metric of two input vectors a and b.
+//' Reimplementation in Cpp of the function wasserstein1d in the package transport.
+//'
+//' @param a : NumericVector a representing a distribution
+//' @param b : NumericVector b representing a distribution
+//' @param p : int p representing the exponent in the root mean squared difference
+//' @param wa : NumericVector wa representing a weight matrix for vector a
+//' @param wb : NumericVector wb representing a weight matrix for vector b
+//'
+//' @return a floating point number representing the wasserstein distance or metric
+//'		between the given input distributions
+//'
+//' @export
 // [[Rcpp::export]]
 double wasserstein_metric(NumericVector a, 
 						  NumericVector b, float p=1, 

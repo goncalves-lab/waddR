@@ -2,6 +2,16 @@ library("testthat")
 library("diffexpR")
 
 
+if (!exists("empcdf.ref")) {
+  # load asymptotic reference distribution if it is not available
+  # contains:
+  #   value.integral  : a distribution
+  #   empcdf.ref      : an empirical cumulative distribution function
+  #                     based on the values in value.integral
+  load(system.file("data/ref_distr.dat", package="diffexpR"))
+}
+
+
 test_that("Correctness of wasserstein single cell output", {
   # TODO
   expect_true(FALSE)

@@ -1,5 +1,6 @@
 library(BiocParallel)
 library(eva)
+library(arm)
 
 
 ######
@@ -33,7 +34,7 @@ testZeroes <- function(dat, cond, these=1:nrow(dat)){
   onegene <- function(j, dat, detection, cond, these){
     y=dat[these[j],]
     if (sum(y==0) > 0){
-      M1 <- suppressWarnings(arm::bayesglm(y>0 ~ detection + factor(cond), 
+      M1 <- suppressWarnings(bayesglm(y>0 ~ detection + factor(cond), 
                                            family=binomial(link="logit"),
                                            Warning=FALSE))
       return(summary(M1)$coefficients[3,4])
