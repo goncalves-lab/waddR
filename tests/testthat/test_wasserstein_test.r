@@ -6,6 +6,7 @@ library("diffexpR")
 ##                    WASSERSTEIN.TEST FUNCTION                         ##
 ##########################################################################
 test_that("Input Validation for wasserstein test", {
+  skip_temporarily()
   
   invalid_method <- "TS"
   expect_error(wasserstein.test(rnorm(199, 20, 0.4), rnorm(239, 19, 2), 2, method=invalid_method))
@@ -14,6 +15,8 @@ test_that("Input Validation for wasserstein test", {
 
 
 test_that("Correctness of wasserstein test", {
+  skip_temporarily()
+  
   set.seed(42)
   result <- wasserstein.test(rnorm(100,20,3), rnorm(134, 30,10), method="SP")
 
@@ -25,6 +28,7 @@ test_that("Correctness of wasserstein test", {
 
 
 test_that("Example Run of Wasserstein Test", {
+  skip_temporarily()
   
   v<-rnorm(500)
   w<-rnorm(500,1,2)

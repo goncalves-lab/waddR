@@ -1,4 +1,11 @@
-#include "./wasserstein.hpp"
+// [[Rcpp::depends(RcppArmadillo)]]
+#include "wasserstein.hpp"
+
+#define END "\n";
+
+using namespace arma;
+using namespace std;
+using namespace Rcpp;
 
 template <typename T>
 vector<T> multiply(const vector<T> & x, const vector<T> y)
@@ -11,6 +18,18 @@ vector<T> multiply(const vector<T> & x, const vector<T> y)
   return result;
 }
 
+template <typename T>
+vector<T> multiply(const vector<T> & x, const T & factor)
+{ 
+  //TODO : check for equal vector lengths or throw error
+  vector<T> result(x.begin(), x.end());
+  
+  for (T & element : result) {
+    element = element * factor;
+  }
+
+  return result;
+}
 
 template <typename T>
 vector<T> pow(const vector<T> & x, const T exp)
@@ -21,7 +40,6 @@ vector<T> pow(const vector<T> & x, const T exp)
   }
   return result;
 }
-
 
 template <typename T>
 T sum(const vector<T> & x) 
@@ -62,10 +80,41 @@ vector<T> divide(const vector<T> & x, const T divisor)
 Returns the average of a NumericVector object that is not Null
 @param x : NumericVector object
 */
-template <typename T>
-double mean(const vector<T> & x)
+// template <typename T>
+// double mean(const vector<T> & x)
+// {	
+
+// 		double sum = 0.0;
+// 		double result = 0.0;
+
+// 		for (const double& element : x)
+// 		{
+// 			sum += element;
+// 		}
+
+// 		result = sum / x.size();
+		
+// 		return result;
+// }
+double mean(const vector<double> & x)
 {	
 
+		double sum = 0.0;
+		double result = 0.0;
+
+		for (const double& element : x)
+		{
+			sum += element;
+		}
+
+		result = sum / x.size();
+		
+		return result;
+}
+
+
+double mean(const vector<int> & x)
+{	
 
 		double sum = 0.0;
 		double result = 0.0;
@@ -118,8 +167,8 @@ vector<T> abs(const vector<T> & x)
 
 template <typename T>
 double cor(const vector<T> & x, const vector<T> & y, 
-	double mean_x = numeric_limits<double>::infinity(), 
-	double mean_y = numeric_limits<double>::infinity())
+	double mean_x, 
+	double mean_y)
 {	
 	if (x.size() != y.size()){
 		warning("Cannot calculate correlation of two vectors of different size.");
@@ -168,7 +217,7 @@ double cor(const vector<T> & x, const vector<T> & y,
 //'		in the input vector 
 //'
 template <typename T>
-vector<T> cumSum(const vector<T> & x, const int last_index=0)
+vector<T> cumSum(const vector<T> & x, const int last_index)
 {
 	
 	int upper = ((last_index > 0) && (last_index <= x.size()) 
@@ -202,7 +251,7 @@ vector<T> lin_interpolated_quantiles(vector<T> & x, int K)
 
 template <typename T>
 vector<T> emp_equi_quantiles(vector<T> & x_, int & K, 
-	bool INTERPOLATE=false, bool USE_ECDF=true)
+	bool INTERPOLATE, bool USE_ECDF)
 {
 	int n = x_.size();
 	vector<T> x(n), equi_quantiles(K);
@@ -241,7 +290,6 @@ vector<T> emp_equi_quantiles(vector<T> & x_, int & K,
 
 	return equi_quantiles;
 }
-
 
 
 //' Repeat weighted
@@ -302,7 +350,6 @@ vector<double> rep_weighted(vector<double> x,
 //'
 //' @return concatenation of y after x
 //'
-//[[Rcpp::export]]
 vector<double> concat(vector<double> x, vector<double> y)
 {	
 
@@ -346,7 +393,7 @@ vector<double> concat(vector<double> x, vector<double> y)
 //'
 vector<int> interval_table(vector<double> datavec,
 							vector<double> interval_breaks,
-							const int init_value=0)
+							const int init_value)
 {
 	// count the elements in cua that occur
 	// in the intervals defined by cub
@@ -426,7 +473,7 @@ NumericMatrix permutations(NumericVector x, const int num_permutations)
 
 
 //[[Rcpp::export]]
-double sq_wasserstein(NumericVector a_, NumericVector b_, double p=1) {
+double sq_wasserstein(NumericVector a_, NumericVector b_, double p) {
 
 	int NUM_QUANTILES = 1000;
 	vector<double> a(a_.begin(), a_.end()), b(b_.begin(), b_.end()),
@@ -449,7 +496,7 @@ double sq_wasserstein(NumericVector a_, NumericVector b_, double p=1) {
 
 
 // [[Rcpp::export]]
-Rcpp::List sq_wasserstein_decomp(NumericVector a_, NumericVector b_, double p=1) {
+Rcpp::List sq_wasserstein_decomp(NumericVector a_, NumericVector b_, double p) {
 
 	int NUM_QUANTILES = 1000;
 	vector<double> a(a_.begin(), a_.end()), b(b_.begin(), b_.end()),
@@ -475,11 +522,13 @@ Rcpp::List sq_wasserstein_decomp(NumericVector a_, NumericVector b_, double p=1)
 }
 
 
+
 // [[Rcpp::export]]
 double wasserstein_metric(NumericVector a_, 
-						  NumericVector b_, double p=1, 
-						  Nullable<NumericVector> wa_=R_NilValue, 
-						  Nullable<NumericVector> wb_=R_NilValue) {
+						  NumericVector b_,
+						  Nullable<NumericVector> wa_, 
+						  Nullable<NumericVector> wb_,
+						  double p) {
 	
 	vector<double> a(a_.begin(), a_.end());
 	vector<double> b(b_.begin(), b_.end());
@@ -564,38 +613,3 @@ double wasserstein_metric(NumericVector a_,
 	sdb = sd(b);
 
 }
-
-
-
-// // [[Rcpp::export]]
-// int test_run_wasserstein(){
-// 	
-// 	static const int arrx[] = {2,3,1};
-// 	vector<double> vecx (arrx, arrx + sizeof(arrx) / sizeof(arrx[0]) );
-// 	NumericVector x(vecx.begin(), vecx.end());
-// 	static const int arry[] = {2,3,1};
-// 	vector<double> vecy (arry, arry + sizeof(arry) / sizeof(arry[0]) );
-// 	NumericVector y(vecy.begin(), vecy.end());
-// 
-// 	// Computation loop
-// 	Rcout << "Computation ..." << END;
-// 	list<WassersteinResult> results;
-// 	for (int i=0; i<5000; i++){
-// 		results.push_back(wasserstein_metric(x,y,2));
-// 	}
-// 
-// 	// Checking loop
-// 	Rcout << "Checking ..." << END;
-// 	WassersteinResult firstResult = results.front();
-// 	for (std::list<WassersteinResult>::iterator it=results.begin(); it != results.end(); ++it){
-// 
-// 		WassersteinResult currentRes = *it;
-// 		if (currentRes.areap != firstResult.areap){
-// //			firstResult.printResult();
-// //			currentRes.printResult();
-// 			return 1;
-// 		}
-// 	}
-// 
-// 	return 0;
-// }
