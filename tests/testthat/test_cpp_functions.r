@@ -1,20 +1,21 @@
 library("testthat")
 library("diffexpR")
 
-
 ##########################################################################
 ##                        CPP FUNCTIONS EXPOSED TO R                    ##
 ##########################################################################
 
 #### NUMERIC VECTOR ABSOLUTE VALUE
-test_that("NumericVectorAbs", {
-  skip_temporarily()
-  
+test_that("abs_test_export", {
   v1 <- c(0,2.3,2,3,4,-3,-134)
-  empty <- c()
-  
-  expect_equal(diffexpR::abs(v1), diffexpR::abs(v1))
-  expect_error(diffexpR::abs(empty))
+  expect_equal(diffexpR::abs_test_export(v1), base::abs(v1))
+})
+
+#### Vector sum
+test_that("sum_test_export", {
+  v1 <- c(12,23,42.5, 22.5)
+  expected <- 100
+  expect_equal(diffexpR::sum_test_export(v1), expected)
 })
 
 #### NUMERIC VECTOR MEAN
@@ -26,13 +27,47 @@ test_that("mean_test_export", {
   expect_equal(diffexpR::mean_test_export(v2), base::mean(v2))
 })
 
+#### NUMERIC VECTOR SD
+test_that("sd_test_export", {
+  set.seed(42)
+  v <- rnorm(100)
+  v2 <- c(-1,3.5,100)
+  expect_equal(diffexpR::sd_test_export(v), sd(v))
+  expect_equal(diffexpR::sd_test_export(v2), sd(v2))
+})
+
+#### Vector subtract
+test_that("subtract_test_export", {
+  v1 <- c(1,2,3,4)
+  v2 <- c(2,2,2,2)
+  expected <- c(-1,0,1,2)
+  expect_equal(diffexpR::subtract_test_export(v1,v2), expected) # with vector
+})
+
+#### Vector divide
+test_that("divide_test_export", {
+  v1 <- c(1,2,3,4)
+  v2 <- c(2,2,2,2)
+  expected <- c(0.5,1.0,1.5,2)
+  expect_equal(diffexpR::divide_test_export_vectors(v1,v2), expected) # with vector
+  expect_equal(diffexpR::divide_test_export_sv(v1,2), expected) # with scalar
+})
+
 #### Vector multiply
 test_that("multiply_test_export", {
   v1 <- c(1,2,3,4)
   v2 <- c(2,2,2,2)
   expected <- c(2,4,6,8)
   expect_equal(diffexpR::multiply_test_export(v1,v2), expected) # with vector
-  expect_equal(diffexpR::multiply_test_export(v1,2), expected) # with scalar
+  expect_warning(diffexpR::multiply_test_export(v1,2)) 
+  expect_equal(diffexpR::multiply_test_export_sv(v1,2), expected) # with scalar
+})
+
+#### Vector Pow
+test_that("pow_test_export",{
+  v1 <- c(1,2,3,4)
+  expected <- c(1,4,9,16)
+  expect_equal(diffexpR::pow_test_export(v1,2), expected) # with scalar
 })
 
 #### PERMUTATIONS OF NUMERIC VECTOR
@@ -50,16 +85,14 @@ test_that("permutations", {
 })
 
 #### CUMULATIVE SUM OF NUMERIC VECTOR
-test_that("cumSum", {
-  skip_temporarily()
-  expect_equal(diffexpR::cumSum(c(1,2,3,4,5)), c(1,3,6,10,15))
-  expect_equal(diffexpR::cumSum(c(1,2,3,4,5), 3), c(1,3,6))
-  expect_equal(diffexpR::cumSum(c(1,2,3,4), 0), c(1,3,6,10))
+test_that("cumSum_test_export", {
+  expect_equal(diffexpR::cumSum_test_export(c(1,2,3,4,5)), c(1,3,6,10,15))
+  expect_equal(diffexpR::cumSum_test_export(c(1,2,3,4,5), 3), c(1,3,6))
+  expect_equal(diffexpR::cumSum_test_export(c(1,2,3,4), 0), c(1,3,6,10))
 })
 
 #### INTERVAL TABLE
-test_that("Interval table", {
-  skip_temporarily()
+test_that("Interval_table_test_export", {
   # setup
   set.seed(42)
   wa<- rnorm(200, 20, 1)
@@ -87,9 +120,9 @@ test_that("Interval table", {
   cub3 <- c(cumsum(ub))
   
   # cpp implementation
-  cppresult1 <- interval_table(cub, cua,1)
-  cppresult2 <- interval_table(cua2, cub2,1)
-  cppresult3 <- interval_table(cua3, cub3,1)
+  cppresult1 <- interval_table_test_export(cub, cua,1)
+  cppresult2 <- interval_table_test_export(cua2, cub2,1)
+  cppresult3 <- interval_table_test_export(cua3, cub3,1)
   
   # pure R
   temp <- cut(cub, breaks = c(-Inf, cua, Inf))
@@ -103,24 +136,39 @@ test_that("Interval table", {
   expect_true(length(rresult1) == length(cppresult1))
   expect_true(all(rresult2 == cppresult2))
   expect_true(all(rresult3 == cppresult3))
-  expect_type(interval_table(rnorm(1000, 10,0.3), rnorm(834, 20, 10)), "integer")
+  expect_type(interval_table_test_export(rnorm(1000, 10,0.3), rnorm(834, 20, 10)), "integer")
   
 })
 
 #### Repeat Weighted
-test_that("rep weighted", {
-  skip_temporarily()
-  expect_equal(rep_weighted(c(1,2,3),c(1,2,2)), rep(c(1,2,3), times=c(1,2,2)))
-  expect_equal(rep_weighted(c(1,2,3,4), c(1,2,2,2)), c(1,2,2,3,3,4,4))
-  expect_equal(rep_weighted(c(1,2), c(0,1)), c(2))
-#  expect_error(rep_weighted(c(1,2), c()))
+test_that("rep_weighted_test_export", {
+  expect_equal(rep_weighted_test_export(c(1,2,3),c(1,2,2)), rep(c(1,2,3), times=c(1,2,2)))
+  expect_equal(rep_weighted_test_export(c(1,2,3,4), c(1,2,2,2)), c(1,2,2,3,3,4,4))
+  expect_equal(rep_weighted_test_export(c(1,2), c(0,1)), c(2))
+#  expect_error(rep_weighted_test_export(c(1,2), c()))
 })
 
 #### Concat NumericVectors
-test_that("concat", {
-  skip_temporarily()
-  expect_equal(concat(c(1,2,3,4), c(5,6,7,8)), c(1,2,3,4,5,6,7,8))
-  expect_equal(concat(c(1,2,3), c(1)), c(1,2,3,1))
-  expect_equal(concat(c(1,2,3),c(1,2,3)), c(1,2,3,1,2,3))
-  expect_equal(concat(c(), c(1,2,3)), c(1,2,3))
+test_that("concat_test_export", {
+  expect_equal(concat_test_export(c(1,2,3,4), c(5,6,7,8)), c(1,2,3,4,5,6,7,8))
+  expect_equal(concat_test_export(c(1,2,3), c(1)), c(1,2,3,1))
+  expect_equal(concat_test_export(c(1,2,3),c(1,2,3)), c(1,2,3,1,2,3))
+#  expect_equal(concat_test_export(c(), c(1,2,3)), c(1,2,3))
 })
+
+#### correlation of vectors
+test_that("cor_test_export", {
+  skip("Likely to throw errors while emp_equi_quant... not fixed")
+  expect_equal(cor_test_export(c(1,2,3,4,5), c(2,3,4,5,6)), 1)
+  expect_equal(cor_test_export(c(1,2,3,4,5), c(2,3,4,5,6)*-1), -1)
+  expect_equal(cor_test_export(c(1,34,134,13,50,5,1,2), c(2,20,55, 18, 55, 6, 2, 2)), cor(c(1,34,134,13,50,5,1,2), c(2,20,55, 18, 55, 6, 2, 2)))
+})
+
+#### empirical equidistant quantiles
+test_that("emp_equi_quantiles_test_export",{
+  
+  expect_equal(emp_equi_quantiles_test_export(c(1:10),10), c(1:10))
+  expect_equal(emp_equi_quantiles_test_export(c(1:20),10), c(2,4,6,8,10,12,14,16,18,20))
+  expect_equal(emp_equi_quantiles_test_export(c(1:5),10), c(1,1,2,2,3,3,4,4,5,5))
+})
+
