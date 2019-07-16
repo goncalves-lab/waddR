@@ -185,12 +185,12 @@ double cor(const vector<T> & x, const vector<T> & y,
 		mean_y = mean(y);
 	}
 
-	double r = 0.0, numerator = 0.0, denom_x = 0.0, denom_y = 0.0,
-		delta_xval, delta_yval, denominator;
+	double 	r = 0.0, numerator = 0.0, denom_x = 0.0, denom_y = 0.0,
+			delta_xval = 0.0, delta_yval = 0.0, denominator = 0.0;
 
-	for (int idx=0; idx<x.size(); idx++){
-		delta_xval = x[idx] - mean_x;
-		delta_yval = y[idx] - mean_y;
+	for (int i=0; i<x.size(); i++){
+		delta_xval = x[i] - mean_x;
+		delta_yval = y[i] - mean_y;
 
 		numerator += delta_xval * delta_yval;
 
@@ -252,8 +252,8 @@ vector<T> lin_interpolated_quantiles(const vector<T> & x, const int K)
 
 
 template <typename T>
-vector<T> emp_equi_quantiles(const vector<T> & x_, const int & K,
-	const bool INTERPOLATE=false, const  bool USE_ECDF=true)
+vector<T> emp_equi_quantiles(const vector<T> & x_, const int & K=1000,
+	const bool USE_ECDF=false, const bool INTERPOLATE=false)
 {
 	int n = x_.size();
 	vector<T> x(n), equi_quantiles(K);
@@ -270,20 +270,20 @@ vector<T> emp_equi_quantiles(const vector<T> & x_, const int & K,
 		equi_quantiles = lin_interpolated_quantiles(x, K);
 
 	} else {
-		
-		float quantile, x_pos, x_idx;
-		int q_idx=0, q_num = 1;
+
+		double x_pos = 0.0;
+		int q_idx=0, q_num = 1, x_idx;
 		for (; q_idx < K; q_num++, q_idx++) {
 
-			quantile = (q_num) / K ;
-			x_pos = n * quantile;
-			x_idx = (int) ceil(x_pos);
-
+			x_pos = n * q_num / K ;
+			x_idx = (int) min(max((double) 0.0, ceil(x_pos) - 1), (double) n-1);
+			//x_idx = (int) ceil(x_pos);
+			
 			// check if the data index x_pos is a whole number
 			if (x_pos == (double) x_idx) {
 				equi_quantiles[q_idx] = 1/2 * (x[x_idx] + x[x_idx + 1]);
 			} else { // not a whole number 
-				// => x_idx has been rounded up to be used as an index
+				// => x_idx has been rounded down to be used as an index
 				equi_quantiles[q_idx] = x[x_idx];
 			}
 		}
@@ -489,21 +489,32 @@ double sq_wasserstein(const NumericVector & a_, const NumericVector & b_, const 
 {
 
 	int NUM_QUANTILES = 1000;
-	vector<double> a(a_.begin(), a_.end()), b(b_.begin(), b_.end()),
-		quantiles_a = emp_equi_quantiles(a, NUM_QUANTILES),
-		quantiles_b = emp_equi_quantiles(b, NUM_QUANTILES);
+	vector<double> 	a(a_.begin(), a_.end()),
+					b(b_.begin(), b_.end()),
+					quantiles_a = emp_equi_quantiles(a, NUM_QUANTILES),
+					quantiles_b = emp_equi_quantiles(b, NUM_QUANTILES);
 
 	double location, shape, size, d, mean_a = mean(a), mean_b = mean(b),
 		sd_a = sd(a), sd_b = sd(b), 
 		quantile_cor_ab = cor(quantiles_a, quantiles_b);
 
-
 	location = pow(mean_a - mean_b, 2);
 	size = pow(sd_a - sd_b, 2);
 	shape = 2 * sd_a * sd_b * (1 - quantile_cor_ab);
-
 	d = location + size + shape;
 
+	/*
+	// DEBUGGING ...
+	Rcout << "mean_a = " << mean_a <<END;
+	Rcout << "mean_b = " << mean_b <<END;
+	Rcout << "sd_a = " << sd_a <<END;
+	Rcout << "sd_b = " << sd_b<<END;
+	Rcout << "quantile_cor_ab = " << quantile_cor_ab <<END;
+	Rcout << "location = " << location <<END;
+	Rcout << "size = " << size <<END;
+	Rcout << "shape = " << shape <<END;
+	Rcout << "d = " << d <<END;
+	*/
 	return d;
 }
 
@@ -553,9 +564,12 @@ Rcpp::List sq_wasserstein_decomp(const NumericVector & a_, const NumericVector &
 //'
 //' @export
 //[[Rcpp::export]]
-double wasserstein(const NumericVector & a_, const NumericVector & b_, const double & p=1)
+double wasserstein(const NumericVector a_, const NumericVector b_, const double p=1)
 {
-	return sqrt(sq_wasserstein(a_, b_, p));
+	double 	squared_wasserstein = sq_wasserstein(a_, b_, p),
+			dist = sqrt(squared_wasserstein);
+
+	return dist;
 }
 
 // [[Rcpp::export]]
@@ -788,11 +802,15 @@ NumericVector cumSum_test_export(NumericVector & x_, int last_index=0)
 }
 
 // [[Rcpp::export]]
-NumericVector cor_test_export(NumericVector & x_, NumericVector & y_)
-{
-	vector<double> 	x(x_.begin(), x_.end()),
-					y(y_.begin(), y_.end());
+double cor_test_export(NumericVector x_, NumericVector y_)
+{	
+
+	vector<double> 	x(x_.size()),
+					y(y_.size());
 	
+	for (int i=0; i<x.size(); i++) { x[i] = x_[i];}
+	for (int j=0; j<y.size(); j++) { y[j] = y_[j];}
+
 	double result = cor(x, y);
 	
 	return result;
@@ -849,4 +867,15 @@ IntegerVector interval_table_test_export(	NumericVector & data_,
 
 	IntegerVector output(result.begin(), result.end());
 	return output;
+}
+
+
+
+/*
+	Program entry point for debugging
+*/
+int main() 
+{
+	Rcout << "it ran" << END;
+	return 0;
 }

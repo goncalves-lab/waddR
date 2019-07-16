@@ -45,14 +45,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // wasserstein
-double wasserstein(const NumericVector& a_, const NumericVector& b_, const double& p);
+double wasserstein(const NumericVector a_, const NumericVector b_, const double p);
 RcppExport SEXP _diffexpR_wasserstein(SEXP a_SEXP, SEXP b_SEXP, SEXP pSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const NumericVector& >::type a_(a_SEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type b_(b_SEXP);
-    Rcpp::traits::input_parameter< const double& >::type p(pSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type a_(a_SEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type b_(b_SEXP);
+    Rcpp::traits::input_parameter< const double >::type p(pSEXP);
     rcpp_result_gen = Rcpp::wrap(wasserstein(a_, b_, p));
     return rcpp_result_gen;
 END_RCPP
@@ -201,13 +201,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // cor_test_export
-NumericVector cor_test_export(NumericVector& x_, NumericVector& y_);
+double cor_test_export(NumericVector x_, NumericVector y_);
 RcppExport SEXP _diffexpR_cor_test_export(SEXP x_SEXP, SEXP y_SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector& >::type x_(x_SEXP);
-    Rcpp::traits::input_parameter< NumericVector& >::type y_(y_SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type x_(x_SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y_(y_SEXP);
     rcpp_result_gen = Rcpp::wrap(cor_test_export(x_, y_));
     return rcpp_result_gen;
 END_RCPP
