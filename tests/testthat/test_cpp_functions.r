@@ -158,17 +158,15 @@ test_that("concat_test_export", {
 
 #### correlation of vectors
 test_that("cor_test_export", {
-  skip("Likely to throw errors while emp_equi_quant... not fixed")
-  expect_equal(cor_test_export(c(1,2,3,4,5), c(2,3,4,5,6)), 1)
+  expect_equal(cor_test_export(c(1.0,2.0,3,4,5), c(2,3,4,5,6)), 1)
   expect_equal(cor_test_export(c(1,2,3,4,5), c(2,3,4,5,6)*-1), -1)
   expect_equal(cor_test_export(c(1,34,134,13,50,5,1,2), c(2,20,55, 18, 55, 6, 2, 2)), cor(c(1,34,134,13,50,5,1,2), c(2,20,55, 18, 55, 6, 2, 2)))
 })
 
 #### empirical equidistant quantiles
 test_that("emp_equi_quantiles_test_export",{
-  
   expect_equal(emp_equi_quantiles_test_export(c(1:10),10), c(1:10))
-  expect_equal(emp_equi_quantiles_test_export(c(1:20),10), c(2,4,6,8,10,12,14,16,18,20))
-  expect_equal(emp_equi_quantiles_test_export(c(1:5),10), c(1,1,2,2,3,3,4,4,5,5))
+  expect_equal(emp_equi_quantiles_test_export(c(1:10),5), c(2,4,6,8,10))
+  expect_equal(emp_equi_quantiles_test_export(c(1:5),10), c(0,1,1,2,2,3,3,4,4,5))
 })
 
