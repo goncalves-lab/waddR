@@ -46,23 +46,54 @@ if (!requireNamespace("transport", quietly = TRUE)) {
     uu0 <- c(0, uu)
     uu1 <- c(uu, 1)
     areap <- sum((uu1 - uu0) * abs(bb - aa)^p)^(1/p)
-    #    print("uu1-uu0 = ")
-    #    print(uu1-uu0)
-    #    print("bb-aa = ")
-    #    print(bb-aa)
-    #    print("(uu1 - uu0) * abs(bb - aa) = ")
-    #    print((uu1 - uu0) * abs(bb - aa))
-    #    print("sum((uu1 - uu0) * abs(bb - aa)^p) = ")
-    #    print(sum((uu1 - uu0) * abs(bb - aa)^p))
     return(areap)
   }
 } else {
   library("transport")
 }
 
-test_that("wasserstein metric", {
-  # test versus an R implementation 
+
+##################################################
+#       WASSERSTEIN IMPLEMENTATION (NEW)         #
+##################################################
+
+# test correctnes of wasserstein versus an R implementation 
+test_that("wasserstein correctness", {
   
+  a <- c(13, 21, 34, 23)
+  b <- c(1,  1,  1,  2.3)
+  p <- 2
+  # case with equally long vectors a and b
+  expect_equal(wasserstein(a,b,p), wasserstein1d(a,b,p), tolerance=1)
+  expect_equal(wasserstein(a,b,1), wasserstein1d(a,b,1), tolerance=2)
+  
+  set.seed(42)
+  a2 <- rnorm(100, 10, 1)
+  set.seed(24)
+  b2 <- rnorm(102, 10.5, 1)
+  expect_equal(wasserstein(a2,b2,p), wasserstein1d(a2,b2,p), tolerance=1)
+})
+
+# test consistency of results
+test_that("wasserstein consistency test", {
+  #skip("skip the verbose tests")
+  # check against a weird behaviour where NaN's were produced seemingly randomly
+  x <- c(2, 1, 3) 
+  y <- c(3, 3, 2, 6)
+  results <- 1:100000
+  for (i in results) { results[i] =  wasserstein(x, y, p=2)}
+  first = results[1]
+  expect_true(all(results == first))
+} )
+
+
+##################################################
+# WASSERSTEIN_METRIC IMPLEMENTATION (DEPRECATED) #
+##################################################
+
+# test correctnes of wasserstein_metric versus an R implementation 
+test_that("wasserstein_metric correctness", {
+  skip("wasserstein_metric will be deprecated, skipping all test for it")
   a <- c(13, 21, 34, 23)
   b <- c(1,  1,  1,  2.3)
   p <- 2
@@ -71,18 +102,18 @@ test_that("wasserstein metric", {
   expect_equal(wasserstein_metric(a,b), wasserstein1d(a,b))
   
   # vectors of different lengths
-  c <- c(34, 4343, 3090, 1309, 23.2)
+  x <- c(34, 4343, 3090, 1309, 23.2)
   set.seed(42)
   a2 <- rnorm(100,10,1)
   set.seed(24)
   b2 <- rnorm(102,10.5, 1)
   expect_equal(wasserstein_metric(a2,b2,p), wasserstein1d(a2,b2,p))
-  expect_equal(wasserstein_metric(a,c,p), wasserstein1d(a,c,p))
+  expect_equal(wasserstein_metric(a,x,p), wasserstein1d(a,x,p))
 })
 
-
-test_that("test against itself", {
-  # test consistency of results
+# test consistency of results
+test_that("wasserstein_metric consistency test", {
+  skip("wasserstein_metric will be deprecated, skipping all test for it")
   # check against a weird behaviour where NaN's were produced seemingly randomly
   x <- c(2, 1, 3) 
   y <- c(3, 3, 2, 6)
@@ -91,3 +122,4 @@ test_that("test against itself", {
   first = results[1]
   expect_true(all(results == first))
 } )
+
