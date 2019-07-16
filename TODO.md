@@ -6,7 +6,7 @@
 - [x] Wasserstein Metric Rcpp implementation differs from wasserstein1d
 
 ## IMPORTANT
-- <s> [x] Write Man pages</s> Roxygen2 does that now
+- [x] <s> Write Man pages</s> Use Roxygen
 - [ ] update new cpp code comments for roxygen2
 - [ ] Biological application
 - [x] Fix tests to run with devtools::test()
@@ -14,5 +14,5 @@
 - [x] Make use of Cpp references
 
 ## FEATURES
-- <s> [ ] CI Testing </s>
+- [ ] <s> CI Testing </s> Not necessary at this point
 - [ ] Use Issues instead of this TODO file
