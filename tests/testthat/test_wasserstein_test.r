@@ -6,8 +6,6 @@ library("diffexpR")
 ##                    WASSERSTEIN.TEST FUNCTION                         ##
 ##########################################################################
 test_that("Input Validation for wasserstein test", {
-  skip_temporarily()
-  
   invalid_method <- "TS"
   expect_error(wasserstein.test(rnorm(199, 20, 0.4), rnorm(239, 19, 2), 2, method=invalid_method))
   
@@ -15,21 +13,14 @@ test_that("Input Validation for wasserstein test", {
 
 
 test_that("Correctness of wasserstein test", {
-  skip_temporarily()
-  
   set.seed(42)
-  result <- wasserstein.test(rnorm(100,20,3), rnorm(134, 30,10), method="SP")
-
-  expect_true(round(result["d.transport"], 4) == round(12.01397, 4))
-  expect_true(round(result["perc.loc"]) == round(62.32))
-  expect_true(round(result["perc.size"]) == round(36.56))
-  expect_true(round(result["perc.shape"]) == round(1.12))
+  x<- rnorm(100,20,3)
+  y <- rnorm(134, 30,10)
+  expect_known("value", wasserstein.test(x, y, method="SP"), file = "known.values/testresult_correctness_wasserstein_test_1")
 })
 
 
 test_that("Example Run of Wasserstein Test", {
-  skip_temporarily()
-  
   v<-rnorm(500)
   w<-rnorm(500,1,2)
   names.sp <-c("d.transport","d.transport^2","d.comp^2","d.comp","location",
