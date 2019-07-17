@@ -12,10 +12,24 @@ using namespace arma;
 using namespace std;
 using namespace Rcpp;
 
+
+
+/*=============================================
+
+			SIMPLE VECTOR OPERATIONS
+
+==============================================*/ 
+
+
+//' vector_factor_multiplication
+//'
+//' @param x vector 
+//' @param factor numerical
+//' @return a vector containing the product of each element in x and the factor
+//'
 template <typename T>
 vector<T> multiply(const vector<T> & x, const T & factor)
 { 
-  //TODO : check for equal vector lengths or throw error
   vector<T> result(x.begin(), x.end());
   
   for (T & element : result) {
@@ -25,8 +39,15 @@ vector<T> multiply(const vector<T> & x, const T & factor)
   return result;
 }
 
+//' vector_vector_multiplication
+//'
+//' @param x vector 
+//' @param y vector
+//' @return a vector containing the product of each element
+//'   in x and the factor
+//'
 template <typename T>
-vector<T> multiply(const vector<T> & x, const vector<T> y)
+vector<T> multiply(const vector<T> & x, const vector<T> & y)
 { 
   vector<T> result(x.begin(), x.end());
   if (x.size() != y.size()) {
@@ -45,8 +66,16 @@ vector<T> multiply(const vector<T> & x, const vector<T> y)
   return result;
 }
 
+
+//' vector_pow
+//'
+//' @param x vector 
+//' @param exp numerical representing the exponent
+//' @return a vector containing a copy of x with each 
+//'   element raised to the power of exp
+//'
 template <typename T>
-vector<T> pow(const vector<T> & x, const T exp)
+vector<T> pow(const vector<T> & x, const T & exp)
 {
   vector<T> result(x.begin(), x.end());
   for (T& element : result) {
@@ -55,6 +84,11 @@ vector<T> pow(const vector<T> & x, const T exp)
   return result;
 }
 
+//' vector_sum
+//'
+//' @param x vector with numerical elements 
+//' @return The sum of all elements in x
+//'
 template <typename T>
 T sum(const vector<T> & x) 
 {
@@ -65,9 +99,14 @@ T sum(const vector<T> & x)
   return result;
 }
 
-
+//' vector_vector_subtract
+//'
+//' @param x vector 
+//' @param y vector
+//' @return vector representing the subtraction x - y
+//'
 template <typename T>
-vector<T> subtract(const vector<T> & x, const vector<T> y)
+vector<T> subtract(const vector<T> & x, const vector<T> & y)
 {
   if (x.size() != y.size()) {
   	stop("subtract: Sizes of vectors x and y are incompatible.");
@@ -80,9 +119,15 @@ vector<T> subtract(const vector<T> & x, const vector<T> y)
   }
 }
 
-
+//' vector_factor_division
+//'
+//' @param x vector 
+//' @param divisor numerical
+//' @return a vector containing the result of each 
+//'   element in x divided by divisor
+//'
 template <typename T>
-vector<T> divide(const vector<T> & x, const T divisor)
+vector<T> divide(const vector<T> & x, const T & divisor)
 {
   vector<T> result(x.begin(), x.end());
   for (T& element : result) {
@@ -91,9 +136,15 @@ vector<T> divide(const vector<T> & x, const T divisor)
   return result;
 }
 
-
+//' vector_vector_division
+//'
+//' @param x vector 
+//' @param y vector
+//' @return a vector containing the product of each element
+//'   in x and the factor
+//'
 template <typename T>
-vector<T> divide(const vector<T> & x, const vector<T> y)
+vector<T> divide(const vector<T> & x, const vector<T> & y)
 { 
   vector<T> result(x.begin(), x.end());
   if (x.size() != y.size()) {
@@ -112,10 +163,11 @@ vector<T> divide(const vector<T> & x, const vector<T> y)
   return result;
 }
 
-/*
-Returns the average of a NumericVector object that is not Null
-@param x : NumericVector object
-*/
+//' vector_mean
+//'
+//' @param x vector with numericals
+//' @return the average of all elements in x
+//'
 template <typename T>
 double mean(const vector<T> & x)
 {	
@@ -132,7 +184,11 @@ double mean(const vector<T> & x)
  		return result;
 }
 
-
+//' vector_standard_deviation
+//'
+//' @param x vector with numericals
+//' @return the standard deviation of all elements in x
+//'
 template <typename T>
 double sd(const vector<T> & x)
 {
@@ -147,12 +203,11 @@ double sd(const vector<T> & x)
 	return result;
 }
 
-
-/*
-Returns a NumericVector object with the absolute values from
-a given input vector.
-@param x NumericVector object, not Null
-*/
+//' vector_absolute
+//'
+//' @param x vector with numericals
+//' @return vector with the absolute values of all elements in x
+//'
 template <typename T>
 vector<T> abs(const vector<T> & x) 
 {	
@@ -168,6 +223,21 @@ vector<T> abs(const vector<T> & x)
 }
 
 
+/*=============================================
+
+			ALGORITHMS ON VECTORS
+
+==============================================*/ 
+
+
+//' vector_vector_correlation
+//'
+//' @param x vector with numericals
+//' @param y vector with numericals
+//' @param mean_x optional pre-calculated mean of x
+//' @param mean_y optional pre-calculated mean of y
+//' @return pearsons correlation of the vectors x and y
+//'
 template <typename T>
 double cor(const vector<T> & x, const vector<T> & y, 
 	double mean_x = std::numeric_limits<double>::infinity(), 
@@ -209,14 +279,13 @@ double cor(const vector<T> & x, const vector<T> & y,
 }
 
 
-//' Cumulative Sum
+//' vector_cumulative_sum
 //' 
-//' Returns the cumulative sums of a NumericalVector object.
+//' The cumulative sum x[i] is the sum of all previous elements in x:
+//' x[i] = x[i-1] + x[i-2] + ... + x[0]
 //'
-//' @param x NumericalVector
-//'
-//' @return a vector containing cumulative sums of the values
-//'		in the input vector 
+//' @param x vector of numericals
+//' @return a vector containing cumulative sums of the values in x
 //'
 template <typename T>
 vector<T> cumSum(const std::vector<T> & x, const int last_index=0)
@@ -277,7 +346,6 @@ vector<T> emp_equi_quantiles(const vector<T> & x_, const int & K=1000,
 
 			x_pos = n * q_num / K ;
 			x_idx = (int) min(max((double) 0.0, ceil(x_pos) - 1), (double) n-1);
-			//x_idx = (int) ceil(x_pos);
 			
 			// check if the data index x_pos is a whole number
 			if (x_pos == (double) x_idx) {
@@ -296,14 +364,11 @@ vector<T> emp_equi_quantiles(const vector<T> & x_, const int & K=1000,
 
 //' Repeat weighted
 //'
-//' Returns a weighted NumericVector of a given input vector.
 //' Each element x[i] in the given input vector x is repeated according
 //' to the weight vector at position i
 //'
-//' @param x NumericVector object with the elements that are to be weighted
-//' @param freq_table NumericVector object representing a weight vector.
-//'		Each element in x is repeated accoring to its weight in freq_table
-//'
+//' @param x vector with numeric elements
+//' @param freq_table vector<int> representing the numer of repeats
 //' @return the weight-repeated NumericVector of x
 //'
 vector<double> rep_weighted(vector<double> x,
@@ -341,23 +406,18 @@ vector<double> rep_weighted(vector<double> x,
 }
 
 
-//' Concatenate Numeric Vectors
+//' vector_concatenate
 //'
-//' `concat` returns a NumericVector that represents the concatenation of two input vectors.
-//' The elements of the second given vector are written to the output vector after the elements
-//' in the first vector
+//' `concat` returns a vector that represents the concatenation of two input vectors.
+//' The elements of the second given vector are appended to a copy of the first vector.
 //'
-//' @param x NumericVector first vector to be written to the output
-//' @param y NumericVector second vector to be written to the output
-//'
+//' @param x vector
+//' @param y vector
 //' @return concatenation of y after x
 //'
 vector<double> concat(vector<double> & x, vector<double> & y)
 {	
-
-
 	vector<double> out(x.size() + y.size());
-
 	vector<double>::iterator x_it = x.begin();
 	vector<double>::iterator x_it_end = x.end();
 	vector<double>::iterator y_it = y.begin();
@@ -377,21 +437,20 @@ vector<double> concat(vector<double> & x, vector<double> & y)
 }
 
 
-//' Interval Table
+//' interval_table
 //'
-//' Given a NumericVector datavec and a NumericVector of interval breaks,
-//' a table with the number of elements in datavec that fall into each of the
-//' intervals is returned.
+//' Given a vector datavec and a vector with interval breaks,
+//' a histogram with the number of elements in datavec that fall into each
+//' of the intervals is returned.
 //'
-//' @param datavec NumericVector with elements to be distributed over the intervals
-//' @param interval_breaks NumericVector with n interval_borders that are
+//' @param datavec vector with elements to be distributed over the intervals
+//' @param interval_breaks vector with n interval_borders that are
 //'		interpreted as interval breaks:\cr 
 //'		(-Inf, breaks[0]], (breaks[0], breaks[1]), ... , (breaks(n), Inf)
-//' @param ini_value Default frequency that is assigned to each interval_breaks.
-//'		Counted interval frequencies are added to the default frequency.
+//' @param ini_value default frequency value
 //'
-//' @return The frequency with which elements of datavec fall into each of the intervals defined
-//' 		by the second argument interval_breaks
+//' @return frequency with which elements of datavec fall into each of the 
+//'    intervals defined by interval_breaks
 //'
 vector<int> interval_table(	const vector<double> & datavec,
 							const vector<double> & interval_breaks,
@@ -445,7 +504,8 @@ vector<int> interval_table(	const vector<double> & datavec,
 }
 
 
-//' Permutations
+//' permutations
+//'
 //' Returns permutations of a given NumericVector as columns in a NumericMatrix
 //' object. 
 //' @param x :	NumericVector representing a vector that is to be permutated
@@ -474,13 +534,21 @@ NumericMatrix permutations(const NumericVector x, const int num_permutations)
 }
 
 
+/*=============================================
+
+		WASSERSTEIN DISTANCE CALCULATION
+
+==============================================*/
+
+
 //' sq_wasserstein
-//' Squared Wasserstein distance between two vectors. 
+//'
+//' Squared Wasserstein distance between two vectors.
+//'
 //' The squared wasserstein distance has useful properties for decomposition.
 //' @param a Vector representing an empirical distribution under condition A 
 //' @param b Vector representing an empirical distribution under condition B
 //'	@param p exponent of the wasserstine distance
-//'
 //' @return The squared wasserstein distance between a and b
 //'
 //' @export
@@ -519,11 +587,12 @@ double sq_wasserstein(const NumericVector & a_, const NumericVector & b_, const 
 }
 
 //' sq_wasserstein_decomp
+//'
 //' Squared Wasserstein distance between two vectors, decomposed into size, location and shape. 
+//'
 //' @param a Vector representing an empirical distribution under condition A 
 //' @param b Vector representing an empirical distribution under condition B
 //'	@param p exponent of the wasserstine distance
-//'
 //' @return The wasserstein distance between a and b, decomposed into terms for size, location, and shape
 //'
 //' @export
@@ -555,7 +624,9 @@ Rcpp::List sq_wasserstein_decomp(const NumericVector & a_, const NumericVector &
 }
 
 //' wasserstein
+//'
 //' Wasserstein distance between two vectors. 
+//'
 //' @param a Vector representing an empirical distribution under condition A 
 //' @param b Vector representing an empirical distribution under condition B
 //'	@param p exponent of the wasserstine distance
@@ -578,7 +649,7 @@ double wasserstein_metric(NumericVector a_,
 						  Nullable<NumericVector> wa_, 
 						  Nullable<NumericVector> wb_,
 						  double p) {
-	
+	warning("wasserstein_metric will be deprecated in the next update. Use wasserstein() instead");
 	vector<double> a(a_.begin(), a_.end());
 	vector<double> b(b_.begin(), b_.end());
 	sort(a.begin(), a.end());
