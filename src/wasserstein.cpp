@@ -16,26 +16,38 @@ using namespace Rcpp;
 
 /*=============================================
 
-			SIMPLE VECTOR OPERATIONS
+				VECTOR OPERATIONS
 
 ==============================================*/ 
 
+//' vector_factor_addition
+//'
+//' @param x vector 
+//' @param summand numerical
+//' @return a vector containing the sum of each element in x and the summand
+//'
 template <typename T>
-vector<T> operator+(vector<T> x, T add)
+vector<T> operator+(vector<T> x, T summand)
 {
 	vector<T> result(x.begin(), x.end());
 
 	for (T & element : result) {
-		element = element + add;
+		element = element + summand;
 	}
 	return result;
 }
 
+//' vector_vector_addition
+//'
+//' @param x vector 
+//' @param y vector
+//' @return a vector containing at each position i the sum of x[i] + y[i]
+//'
 template <typename T>
 vector<T> operator+(vector<T> x, vector<T> y)
 {
 	if (x.size() != y.size()) {
-		stop("subtract: Sizes of vectors x and y are incompatible.");
+		stop("add: Sizes of vectors x and y are incompatible.");
 	} else {
 		vector<T> result(x.begin(), x.end());
 		for (int i=0; i<x.size(); i++) {
@@ -52,7 +64,7 @@ vector<T> operator+(vector<T> x, vector<T> y)
 //' @return a vector containing the product of each element in x and the factor
 //'
 template <typename T>
-vector<T> multiply(const vector<T> & x, const T & factor)
+vector<T> operator*(const vector<T> & x, const T & factor)
 { 
   vector<T> result(x.begin(), x.end());
   
@@ -67,24 +79,87 @@ vector<T> multiply(const vector<T> & x, const T & factor)
 //'
 //' @param x vector 
 //' @param y vector
-//' @return a vector containing the product of each element
-//'   in x and the factor
+//' @return a vector containing at each position i the product  x[i] * y[i]
 //'
 template <typename T>
-vector<T> multiply(const vector<T> & x, const vector<T> & y)
+vector<T> operator*(const vector<T> & x, const vector<T> & y)
 { 
   vector<T> result(x.begin(), x.end());
   if (x.size() != y.size()) {
   	warning("multiply: Sizes of vectors x and y are incompatible. Attempting multiplication by factor with y[0] ...");
   	if (y.size() >=1) {
   		const double factor = y[0];
-  		result = multiply(x, factor);
+  		result = x * factor;
   	} else {
   		stop("Invalid vector y");
   	}
   } else {
     for (int i=0; i<x.size(); i++) {
       result[i] = x[i] * y[i];
+    }
+  }
+  return result;
+}
+
+//' vector_vector_subtract
+//'
+//' @param x vector 
+//' @param y vector
+//' @return vector representing the subtraction x - y
+//'
+template <typename T>
+vector<T> operator-(const vector<T> & x, const vector<T> & y)
+{
+  if (x.size() != y.size()) {
+  	stop("subtract: Sizes of vectors x and y are incompatible.");
+  } else {
+  	vector<T> result(x.begin(), x.end());
+    for (int i=0; i<x.size(); i++) {
+      result[i] = x[i] - y[i];
+    }
+    return result;
+  }
+}
+
+//' vector_factor_division
+//'
+//' @param x vector 
+//' @param divisor numerical
+//' @return a vector containing the result of each 
+//'   element in x divided by divisor
+//'
+template <typename T>
+vector<T> operator/(const vector<T> & x, const T & divisor)
+{
+  vector<T> result(x.begin(), x.end());
+  for (T& element : result) {
+    element = element / divisor;
+  }
+  return result;
+}
+
+//' vector_vector_division
+//'
+//' @param x vector 
+//' @param y vector
+//' @return a vector containing the product of each element
+//'   in x and the factor
+//'
+template <typename T>
+vector<T> operator/(const vector<T> & x, const vector<T> & y)
+{ 
+  vector<T> result(x.begin(), x.end());
+  if (x.size() != y.size()) {
+  	warning("divide: Sizes of vectors x and y are incompatible. Attempting division of x by y[0] ...");
+  	if (y.size() >=1) {
+  		const double divisor = y[0];
+  		result = x / divisor;
+  	} else {
+  		stop("Invalid vector y");
+  	}
+  } else {
+    for (int i=0; i<x.size(); i++) {
+      result[i] = x[i] / y[i];
     }
   }
   return result;
@@ -123,69 +198,6 @@ T sum(const vector<T> & x)
   return result;
 }
 
-//' vector_vector_subtract
-//'
-//' @param x vector 
-//' @param y vector
-//' @return vector representing the subtraction x - y
-//'
-template <typename T>
-vector<T> subtract(const vector<T> & x, const vector<T> & y)
-{
-  if (x.size() != y.size()) {
-  	stop("subtract: Sizes of vectors x and y are incompatible.");
-  } else {
-  	vector<T> result(x.begin(), x.end());
-    for (int i=0; i<x.size(); i++) {
-      result[i] = x[i] - y[i];
-    }
-    return result;
-  }
-}
-
-//' vector_factor_division
-//'
-//' @param x vector 
-//' @param divisor numerical
-//' @return a vector containing the result of each 
-//'   element in x divided by divisor
-//'
-template <typename T>
-vector<T> divide(const vector<T> & x, const T & divisor)
-{
-  vector<T> result(x.begin(), x.end());
-  for (T& element : result) {
-    element = element / divisor;
-  }
-  return result;
-}
-
-//' vector_vector_division
-//'
-//' @param x vector 
-//' @param y vector
-//' @return a vector containing the product of each element
-//'   in x and the factor
-//'
-template <typename T>
-vector<T> divide(const vector<T> & x, const vector<T> & y)
-{ 
-  vector<T> result(x.begin(), x.end());
-  if (x.size() != y.size()) {
-  	warning("divide: Sizes of vectors x and y are incompatible. Attempting division of x by y[0] ...");
-  	if (y.size() >=1) {
-  		const double divisor = y[0];
-  		result = divide(x, divisor);
-  	} else {
-  		stop("Invalid vector y");
-  	}
-  } else {
-    for (int i=0; i<x.size(); i++) {
-      result[i] = x[i] / y[i];
-    }
-  }
-  return result;
-}
 
 //' vector_mean
 //'
@@ -686,7 +698,7 @@ double wasserstein_metric(NumericVector a_,
 		// compute root mean squared absolute difference of a and b
 		// in R: mean(abs(sort(b) - sort(a))^p)^(1/p)
 		vector<double> sq_abs_diff = pow(
-		  abs(subtract(b, a)),
+		  abs(b - a),
 		  p);
 		double mrsad = pow((double) mean(sq_abs_diff), (double) 1.0/p);
 		return mrsad;
@@ -710,10 +722,10 @@ double wasserstein_metric(NumericVector a_,
 
 	// normalize the weights to add up to 1
 	vector<double> ua(wa.size());
-	ua = divide(wa, sum(wa));
+	ua = wa / sum(wa);
 	ua.pop_back();
 	vector<double> ub(wb.size());
-	ub = divide(wb, sum(wb));
+	ub = wb / sum(wb);
 	ub.pop_back();
 
 	// cumulative distribution without the last value
@@ -756,7 +768,7 @@ double wasserstein_metric(NumericVector a_,
 	//Rcout << "AFTER CONCATENATING SOMETHING: uu1.size() = " << uu1.size() << ", uu0.size() = " << uu0.size() <<END;
 	//Rcout << "b_weighted.size() = " << b_weighted.size() << ", a_weighted.size() = " << a_weighted.size() <<END;
 
-	wsum = sum( multiply(subtract(uu1, uu0), pow(abs(subtract(b_weighted,a_weighted)), p)));
+	wsum = sum((uu1 - uu0) * pow(abs(b_weighted - a_weighted), p));
 	areap = pow((double) wsum, (double) (1/p));
 
 	return areap;
@@ -771,29 +783,54 @@ double wasserstein_metric(NumericVector a_,
 
 ==============================================*/ 
 
-
 // [[Rcpp::export]]
-NumericVector multiply_test_export(NumericVector & x_, NumericVector & y_)
+NumericVector add_test_export(NumericVector & x_, NumericVector & y_)
 {
-
 	vector<double> 	x(x_.begin(), x_.end()),
 					y(y_.begin(), y_.end()),
 					result(x.size());
 
-	result = multiply(x, y);
+	result = x + y;
 	NumericVector output(result.begin(), result.end());
 	return output;
 }
 
 
 // [[Rcpp::export]]
-NumericVector multiply_test_export_sv(NumericVector & x_, double & y_)
+NumericVector add_test_export_sv(NumericVector & x_, double & summand_)
+{
+	vector<double> 	x(x_.begin(), x_.end()),
+					result(x.size());
+	const double summand = summand_;
+
+	result = x + summand;
+	NumericVector output(result.begin(), result.end());
+	return output;
+}
+
+
+// [[Rcpp::export]]
+NumericVector multiply_test_export(NumericVector & x_, NumericVector & y_)
+{
+	vector<double> 	x(x_.begin(), x_.end()),
+					y(y_.begin(), y_.end()),
+					result(x.size());
+
+	result = x * y;
+	NumericVector output(result.begin(), result.end());
+	return output;
+}
+
+
+// [[Rcpp::export]]
+NumericVector multiply_test_export_sv(NumericVector & x_, double & factor_)
 {
 
 	vector<double> 	x(x_.begin(), x_.end()),
 					result(x.size());
-	const double y = y_;
-	result = multiply(x, y);
+	const double factor = factor_;
+
+	result = x * factor;
 	NumericVector output(result.begin(), result.end());
 	return output;
 }
@@ -840,7 +877,7 @@ NumericVector subtract_test_export(NumericVector & x_, NumericVector & y_)
 					y(y_.begin(), y_.end()),
 					result(x.size());
 
-	result = subtract(x,y);
+	result = x - y;
 	
 	NumericVector output(result.begin(), result.end());
 	return output;
@@ -853,7 +890,7 @@ NumericVector divide_test_export_sv(NumericVector & x_, double & y_)
 					result(x.size());
 	const double 	y = y_;
 
-	result = divide(x,y);
+	result = x / y;
 
 	NumericVector output(result.begin(), result.end());
 	return output;
@@ -866,7 +903,7 @@ NumericVector divide_test_export_vectors(NumericVector & x_, NumericVector & y_)
 					y(y_.begin(), y_.end()),
 					result(x.size());
 
-	result = divide(x,y);
+	result = x / y;
 
 	NumericVector output(result.begin(), result.end());
 	return output;

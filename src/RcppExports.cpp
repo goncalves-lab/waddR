@@ -58,17 +58,41 @@ BEGIN_RCPP
 END_RCPP
 }
 // wasserstein_metric
-double wasserstein_metric(NumericVector a_, NumericVector b_, Nullable<NumericVector> wa_, Nullable<NumericVector> wb_, double p);
-RcppExport SEXP _diffexpR_wasserstein_metric(SEXP a_SEXP, SEXP b_SEXP, SEXP wa_SEXP, SEXP wb_SEXP, SEXP pSEXP) {
+double wasserstein_metric(NumericVector a_, NumericVector b_, double p, Nullable<NumericVector> wa_, Nullable<NumericVector> wb_);
+RcppExport SEXP _diffexpR_wasserstein_metric(SEXP a_SEXP, SEXP b_SEXP, SEXP pSEXP, SEXP wa_SEXP, SEXP wb_SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type a_(a_SEXP);
     Rcpp::traits::input_parameter< NumericVector >::type b_(b_SEXP);
+    Rcpp::traits::input_parameter< double >::type p(pSEXP);
     Rcpp::traits::input_parameter< Nullable<NumericVector> >::type wa_(wa_SEXP);
     Rcpp::traits::input_parameter< Nullable<NumericVector> >::type wb_(wb_SEXP);
-    Rcpp::traits::input_parameter< double >::type p(pSEXP);
-    rcpp_result_gen = Rcpp::wrap(wasserstein_metric(a_, b_, wa_, wb_, p));
+    rcpp_result_gen = Rcpp::wrap(wasserstein_metric(a_, b_, p, wa_, wb_));
+    return rcpp_result_gen;
+END_RCPP
+}
+// add_test_export
+NumericVector add_test_export(NumericVector& x_, NumericVector& y_);
+RcppExport SEXP _diffexpR_add_test_export(SEXP x_SEXP, SEXP y_SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector& >::type x_(x_SEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type y_(y_SEXP);
+    rcpp_result_gen = Rcpp::wrap(add_test_export(x_, y_));
+    return rcpp_result_gen;
+END_RCPP
+}
+// add_test_export_sv
+NumericVector add_test_export_sv(NumericVector& x_, double& summand_);
+RcppExport SEXP _diffexpR_add_test_export_sv(SEXP x_SEXP, SEXP summand_SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector& >::type x_(x_SEXP);
+    Rcpp::traits::input_parameter< double& >::type summand_(summand_SEXP);
+    rcpp_result_gen = Rcpp::wrap(add_test_export_sv(x_, summand_));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -85,14 +109,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // multiply_test_export_sv
-NumericVector multiply_test_export_sv(NumericVector& x_, double& y_);
-RcppExport SEXP _diffexpR_multiply_test_export_sv(SEXP x_SEXP, SEXP y_SEXP) {
+NumericVector multiply_test_export_sv(NumericVector& x_, double& factor_);
+RcppExport SEXP _diffexpR_multiply_test_export_sv(SEXP x_SEXP, SEXP factor_SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector& >::type x_(x_SEXP);
-    Rcpp::traits::input_parameter< double& >::type y_(y_SEXP);
-    rcpp_result_gen = Rcpp::wrap(multiply_test_export_sv(x_, y_));
+    Rcpp::traits::input_parameter< double& >::type factor_(factor_SEXP);
+    rcpp_result_gen = Rcpp::wrap(multiply_test_export_sv(x_, factor_));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -268,6 +292,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_diffexpR_sq_wasserstein_decomp", (DL_FUNC) &_diffexpR_sq_wasserstein_decomp, 3},
     {"_diffexpR_wasserstein", (DL_FUNC) &_diffexpR_wasserstein, 3},
     {"_diffexpR_wasserstein_metric", (DL_FUNC) &_diffexpR_wasserstein_metric, 5},
+    {"_diffexpR_add_test_export", (DL_FUNC) &_diffexpR_add_test_export, 2},
+    {"_diffexpR_add_test_export_sv", (DL_FUNC) &_diffexpR_add_test_export_sv, 2},
     {"_diffexpR_multiply_test_export", (DL_FUNC) &_diffexpR_multiply_test_export, 2},
     {"_diffexpR_multiply_test_export_sv", (DL_FUNC) &_diffexpR_multiply_test_export_sv, 2},
     {"_diffexpR_pow_test_export", (DL_FUNC) &_diffexpR_pow_test_export, 2},

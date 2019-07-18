@@ -36,6 +36,17 @@ test_that("sd_test_export", {
   expect_equal(diffexpR::sd_test_export(v2), sd(v2))
 })
 
+#### Vector add
+#### Vector subtract
+test_that("add_test_export", {
+  v1 <- c(1,2,3,4)
+  v2 <- c(2,2,2,2)
+  expected <- c(3,4,5,6)
+  expect_equal(diffexpR::add_test_export(v1,v2), expected)
+  expect_error(diffexpR::add_test_export(v1,2)) 
+  expect_equal(diffexpR::add_test_export_sv(v1,2), expected)
+})
+
 #### Vector subtract
 test_that("subtract_test_export", {
   v1 <- c(1,2,3,4)
