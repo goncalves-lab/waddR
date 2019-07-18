@@ -20,6 +20,30 @@ using namespace Rcpp;
 
 ==============================================*/ 
 
+template <typename T>
+vector<T> operator+(vector<T> x, T add)
+{
+	vector<T> result(x.begin(), x.end());
+
+	for (T & element : result) {
+		element = element + add;
+	}
+	return result;
+}
+
+template <typename T>
+vector<T> operator+(vector<T> x, vector<T> y)
+{
+	if (x.size() != y.size()) {
+		stop("subtract: Sizes of vectors x and y are incompatible.");
+	} else {
+		vector<T> result(x.begin(), x.end());
+		for (int i=0; i<x.size(); i++) {
+			result[i] = x[i] + y[i];
+		}
+		return result;
+	}
+}
 
 //' vector_factor_multiplication
 //'
@@ -491,7 +515,7 @@ vector<int> interval_table(	const vector<double> & datavec,
 
 		// update the interval:
 		if (interval_i == interval_breaks.size()-1) {
-			upper_bound = - numeric_limits<double>::infinity();
+			upper_bound = numeric_limits<double>::infinity();
 			lower_bound = interval_breaks[interval_breaks.size()];
 		}
 		else {
@@ -646,10 +670,10 @@ double wasserstein(const NumericVector a_, const NumericVector b_, const double 
 // [[Rcpp::export]]
 double wasserstein_metric(NumericVector a_, 
 						  NumericVector b_,
-						  Nullable<NumericVector> wa_, 
-						  Nullable<NumericVector> wb_,
-						  double p) {
-	warning("wasserstein_metric will be deprecated in the next update. Use wasserstein() instead");
+						  double p=1,
+						  Nullable<NumericVector> wa_=R_NilValue, 
+						  Nullable<NumericVector> wb_=R_NilValue) {
+	//warning("wasserstein_metric will be deprecated in the next update. Use wasserstein() instead");
 	vector<double> a(a_.begin(), a_.end());
 	vector<double> b(b_.begin(), b_.end());
 	sort(a.begin(), a.end());
@@ -658,13 +682,14 @@ double wasserstein_metric(NumericVector a_,
 	// No weight vectors are given
 	if (a.size() == b.size() && wa_.isNull() && wb_.isNull()) {
 
-	// compute root mean squared absolute difference of a and b
-	// in R: mean(abs(sort(b) - sort(a))^p)^(1/p)
-	vector<double> sq_abs_diff = pow(
-	  abs(subtract(b, a)),
-	  p);
-	double mrsad = pow((double) mean(sq_abs_diff), (double) 1.0/p);
-	return mrsad;
+		Rcout << "a.size() = " << a.size() << ", b.size() = " << b.size() <<END;
+		// compute root mean squared absolute difference of a and b
+		// in R: mean(abs(sort(b) - sort(a))^p)^(1/p)
+		vector<double> sq_abs_diff = pow(
+		  abs(subtract(b, a)),
+		  p);
+		double mrsad = pow((double) mean(sq_abs_diff), (double) 1.0/p);
+		return mrsad;
 
 	}
 
@@ -686,23 +711,31 @@ double wasserstein_metric(NumericVector a_,
 	// normalize the weights to add up to 1
 	vector<double> ua(wa.size());
 	ua = divide(wa, sum(wa));
+	ua.pop_back();
 	vector<double> ub(wb.size());
 	ub = divide(wb, sum(wb));
+	ub.pop_back();
 
 	// cumulative distribution without the last value
 	// => last value will be considered as an open interval to Infinity
-	vector<double> cua(a.size()-1);
-	cua = cumSum(ua, a.size()-1);
-	vector<double> cub(b.size()-1);
-	cub = cumSum(ub, b.size()-1);
+	vector<double> cua(ua.size());
+	cua = cumSum(ua);
+	vector<double> cub(ub.size());
+	cub = cumSum(ub);
 
-	vector<int> a_rep = interval_table(cub, cua, 1);
-	vector<int> b_rep = interval_table(cua, cub, 1);
-	//Rcout << a_rep << END;
-	//Rcout << b_rep << END;
+	vector<int> a_rep = interval_table(cub, cua, 0);
+	vector<int> b_rep = interval_table(cua, cub, 0);
+	a_rep = a_rep + 1;
+	b_rep = b_rep + 1;
+
+	//Rcout << "a_rep = "; for (int ea : a_rep) { Rcout << ea; } Rcout << END;
+	//Rcout << "b_rep = "; for (int eb : b_rep) { Rcout << eb; } Rcout << END;
 
 	int len_a_weighted = sum(a_rep);
 	int len_b_weighted = sum(b_rep);
+	//Rcout << "len_b_weighted = " << sum(b_rep) << END;
+	//Rcout << "len_a_weighted = " << sum(a_rep) << END;
+
 	vector<double> a_weighted(len_b_weighted);
 	vector<double> b_weighted(len_a_weighted);
 	a_weighted = rep_weighted(a, a_rep);
@@ -710,27 +743,23 @@ double wasserstein_metric(NumericVector a_,
 
 	vector<double> uu0(cua.size() + cub.size());
 	vector<double> uu1(cua.size() + cub.size());
+	//Rcout << "AFTER INITIALIZATION: uu1.size() = " << uu1.size() << ", uu0.size() = " << uu0.size() <<END;
 
 	uu0 = concat(cua, cub);
-	vector<double>::iterator beginit = uu0.begin();
-	uu0.insert(beginit,0);
+	uu0.insert(uu0.begin(),0);
 	uu1 = concat(cua, cub);
 	uu1.push_back(1);
 
 	double wsum = 0.0;
 	double areap = 0.0;
+
+	//Rcout << "AFTER CONCATENATING SOMETHING: uu1.size() = " << uu1.size() << ", uu0.size() = " << uu0.size() <<END;
+	//Rcout << "b_weighted.size() = " << b_weighted.size() << ", a_weighted.size() = " << a_weighted.size() <<END;
+
 	wsum = sum( multiply(subtract(uu1, uu0), pow(abs(subtract(b_weighted,a_weighted)), p)));
 	areap = pow((double) wsum, (double) (1/p));
 
-	//return areap;
-
-	double meana, meanb;
-	meana = mean(a);
-	meanb = mean(b);
-
-	double sda, sdb;
-	sda = sd(a);
-	sdb = sd(b);
+	return areap;
 
 }
 
