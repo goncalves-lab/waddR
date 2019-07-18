@@ -12,6 +12,7 @@
 - [x] Fix tests to run with devtools::test()
 - [ ] Upload to CRAN / Bioconductor
 - [x] Make use of Cpp references
+- [ ] change decomposition error in Test output from absolute to relative measure
 
 ## FEATURES
 - [ ] <s> CI Testing </s> Not necessary at this point

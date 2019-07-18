@@ -2,9 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{sq_wasserstein}
 \alias{sq_wasserstein}
-\title{sq_wasserstein
-Squared Wasserstein distance between two vectors. 
-The squared wasserstein distance has useful properties for decomposition.}
+\title{sq_wasserstein}
 \usage{
 sq_wasserstein(a_, b_, p = 1)
 }
@@ -19,7 +17,8 @@ sq_wasserstein(a_, b_, p = 1)
 The squared wasserstein distance between a and b
 }
 \description{
-sq_wasserstein
-Squared Wasserstein distance between two vectors. 
+Squared Wasserstein distance between two vectors.
+}
+\details{
 The squared wasserstein distance has useful properties for decomposition.
 }

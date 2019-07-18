@@ -184,35 +184,50 @@ sq_wasserstein <- function(a_, b_, p = 1) {
     .Call('_diffexpR_sq_wasserstein', PACKAGE = 'diffexpR', a_, b_, p)
 }
 
-#' sq_wasserstein_decomp
+#' squared_wass_decomp
 #'
-#' Squared Wasserstein distance between two vectors, decomposed into size, location and shape. 
-#'
-#' @param a Vector representing an empirical distribution under condition A 
-#' @param b Vector representing an empirical distribution under condition B
-#'	@param p exponent of the wasserstine distance
-#' @return The wasserstein distance between a and b, decomposed into terms for size, location, and shape
-#'
-#' @export
-sq_wasserstein_decomp <- function(a_, b_, p = 1) {
-    .Call('_diffexpR_sq_wasserstein_decomp', PACKAGE = 'diffexpR', a_, b_, p)
-}
-
-#' wasserstein
-#'
-#' Wasserstein distance between two vectors. 
+#' Approximation of the squared Wasserstein distance between two vectors,
+#' decomposed into size, location and shape. 
+#' As an approximation of the distribution, 1000 quantiles are computed for each vector.
 #'
 #' @param a Vector representing an empirical distribution under condition A 
 #' @param b Vector representing an empirical distribution under condition B
 #'	@param p exponent of the wasserstine distance
-#'
-#' @return The wasserstein distance between a and b
+#' @return An named Rcpp::List with the wasserstein distance between a and b,
+#'    decomposed into terms for size, location, and shape
 #'
 #' @export
-wasserstein <- function(a_, b_, p = 1) {
-    .Call('_diffexpR_wasserstein', PACKAGE = 'diffexpR', a_, b_, p)
+squared_wass_decomp <- function(a_, b_, p = 1) {
+    .Call('_diffexpR_squared_wass_decomp', PACKAGE = 'diffexpR', a_, b_, p)
 }
 
+#' squared_wass_approx
+#'
+#' Approximation of the squared wasserstein distance.
+#' Calculation based on the mean squared difference between the equidistant 
+#' quantiles of the two input vectors a and b.
+#' As an approximation of the distribution, 1000 quantiles are computed for each vector.
+#'
+#' @param a Vector representing an empirical distribution under condition A 
+#' @param b Vector representing an empirical distribution under condition B
+#'	@param p exponent of the wasserstine distance
+#' @return The approximated squared wasserstein distance between a and b
+#'
+#' @export
+squared_wass_approx <- function(a_, b_, p = 1) {
+    .Call('_diffexpR_squared_wass_approx', PACKAGE = 'diffexpR', a_, b_, p)
+}
+
+#' wasserstein_metric
+#'
+#' @param a_ NumericVector representing an empirical distribution under condition A 
+#' @param b_ NumericVector representing an empirical distribution under condition B
+#'	@param p exponent of the wasserstine distance
+#' @param wa_ NumericVector representing the weights of datapoints (interpreted as clusters) in a
+#' @param wb_ NumericVector representing the weights of datapoints (interpreted as clusters) in b
+#' @return The wasserstein (transport) distance between a and b
+#'
+#' @export
 wasserstein_metric <- function(a_, b_, p = 1, wa_ = NULL, wb_ = NULL) {
     .Call('_diffexpR_wasserstein_metric', PACKAGE = 'diffexpR', a_, b_, p, wa_, wb_)
 }

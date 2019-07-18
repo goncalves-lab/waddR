@@ -6,7 +6,7 @@ library("diffexpR")
 ##########################################################################
 
 # R implementation to test against, from the package transport
-if (!requireNamespace("transport", quietly = TRUE)) {
+if (TRUE) {#!requireNamespace("transport", quietly = TRUE)) {
   # Copy of the transport implementation of wasserstein metric
   wasserstein1d <- function (a, b, p = 1, wa = NULL, wb = NULL) {
     m <- length(a)
@@ -27,7 +27,6 @@ if (!requireNamespace("transport", quietly = TRUE)) {
     ua <- (wa/sum(wa))[-m]
     ub <- (wb/sum(wb))[-n]
     
-    
     cua <- c(cumsum(ua))
     cub <- c(cumsum(ub))
     temp <- cut(cub, breaks = c(-Inf, cua, Inf))
@@ -38,6 +37,19 @@ if (!requireNamespace("transport", quietly = TRUE)) {
     # repeat each element in a and b as often as the intervals in arep and brep are mentionned
     aa <- rep(sort(a), times = arep)
     bb <- rep(sort(b), times = brep)
+    
+    cat("a length = ",length(a))
+    cat(" b length = ",length(b), "\n")
+    cat("ua length = ", length(ua))
+    cat(" ub length = ", length(ub), "\n")
+    cat("cua length = ", length(cua))
+    cat(" cub length = ", length(cub), "\n")
+    cat("arep length = ", length(arep))
+    cat(" brep length = ", length(brep), "\n")
+    cat("arep  = ", arep)
+    cat(" brep  = ", brep, "\n")
+    cat("a_weighted length = ", length(aa))
+    cat(" b_weighted length= ", length(bb), "\n")
     
     # combine ecdf of weights vectors for a and b 
     uu <- sort(c(cua, cub))
@@ -93,7 +105,7 @@ test_that("wasserstein consistency test", {
 
 # test correctnes of wasserstein_metric versus an R implementation 
 test_that("wasserstein_metric correctness", {
-  skip("wasserstein_metric will be deprecated, skipping all test for it")
+  #skip("wasserstein_metric will be deprecated, skipping all test for it")
   a <- c(13, 21, 34, 23)
   b <- c(1,  1,  1,  2.3)
   p <- 2
@@ -113,7 +125,7 @@ test_that("wasserstein_metric correctness", {
 
 # test consistency of results
 test_that("wasserstein_metric consistency test", {
-  skip("wasserstein_metric will be deprecated, skipping all test for it")
+  #skip("wasserstein_metric will be deprecated, skipping all test for it")
   # check against a weird behaviour where NaN's were produced seemingly randomly
   x <- c(2, 1, 3) 
   y <- c(3, 3, 2, 6)

@@ -622,34 +622,38 @@ double sq_wasserstein(const NumericVector & a_, const NumericVector & b_, const 
 	return d;
 }
 
-//' sq_wasserstein_decomp
+//' squared_wass_decomp
 //'
-//' Squared Wasserstein distance between two vectors, decomposed into size, location and shape. 
+//' Approximation of the squared Wasserstein distance between two vectors,
+//' decomposed into size, location and shape. 
+//' As an approximation of the distribution, 1000 quantiles are computed for each vector.
 //'
 //' @param a Vector representing an empirical distribution under condition A 
 //' @param b Vector representing an empirical distribution under condition B
 //'	@param p exponent of the wasserstine distance
-//' @return The wasserstein distance between a and b, decomposed into terms for size, location, and shape
+//' @return An named Rcpp::List with the wasserstein distance between a and b,
+//'    decomposed into terms for size, location, and shape
 //'
 //' @export
 //[[Rcpp::export]]
-Rcpp::List sq_wasserstein_decomp(const NumericVector & a_, const NumericVector & b_,const double & p=1)
+Rcpp::List squared_wass_decomp(const NumericVector & a_, const NumericVector & b_,const double & p=1)
 {
 
 	int NUM_QUANTILES = 1000;
-	vector<double> a(a_.begin(), a_.end()), b(b_.begin(), b_.end()),
-		quantiles_a = emp_equi_quantiles(a, NUM_QUANTILES),
-		quantiles_b = emp_equi_quantiles(b, NUM_QUANTILES);
+	vector<double> 		a(a_.begin(), a_.end()), b(b_.begin(), b_.end()),
+						quantiles_a = emp_equi_quantiles(a, NUM_QUANTILES),
+						quantiles_b = emp_equi_quantiles(b, NUM_QUANTILES);
 
-	double location, shape, size, d, mean_a = mean(a), mean_b = mean(b),
-		sd_a = sd(a), sd_b = sd(b), 
-		quantile_cor_ab = cor(quantiles_a, quantiles_b);
+	double 	location, shape, size, d, 
+			mean_a = mean(a), mean_b = mean(b),
+			sd_a = sd(a), sd_b = sd(b), 
+			quantile_cor_ab = cor(quantiles_a, quantiles_b);
 
 
-	location = pow(mean_a - mean_b, 2);
-	size = pow(sd_a - sd_b, 2);
-	shape = 2 * sd_a * sd_b * (1 - quantile_cor_ab);
-	d = location + size + shape;
+	location 	= pow(mean_a - mean_b, 2);
+	size 		= pow(sd_a - sd_b, 2);
+	shape 		= 2 * sd_a * sd_b * (1 - quantile_cor_ab);
+	d 			= location + size + shape;
 	
 	return Rcpp::List::create(
 		Rcpp::Named("distance") = d,
@@ -659,27 +663,51 @@ Rcpp::List sq_wasserstein_decomp(const NumericVector & a_, const NumericVector &
 		);
 }
 
-//' wasserstein
+//' squared_wass_approx
 //'
-//' Wasserstein distance between two vectors. 
+//' Approximation of the squared wasserstein distance.
+//' Calculation based on the mean squared difference between the equidistant 
+//' quantiles of the two input vectors a and b.
+//' As an approximation of the distribution, 1000 quantiles are computed for each vector.
 //'
 //' @param a Vector representing an empirical distribution under condition A 
 //' @param b Vector representing an empirical distribution under condition B
 //'	@param p exponent of the wasserstine distance
-//'
-//' @return The wasserstein distance between a and b
+//' @return The approximated squared wasserstein distance between a and b
 //'
 //' @export
 //[[Rcpp::export]]
-double wasserstein(const NumericVector a_, const NumericVector b_, const double p=1)
+double squared_wass_approx(const NumericVector & a_, const NumericVector & b_, const double p=1)
 {
-	double 	squared_wasserstein = sq_wasserstein(a_, b_, p),
-			dist = sqrt(squared_wasserstein);
+	const int			NUM_QUANTILES = 1000;
+	double				wass_approx;
+	const vector<double>	a(a_.begin(), a_.end()),
+							b(b_.begin(), b_.end());
+	vector<double>		quantiles_a(NUM_QUANTILES), 
+						quantiles_b(NUM_QUANTILES),
+						squared_quantile_diff(NUM_QUANTILES);
 
-	return dist;
+	quantiles_a				= emp_equi_quantiles(a, NUM_QUANTILES);
+	quantiles_b				= emp_equi_quantiles(b, NUM_QUANTILES);
+	const vector<double> quantile_diff	= quantiles_a - quantiles_b;
+	squared_quantile_diff	= pow(quantile_diff, (double) 2.0);
+	wass_approx 			= mean(squared_quantile_diff);
+
+	return wass_approx;
 }
 
-// [[Rcpp::export]]
+
+//' wasserstein_metric
+//'
+//' @param a_ NumericVector representing an empirical distribution under condition A 
+//' @param b_ NumericVector representing an empirical distribution under condition B
+//'	@param p exponent of the wasserstine distance
+//' @param wa_ NumericVector representing the weights of datapoints (interpreted as clusters) in a
+//' @param wb_ NumericVector representing the weights of datapoints (interpreted as clusters) in b
+//' @return The wasserstein (transport) distance between a and b
+//'
+//' @export
+//[[Rcpp::export]]
 double wasserstein_metric(NumericVector a_, 
 						  NumericVector b_,
 						  double p=1,
@@ -1013,6 +1041,6 @@ IntegerVector interval_table_test_export(	NumericVector & data_,
 */
 int main() 
 {
-	Rcout << "it ran" << END;
+
 	return 0;
 }

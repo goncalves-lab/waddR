@@ -1,3 +1,7 @@
+#' @import Rcpp
+#' @useDynLib diffexpR
+NULL
+
 # load asymptotic reference distribution
 # contains:
 #   value.integral  : a distribution
@@ -18,7 +22,6 @@ load(system.file("data/ref_distr.dat", package="diffexpR"))
 
 
 # cleanup after our cpp libraries
-#'@export
 .onUnload <- function (libpath) {
   library.dynam.unload("diffexpR", libpath)
 }
