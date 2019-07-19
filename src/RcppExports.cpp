@@ -6,127 +6,296 @@
 
 using namespace Rcpp;
 
-// mean_export
-double mean_export(Nullable<NumericVector> x_);
-RcppExport SEXP _diffexpR_mean_export(SEXP x_SEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Nullable<NumericVector> >::type x_(x_SEXP);
-    rcpp_result_gen = Rcpp::wrap(mean_export(x_));
-    return rcpp_result_gen;
-END_RCPP
-}
-// abs_export
-NumericVector abs_export(Nullable<NumericVector> x_);
-RcppExport SEXP _diffexpR_abs_export(SEXP x_SEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Nullable<NumericVector> >::type x_(x_SEXP);
-    rcpp_result_gen = Rcpp::wrap(abs_export(x_));
-    return rcpp_result_gen;
-END_RCPP
-}
-// cumSum
-NumericVector cumSum(Nullable<NumericVector> x_, const int last_index);
-RcppExport SEXP _diffexpR_cumSum(SEXP x_SEXP, SEXP last_indexSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Nullable<NumericVector> >::type x_(x_SEXP);
-    Rcpp::traits::input_parameter< const int >::type last_index(last_indexSEXP);
-    rcpp_result_gen = Rcpp::wrap(cumSum(x_, last_index));
-    return rcpp_result_gen;
-END_RCPP
-}
-// rep_weighted
-NumericVector rep_weighted(NumericVector x, IntegerVector freq_table);
-RcppExport SEXP _diffexpR_rep_weighted(SEXP xSEXP, SEXP freq_tableSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type freq_table(freq_tableSEXP);
-    rcpp_result_gen = Rcpp::wrap(rep_weighted(x, freq_table));
-    return rcpp_result_gen;
-END_RCPP
-}
-// concat
-NumericVector concat(Nullable<NumericVector> x_, Nullable<NumericVector> y_);
-RcppExport SEXP _diffexpR_concat(SEXP x_SEXP, SEXP y_SEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Nullable<NumericVector> >::type x_(x_SEXP);
-    Rcpp::traits::input_parameter< Nullable<NumericVector> >::type y_(y_SEXP);
-    rcpp_result_gen = Rcpp::wrap(concat(x_, y_));
-    return rcpp_result_gen;
-END_RCPP
-}
-// interval_table
-IntegerVector interval_table(NumericVector datavec, NumericVector interval_breaks, const int init_value);
-RcppExport SEXP _diffexpR_interval_table(SEXP datavecSEXP, SEXP interval_breaksSEXP, SEXP init_valueSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type datavec(datavecSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type interval_breaks(interval_breaksSEXP);
-    Rcpp::traits::input_parameter< const int >::type init_value(init_valueSEXP);
-    rcpp_result_gen = Rcpp::wrap(interval_table(datavec, interval_breaks, init_value));
-    return rcpp_result_gen;
-END_RCPP
-}
 // permutations
-NumericMatrix permutations(NumericVector x, const int num_permutations);
+NumericMatrix permutations(const NumericVector x, const int num_permutations);
 RcppExport SEXP _diffexpR_permutations(SEXP xSEXP, SEXP num_permutationsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type x(xSEXP);
     Rcpp::traits::input_parameter< const int >::type num_permutations(num_permutationsSEXP);
     rcpp_result_gen = Rcpp::wrap(permutations(x, num_permutations));
     return rcpp_result_gen;
 END_RCPP
 }
-// permutations_internal_test_export
-NumericMatrix permutations_internal_test_export(NumericVector x, const int num_permutations);
-RcppExport SEXP _diffexpR_permutations_internal_test_export(SEXP xSEXP, SEXP num_permutationsSEXP) {
+// squared_wass_decomp
+Rcpp::List squared_wass_decomp(const NumericVector& a_, const NumericVector& b_, const double& p);
+RcppExport SEXP _diffexpR_squared_wass_decomp(SEXP a_SEXP, SEXP b_SEXP, SEXP pSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< const int >::type num_permutations(num_permutationsSEXP);
-    rcpp_result_gen = Rcpp::wrap(permutations_internal_test_export(x, num_permutations));
+    Rcpp::traits::input_parameter< const NumericVector& >::type a_(a_SEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type b_(b_SEXP);
+    Rcpp::traits::input_parameter< const double& >::type p(pSEXP);
+    rcpp_result_gen = Rcpp::wrap(squared_wass_decomp(a_, b_, p));
+    return rcpp_result_gen;
+END_RCPP
+}
+// squared_wass_approx
+double squared_wass_approx(const NumericVector& a_, const NumericVector& b_, const double& p);
+RcppExport SEXP _diffexpR_squared_wass_approx(SEXP a_SEXP, SEXP b_SEXP, SEXP pSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericVector& >::type a_(a_SEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type b_(b_SEXP);
+    Rcpp::traits::input_parameter< const double& >::type p(pSEXP);
+    rcpp_result_gen = Rcpp::wrap(squared_wass_approx(a_, b_, p));
     return rcpp_result_gen;
 END_RCPP
 }
 // wasserstein_metric
-double wasserstein_metric(NumericVector a, NumericVector b, float p, Nullable<NumericVector> wa_, Nullable<NumericVector> wb_);
-RcppExport SEXP _diffexpR_wasserstein_metric(SEXP aSEXP, SEXP bSEXP, SEXP pSEXP, SEXP wa_SEXP, SEXP wb_SEXP) {
+double wasserstein_metric(NumericVector a_, NumericVector b_, const double p, Nullable<NumericVector> wa_, Nullable<NumericVector> wb_);
+RcppExport SEXP _diffexpR_wasserstein_metric(SEXP a_SEXP, SEXP b_SEXP, SEXP pSEXP, SEXP wa_SEXP, SEXP wb_SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type a(aSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type b(bSEXP);
-    Rcpp::traits::input_parameter< float >::type p(pSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type a_(a_SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type b_(b_SEXP);
+    Rcpp::traits::input_parameter< const double >::type p(pSEXP);
     Rcpp::traits::input_parameter< Nullable<NumericVector> >::type wa_(wa_SEXP);
     Rcpp::traits::input_parameter< Nullable<NumericVector> >::type wb_(wb_SEXP);
-    rcpp_result_gen = Rcpp::wrap(wasserstein_metric(a, b, p, wa_, wb_));
+    rcpp_result_gen = Rcpp::wrap(wasserstein_metric(a_, b_, p, wa_, wb_));
+    return rcpp_result_gen;
+END_RCPP
+}
+// add_test_export
+NumericVector add_test_export(NumericVector& x_, NumericVector& y_);
+RcppExport SEXP _diffexpR_add_test_export(SEXP x_SEXP, SEXP y_SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector& >::type x_(x_SEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type y_(y_SEXP);
+    rcpp_result_gen = Rcpp::wrap(add_test_export(x_, y_));
+    return rcpp_result_gen;
+END_RCPP
+}
+// add_test_export_sv
+NumericVector add_test_export_sv(NumericVector& x_, double& summand_);
+RcppExport SEXP _diffexpR_add_test_export_sv(SEXP x_SEXP, SEXP summand_SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector& >::type x_(x_SEXP);
+    Rcpp::traits::input_parameter< double& >::type summand_(summand_SEXP);
+    rcpp_result_gen = Rcpp::wrap(add_test_export_sv(x_, summand_));
+    return rcpp_result_gen;
+END_RCPP
+}
+// multiply_test_export
+NumericVector multiply_test_export(NumericVector& x_, NumericVector& y_);
+RcppExport SEXP _diffexpR_multiply_test_export(SEXP x_SEXP, SEXP y_SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector& >::type x_(x_SEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type y_(y_SEXP);
+    rcpp_result_gen = Rcpp::wrap(multiply_test_export(x_, y_));
+    return rcpp_result_gen;
+END_RCPP
+}
+// multiply_test_export_sv
+NumericVector multiply_test_export_sv(NumericVector& x_, double& factor_);
+RcppExport SEXP _diffexpR_multiply_test_export_sv(SEXP x_SEXP, SEXP factor_SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector& >::type x_(x_SEXP);
+    Rcpp::traits::input_parameter< double& >::type factor_(factor_SEXP);
+    rcpp_result_gen = Rcpp::wrap(multiply_test_export_sv(x_, factor_));
+    return rcpp_result_gen;
+END_RCPP
+}
+// pow_test_export
+NumericVector pow_test_export(NumericVector& x_, const double& exp);
+RcppExport SEXP _diffexpR_pow_test_export(SEXP x_SEXP, SEXP expSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector& >::type x_(x_SEXP);
+    Rcpp::traits::input_parameter< const double& >::type exp(expSEXP);
+    rcpp_result_gen = Rcpp::wrap(pow_test_export(x_, exp));
+    return rcpp_result_gen;
+END_RCPP
+}
+// abs_test_export
+NumericVector abs_test_export(NumericVector& x_);
+RcppExport SEXP _diffexpR_abs_test_export(SEXP x_SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector& >::type x_(x_SEXP);
+    rcpp_result_gen = Rcpp::wrap(abs_test_export(x_));
+    return rcpp_result_gen;
+END_RCPP
+}
+// sum_test_export
+double sum_test_export(NumericVector& x_);
+RcppExport SEXP _diffexpR_sum_test_export(SEXP x_SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector& >::type x_(x_SEXP);
+    rcpp_result_gen = Rcpp::wrap(sum_test_export(x_));
+    return rcpp_result_gen;
+END_RCPP
+}
+// subtract_test_export
+NumericVector subtract_test_export(NumericVector& x_, NumericVector& y_);
+RcppExport SEXP _diffexpR_subtract_test_export(SEXP x_SEXP, SEXP y_SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector& >::type x_(x_SEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type y_(y_SEXP);
+    rcpp_result_gen = Rcpp::wrap(subtract_test_export(x_, y_));
+    return rcpp_result_gen;
+END_RCPP
+}
+// divide_test_export_sv
+NumericVector divide_test_export_sv(NumericVector& x_, double& y_);
+RcppExport SEXP _diffexpR_divide_test_export_sv(SEXP x_SEXP, SEXP y_SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector& >::type x_(x_SEXP);
+    Rcpp::traits::input_parameter< double& >::type y_(y_SEXP);
+    rcpp_result_gen = Rcpp::wrap(divide_test_export_sv(x_, y_));
+    return rcpp_result_gen;
+END_RCPP
+}
+// divide_test_export_vectors
+NumericVector divide_test_export_vectors(NumericVector& x_, NumericVector& y_);
+RcppExport SEXP _diffexpR_divide_test_export_vectors(SEXP x_SEXP, SEXP y_SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector& >::type x_(x_SEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type y_(y_SEXP);
+    rcpp_result_gen = Rcpp::wrap(divide_test_export_vectors(x_, y_));
+    return rcpp_result_gen;
+END_RCPP
+}
+// mean_test_export
+double mean_test_export(NumericVector& x_);
+RcppExport SEXP _diffexpR_mean_test_export(SEXP x_SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector& >::type x_(x_SEXP);
+    rcpp_result_gen = Rcpp::wrap(mean_test_export(x_));
+    return rcpp_result_gen;
+END_RCPP
+}
+// sd_test_export
+double sd_test_export(NumericVector& x_);
+RcppExport SEXP _diffexpR_sd_test_export(SEXP x_SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector& >::type x_(x_SEXP);
+    rcpp_result_gen = Rcpp::wrap(sd_test_export(x_));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cumSum_test_export
+NumericVector cumSum_test_export(NumericVector& x_, int last_index);
+RcppExport SEXP _diffexpR_cumSum_test_export(SEXP x_SEXP, SEXP last_indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector& >::type x_(x_SEXP);
+    Rcpp::traits::input_parameter< int >::type last_index(last_indexSEXP);
+    rcpp_result_gen = Rcpp::wrap(cumSum_test_export(x_, last_index));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cor_test_export
+double cor_test_export(NumericVector x_, NumericVector y_);
+RcppExport SEXP _diffexpR_cor_test_export(SEXP x_SEXP, SEXP y_SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x_(x_SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y_(y_SEXP);
+    rcpp_result_gen = Rcpp::wrap(cor_test_export(x_, y_));
+    return rcpp_result_gen;
+END_RCPP
+}
+// emp_equi_quantiles_test_export
+NumericVector emp_equi_quantiles_test_export(NumericVector& x_, const int& K);
+RcppExport SEXP _diffexpR_emp_equi_quantiles_test_export(SEXP x_SEXP, SEXP KSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector& >::type x_(x_SEXP);
+    Rcpp::traits::input_parameter< const int& >::type K(KSEXP);
+    rcpp_result_gen = Rcpp::wrap(emp_equi_quantiles_test_export(x_, K));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rep_weighted_test_export
+NumericVector rep_weighted_test_export(NumericVector& x_, NumericVector& weights_);
+RcppExport SEXP _diffexpR_rep_weighted_test_export(SEXP x_SEXP, SEXP weights_SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector& >::type x_(x_SEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type weights_(weights_SEXP);
+    rcpp_result_gen = Rcpp::wrap(rep_weighted_test_export(x_, weights_));
+    return rcpp_result_gen;
+END_RCPP
+}
+// concat_test_export
+NumericVector concat_test_export(NumericVector& x_, NumericVector& y_);
+RcppExport SEXP _diffexpR_concat_test_export(SEXP x_SEXP, SEXP y_SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector& >::type x_(x_SEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type y_(y_SEXP);
+    rcpp_result_gen = Rcpp::wrap(concat_test_export(x_, y_));
+    return rcpp_result_gen;
+END_RCPP
+}
+// interval_table_test_export
+IntegerVector interval_table_test_export(NumericVector& data_, NumericVector& breaks_, const int& default_freq);
+RcppExport SEXP _diffexpR_interval_table_test_export(SEXP data_SEXP, SEXP breaks_SEXP, SEXP default_freqSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector& >::type data_(data_SEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type breaks_(breaks_SEXP);
+    Rcpp::traits::input_parameter< const int& >::type default_freq(default_freqSEXP);
+    rcpp_result_gen = Rcpp::wrap(interval_table_test_export(data_, breaks_, default_freq));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_diffexpR_mean_export", (DL_FUNC) &_diffexpR_mean_export, 1},
-    {"_diffexpR_abs_export", (DL_FUNC) &_diffexpR_abs_export, 1},
-    {"_diffexpR_cumSum", (DL_FUNC) &_diffexpR_cumSum, 2},
-    {"_diffexpR_rep_weighted", (DL_FUNC) &_diffexpR_rep_weighted, 2},
-    {"_diffexpR_concat", (DL_FUNC) &_diffexpR_concat, 2},
-    {"_diffexpR_interval_table", (DL_FUNC) &_diffexpR_interval_table, 3},
     {"_diffexpR_permutations", (DL_FUNC) &_diffexpR_permutations, 2},
-    {"_diffexpR_permutations_internal_test_export", (DL_FUNC) &_diffexpR_permutations_internal_test_export, 2},
+    {"_diffexpR_squared_wass_decomp", (DL_FUNC) &_diffexpR_squared_wass_decomp, 3},
+    {"_diffexpR_squared_wass_approx", (DL_FUNC) &_diffexpR_squared_wass_approx, 3},
     {"_diffexpR_wasserstein_metric", (DL_FUNC) &_diffexpR_wasserstein_metric, 5},
+    {"_diffexpR_add_test_export", (DL_FUNC) &_diffexpR_add_test_export, 2},
+    {"_diffexpR_add_test_export_sv", (DL_FUNC) &_diffexpR_add_test_export_sv, 2},
+    {"_diffexpR_multiply_test_export", (DL_FUNC) &_diffexpR_multiply_test_export, 2},
+    {"_diffexpR_multiply_test_export_sv", (DL_FUNC) &_diffexpR_multiply_test_export_sv, 2},
+    {"_diffexpR_pow_test_export", (DL_FUNC) &_diffexpR_pow_test_export, 2},
+    {"_diffexpR_abs_test_export", (DL_FUNC) &_diffexpR_abs_test_export, 1},
+    {"_diffexpR_sum_test_export", (DL_FUNC) &_diffexpR_sum_test_export, 1},
+    {"_diffexpR_subtract_test_export", (DL_FUNC) &_diffexpR_subtract_test_export, 2},
+    {"_diffexpR_divide_test_export_sv", (DL_FUNC) &_diffexpR_divide_test_export_sv, 2},
+    {"_diffexpR_divide_test_export_vectors", (DL_FUNC) &_diffexpR_divide_test_export_vectors, 2},
+    {"_diffexpR_mean_test_export", (DL_FUNC) &_diffexpR_mean_test_export, 1},
+    {"_diffexpR_sd_test_export", (DL_FUNC) &_diffexpR_sd_test_export, 1},
+    {"_diffexpR_cumSum_test_export", (DL_FUNC) &_diffexpR_cumSum_test_export, 2},
+    {"_diffexpR_cor_test_export", (DL_FUNC) &_diffexpR_cor_test_export, 2},
+    {"_diffexpR_emp_equi_quantiles_test_export", (DL_FUNC) &_diffexpR_emp_equi_quantiles_test_export, 2},
+    {"_diffexpR_rep_weighted_test_export", (DL_FUNC) &_diffexpR_rep_weighted_test_export, 2},
+    {"_diffexpR_concat_test_export", (DL_FUNC) &_diffexpR_concat_test_export, 2},
+    {"_diffexpR_interval_table_test_export", (DL_FUNC) &_diffexpR_interval_table_test_export, 3},
     {NULL, NULL, 0}
 };
 

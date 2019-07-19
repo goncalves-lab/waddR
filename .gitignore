@@ -1,6 +1,9 @@
 # always keep buildignore
 !Rbuildignore
 
+# References for some tests are kept in tests/testthat/know.values/
+tests/testthat/known.values/testresult*
+
 # Rcpp compiled files
 src/*.o
 src/*.so

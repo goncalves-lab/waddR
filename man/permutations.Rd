@@ -2,9 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{permutations}
 \alias{permutations}
-\title{Permutations
-Returns permutations of a given NumericVector as columns in a NumericMatrix
-object.}
+\title{permutations}
 \usage{
 permutations(x, num_permutations)
 }
@@ -18,7 +16,6 @@ that are to be performed.}
 a matrix containing in every column one permutations of the input vector
 }
 \description{
-Permutations
 Returns permutations of a given NumericVector as columns in a NumericMatrix
 object.
 }

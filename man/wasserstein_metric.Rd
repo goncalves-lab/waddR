@@ -2,26 +2,24 @@
 % Please edit documentation in R/RcppExports.R
 \name{wasserstein_metric}
 \alias{wasserstein_metric}
-\title{Wasserstein Metric}
+\title{wasserstein_metric}
 \usage{
-wasserstein_metric(a, b, p = 1, wa_ = NULL, wb_ = NULL)
+wasserstein_metric(a_, b_, p = 1, wa_ = NULL, wb_ = NULL)
 }
 \arguments{
-\item{a}{: NumericVector a representing a distribution}
+\item{a_}{NumericVector representing an empirical distribution under condition A}
 
-\item{b}{: NumericVector b representing a distribution}
+\item{b_}{NumericVector representing an empirical distribution under condition B}
 
-\item{p}{: int p representing the exponent in the root mean squared difference}
+\item{p}{exponent of the wasserstine distance}
 
-\item{wa}{: NumericVector wa representing a weight matrix for vector a}
+\item{wa_}{NumericVector representing the weights of datapoints (interpreted as clusters) in a}
 
-\item{wb}{: NumericVector wb representing a weight matrix for vector b}
+\item{wb_}{NumericVector representing the weights of datapoints (interpreted as clusters) in b}
 }
 \value{
-a floating point number representing the wasserstein distance or metric
-	between the given input distributions
+The wasserstein (transport) distance between a and b
 }
 \description{
-Returns the Wasserstein Metric of two input vectors a and b.
-Reimplementation in Cpp of the function wasserstein1d in the package transport.
+wasserstein_metric
 }

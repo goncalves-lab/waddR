@@ -6,7 +6,7 @@ library("diffexpR")
 ##########################################################################
 
 # R implementation to test against, from the package transport
-if (!requireNamespace("transport", quietly = TRUE)) {
+if (TRUE) {#!requireNamespace("transport", quietly = TRUE)) {
   # Copy of the transport implementation of wasserstein metric
   wasserstein1d <- function (a, b, p = 1, wa = NULL, wb = NULL) {
     m <- length(a)
@@ -46,23 +46,75 @@ if (!requireNamespace("transport", quietly = TRUE)) {
     uu0 <- c(0, uu)
     uu1 <- c(uu, 1)
     areap <- sum((uu1 - uu0) * abs(bb - aa)^p)^(1/p)
-    #    print("uu1-uu0 = ")
-    #    print(uu1-uu0)
-    #    print("bb-aa = ")
-    #    print(bb-aa)
-    #    print("(uu1 - uu0) * abs(bb - aa) = ")
-    #    print((uu1 - uu0) * abs(bb - aa))
-    #    print("sum((uu1 - uu0) * abs(bb - aa)^p) = ")
-    #    print(sum((uu1 - uu0) * abs(bb - aa)^p))
+    
+    #cat("a length = ",length(a))
+    #cat(" b length = ",length(b), "\n")
+    #cat("ua length = ", length(ua))
+    #cat(" ub length = ", length(ub), "\n")
+    #cat("cua length = ", length(cua))
+    #cat(" cub length = ", length(cub), "\n")
+    #cat("arep length = ", length(arep))
+    #cat(" brep length = ", length(brep), "\n")
+    #cat("cua  = ", paste(as.character(cua), collapse=", "), "\n")
+    #cat("cub  = ", paste(as.character(cua), collapse=", "), "\n")
+    
+    #cat("a_rep  = ", paste(as.character(arep), collapse=", "), "\n")
+    #cat("b_rep  = ", paste(as.character(brep), collapse=", "), "\n")
+    
+    #cat("aa  = ", paste(as.character(aa), collapse=", "), "\n")
+    #cat("bb  = ", paste(as.character(bb), collapse=", "), "\n")
+    
+    #cat("uu0  = ", paste(as.character(uu0), collapse=", "), "\n")
+    #cat("uu1  = ", paste(as.character(uu1), collapse=", ")+, "\n")
     return(areap)
   }
 } else {
   library("transport")
 }
 
-test_that("wasserstein metric", {
-  # test versus an R implementation 
+
+##################################################
+#   WASSERSTEIN IMPLEMENTATION (Approximation)   #
+##################################################
+
+# test correctness of wasserstein approximation 
+test_that("squared_wass_approx correctness", {
   
+  a <- c(13, 21, 34, 23)
+  b <- c(1,  1,  1,  2.3)
+  p <- 2
+  # case with equally long vectors a and b
+  expect_known("value", squared_wass_approx(a,b,p), file = "known.values/testresult_squared_wass_approx_correctness1")
+  expect_known("value", squared_wass_approx(a,b,1), file = "known.values/testresult_squared_wass_approx_correctness2")
+  set.seed(42)
+  a2 <- rnorm(100, 10, 1)
+  set.seed(24)
+  b2 <- rnorm(102, 10.5, 1)
+  expect_known("value", squared_wass_approx(a2,b2,p), file = "known.values/testresult_squared_wass_approx_correctness3")
+})
+
+
+##################################################
+#   WASSERSTEIN DECOMPOSITION (Approximation)    #
+##################################################
+
+# test correctnes of decomposed wasserstein approximation
+test_that("squared_wass_decomp correctness", {
+  a <- c(13, 21, 34, 23)
+  b <- c(1,  1,  1,  2.3)
+  p <- 2
+  # case with equally long vectors a and b
+  expect_known("value", squared_wass_approx(a,b,p), file = "known.values/testresult_squared_wass_decomp_correctness1")
+})
+
+
+##################################################
+#       WASSERSTEIN_METRIC IMPLEMENTATION        #
+##################################################
+
+# test correctnes of wasserstein_metric versus an R implementation 
+test_that("wasserstein_metric correctness", {
+  #skip("wasserstein_metric will be deprecated, skipping all test for it")
   a <- c(13, 21, 34, 23)
   b <- c(1,  1,  1,  2.3)
   p <- 2
@@ -71,18 +123,18 @@ test_that("wasserstein metric", {
   expect_equal(wasserstein_metric(a,b), wasserstein1d(a,b))
   
   # vectors of different lengths
-  c <- c(34, 4343, 3090, 1309, 23.2)
+  x <- c(34, 4343, 3090, 1309, 23.2)
   set.seed(42)
   a2 <- rnorm(100,10,1)
   set.seed(24)
   b2 <- rnorm(102,10.5, 1)
   expect_equal(wasserstein_metric(a2,b2,p), wasserstein1d(a2,b2,p))
-  expect_equal(wasserstein_metric(a,c,p), wasserstein1d(a,c,p))
+  expect_equal(wasserstein_metric(a,x,p), wasserstein1d(a,x,p))
 })
 
-
-test_that("test against itself", {
-  # test consistency of results
+# test consistency of results
+test_that("wasserstein_metric consistency test", {
+  #skip("wasserstein_metric will be deprecated, skipping all test for it")
   # check against a weird behaviour where NaN's were produced seemingly randomly
   x <- c(2, 1, 3) 
   y <- c(3, 3, 2, 6)
@@ -91,3 +143,4 @@ test_that("test against itself", {
   first = results[1]
   expect_true(all(results == first))
 } )
+

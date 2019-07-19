@@ -233,11 +233,6 @@ testWass<-function(dat, condition,seedex,permnum, inclZero=TRUE){
     
     RES<-cbind(wass.res1,wass.pval.adj)
     row.names(RES)<-rownames(dat)
-    colnames(RES)<-c("d.transport","d.transport^2","d.comp^2","d.comp",
-      "location","size","shape","rho","p.nonzero","p.ad.gpd","N.exc",
-      "perc.loc","perc.size","perc.shape","decomp.error","p.zer o",
-      "p.combined","p.adj.nonzero","p.adj.zero","p.adj.combined")
-    
   }
   
   return(RES)
