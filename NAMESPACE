@@ -3,7 +3,6 @@
 export(CombinePVal)
 export(fishersCombinedPval)
 export(permutations)
-export(sq_wasserstein)
 export(squared_wass_approx)
 export(squared_wass_decomp)
 export(testWass)

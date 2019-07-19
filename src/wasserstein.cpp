@@ -576,56 +576,12 @@ NumericMatrix permutations(const NumericVector x, const int num_permutations)
 
 ==============================================*/
 
-
-//' sq_wasserstein
-//'
-//' Squared Wasserstein distance between two vectors.
-//'
-//' The squared wasserstein distance has useful properties for decomposition.
-//' @param a Vector representing an empirical distribution under condition A 
-//' @param b Vector representing an empirical distribution under condition B
-//'	@param p exponent of the wasserstine distance
-//' @return The squared wasserstein distance between a and b
-//'
-//' @export
-//[[Rcpp::export]]
-double sq_wasserstein(const NumericVector & a_, const NumericVector & b_, const double & p=1)
-{
-
-	int NUM_QUANTILES = 1000;
-	vector<double> 	a(a_.begin(), a_.end()),
-					b(b_.begin(), b_.end()),
-					quantiles_a = emp_equi_quantiles(a, NUM_QUANTILES),
-					quantiles_b = emp_equi_quantiles(b, NUM_QUANTILES);
-
-	double location, shape, size, d, mean_a = mean(a), mean_b = mean(b),
-		sd_a = sd(a), sd_b = sd(b), 
-		quantile_cor_ab = cor(quantiles_a, quantiles_b);
-
-	location = pow(mean_a - mean_b, 2);
-	size = pow(sd_a - sd_b, 2);
-	shape = 2 * sd_a * sd_b * (1 - quantile_cor_ab);
-	d = location + size + shape;
-
-	/*
-	// DEBUGGING ...
-	Rcout << "mean_a = " << mean_a <<END;
-	Rcout << "mean_b = " << mean_b <<END;
-	Rcout << "sd_a = " << sd_a <<END;
-	Rcout << "sd_b = " << sd_b<<END;
-	Rcout << "quantile_cor_ab = " << quantile_cor_ab <<END;
-	Rcout << "location = " << location <<END;
-	Rcout << "size = " << size <<END;
-	Rcout << "shape = " << shape <<END;
-	Rcout << "d = " << d <<END;
-	*/
-	return d;
-}
-
 //' squared_wass_decomp
 //'
 //' Approximation of the squared Wasserstein distance between two vectors,
 //' decomposed into size, location and shape. 
+//' Calculation based on the mean squared difference between the equidistant 
+//' quantiles of the two input vectors a and b.
 //' As an approximation of the distribution, 1000 quantiles are computed for each vector.
 //'
 //' @param a Vector representing an empirical distribution under condition A 
@@ -663,6 +619,7 @@ Rcpp::List squared_wass_decomp(const NumericVector & a_, const NumericVector & b
 		);
 }
 
+
 //' squared_wass_approx
 //'
 //' Approximation of the squared wasserstein distance.
@@ -677,23 +634,12 @@ Rcpp::List squared_wass_decomp(const NumericVector & a_, const NumericVector & b
 //'
 //' @export
 //[[Rcpp::export]]
-double squared_wass_approx(const NumericVector & a_, const NumericVector & b_, const double p=1)
+double squared_wass_approx(const NumericVector & a_, const NumericVector & b_, const double & p=1)
 {
-	const int			NUM_QUANTILES = 1000;
-	double				wass_approx;
-	const vector<double>	a(a_.begin(), a_.end()),
-							b(b_.begin(), b_.end());
-	vector<double>		quantiles_a(NUM_QUANTILES), 
-						quantiles_b(NUM_QUANTILES),
-						squared_quantile_diff(NUM_QUANTILES);
 
-	quantiles_a				= emp_equi_quantiles(a, NUM_QUANTILES);
-	quantiles_b				= emp_equi_quantiles(b, NUM_QUANTILES);
-	const vector<double> quantile_diff	= quantiles_a - quantiles_b;
-	squared_quantile_diff	= pow(quantile_diff, (double) 2.0);
-	wass_approx 			= mean(squared_quantile_diff);
-
-	return wass_approx;
+	List result = squared_wass_decomp(a_, b_, p);
+	double distance_approx = result["distance"];
+	return distance_approx;
 }
 
 
@@ -710,7 +656,7 @@ double squared_wass_approx(const NumericVector & a_, const NumericVector & b_, c
 //[[Rcpp::export]]
 double wasserstein_metric(NumericVector a_, 
 						  NumericVector b_,
-						  double p=1,
+						  const double p=1,
 						  Nullable<NumericVector> wa_=R_NilValue, 
 						  Nullable<NumericVector> wb_=R_NilValue) {
 	//warning("wasserstein_metric will be deprecated in the next update. Use wasserstein() instead");
@@ -722,7 +668,6 @@ double wasserstein_metric(NumericVector a_,
 	// No weight vectors are given
 	if (a.size() == b.size() && wa_.isNull() && wb_.isNull()) {
 
-		Rcout << "a.size() = " << a.size() << ", b.size() = " << b.size() <<END;
 		// compute root mean squared absolute difference of a and b
 		// in R: mean(abs(sort(b) - sort(a))^p)^(1/p)
 		vector<double> sq_abs_diff = pow(
@@ -763,13 +708,16 @@ double wasserstein_metric(NumericVector a_,
 	vector<double> cub(ub.size());
 	cub = cumSum(ub);
 
+	//Rcout << "cua = "; for (double ecua : cua) { Rcout << ecua << ", "; } Rcout << END;
+	//Rcout << "cub = "; for (double ecub : cub) { Rcout << ecub << ", "; } Rcout << END;
+
 	vector<int> a_rep = interval_table(cub, cua, 0);
 	vector<int> b_rep = interval_table(cua, cub, 0);
 	a_rep = a_rep + 1;
 	b_rep = b_rep + 1;
 
-	//Rcout << "a_rep = "; for (int ea : a_rep) { Rcout << ea; } Rcout << END;
-	//Rcout << "b_rep = "; for (int eb : b_rep) { Rcout << eb; } Rcout << END;
+	//Rcout << "a_rep = "; for (int ea : a_rep) { Rcout << ea << ", "; } Rcout << END;
+	//Rcout << "b_rep = "; for (int eb : b_rep) { Rcout << eb << ", "; } Rcout << END;
 
 	int len_a_weighted = sum(a_rep);
 	int len_b_weighted = sum(b_rep);
@@ -781,14 +729,22 @@ double wasserstein_metric(NumericVector a_,
 	a_weighted = rep_weighted(a, a_rep);
 	b_weighted = rep_weighted(b, b_rep);
 
-	vector<double> uu0(cua.size() + cub.size());
-	vector<double> uu1(cua.size() + cub.size());
+	///Rcout << "aa = "; for (double eaa : a_weighted) { Rcout << eaa << ", "; } Rcout << END;
+	//Rcout << "bb = "; for (double ebb : b_weighted) { Rcout << ebb << ", "; } Rcout << END;
+
+	vector<double> uu(cua.size() + cub.size());
+	vector<double> uu0(cua.size() + cub.size()+1);
+	vector<double> uu1(cua.size() + cub.size()+1);
+	vector<double> ONE{(double) 1.0};
+	vector<double> ZERO{(double) 0.0};
 	//Rcout << "AFTER INITIALIZATION: uu1.size() = " << uu1.size() << ", uu0.size() = " << uu0.size() <<END;
 
-	uu0 = concat(cua, cub);
-	uu0.insert(uu0.begin(),0);
-	uu1 = concat(cua, cub);
-	uu1.push_back(1);
+	uu = concat(cua, cub);
+	std::sort(uu.begin(), uu.end());
+	uu0 = concat(ZERO, uu);
+	uu1 = concat(uu, ONE);
+	//Rcout << "uu0 = "; for (double euu0 : uu0) { Rcout << euu0 << ", "; } Rcout << END;
+	//Rcout << "uu1 = "; for (double euu1 : uu1) { Rcout << euu1 << ", "; } Rcout << END;
 
 	double wsum = 0.0;
 	double areap = 0.0;
@@ -797,7 +753,7 @@ double wasserstein_metric(NumericVector a_,
 	//Rcout << "b_weighted.size() = " << b_weighted.size() << ", a_weighted.size() = " << a_weighted.size() <<END;
 
 	wsum = sum((uu1 - uu0) * pow(abs(b_weighted - a_weighted), p));
-	areap = pow((double) wsum, (double) (1/p));
+	areap = pow(wsum, (double) (1/p));
 
 	return areap;
 

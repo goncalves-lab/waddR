@@ -169,25 +169,12 @@ permutations <- function(x, num_permutations) {
     .Call('_diffexpR_permutations', PACKAGE = 'diffexpR', x, num_permutations)
 }
 
-#' sq_wasserstein
-#'
-#' Squared Wasserstein distance between two vectors.
-#'
-#' The squared wasserstein distance has useful properties for decomposition.
-#' @param a Vector representing an empirical distribution under condition A 
-#' @param b Vector representing an empirical distribution under condition B
-#'	@param p exponent of the wasserstine distance
-#' @return The squared wasserstein distance between a and b
-#'
-#' @export
-sq_wasserstein <- function(a_, b_, p = 1) {
-    .Call('_diffexpR_sq_wasserstein', PACKAGE = 'diffexpR', a_, b_, p)
-}
-
 #' squared_wass_decomp
 #'
 #' Approximation of the squared Wasserstein distance between two vectors,
 #' decomposed into size, location and shape. 
+#' Calculation based on the mean squared difference between the equidistant 
+#' quantiles of the two input vectors a and b.
 #' As an approximation of the distribution, 1000 quantiles are computed for each vector.
 #'
 #' @param a Vector representing an empirical distribution under condition A 
