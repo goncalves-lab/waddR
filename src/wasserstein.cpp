@@ -637,8 +637,17 @@ Rcpp::List squared_wass_decomp(const NumericVector & a_, const NumericVector & b
 double squared_wass_approx(const NumericVector & a_, const NumericVector & b_, const double & p=1)
 {
 
-	List result = squared_wass_decomp(a_, b_, p);
-	double distance_approx = result["distance"];
+	double				distance_approx;
+	int 				NUM_QUANTILES = 1000;
+	vector<double> 		a(a_.begin(), a_.end()), b(b_.begin(), b_.end()),
+						quantiles_a = emp_equi_quantiles(a, NUM_QUANTILES),
+						quantiles_b = emp_equi_quantiles(b, NUM_QUANTILES),
+						squared_quantile_diff(NUM_QUANTILES);
+
+
+	squared_quantile_diff = pow(quantiles_a - quantiles_b, (double) 2.0);
+	distance_approx = mean(squared_quantile_diff);
+
 	return distance_approx;
 }
 
