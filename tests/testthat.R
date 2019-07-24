@@ -1,5 +1,5 @@
 library(testthat)
-library(diffexpR)
+library(waddR)
 library(devtools)
 
 
@@ -10,4 +10,5 @@ if(!"DESCRIPTION" %in% dir()){
 }
 load_all(package_base)
 
-test_check("diffexpR")
+test_check("waddR")
+

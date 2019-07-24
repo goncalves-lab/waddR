@@ -1,5 +1,5 @@
 library("testthat")
-library("diffexpR")
+library("waddR")
 
 
 if (!exists("empcdf.ref")) {
@@ -8,12 +8,12 @@ if (!exists("empcdf.ref")) {
   #   value.integral  : a distribution
   #   empcdf.ref      : an empirical cumulative distribution function
   #                     based on the values in value.integral
-  load(system.file("data/ref_distr.dat", package="diffexpR"))
+  load(system.file("data/ref_distr.dat", package="waddR"))
 }
 
 
 test_that("Correctness of wasserstein single cell output", {
-  skip("Correctness proven with previous results, skipping for now")
+  skip("TODO")
   expect_true(FALSE)
 })
 

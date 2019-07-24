@@ -1,13 +1,10 @@
-#' @import Rcpp
-#' @useDynLib diffexpR
-NULL
 
 # load asymptotic reference distribution
 # contains:
 #   value.integral  : a distribution
 #   empcdf.ref      : an empirical cumulative distribution function
 #                     based on the values in value.integral
-load(system.file("data/ref_distr.dat", package="diffexpR"))
+load(system.file("data/ref_distr.dat", package="waddR"))
 
 
 # on load
@@ -15,13 +12,13 @@ load(system.file("data/ref_distr.dat", package="diffexpR"))
   ver <- read.dcf(file.path(lib, pkg, "DESCRIPTION"),"Version")
   ver <- as.character(ver)
   # compiled cpp
-  library.dynam("diffexpR", pkg, lib)
+  library.dynam("waddR", pkg, lib)
   
-  cat("diffexpR", ver, "loaded\n")
+  cat("waddR", ver, "loaded\n")
 }
 
 
 # cleanup after our cpp libraries
 .onUnload <- function (libpath) {
-  library.dynam.unload("diffexpR", libpath)
+  library.dynam.unload("waddR", libpath)
 }

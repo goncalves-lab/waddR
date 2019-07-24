@@ -166,7 +166,7 @@ NULL
 #'
 #' @export
 permutations <- function(x, num_permutations) {
-    .Call('_diffexpR_permutations', PACKAGE = 'diffexpR', x, num_permutations)
+    .Call('_waddR_permutations', PACKAGE = 'waddR', x, num_permutations)
 }
 
 #' squared_wass_decomp
@@ -185,7 +185,7 @@ permutations <- function(x, num_permutations) {
 #'
 #' @export
 squared_wass_decomp <- function(a_, b_, p = 1) {
-    .Call('_diffexpR_squared_wass_decomp', PACKAGE = 'diffexpR', a_, b_, p)
+    .Call('_waddR_squared_wass_decomp', PACKAGE = 'waddR', a_, b_, p)
 }
 
 #' squared_wass_approx
@@ -202,7 +202,7 @@ squared_wass_decomp <- function(a_, b_, p = 1) {
 #'
 #' @export
 squared_wass_approx <- function(a_, b_, p = 1) {
-    .Call('_diffexpR_squared_wass_approx', PACKAGE = 'diffexpR', a_, b_, p)
+    .Call('_waddR_squared_wass_approx', PACKAGE = 'waddR', a_, b_, p)
 }
 
 #' wasserstein_metric
@@ -216,78 +216,78 @@ squared_wass_approx <- function(a_, b_, p = 1) {
 #'
 #' @export
 wasserstein_metric <- function(a_, b_, p = 1, wa_ = NULL, wb_ = NULL) {
-    .Call('_diffexpR_wasserstein_metric', PACKAGE = 'diffexpR', a_, b_, p, wa_, wb_)
+    .Call('_waddR_wasserstein_metric', PACKAGE = 'waddR', a_, b_, p, wa_, wb_)
 }
 
 add_test_export <- function(x_, y_) {
-    .Call('_diffexpR_add_test_export', PACKAGE = 'diffexpR', x_, y_)
+    .Call('_waddR_add_test_export', PACKAGE = 'waddR', x_, y_)
 }
 
 add_test_export_sv <- function(x_, summand_) {
-    .Call('_diffexpR_add_test_export_sv', PACKAGE = 'diffexpR', x_, summand_)
+    .Call('_waddR_add_test_export_sv', PACKAGE = 'waddR', x_, summand_)
 }
 
 multiply_test_export <- function(x_, y_) {
-    .Call('_diffexpR_multiply_test_export', PACKAGE = 'diffexpR', x_, y_)
+    .Call('_waddR_multiply_test_export', PACKAGE = 'waddR', x_, y_)
 }
 
 multiply_test_export_sv <- function(x_, factor_) {
-    .Call('_diffexpR_multiply_test_export_sv', PACKAGE = 'diffexpR', x_, factor_)
+    .Call('_waddR_multiply_test_export_sv', PACKAGE = 'waddR', x_, factor_)
 }
 
 pow_test_export <- function(x_, exp) {
-    .Call('_diffexpR_pow_test_export', PACKAGE = 'diffexpR', x_, exp)
+    .Call('_waddR_pow_test_export', PACKAGE = 'waddR', x_, exp)
 }
 
 abs_test_export <- function(x_) {
-    .Call('_diffexpR_abs_test_export', PACKAGE = 'diffexpR', x_)
+    .Call('_waddR_abs_test_export', PACKAGE = 'waddR', x_)
 }
 
 sum_test_export <- function(x_) {
-    .Call('_diffexpR_sum_test_export', PACKAGE = 'diffexpR', x_)
+    .Call('_waddR_sum_test_export', PACKAGE = 'waddR', x_)
 }
 
 subtract_test_export <- function(x_, y_) {
-    .Call('_diffexpR_subtract_test_export', PACKAGE = 'diffexpR', x_, y_)
+    .Call('_waddR_subtract_test_export', PACKAGE = 'waddR', x_, y_)
 }
 
 divide_test_export_sv <- function(x_, y_) {
-    .Call('_diffexpR_divide_test_export_sv', PACKAGE = 'diffexpR', x_, y_)
+    .Call('_waddR_divide_test_export_sv', PACKAGE = 'waddR', x_, y_)
 }
 
 divide_test_export_vectors <- function(x_, y_) {
-    .Call('_diffexpR_divide_test_export_vectors', PACKAGE = 'diffexpR', x_, y_)
+    .Call('_waddR_divide_test_export_vectors', PACKAGE = 'waddR', x_, y_)
 }
 
 mean_test_export <- function(x_) {
-    .Call('_diffexpR_mean_test_export', PACKAGE = 'diffexpR', x_)
+    .Call('_waddR_mean_test_export', PACKAGE = 'waddR', x_)
 }
 
 sd_test_export <- function(x_) {
-    .Call('_diffexpR_sd_test_export', PACKAGE = 'diffexpR', x_)
+    .Call('_waddR_sd_test_export', PACKAGE = 'waddR', x_)
 }
 
 cumSum_test_export <- function(x_, last_index = 0L) {
-    .Call('_diffexpR_cumSum_test_export', PACKAGE = 'diffexpR', x_, last_index)
+    .Call('_waddR_cumSum_test_export', PACKAGE = 'waddR', x_, last_index)
 }
 
 cor_test_export <- function(x_, y_) {
-    .Call('_diffexpR_cor_test_export', PACKAGE = 'diffexpR', x_, y_)
+    .Call('_waddR_cor_test_export', PACKAGE = 'waddR', x_, y_)
 }
 
 emp_equi_quantiles_test_export <- function(x_, K) {
-    .Call('_diffexpR_emp_equi_quantiles_test_export', PACKAGE = 'diffexpR', x_, K)
+    .Call('_waddR_emp_equi_quantiles_test_export', PACKAGE = 'waddR', x_, K)
 }
 
 rep_weighted_test_export <- function(x_, weights_) {
-    .Call('_diffexpR_rep_weighted_test_export', PACKAGE = 'diffexpR', x_, weights_)
+    .Call('_waddR_rep_weighted_test_export', PACKAGE = 'waddR', x_, weights_)
 }
 
 concat_test_export <- function(x_, y_) {
-    .Call('_diffexpR_concat_test_export', PACKAGE = 'diffexpR', x_, y_)
+    .Call('_waddR_concat_test_export', PACKAGE = 'waddR', x_, y_)
 }
 
 interval_table_test_export <- function(data_, breaks_, default_freq = 0L) {
-    .Call('_diffexpR_interval_table_test_export', PACKAGE = 'diffexpR', data_, breaks_, default_freq)
+    .Call('_waddR_interval_table_test_export', PACKAGE = 'waddR', data_, breaks_, default_freq)
 }
 

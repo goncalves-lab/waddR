@@ -1,5 +1,5 @@
 library("testthat")
-library("diffexpR")
+library("waddR")
 
 ##########################################################################
 ##                    WASSERSTEIN METRIC CALCULATION                    ##

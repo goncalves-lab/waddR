@@ -8,7 +8,7 @@ using namespace Rcpp;
 
 // permutations
 NumericMatrix permutations(const NumericVector x, const int num_permutations);
-RcppExport SEXP _diffexpR_permutations(SEXP xSEXP, SEXP num_permutationsSEXP) {
+RcppExport SEXP _waddR_permutations(SEXP xSEXP, SEXP num_permutationsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -20,7 +20,7 @@ END_RCPP
 }
 // squared_wass_decomp
 Rcpp::List squared_wass_decomp(const NumericVector& a_, const NumericVector& b_, const double& p);
-RcppExport SEXP _diffexpR_squared_wass_decomp(SEXP a_SEXP, SEXP b_SEXP, SEXP pSEXP) {
+RcppExport SEXP _waddR_squared_wass_decomp(SEXP a_SEXP, SEXP b_SEXP, SEXP pSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -33,7 +33,7 @@ END_RCPP
 }
 // squared_wass_approx
 double squared_wass_approx(const NumericVector& a_, const NumericVector& b_, const double& p);
-RcppExport SEXP _diffexpR_squared_wass_approx(SEXP a_SEXP, SEXP b_SEXP, SEXP pSEXP) {
+RcppExport SEXP _waddR_squared_wass_approx(SEXP a_SEXP, SEXP b_SEXP, SEXP pSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -46,7 +46,7 @@ END_RCPP
 }
 // wasserstein_metric
 double wasserstein_metric(NumericVector a_, NumericVector b_, const double p, Nullable<NumericVector> wa_, Nullable<NumericVector> wb_);
-RcppExport SEXP _diffexpR_wasserstein_metric(SEXP a_SEXP, SEXP b_SEXP, SEXP pSEXP, SEXP wa_SEXP, SEXP wb_SEXP) {
+RcppExport SEXP _waddR_wasserstein_metric(SEXP a_SEXP, SEXP b_SEXP, SEXP pSEXP, SEXP wa_SEXP, SEXP wb_SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -61,7 +61,7 @@ END_RCPP
 }
 // add_test_export
 NumericVector add_test_export(NumericVector& x_, NumericVector& y_);
-RcppExport SEXP _diffexpR_add_test_export(SEXP x_SEXP, SEXP y_SEXP) {
+RcppExport SEXP _waddR_add_test_export(SEXP x_SEXP, SEXP y_SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -73,7 +73,7 @@ END_RCPP
 }
 // add_test_export_sv
 NumericVector add_test_export_sv(NumericVector& x_, double& summand_);
-RcppExport SEXP _diffexpR_add_test_export_sv(SEXP x_SEXP, SEXP summand_SEXP) {
+RcppExport SEXP _waddR_add_test_export_sv(SEXP x_SEXP, SEXP summand_SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -85,7 +85,7 @@ END_RCPP
 }
 // multiply_test_export
 NumericVector multiply_test_export(NumericVector& x_, NumericVector& y_);
-RcppExport SEXP _diffexpR_multiply_test_export(SEXP x_SEXP, SEXP y_SEXP) {
+RcppExport SEXP _waddR_multiply_test_export(SEXP x_SEXP, SEXP y_SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -97,7 +97,7 @@ END_RCPP
 }
 // multiply_test_export_sv
 NumericVector multiply_test_export_sv(NumericVector& x_, double& factor_);
-RcppExport SEXP _diffexpR_multiply_test_export_sv(SEXP x_SEXP, SEXP factor_SEXP) {
+RcppExport SEXP _waddR_multiply_test_export_sv(SEXP x_SEXP, SEXP factor_SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -109,7 +109,7 @@ END_RCPP
 }
 // pow_test_export
 NumericVector pow_test_export(NumericVector& x_, const double& exp);
-RcppExport SEXP _diffexpR_pow_test_export(SEXP x_SEXP, SEXP expSEXP) {
+RcppExport SEXP _waddR_pow_test_export(SEXP x_SEXP, SEXP expSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -121,7 +121,7 @@ END_RCPP
 }
 // abs_test_export
 NumericVector abs_test_export(NumericVector& x_);
-RcppExport SEXP _diffexpR_abs_test_export(SEXP x_SEXP) {
+RcppExport SEXP _waddR_abs_test_export(SEXP x_SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -132,7 +132,7 @@ END_RCPP
 }
 // sum_test_export
 double sum_test_export(NumericVector& x_);
-RcppExport SEXP _diffexpR_sum_test_export(SEXP x_SEXP) {
+RcppExport SEXP _waddR_sum_test_export(SEXP x_SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -143,7 +143,7 @@ END_RCPP
 }
 // subtract_test_export
 NumericVector subtract_test_export(NumericVector& x_, NumericVector& y_);
-RcppExport SEXP _diffexpR_subtract_test_export(SEXP x_SEXP, SEXP y_SEXP) {
+RcppExport SEXP _waddR_subtract_test_export(SEXP x_SEXP, SEXP y_SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -155,7 +155,7 @@ END_RCPP
 }
 // divide_test_export_sv
 NumericVector divide_test_export_sv(NumericVector& x_, double& y_);
-RcppExport SEXP _diffexpR_divide_test_export_sv(SEXP x_SEXP, SEXP y_SEXP) {
+RcppExport SEXP _waddR_divide_test_export_sv(SEXP x_SEXP, SEXP y_SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -167,7 +167,7 @@ END_RCPP
 }
 // divide_test_export_vectors
 NumericVector divide_test_export_vectors(NumericVector& x_, NumericVector& y_);
-RcppExport SEXP _diffexpR_divide_test_export_vectors(SEXP x_SEXP, SEXP y_SEXP) {
+RcppExport SEXP _waddR_divide_test_export_vectors(SEXP x_SEXP, SEXP y_SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -179,7 +179,7 @@ END_RCPP
 }
 // mean_test_export
 double mean_test_export(NumericVector& x_);
-RcppExport SEXP _diffexpR_mean_test_export(SEXP x_SEXP) {
+RcppExport SEXP _waddR_mean_test_export(SEXP x_SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -190,7 +190,7 @@ END_RCPP
 }
 // sd_test_export
 double sd_test_export(NumericVector& x_);
-RcppExport SEXP _diffexpR_sd_test_export(SEXP x_SEXP) {
+RcppExport SEXP _waddR_sd_test_export(SEXP x_SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -201,7 +201,7 @@ END_RCPP
 }
 // cumSum_test_export
 NumericVector cumSum_test_export(NumericVector& x_, int last_index);
-RcppExport SEXP _diffexpR_cumSum_test_export(SEXP x_SEXP, SEXP last_indexSEXP) {
+RcppExport SEXP _waddR_cumSum_test_export(SEXP x_SEXP, SEXP last_indexSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -213,7 +213,7 @@ END_RCPP
 }
 // cor_test_export
 double cor_test_export(NumericVector x_, NumericVector y_);
-RcppExport SEXP _diffexpR_cor_test_export(SEXP x_SEXP, SEXP y_SEXP) {
+RcppExport SEXP _waddR_cor_test_export(SEXP x_SEXP, SEXP y_SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -225,7 +225,7 @@ END_RCPP
 }
 // emp_equi_quantiles_test_export
 NumericVector emp_equi_quantiles_test_export(NumericVector& x_, const int& K);
-RcppExport SEXP _diffexpR_emp_equi_quantiles_test_export(SEXP x_SEXP, SEXP KSEXP) {
+RcppExport SEXP _waddR_emp_equi_quantiles_test_export(SEXP x_SEXP, SEXP KSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -237,7 +237,7 @@ END_RCPP
 }
 // rep_weighted_test_export
 NumericVector rep_weighted_test_export(NumericVector& x_, NumericVector& weights_);
-RcppExport SEXP _diffexpR_rep_weighted_test_export(SEXP x_SEXP, SEXP weights_SEXP) {
+RcppExport SEXP _waddR_rep_weighted_test_export(SEXP x_SEXP, SEXP weights_SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -249,7 +249,7 @@ END_RCPP
 }
 // concat_test_export
 NumericVector concat_test_export(NumericVector& x_, NumericVector& y_);
-RcppExport SEXP _diffexpR_concat_test_export(SEXP x_SEXP, SEXP y_SEXP) {
+RcppExport SEXP _waddR_concat_test_export(SEXP x_SEXP, SEXP y_SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -261,7 +261,7 @@ END_RCPP
 }
 // interval_table_test_export
 IntegerVector interval_table_test_export(NumericVector& data_, NumericVector& breaks_, const int& default_freq);
-RcppExport SEXP _diffexpR_interval_table_test_export(SEXP data_SEXP, SEXP breaks_SEXP, SEXP default_freqSEXP) {
+RcppExport SEXP _waddR_interval_table_test_export(SEXP data_SEXP, SEXP breaks_SEXP, SEXP default_freqSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -274,32 +274,32 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_diffexpR_permutations", (DL_FUNC) &_diffexpR_permutations, 2},
-    {"_diffexpR_squared_wass_decomp", (DL_FUNC) &_diffexpR_squared_wass_decomp, 3},
-    {"_diffexpR_squared_wass_approx", (DL_FUNC) &_diffexpR_squared_wass_approx, 3},
-    {"_diffexpR_wasserstein_metric", (DL_FUNC) &_diffexpR_wasserstein_metric, 5},
-    {"_diffexpR_add_test_export", (DL_FUNC) &_diffexpR_add_test_export, 2},
-    {"_diffexpR_add_test_export_sv", (DL_FUNC) &_diffexpR_add_test_export_sv, 2},
-    {"_diffexpR_multiply_test_export", (DL_FUNC) &_diffexpR_multiply_test_export, 2},
-    {"_diffexpR_multiply_test_export_sv", (DL_FUNC) &_diffexpR_multiply_test_export_sv, 2},
-    {"_diffexpR_pow_test_export", (DL_FUNC) &_diffexpR_pow_test_export, 2},
-    {"_diffexpR_abs_test_export", (DL_FUNC) &_diffexpR_abs_test_export, 1},
-    {"_diffexpR_sum_test_export", (DL_FUNC) &_diffexpR_sum_test_export, 1},
-    {"_diffexpR_subtract_test_export", (DL_FUNC) &_diffexpR_subtract_test_export, 2},
-    {"_diffexpR_divide_test_export_sv", (DL_FUNC) &_diffexpR_divide_test_export_sv, 2},
-    {"_diffexpR_divide_test_export_vectors", (DL_FUNC) &_diffexpR_divide_test_export_vectors, 2},
-    {"_diffexpR_mean_test_export", (DL_FUNC) &_diffexpR_mean_test_export, 1},
-    {"_diffexpR_sd_test_export", (DL_FUNC) &_diffexpR_sd_test_export, 1},
-    {"_diffexpR_cumSum_test_export", (DL_FUNC) &_diffexpR_cumSum_test_export, 2},
-    {"_diffexpR_cor_test_export", (DL_FUNC) &_diffexpR_cor_test_export, 2},
-    {"_diffexpR_emp_equi_quantiles_test_export", (DL_FUNC) &_diffexpR_emp_equi_quantiles_test_export, 2},
-    {"_diffexpR_rep_weighted_test_export", (DL_FUNC) &_diffexpR_rep_weighted_test_export, 2},
-    {"_diffexpR_concat_test_export", (DL_FUNC) &_diffexpR_concat_test_export, 2},
-    {"_diffexpR_interval_table_test_export", (DL_FUNC) &_diffexpR_interval_table_test_export, 3},
+    {"_waddR_permutations", (DL_FUNC) &_waddR_permutations, 2},
+    {"_waddR_squared_wass_decomp", (DL_FUNC) &_waddR_squared_wass_decomp, 3},
+    {"_waddR_squared_wass_approx", (DL_FUNC) &_waddR_squared_wass_approx, 3},
+    {"_waddR_wasserstein_metric", (DL_FUNC) &_waddR_wasserstein_metric, 5},
+    {"_waddR_add_test_export", (DL_FUNC) &_waddR_add_test_export, 2},
+    {"_waddR_add_test_export_sv", (DL_FUNC) &_waddR_add_test_export_sv, 2},
+    {"_waddR_multiply_test_export", (DL_FUNC) &_waddR_multiply_test_export, 2},
+    {"_waddR_multiply_test_export_sv", (DL_FUNC) &_waddR_multiply_test_export_sv, 2},
+    {"_waddR_pow_test_export", (DL_FUNC) &_waddR_pow_test_export, 2},
+    {"_waddR_abs_test_export", (DL_FUNC) &_waddR_abs_test_export, 1},
+    {"_waddR_sum_test_export", (DL_FUNC) &_waddR_sum_test_export, 1},
+    {"_waddR_subtract_test_export", (DL_FUNC) &_waddR_subtract_test_export, 2},
+    {"_waddR_divide_test_export_sv", (DL_FUNC) &_waddR_divide_test_export_sv, 2},
+    {"_waddR_divide_test_export_vectors", (DL_FUNC) &_waddR_divide_test_export_vectors, 2},
+    {"_waddR_mean_test_export", (DL_FUNC) &_waddR_mean_test_export, 1},
+    {"_waddR_sd_test_export", (DL_FUNC) &_waddR_sd_test_export, 1},
+    {"_waddR_cumSum_test_export", (DL_FUNC) &_waddR_cumSum_test_export, 2},
+    {"_waddR_cor_test_export", (DL_FUNC) &_waddR_cor_test_export, 2},
+    {"_waddR_emp_equi_quantiles_test_export", (DL_FUNC) &_waddR_emp_equi_quantiles_test_export, 2},
+    {"_waddR_rep_weighted_test_export", (DL_FUNC) &_waddR_rep_weighted_test_export, 2},
+    {"_waddR_concat_test_export", (DL_FUNC) &_waddR_concat_test_export, 2},
+    {"_waddR_interval_table_test_export", (DL_FUNC) &_waddR_interval_table_test_export, 3},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_diffexpR(DllInfo *dll) {
+RcppExport void R_init_waddR(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }
