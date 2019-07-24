@@ -1,3 +1,9 @@
+#'@useDynLib waddR
+#'@importFrom Rcpp sourceCpp
+#'@import arm
+#'@import eva
+#'@import BiocParallel
+NULL
 
 # load asymptotic reference distribution
 # contains:
