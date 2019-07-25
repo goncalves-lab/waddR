@@ -1,12 +1,12 @@
+# setting R_TESTS to empty string because of
+# https://github.com/hadley/testthat/issues/144
+# revert this when that issue in R is fixed.
+Sys.setenv("R_TESTS" = "")
+
 library(testthat)
 library(waddR)
 library(devtools)
 
-if(!"DESCRIPTION" %in% dir()){
-  package_base <- "DESCRIPTION" %in% dir()
-} else {
-  package_base <- "."
-}
-load_all(package_base)
+load_all()
 
 test_check("waddR")
