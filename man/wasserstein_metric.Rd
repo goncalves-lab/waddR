@@ -4,21 +4,21 @@
 \alias{wasserstein_metric}
 \title{wasserstein_metric}
 \usage{
-wasserstein_metric(a_, b_, p = 1, wa_ = NULL, wb_ = NULL)
+wasserstein_metric(x, y, p = 1, wa_ = NULL, wb_ = NULL)
 }
 \arguments{
-\item{a_}{NumericVector representing an empirical distribution under condition A}
+\item{x}{NumericVector representing an empirical distribution under condition A}
 
-\item{b_}{NumericVector representing an empirical distribution under condition B}
+\item{y}{NumericVector representing an empirical distribution under condition B}
 
 \item{p}{exponent of the wasserstine distance}
 
-\item{wa_}{NumericVector representing the weights of datapoints (interpreted as clusters) in a}
+\item{wa_}{NumericVector representing the weights of datapoints (interpreted as clusters) in x}
 
-\item{wb_}{NumericVector representing the weights of datapoints (interpreted as clusters) in b}
+\item{wb_}{NumericVector representing the weights of datapoints (interpreted as clusters) in y}
 }
 \value{
-The wasserstein (transport) distance between a and b
+The wasserstein (transport) distance between x and y
 }
 \description{
 wasserstein_metric

@@ -19,43 +19,43 @@ BEGIN_RCPP
 END_RCPP
 }
 // squared_wass_decomp
-Rcpp::List squared_wass_decomp(const NumericVector& a_, const NumericVector& b_, const double& p);
-RcppExport SEXP _waddR_squared_wass_decomp(SEXP a_SEXP, SEXP b_SEXP, SEXP pSEXP) {
+Rcpp::List squared_wass_decomp(const NumericVector& x, const NumericVector& y, const double& p);
+RcppExport SEXP _waddR_squared_wass_decomp(SEXP xSEXP, SEXP ySEXP, SEXP pSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const NumericVector& >::type a_(a_SEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type b_(b_SEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type y(ySEXP);
     Rcpp::traits::input_parameter< const double& >::type p(pSEXP);
-    rcpp_result_gen = Rcpp::wrap(squared_wass_decomp(a_, b_, p));
+    rcpp_result_gen = Rcpp::wrap(squared_wass_decomp(x, y, p));
     return rcpp_result_gen;
 END_RCPP
 }
 // squared_wass_approx
-double squared_wass_approx(const NumericVector& a_, const NumericVector& b_, const double& p);
-RcppExport SEXP _waddR_squared_wass_approx(SEXP a_SEXP, SEXP b_SEXP, SEXP pSEXP) {
+double squared_wass_approx(const NumericVector& x, const NumericVector& y, const double& p);
+RcppExport SEXP _waddR_squared_wass_approx(SEXP xSEXP, SEXP ySEXP, SEXP pSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const NumericVector& >::type a_(a_SEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type b_(b_SEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const NumericVector& >::type y(ySEXP);
     Rcpp::traits::input_parameter< const double& >::type p(pSEXP);
-    rcpp_result_gen = Rcpp::wrap(squared_wass_approx(a_, b_, p));
+    rcpp_result_gen = Rcpp::wrap(squared_wass_approx(x, y, p));
     return rcpp_result_gen;
 END_RCPP
 }
 // wasserstein_metric
-double wasserstein_metric(NumericVector a_, NumericVector b_, const double p, Nullable<NumericVector> wa_, Nullable<NumericVector> wb_);
-RcppExport SEXP _waddR_wasserstein_metric(SEXP a_SEXP, SEXP b_SEXP, SEXP pSEXP, SEXP wa_SEXP, SEXP wb_SEXP) {
+double wasserstein_metric(NumericVector x, NumericVector y, const double p, Nullable<NumericVector> wa_, Nullable<NumericVector> wb_);
+RcppExport SEXP _waddR_wasserstein_metric(SEXP xSEXP, SEXP ySEXP, SEXP pSEXP, SEXP wa_SEXP, SEXP wb_SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type a_(a_SEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type b_(b_SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
     Rcpp::traits::input_parameter< const double >::type p(pSEXP);
     Rcpp::traits::input_parameter< Nullable<NumericVector> >::type wa_(wa_SEXP);
     Rcpp::traits::input_parameter< Nullable<NumericVector> >::type wb_(wb_SEXP);
-    rcpp_result_gen = Rcpp::wrap(wasserstein_metric(a_, b_, p, wa_, wb_));
+    rcpp_result_gen = Rcpp::wrap(wasserstein_metric(x, y, p, wa_, wb_));
     return rcpp_result_gen;
 END_RCPP
 }

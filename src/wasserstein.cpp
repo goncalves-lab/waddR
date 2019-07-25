@@ -584,19 +584,19 @@ NumericMatrix permutations(const NumericVector x, const int num_permutations)
 //' quantiles of the two input vectors a and b.
 //' As an approximation of the distribution, 1000 quantiles are computed for each vector.
 //'
-//' @param a Vector representing an empirical distribution under condition A 
-//' @param b Vector representing an empirical distribution under condition B
+//' @param x Vector representing an empirical distribution under condition A 
+//' @param y Vector representing an empirical distribution under condition B
 //'	@param p exponent of the wasserstine distance
-//' @return An named Rcpp::List with the wasserstein distance between a and b,
+//' @return An named Rcpp::List with the wasserstein distance between x and y,
 //'    decomposed into terms for size, location, and shape
 //'
 //' @export
 //[[Rcpp::export]]
-Rcpp::List squared_wass_decomp(const NumericVector & a_, const NumericVector & b_,const double & p=1)
+Rcpp::List squared_wass_decomp(const NumericVector & x, const NumericVector & y, const double & p=1)
 {
 
 	int NUM_QUANTILES = 1000;
-	vector<double> 		a(a_.begin(), a_.end()), b(b_.begin(), b_.end()),
+	vector<double> 		a(x.begin(), x.end()), b(y.begin(), y.end()),
 						quantiles_a = emp_equi_quantiles(a, NUM_QUANTILES),
 						quantiles_b = emp_equi_quantiles(b, NUM_QUANTILES);
 
@@ -627,19 +627,19 @@ Rcpp::List squared_wass_decomp(const NumericVector & a_, const NumericVector & b
 //' quantiles of the two input vectors a and b.
 //' As an approximation of the distribution, 1000 quantiles are computed for each vector.
 //'
-//' @param a Vector representing an empirical distribution under condition A 
-//' @param b Vector representing an empirical distribution under condition B
+//' @param x Vector representing an empirical distribution under condition A 
+//' @param y Vector representing an empirical distribution under condition B
 //'	@param p exponent of the wasserstine distance
-//' @return The approximated squared wasserstein distance between a and b
+//' @return The approximated squared wasserstein distance between x and y
 //'
 //' @export
 //[[Rcpp::export]]
-double squared_wass_approx(const NumericVector & a_, const NumericVector & b_, const double & p=1)
+double squared_wass_approx(const NumericVector & x, const NumericVector & y, const double & p=1)
 {
 
 	double				distance_approx;
 	int 				NUM_QUANTILES = 1000;
-	vector<double> 		a(a_.begin(), a_.end()), b(b_.begin(), b_.end()),
+	vector<double> 		a(x.begin(), x.end()), b(y.begin(), y.end()),
 						quantiles_a = emp_equi_quantiles(a, NUM_QUANTILES),
 						quantiles_b = emp_equi_quantiles(b, NUM_QUANTILES),
 						squared_quantile_diff(NUM_QUANTILES);
@@ -654,23 +654,23 @@ double squared_wass_approx(const NumericVector & a_, const NumericVector & b_, c
 
 //' wasserstein_metric
 //'
-//' @param a_ NumericVector representing an empirical distribution under condition A 
-//' @param b_ NumericVector representing an empirical distribution under condition B
+//' @param x NumericVector representing an empirical distribution under condition A 
+//' @param y NumericVector representing an empirical distribution under condition B
 //'	@param p exponent of the wasserstine distance
-//' @param wa_ NumericVector representing the weights of datapoints (interpreted as clusters) in a
-//' @param wb_ NumericVector representing the weights of datapoints (interpreted as clusters) in b
-//' @return The wasserstein (transport) distance between a and b
+//' @param wa_ NumericVector representing the weights of datapoints (interpreted as clusters) in x
+//' @param wb_ NumericVector representing the weights of datapoints (interpreted as clusters) in y
+//' @return The wasserstein (transport) distance between x and y
 //'
 //' @export
 //[[Rcpp::export]]
-double wasserstein_metric(NumericVector a_, 
-						  NumericVector b_,
+double wasserstein_metric(NumericVector x, 
+						  NumericVector y,
 						  const double p=1,
 						  Nullable<NumericVector> wa_=R_NilValue, 
 						  Nullable<NumericVector> wb_=R_NilValue) {
 	//warning("wasserstein_metric will be deprecated in the next update. Use wasserstein() instead");
-	vector<double> a(a_.begin(), a_.end());
-	vector<double> b(b_.begin(), b_.end());
+	vector<double> a(x.begin(), x.end());
+	vector<double> b(y.begin(), y.end());
 	sort(a.begin(), a.end());
 	sort(b.begin(), b.end());
 

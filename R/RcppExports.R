@@ -177,15 +177,15 @@ permutations <- function(x, num_permutations) {
 #' quantiles of the two input vectors a and b.
 #' As an approximation of the distribution, 1000 quantiles are computed for each vector.
 #'
-#' @param a Vector representing an empirical distribution under condition A 
-#' @param b Vector representing an empirical distribution under condition B
+#' @param x Vector representing an empirical distribution under condition A 
+#' @param y Vector representing an empirical distribution under condition B
 #'	@param p exponent of the wasserstine distance
-#' @return An named Rcpp::List with the wasserstein distance between a and b,
+#' @return An named Rcpp::List with the wasserstein distance between x and y,
 #'    decomposed into terms for size, location, and shape
 #'
 #' @export
-squared_wass_decomp <- function(a_, b_, p = 1) {
-    .Call('_waddR_squared_wass_decomp', PACKAGE = 'waddR', a_, b_, p)
+squared_wass_decomp <- function(x, y, p = 1) {
+    .Call('_waddR_squared_wass_decomp', PACKAGE = 'waddR', x, y, p)
 }
 
 #' squared_wass_approx
@@ -195,28 +195,28 @@ squared_wass_decomp <- function(a_, b_, p = 1) {
 #' quantiles of the two input vectors a and b.
 #' As an approximation of the distribution, 1000 quantiles are computed for each vector.
 #'
-#' @param a Vector representing an empirical distribution under condition A 
-#' @param b Vector representing an empirical distribution under condition B
+#' @param x Vector representing an empirical distribution under condition A 
+#' @param y Vector representing an empirical distribution under condition B
 #'	@param p exponent of the wasserstine distance
-#' @return The approximated squared wasserstein distance between a and b
+#' @return The approximated squared wasserstein distance between x and y
 #'
 #' @export
-squared_wass_approx <- function(a_, b_, p = 1) {
-    .Call('_waddR_squared_wass_approx', PACKAGE = 'waddR', a_, b_, p)
+squared_wass_approx <- function(x, y, p = 1) {
+    .Call('_waddR_squared_wass_approx', PACKAGE = 'waddR', x, y, p)
 }
 
 #' wasserstein_metric
 #'
-#' @param a_ NumericVector representing an empirical distribution under condition A 
-#' @param b_ NumericVector representing an empirical distribution under condition B
+#' @param x NumericVector representing an empirical distribution under condition A 
+#' @param y NumericVector representing an empirical distribution under condition B
 #'	@param p exponent of the wasserstine distance
-#' @param wa_ NumericVector representing the weights of datapoints (interpreted as clusters) in a
-#' @param wb_ NumericVector representing the weights of datapoints (interpreted as clusters) in b
-#' @return The wasserstein (transport) distance between a and b
+#' @param wa_ NumericVector representing the weights of datapoints (interpreted as clusters) in x
+#' @param wb_ NumericVector representing the weights of datapoints (interpreted as clusters) in y
+#' @return The wasserstein (transport) distance between x and y
 #'
 #' @export
-wasserstein_metric <- function(a_, b_, p = 1, wa_ = NULL, wb_ = NULL) {
-    .Call('_waddR_wasserstein_metric', PACKAGE = 'waddR', a_, b_, p, wa_, wb_)
+wasserstein_metric <- function(x, y, p = 1, wa_ = NULL, wb_ = NULL) {
+    .Call('_waddR_wasserstein_metric', PACKAGE = 'waddR', x, y, p, wa_, wb_)
 }
 
 add_test_export <- function(x_, y_) {

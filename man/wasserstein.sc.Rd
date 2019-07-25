@@ -27,8 +27,8 @@ Two-sample test for single-cell RNA-sequencing data to check for differences bet
 Details concerning the permutation testing procedures for single-cell RNA-sequencing data can be found in Schefzik and Goncalves (2019). Corresponds to the function testWass when identifying the argument inclZero=TRUE in testWass with the argument method=”OS” and the argument inclZero=FALSE in testWass with the argument method=”TS”.
 }
 \examples{
-dat<-c(100, 120, 100, 90, 0, 0, 90, 80, 10, 50)
-condition<-c(1, 2, 1, 2, 1, 2, 1, 2, 1, 2)
+dat<-matrix(c(rnorm(100,42,1), rnorm(102,45,3)), nrow=1)
+condition<-c(rep(1,100), rep(2,102))
 wasserstein.sc(dat,condition,24,10000,method="OS")
 wasserstein.sc(dat,condition,24,10000,method="TS")
 

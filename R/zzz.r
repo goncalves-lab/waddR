@@ -1,5 +1,7 @@
 #'@useDynLib waddR
 #'@importFrom Rcpp sourceCpp
+#'@importFrom methods is
+#'@importFrom stats binomial cor ecdf p.adjust pchisq quantile sd
 #'@import arm
 #'@import eva
 #'@import BiocParallel
@@ -11,18 +13,6 @@ NULL
 #   empcdf.ref      : an empirical cumulative distribution function
 #                     based on the values in value.integral
 load(system.file("data/ref_distr.dat", package="waddR"))
-
-
-# on load
-.First.lib <-function(lib,pkg){
-  ver <- read.dcf(file.path(lib, pkg, "DESCRIPTION"),"Version")
-  ver <- as.character(ver)
-  # compiled cpp
-  library.dynam("waddR", pkg, lib)
-  
-  cat("waddR", ver, "loaded\n")
-}
-
 
 # cleanup after our cpp libraries
 .onUnload <- function (libpath) {

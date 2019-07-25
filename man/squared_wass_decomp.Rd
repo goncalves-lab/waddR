@@ -4,17 +4,17 @@
 \alias{squared_wass_decomp}
 \title{squared_wass_decomp}
 \usage{
-squared_wass_decomp(a_, b_, p = 1)
+squared_wass_decomp(x, y, p = 1)
 }
 \arguments{
+\item{x}{Vector representing an empirical distribution under condition A}
+
+\item{y}{Vector representing an empirical distribution under condition B}
+
 \item{p}{exponent of the wasserstine distance}
-
-\item{a}{Vector representing an empirical distribution under condition A}
-
-\item{b}{Vector representing an empirical distribution under condition B}
 }
 \value{
-An named Rcpp::List with the wasserstein distance between a and b,
+An named Rcpp::List with the wasserstein distance between x and y,
    decomposed into terms for size, location, and shape
 }
 \description{

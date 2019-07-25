@@ -21,14 +21,14 @@ library(arm)
 #'@references Korthauer et al. (2016).
 #'
 #'@examples
-#'dat<-c(100, 120, 100, 90, 0, 0, 90, 80, 10, 50)
-#'condition<-c(1, 2, 1, 2, 1, 2, 1, 2, 1, 2)
+#'dat<-matrix(c(rnorm(100,42,1), rnorm(102,45,3)), nrow=1)
+#'condition<-c(rep(1,100), rep(2,102))
 #'testZeroes(dat,condition)
 #'
 #'
 #'@export
 #'
-testZeroes <- function(dat, cond, these=1:nrow(dat)){
+testZeroes <- function(dat, condition, these=1:nrow(dat)){
   detection <- colSums(dat>0)/nrow(dat)
   
   onegene <- function(j, dat, detection, cond, these){
@@ -44,7 +44,7 @@ testZeroes <- function(dat, cond, these=1:nrow(dat)){
   }
   
   pval <- unlist(bplapply(seq_along(these), onegene, dat=dat, 
-                          detection=detection, cond=cond, these=these))
+                          detection=detection, cond=condition, these=these))
   
   return(pval)
 }
@@ -53,7 +53,7 @@ testZeroes <- function(dat, cond, these=1:nrow(dat)){
 ###########
 ####compute Fisher's combined p-value (zero&non-zero)
 
-#'fishersCombinedPVal
+#'fishersCombinedPval
 #'
 #'Aggregates two p-values into a combined p-value according to Fisher’s method 
 #'
@@ -65,7 +65,7 @@ testZeroes <- function(dat, cond, these=1:nrow(dat)){
 #'
 #'@examples
 #'x<-c(0.0004,2e-7)
-#'fishersCombinedPVal(x)
+#'fishersCombinedPval(x)
 #'
 #'
 #'@export
@@ -171,8 +171,8 @@ CombinePVal<-function(r,s){
 #'@references Schefzik and Goncalves (2019).
 #'
 #'@examples
-#'dat<-c(100, 120, 100, 90, 0, 0, 90, 80, 10, 50)
-#'condition<-c(1, 2, 1, 2, 1, 2, 1, 2, 1, 2)
+#'dat<-matrix(c(rnorm(100,42,1), rnorm(102,45,3)), nrow=1)
+#'condition<-c(rep(1,100), rep(2,102))
 #'testWass(dat,condition,24,10000,inclZero=TRUE)
 #'testWass(dat,condition,24,10000,inclZero=FALSE)
 #'
@@ -260,8 +260,8 @@ testWass<-function(dat, condition,seedex,permnum, inclZero=TRUE){
 #'@references Schefzik and Goncalves (2019).
 #'
 #'@examples
-#'dat<-c(100, 120, 100, 90, 0, 0, 90, 80, 10, 50)
-#'condition<-c(1, 2, 1, 2, 1, 2, 1, 2, 1, 2)
+#'dat<-matrix(c(rnorm(100,42,1), rnorm(102,45,3)), nrow=1)
+#'condition<-c(rep(1,100), rep(2,102))
 #'wasserstein.sc(dat,condition,24,10000,method="OS")
 #'wasserstein.sc(dat,condition,24,10000,method="TS")
 #'

@@ -2,7 +2,7 @@
 % Please edit documentation in R/Wasserstein_SingleCell.r
 \name{fishersCombinedPval}
 \alias{fishersCombinedPval}
-\title{fishersCombinedPVal}
+\title{fishersCombinedPval}
 \usage{
 fishersCombinedPval(x)
 }
@@ -20,7 +20,7 @@ Aggregates two p-values into a combined p-value according to Fisher’s method.
 }
 \examples{
 x<-c(0.0004,2e-7)
-fishersCombinedPVal(x)
+fishersCombinedPval(x)
 
 
 }

@@ -4,17 +4,17 @@
 \alias{squared_wass_approx}
 \title{squared_wass_approx}
 \usage{
-squared_wass_approx(a_, b_, p = 1)
+squared_wass_approx(x, y, p = 1)
 }
 \arguments{
+\item{x}{Vector representing an empirical distribution under condition A}
+
+\item{y}{Vector representing an empirical distribution under condition B}
+
 \item{p}{exponent of the wasserstine distance}
-
-\item{a}{Vector representing an empirical distribution under condition A}
-
-\item{b}{Vector representing an empirical distribution under condition B}
 }
 \value{
-The approximated squared wasserstein distance between a and b
+The approximated squared wasserstein distance between x and y
 }
 \description{
 Approximation of the squared wasserstein distance.

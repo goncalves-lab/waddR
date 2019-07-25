@@ -2,7 +2,6 @@ library(testthat)
 library(waddR)
 library(devtools)
 
-
 if(!"DESCRIPTION" %in% dir()){
   package_base <- "DESCRIPTION" %in% dir()
 } else {
@@ -11,4 +10,3 @@ if(!"DESCRIPTION" %in% dir()){
 load_all(package_base)
 
 test_check("waddR")
-

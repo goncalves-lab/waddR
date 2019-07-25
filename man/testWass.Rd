@@ -68,8 +68,8 @@ Two-sample test for single-cell RNA-sequencing data to check for differences bet
 Details concerning the permutation testing procedures for single-cell RNA-sequencing data can be found in Schefzik and Goncalves (2019).
 }
 \examples{
-dat<-c(100, 120, 100, 90, 0, 0, 90, 80, 10, 50)
-condition<-c(1, 2, 1, 2, 1, 2, 1, 2, 1, 2)
+dat<-matrix(c(rnorm(100,42,1), rnorm(102,45,3)), nrow=1)
+condition<-c(rep(1,100), rep(2,102))
 testWass(dat,condition,24,10000,inclZero=TRUE)
 testWass(dat,condition,24,10000,inclZero=FALSE)
 
