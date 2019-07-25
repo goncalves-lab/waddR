@@ -7,12 +7,28 @@
 #'@import BiocParallel
 NULL
 
-# load asymptotic reference distribution
-# contains:
-#   value.integral  : a distribution
-#   empcdf.ref      : an empirical cumulative distribution function
-#                     based on the values in value.integral
-load(system.file("data/ref_distr.dat", package="waddR"))
+
+# Documentation of the RData objects
+#
+#' This object contains a distribution
+#'
+#' @name value.integral
+#' @docType data
+#' @keywords data
+NULL
+
+#' An empirical cumulative distribution function based on the values in value.integral
+#'
+#' @name empcdf.ref  
+#' @docType data
+#' @keywords data
+NULL
+
+# Loading of the R objects value.integral and empcdf.ref
+load(system.file("data/VALUE_INTEGRAL.RData", package="waddR"))
+load(system.file("data/EMPCDF.RData", package="waddR"))
+
+
 
 # cleanup after our cpp libraries
 .onUnload <- function (libpath) {
