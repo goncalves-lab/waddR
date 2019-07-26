@@ -1,7 +1,6 @@
 // [[Rcpp::depends(RcppArmadillo)]]
 
 #include <iostream>
-#include <armadillo>
 #include <math.h>
 #include <RcppArmadillo.h>
 #include <RcppArmadilloExtensions/sample.h>
