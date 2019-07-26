@@ -7,78 +7,87 @@ library("waddR")
 
 #### NUMERIC VECTOR ABSOLUTE VALUE
 test_that("abs_test_export", {
+  skip_if_not_exported()
   v1 <- c(0,2.3,2,3,4,-3,-134)
-  expect_equal(waddR::abs_test_export(v1), base::abs(v1))
+  expect_equal(abs_test_export(v1), base::abs(v1))
 })
 
 #### Vector sum
 test_that("sum_test_export", {
+  skip_if_not_exported()
   v1 <- c(12,23,42.5, 22.5)
   expected <- 100
-  expect_equal(waddR::sum_test_export(v1), expected)
+  expect_equal(sum_test_export(v1), expected)
 })
 
 #### NUMERIC VECTOR MEAN
 test_that("mean_test_export", {
+  skip_if_not_exported()
   set.seed(42)
   v <- rnorm(100)
   v2 <- c(-1,3.5,100)
-  expect_equal(waddR::mean_test_export(v), base::mean(v))
-  expect_equal(waddR::mean_test_export(v2), base::mean(v2))
+  expect_equal(mean_test_export(v), base::mean(v))
+  expect_equal(mean_test_export(v2), base::mean(v2))
 })
 
 #### NUMERIC VECTOR SD
 test_that("sd_test_export", {
+  skip_if_not_exported()
   set.seed(42)
   v <- rnorm(100)
   v2 <- c(-1,3.5,100)
-  expect_equal(waddR::sd_test_export(v), sd(v))
-  expect_equal(waddR::sd_test_export(v2), sd(v2))
+  expect_equal(sd_test_export(v), sd(v))
+  expect_equal(sd_test_export(v2), sd(v2))
 })
 
 #### Vector add
 #### Vector subtract
 test_that("add_test_export", {
+  skip_if_not_exported()
   v1 <- c(1,2,3,4)
   v2 <- c(2,2,2,2)
   expected <- c(3,4,5,6)
-  expect_equal(waddR::add_test_export(v1,v2), expected)
-  expect_error(waddR::add_test_export(v1,2)) 
-  expect_equal(waddR::add_test_export_sv(v1,2), expected)
+  expect_equal(add_test_export(v1,v2), expected)
+  expect_error(add_test_export(v1,2)) 
+  expect_equal(add_test_export_sv(v1,2), expected)
 })
 
 #### Vector subtract
 test_that("subtract_test_export", {
+  skip_if_not_exported()
   v1 <- c(1,2,3,4)
   v2 <- c(2,2,2,2)
   expected <- c(-1,0,1,2)
-  expect_equal(waddR::subtract_test_export(v1,v2), expected) # with vector
+  expect_equal(subtract_test_export(v1,v2), expected) # with vector
 })
 
 #### Vector divide
 test_that("divide_test_export", {
+  skip_if_not_exported()
   v1 <- c(1,2,3,4)
   v2 <- c(2,2,2,2)
   expected <- c(0.5,1.0,1.5,2)
-  expect_equal(waddR::divide_test_export_vectors(v1,v2), expected) # with vector
-  expect_equal(waddR::divide_test_export_sv(v1,2), expected) # with scalar
+  expect_equal(divide_test_export_vectors(v1,v2), expected) # with vector
+  expect_equal(divide_test_export_sv(v1,2), expected) # with scalar
 })
 
 #### Vector multiply
 test_that("multiply_test_export", {
+  skip_if_not_exported()
   v1 <- c(1,2,3,4)
   v2 <- c(2,2,2,2)
   expected <- c(2,4,6,8)
-  expect_equal(waddR::multiply_test_export(v1,v2), expected) # with vector
-  expect_warning(waddR::multiply_test_export(v1,2)) 
-  expect_equal(waddR::multiply_test_export_sv(v1,2), expected) # with scalar
+  expect_equal(multiply_test_export(v1,v2), expected) # with vector
+  expect_warning(multiply_test_export(v1,2)) 
+  expect_equal(multiply_test_export_sv(v1,2), expected) # with scalar
 })
 
 #### Vector Pow
-test_that("pow_test_export",{
+test_that("pow_test_export", {
+  skip_if_not_exported()
   v1 <- c(1,2,3,4)
   expected <- c(1,4,9,16)
-  expect_equal(waddR::pow_test_export(v1,2), expected) # with scalar
+  expect_equal(pow_test_export(v1,2), expected) # with scalar
 })
 
 #### PERMUTATIONS OF NUMERIC VECTOR
@@ -97,13 +106,15 @@ test_that("permutations", {
 
 #### CUMULATIVE SUM OF NUMERIC VECTOR
 test_that("cumSum_test_export", {
-  expect_equal(waddR::cumSum_test_export(c(1,2,3,4,5)), c(1,3,6,10,15))
-  expect_equal(waddR::cumSum_test_export(c(1,2,3,4,5), 3), c(1,3,6))
-  expect_equal(waddR::cumSum_test_export(c(1,2,3,4), 0), c(1,3,6,10))
+  skip_if_not_exported()
+  expect_equal(cumSum_test_export(c(1,2,3,4,5)), c(1,3,6,10,15))
+  expect_equal(cumSum_test_export(c(1,2,3,4,5), 3), c(1,3,6))
+  expect_equal(cumSum_test_export(c(1,2,3,4), 0), c(1,3,6,10))
 })
 
 #### INTERVAL TABLE
 test_that("Interval_table_test_export", {
+  skip_if_not_exported()
   # setup
   set.seed(42)
   wa<- rnorm(200, 20, 1)
@@ -153,6 +164,7 @@ test_that("Interval_table_test_export", {
 
 #### Repeat Weighted
 test_that("rep_weighted_test_export", {
+  skip_if_not_exported()
   expect_equal(rep_weighted_test_export(c(1,2,3),c(1,2,2)), rep(c(1,2,3), times=c(1,2,2)))
   expect_equal(rep_weighted_test_export(c(1,2,3,4), c(1,2,2,2)), c(1,2,2,3,3,4,4))
   expect_equal(rep_weighted_test_export(c(1,2), c(0,1)), c(2))
@@ -161,6 +173,7 @@ test_that("rep_weighted_test_export", {
 
 #### Concat NumericVectors
 test_that("concat_test_export", {
+  skip_if_not_exported()
   expect_equal(concat_test_export(c(1,2,3,4), c(5,6,7,8)), c(1,2,3,4,5,6,7,8))
   expect_equal(concat_test_export(c(1,2,3), c(1)), c(1,2,3,1))
   expect_equal(concat_test_export(c(1,2,3),c(1,2,3)), c(1,2,3,1,2,3))
@@ -169,6 +182,7 @@ test_that("concat_test_export", {
 
 #### correlation of vectors
 test_that("cor_test_export", {
+  skip_if_not_exported()
   expect_equal(cor_test_export(c(1.0,2.0,3,4,5), c(2,3,4,5,6)), 1)
   expect_equal(cor_test_export(c(1,2,3,4,5), c(2,3,4,5,6)*-1), -1)
   expect_equal(cor_test_export(c(1,34,134,13,50,5,1,2), c(2,20,55, 18, 55, 6, 2, 2)), cor(c(1,34,134,13,50,5,1,2), c(2,20,55, 18, 55, 6, 2, 2)))
@@ -176,6 +190,7 @@ test_that("cor_test_export", {
 
 #### empirical equidistant quantiles
 test_that("emp_equi_quantiles_test_export",{
+  skip_if_not_exported()
   expect_equal(emp_equi_quantiles_test_export(c(1:10),10), c(1:10))
   expect_equal(emp_equi_quantiles_test_export(c(1:10),5), c(2,4,6,8,10))
   expect_equal(emp_equi_quantiles_test_export(c(1:5),10), c(0,1,1,2,2,3,3,4,4,5))

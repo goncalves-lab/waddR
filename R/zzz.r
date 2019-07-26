@@ -7,7 +7,6 @@
 #'@import BiocParallel
 NULL
 
-
 # Documentation of the RData objects
 #
 #' This object contains a distribution
@@ -29,6 +28,10 @@ empcdf.ref <- NULL
 #' @docType data
 #' @keywords data
 global.empcdf.ref <- NULL
+
+# Non-exported definition to check if non-exported functions are available.
+# This will cause tests for these functions (causing issues on build systems) to be skipped.
+NONEXPORTS.AVAILABLE <- TRUE
 
 # cleanup after our cpp libraries
 .onUnload <- function (libpath) {

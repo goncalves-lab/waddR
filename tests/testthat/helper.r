@@ -17,5 +17,11 @@ expect_known <- function(type=c("value","failure", "output", "hash"), function_c
 
 
 skip_temporarily <- function() {
-  skip("Hardskip: This has manually been placed in a test to skip it")
+  skip("SkipTemporarily: This has manually been placed in a test to skip it")
+}
+
+
+skip_if_not_exported <- function() {
+  if (!exists("NONEXPORTS.AVAILABLE"))
+    skip("SkipNotExported: Skipping tests for non-exported functions because loading them failed ...")
 }
