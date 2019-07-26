@@ -1,6 +1,6 @@
 Package: waddR
 Type: Package
-Title: Statistical Test for one-dimensional distributions based on the wasserstein metric
+Title: Statistical Test for One-Dimensional Distributions Based on the Wasserstein Metric
 Version: 0.1
 Date: 2019-06-17
 Author: Roman Schefzik <r.schefzik@dkfz-heidelberg.de> 
