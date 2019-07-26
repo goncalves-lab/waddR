@@ -1,7 +1,7 @@
 Package: waddR
 Type: Package
 Title: Statistical Test for One-Dimensional Distributions Based on the Wasserstein Metric
-Version: 0.2.0
+Version: 0.2.1
 Date: 2019-06-17
 Author: Roman Schefzik <r.schefzik@dkfz-heidelberg.de> 
 Maintainer: Julian Flesch <j.flesch@dkfz-heidelberg.de> 
@@ -12,7 +12,7 @@ Imports:
 	Rcpp (>= 1.0.1),
 	eva (>= 0.2.5),
 	arm (>= 1.10-1),	
-	BiocParallel (>= 1.18.0),
+	BiocParallel,
 	methods,
 	stats
 Depends:
