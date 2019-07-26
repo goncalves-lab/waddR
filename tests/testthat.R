@@ -6,7 +6,15 @@ Sys.setenv("R_TESTS" = "")
 library(testthat)
 library(waddR)
 library(devtools)
+library(rprojroot)
 
-load_all()
+# Workaround for issue on build systems, where package directory can't be found or attached
+# and non-exported functions throw errors.
+if ("waddR" %in% dir("..")) {
+  abspath <- find_root("../waddR", criterion=has_dir("DESCRIPTION"))
+} else {
+  abspath <- find_root(".", criterion=has_dir("DESCRIPTION"))
+}
+load_all(abspath)
 
 test_check("waddR")

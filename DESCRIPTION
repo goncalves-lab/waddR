@@ -20,7 +20,8 @@ Depends:
 Suggests:
 	devtools,
 	testthat,
-	roxygen2
+	roxygen2,
+	rprojroot
 LinkingTo:
 	Rcpp,
 	RcppArmadillo,
