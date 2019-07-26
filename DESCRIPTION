@@ -5,7 +5,7 @@ Version: 0.1
 Date: 2019-06-17
 Author: Roman Schefzik <r.schefzik@dkfz-heidelberg.de> 
 Maintainer: Julian Flesch <j.flesch@dkfz-heidelberg.de> 
-Description: One paragraph description of what the package does as one or more full sentences.
+Description: Wasserstein distance based functions and tests for detecting differential distributions in one-dimensional data. Includes Utilities for Wasserstein distance calculation, a statistical test, and a specialized test applicable to scRNA expression data.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Imports: 
