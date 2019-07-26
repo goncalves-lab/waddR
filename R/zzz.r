@@ -15,20 +15,20 @@ NULL
 #' @name value.integral
 #' @docType data
 #' @keywords data
-NULL
+value.integral <- NULL
 
 #' An empirical cumulative distribution function based on the values in value.integral
 #'
 #' @name empcdf.ref  
 #' @docType data
 #' @keywords data
-NULL
+empcdf.ref <- NULL
 
-# Loading of the R objects value.integral and empcdf.ref
-load(system.file("data/VALUE_INTEGRAL.RData", package="waddR"))
-load(system.file("data/EMPCDF.RData", package="waddR"))
-
-
+#' A global reference to empcdf.ref
+#' @name global.empcdf.ref
+#' @docType data
+#' @keywords data
+global.empcdf.ref <- NULL
 
 # cleanup after our cpp libraries
 .onUnload <- function (libpath) {

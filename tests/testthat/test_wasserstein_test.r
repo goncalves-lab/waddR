@@ -1,6 +1,16 @@
 library("testthat")
 library("waddR")
 
+# load the reference data
+# Checking for and loading the R object value.integral
+if (!exists("value.integral")) {
+  load(system.file("data/VALUE_INTEGRAL.RData", package="waddR"))
+}
+# Checking for and loading the R object empcdf.ref
+if (!exists("empcdf.ref")) {
+  load(system.file("data/EMPCDF.RData", package="waddR"))
+}
+
 
 ##########################################################################
 ##                    WASSERSTEIN.TEST FUNCTION                         ##

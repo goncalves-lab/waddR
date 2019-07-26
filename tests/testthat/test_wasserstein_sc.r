@@ -2,16 +2,6 @@ library("testthat")
 library("waddR")
 
 
-if (!exists("empcdf.ref")) {
-  # load asymptotic reference distribution if it is not available
-  # contains:
-  #   value.integral  : a distribution
-  #   empcdf.ref      : an empirical cumulative distribution function
-  #                     based on the values in value.integral
-  load(system.file("data/ref_distr.dat", package="waddR"))
-}
-
-
 test_that("Correctness of wasserstein single cell output", {
   skip("TODO")
   expect_true(FALSE)
