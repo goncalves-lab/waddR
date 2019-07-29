@@ -1,5 +1,8 @@
-library(BiocParallel)
-library(eva)
+if (requireNamespace(BiocParallel, quitely=TRUE) {
+  library(BiocParallel)
+} else {
+  bplapply <- lapply
+}
 library(arm)
 
 
