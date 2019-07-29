@@ -8,8 +8,8 @@ library(waddR)
 library(devtools)
 library(rprojroot)
 
-# Workaround for issue on build systems, where package directory can't be found or attached
-# and non-exported functions throw errors.
+# Workaround for issue on build systems, where package directory can't be found
+# and tests for non-exported functions throw errors.
 tryCatch({
 
   dir.start <- "."
