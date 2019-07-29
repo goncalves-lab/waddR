@@ -158,15 +158,19 @@ test_that("Interval_table_test_export", {
   expect_true(length(rresult1) == length(cppresult1))
   expect_true(all(rresult2 == cppresult2))
   expect_true(all(rresult3 == cppresult3))
-  expect_type(interval_table_test_export(rnorm(1000, 10,0.3), rnorm(834, 20, 10)), "integer")
+  expect_type(interval_table_test_export(rnorm(1000, 10,0.3),
+                                         rnorm(834, 20, 10)),
+              "integer")
   
 })
 
 #### Repeat Weighted
 test_that("rep_weighted_test_export", {
   skip_if_not_exported()
-  expect_equal(rep_weighted_test_export(c(1,2,3),c(1,2,2)), rep(c(1,2,3), times=c(1,2,2)))
-  expect_equal(rep_weighted_test_export(c(1,2,3,4), c(1,2,2,2)), c(1,2,2,3,3,4,4))
+  expect_equal(rep_weighted_test_export(c(1,2,3), c(1,2,2)),
+               rep(c(1,2,3), times=c(1,2,2)))
+  expect_equal(rep_weighted_test_export(c(1,2,3,4), c(1,2,2,2)),
+               c(1,2,2,3,3,4,4))
   expect_equal(rep_weighted_test_export(c(1,2), c(0,1)), c(2))
 #  expect_error(rep_weighted_test_export(c(1,2), c()))
 })
@@ -174,7 +178,8 @@ test_that("rep_weighted_test_export", {
 #### Concat NumericVectors
 test_that("concat_test_export", {
   skip_if_not_exported()
-  expect_equal(concat_test_export(c(1,2,3,4), c(5,6,7,8)), c(1,2,3,4,5,6,7,8))
+  expect_equal(concat_test_export(c(1,2,3,4), c(5,6,7,8)),
+               c(1,2,3,4,5,6,7,8))
   expect_equal(concat_test_export(c(1,2,3), c(1)), c(1,2,3,1))
   expect_equal(concat_test_export(c(1,2,3),c(1,2,3)), c(1,2,3,1,2,3))
 #  expect_equal(concat_test_export(c(), c(1,2,3)), c(1,2,3))
@@ -185,14 +190,19 @@ test_that("cor_test_export", {
   skip_if_not_exported()
   expect_equal(cor_test_export(c(1.0,2.0,3,4,5), c(2,3,4,5,6)), 1)
   expect_equal(cor_test_export(c(1,2,3,4,5), c(2,3,4,5,6)*-1), -1)
-  expect_equal(cor_test_export(c(1,34,134,13,50,5,1,2), c(2,20,55, 18, 55, 6, 2, 2)), cor(c(1,34,134,13,50,5,1,2), c(2,20,55, 18, 55, 6, 2, 2)))
+  expect_equal(cor_test_export(c(1,34,134,13,50,5,1,2),
+                               c(2,20,55, 18, 55, 6, 2, 2)),
+               cor(c(1,34,134,13,50,5,1,2), c(2,20,55, 18, 55, 6, 2, 2)))
 })
 
 #### empirical equidistant quantiles
 test_that("emp_equi_quantiles_test_export",{
   skip_if_not_exported()
-  expect_equal(emp_equi_quantiles_test_export(c(1:10),10), c(1:10))
-  expect_equal(emp_equi_quantiles_test_export(c(1:10),5), c(2,4,6,8,10))
-  expect_equal(emp_equi_quantiles_test_export(c(1:5),10), c(0,1,1,2,2,3,3,4,4,5))
+  expect_equal(emp_equi_quantiles_test_export(c(1:10),10),
+               c(1:10))
+  expect_equal(emp_equi_quantiles_test_export(c(1:10),5),
+               c(2,4,6,8,10))
+  expect_equal(emp_equi_quantiles_test_export(c(1:5),10),
+               c(0,1,1,2,2,3,3,4,4,5))
 })
 

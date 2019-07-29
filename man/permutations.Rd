@@ -7,13 +7,14 @@
 permutations(x, num_permutations)
 }
 \arguments{
-\item{x}{:    NumericVector representing a vector that is to be permutated}
+\item{x}{NumericVector representing a vector that is to be permutated}
 
-\item{num_permutations}{:     Int representing the number of permutations
+\item{num_permutations}{Integer representing the number of permutations
 that are to be performed.}
 }
 \value{
-a matrix containing in every column one permutations of the input vector
+a matrix containing in every column one permutations of the
+	input vector
 }
 \description{
 Returns permutations of a given NumericVector as columns in a NumericMatrix

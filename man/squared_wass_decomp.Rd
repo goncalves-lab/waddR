@@ -19,8 +19,9 @@ An named Rcpp::List with the wasserstein distance between x and y,
 }
 \description{
 Approximation of the squared Wasserstein distance between two vectors,
-decomposed into size, location and shape. 
-Calculation based on the mean squared difference between the equidistant 
+decomposed into size, location and shape.
+Calculation based on the mean squared difference between the equidistant
 quantiles of the two input vectors a and b.
-As an approximation of the distribution, 1000 quantiles are computed for each vector.
+As an approximation of the distribution, 1000 quantiles are computed for
+each vector.
 }

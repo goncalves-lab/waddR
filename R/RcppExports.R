@@ -129,8 +129,9 @@ NULL
 
 #' vector_concatenate
 #'
-#' `concat` returns a vector that represents the concatenation of two input vectors.
-#' The elements of the second given vector are appended to a copy of the first vector.
+#' `concat` returns a vector that represents the concatenation of two input
+#' vectors. The elements of the second given vector are appended to a copy of
+#' the first vector.
 #'
 #' @param x vector
 #' @param y vector
@@ -151,7 +152,7 @@ NULL
 #' @param ini_value default frequency value
 #'
 #' @return frequency with which elements of datavec fall into each of the 
-#'    intervals defined by interval_breaks
+#'		intervals defined by interval_breaks
 #'
 NULL
 
@@ -159,10 +160,11 @@ NULL
 #'
 #' Returns permutations of a given NumericVector as columns in a NumericMatrix
 #' object. 
-#' @param x :	NumericVector representing a vector that is to be permutated
-#' @param num_permutations : 	Int representing the number of permutations
-#'							that are to be performed.
-#' @return a matrix containing in every column one permutations of the input vector
+#' @param x NumericVector representing a vector that is to be permutated
+#' @param num_permutations Integer representing the number of permutations
+#'		that are to be performed.
+#' @return a matrix containing in every column one permutations of the
+#'		input vector
 #'
 #' @export
 permutations <- function(x, num_permutations) {
@@ -172,12 +174,13 @@ permutations <- function(x, num_permutations) {
 #' squared_wass_decomp
 #'
 #' Approximation of the squared Wasserstein distance between two vectors,
-#' decomposed into size, location and shape. 
-#' Calculation based on the mean squared difference between the equidistant 
+#' decomposed into size, location and shape.
+#' Calculation based on the mean squared difference between the equidistant
 #' quantiles of the two input vectors a and b.
-#' As an approximation of the distribution, 1000 quantiles are computed for each vector.
+#' As an approximation of the distribution, 1000 quantiles are computed for
+#' each vector.
 #'
-#' @param x Vector representing an empirical distribution under condition A 
+#' @param x Vector representing an empirical distribution under condition A
 #' @param y Vector representing an empirical distribution under condition B
 #'	@param p exponent of the wasserstine distance
 #' @return An named Rcpp::List with the wasserstein distance between x and y,
@@ -191,11 +194,12 @@ squared_wass_decomp <- function(x, y, p = 1) {
 #' squared_wass_approx
 #'
 #' Approximation of the squared wasserstein distance.
-#' Calculation based on the mean squared difference between the equidistant 
+#' Calculation based on the mean squared difference between the equidistant
 #' quantiles of the two input vectors a and b.
-#' As an approximation of the distribution, 1000 quantiles are computed for each vector.
+#' As an approximation of the distribution, 1000 quantiles are computed for
+#' each vector.
 #'
-#' @param x Vector representing an empirical distribution under condition A 
+#' @param x Vector representing an empirical distribution under condition A
 #' @param y Vector representing an empirical distribution under condition B
 #'	@param p exponent of the wasserstine distance
 #' @return The approximated squared wasserstein distance between x and y
@@ -207,11 +211,15 @@ squared_wass_approx <- function(x, y, p = 1) {
 
 #' wasserstein_metric
 #'
-#' @param x NumericVector representing an empirical distribution under condition A 
-#' @param y NumericVector representing an empirical distribution under condition B
+#' @param x NumericVector representing an empirical distribution under
+#' condition A
+#' @param y NumericVector representing an empirical distribution under
+#' condition B
 #'	@param p exponent of the wasserstine distance
-#' @param wa_ NumericVector representing the weights of datapoints (interpreted as clusters) in x
-#' @param wb_ NumericVector representing the weights of datapoints (interpreted as clusters) in y
+#' @param wa_ NumericVector representing the weights of datapoints
+#'		(interpreted as clusters) in x
+#' @param wb_ NumericVector representing the weights of datapoints
+#'		(interpreted as clusters) in y
 #' @return The wasserstein (transport) distance between x and y
 #'
 #' @export

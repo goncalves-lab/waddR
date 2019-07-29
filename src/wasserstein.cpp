@@ -85,7 +85,11 @@ vector<T> operator*(const vector<T> & x, const vector<T> & y)
 { 
   vector<T> result(x.begin(), x.end());
   if (x.size() != y.size()) {
-  	warning("multiply: Sizes of vectors x and y are incompatible. Attempting multiplication by factor with y[0] ...");
+  	std::stringstream ss;
+  	ss 	<< "multiply: Sizes of vectors x and y are incompatible. "
+  		<< "Attempting multiplication by factor with y[0]";
+  	warning(ss.str());
+
   	if (y.size() >=1) {
   		const double factor = y[0];
   		result = x * factor;
@@ -149,7 +153,11 @@ vector<T> operator/(const vector<T> & x, const vector<T> & y)
 { 
   vector<T> result(x.begin(), x.end());
   if (x.size() != y.size()) {
-  	warning("divide: Sizes of vectors x and y are incompatible. Attempting division of x by y[0] ...");
+  	std::stringstream ss;
+  	ss 	<< "divide: Sizes of vectors x and y are incompatible. "
+  		<< "Attempting division of x by y[0] ...";
+  	warning(ss.str());
+
   	if (y.size() >=1) {
   		const double divisor = y[0];
   		result = x / divisor;
@@ -347,11 +355,14 @@ vector<T> cumSum(const std::vector<T> & x, const int last_index=0)
 template <typename T>
 vector<T> lin_interpolated_quantiles(const vector<T> & x, const int K)
 {
-  warning("NotYetImplemented: Using a function that currently produces dummy output!");
-  
-  vector<T> FOO(x.begin(), x.end());
-  
-  return FOO;
+	std::stringstream warning_ss;
+	warning_ss	<< "NotYetImplemented: Using a function that "
+				<< "currently produces dummy output!";
+	warning(warning_ss.str());
+
+	vector<T> FOO(x.begin(), x.end());
+
+	return FOO;
 }
 
 
@@ -380,7 +391,9 @@ vector<T> emp_equi_quantiles(const vector<T> & x_, const int & K=1000,
 		for (; q_idx < K; q_num++, q_idx++) {
 
 			x_pos = n * q_num / K ;
-			x_idx = (int) min(max((double) 0.0, ceil(x_pos) - 1), (double) n-1);
+			x_idx = (int) min(	max(	(double) 0.0,
+										ceil(x_pos) - 1),
+								(double) n-1);
 			
 			// check if the data index x_pos is a whole number
 			if (x_pos == (double) x_idx) {
@@ -443,8 +456,9 @@ vector<double> rep_weighted(vector<double> x,
 
 //' vector_concatenate
 //'
-//' `concat` returns a vector that represents the concatenation of two input vectors.
-//' The elements of the second given vector are appended to a copy of the first vector.
+//' `concat` returns a vector that represents the concatenation of two input
+//' vectors. The elements of the second given vector are appended to a copy of
+//' the first vector.
 //'
 //' @param x vector
 //' @param y vector
@@ -485,7 +499,7 @@ vector<double> concat(vector<double> & x, vector<double> & y)
 //' @param ini_value default frequency value
 //'
 //' @return frequency with which elements of datavec fall into each of the 
-//'    intervals defined by interval_breaks
+//'		intervals defined by interval_breaks
 //'
 vector<int> interval_table(	const vector<double> & datavec,
 							const vector<double> & interval_breaks,
@@ -543,10 +557,11 @@ vector<int> interval_table(	const vector<double> & datavec,
 //'
 //' Returns permutations of a given NumericVector as columns in a NumericMatrix
 //' object. 
-//' @param x :	NumericVector representing a vector that is to be permutated
-//' @param num_permutations : 	Int representing the number of permutations
-//'							that are to be performed.
-//' @return a matrix containing in every column one permutations of the input vector
+//' @param x NumericVector representing a vector that is to be permutated
+//' @param num_permutations Integer representing the number of permutations
+//'		that are to be performed.
+//' @return a matrix containing in every column one permutations of the
+//'		input vector
 //'
 //' @export
 // [[Rcpp::export]]
@@ -578,12 +593,13 @@ NumericMatrix permutations(const NumericVector x, const int num_permutations)
 //' squared_wass_decomp
 //'
 //' Approximation of the squared Wasserstein distance between two vectors,
-//' decomposed into size, location and shape. 
-//' Calculation based on the mean squared difference between the equidistant 
+//' decomposed into size, location and shape.
+//' Calculation based on the mean squared difference between the equidistant
 //' quantiles of the two input vectors a and b.
-//' As an approximation of the distribution, 1000 quantiles are computed for each vector.
+//' As an approximation of the distribution, 1000 quantiles are computed for
+//' each vector.
 //'
-//' @param x Vector representing an empirical distribution under condition A 
+//' @param x Vector representing an empirical distribution under condition A
 //' @param y Vector representing an empirical distribution under condition B
 //'	@param p exponent of the wasserstine distance
 //' @return An named Rcpp::List with the wasserstein distance between x and y,
@@ -591,7 +607,9 @@ NumericMatrix permutations(const NumericVector x, const int num_permutations)
 //'
 //' @export
 //[[Rcpp::export]]
-Rcpp::List squared_wass_decomp(const NumericVector & x, const NumericVector & y, const double & p=1)
+Rcpp::List squared_wass_decomp(	const NumericVector & x,
+								const NumericVector & y,
+								const double & p=1)
 {
 
 	int NUM_QUANTILES = 1000;
@@ -622,18 +640,21 @@ Rcpp::List squared_wass_decomp(const NumericVector & x, const NumericVector & y,
 //' squared_wass_approx
 //'
 //' Approximation of the squared wasserstein distance.
-//' Calculation based on the mean squared difference between the equidistant 
+//' Calculation based on the mean squared difference between the equidistant
 //' quantiles of the two input vectors a and b.
-//' As an approximation of the distribution, 1000 quantiles are computed for each vector.
+//' As an approximation of the distribution, 1000 quantiles are computed for
+//' each vector.
 //'
-//' @param x Vector representing an empirical distribution under condition A 
+//' @param x Vector representing an empirical distribution under condition A
 //' @param y Vector representing an empirical distribution under condition B
 //'	@param p exponent of the wasserstine distance
 //' @return The approximated squared wasserstein distance between x and y
 //'
 //' @export
 //[[Rcpp::export]]
-double squared_wass_approx(const NumericVector & x, const NumericVector & y, const double & p=1)
+double squared_wass_approx(	const NumericVector & x,
+							const NumericVector & y,
+							const double & p=1)
 {
 
 	double				distance_approx;
@@ -653,11 +674,15 @@ double squared_wass_approx(const NumericVector & x, const NumericVector & y, con
 
 //' wasserstein_metric
 //'
-//' @param x NumericVector representing an empirical distribution under condition A 
-//' @param y NumericVector representing an empirical distribution under condition B
+//' @param x NumericVector representing an empirical distribution under
+//' condition A
+//' @param y NumericVector representing an empirical distribution under
+//' condition B
 //'	@param p exponent of the wasserstine distance
-//' @param wa_ NumericVector representing the weights of datapoints (interpreted as clusters) in x
-//' @param wb_ NumericVector representing the weights of datapoints (interpreted as clusters) in y
+//' @param wa_ NumericVector representing the weights of datapoints
+//'		(interpreted as clusters) in x
+//' @param wb_ NumericVector representing the weights of datapoints
+//'		(interpreted as clusters) in y
 //' @return The wasserstein (transport) distance between x and y
 //'
 //' @export
@@ -666,8 +691,9 @@ double wasserstein_metric(NumericVector x,
 						  NumericVector y,
 						  const double p=1,
 						  Nullable<NumericVector> wa_=R_NilValue, 
-						  Nullable<NumericVector> wb_=R_NilValue) {
-	//warning("wasserstein_metric will be deprecated in the next update. Use wasserstein() instead");
+						  Nullable<NumericVector> wb_=R_NilValue) 
+{
+
 	vector<double> a(x.begin(), x.end());
 	vector<double> b(y.begin(), y.end());
 	sort(a.begin(), a.end());

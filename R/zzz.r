@@ -16,7 +16,8 @@ NULL
 #' @keywords data
 value.integral <- NULL
 
-#' An empirical cumulative distribution function based on the values in value.integral
+#' An empirical cumulative distribution function based on the values in
+#' value.integral
 #'
 #' @name empcdf.ref  
 #' @docType data
@@ -30,7 +31,8 @@ empcdf.ref <- NULL
 global.empcdf.ref <- NULL
 
 # Non-exported definition to check if non-exported functions are available.
-# This will cause tests for these functions (causing issues on build systems) to be skipped.
+# This will cause tests for these functions (causing issues on build systems)
+# to be skipped.
 NONEXPORTS.AVAILABLE <- TRUE
 
 # cleanup after our cpp libraries

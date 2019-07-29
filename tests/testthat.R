@@ -22,8 +22,10 @@ tryCatch({
       
 }, error = function(err){
 
-  # Workaround of finding the package dir has not worked => catch rprojroot::find_root() error
-  # Define dummy functions, assign to the non-exported functions and skip them
+  # Workaround of finding the package dir has not worked => catch 
+  # rprojroot::find_root() error. Redefine all non-exported functions that are
+  # tested as a dummy function to avaid "not defined" errors and have them 
+  # skipped
   dummy <- function(...) {return(1)}
   abs_test_export <- dummy
   sum_test_export <- dummy

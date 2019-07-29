@@ -1,5 +1,7 @@
 
-expect_known <- function(type=c("value","failure", "output", "hash"), function_call, ...) {
+expect_known <- function(type=c("value","failure", "output", "hash"), 
+                         function_call,
+                         ...) {
   KNOWN_VALUES_DIR = "known.values"
   if (!dir.exists(KNOWN_VALUES_DIR)){
     dir.create(KNOWN_VALUES_DIR)
@@ -23,5 +25,6 @@ skip_temporarily <- function() {
 
 skip_if_not_exported <- function() {
   if (!exists("NONEXPORTS.AVAILABLE"))
-    skip("SkipNotExported: Skipping tests for non-exported functions because loading them failed ...")
+    skip(cat("SkipNotExported: Skipping tests for non-exported functions ",
+             "because loading them failed ..."))
 }

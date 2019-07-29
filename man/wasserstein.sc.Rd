@@ -7,24 +7,42 @@
 wasserstein.sc(dat, condition, seedex, permnum, method)
 }
 \arguments{
-\item{dat}{matrix of single-cell RNA-sequencing expression data with genes in rows and samples (cells) in columns}
+\item{dat}{matrix of single-cell RNA-sequencing expression data with genes in
+rows and samples (cells) in columns}
 
 \item{condition}{vector of condition labels}
 
 \item{seedex}{seed used for generating the permutations in a reproducible way}
 
-\item{permnum}{number of permutations used in the permutation testing procedure}
+\item{permnum}{number of permutations used in the permutation testing
+procedure}
 
-\item{method}{method employed in the testing procedure: “OS” for the one-stage method (i.e. semi-parametric testing applied to all (zero and non-zero) expression values); “TS” for the two-stage method (i.e. semi-parametric testing applied to non-zero expression values only, combined with a separate testing for differential proportions of zero expression using logistic regression)}
+\item{method}{method employed in the testing procedure: “OS” for the
+one-stage method (i.e. semi-parametric testing applied to all (zero and
+non-zero) expression values); “TS” for the two-stage method (i.e.
+semi-parametric testing applied to non-zero expression values only, combined
+with a separate testing for differential proportions of zero expression
+using logistic regression)}
 }
 \value{
-See the corresponding values in the description of the function testWass, where the argument inclZero=TRUE in testWass has to be identified with the argument method=”OS”, and the argument inclZero=FALSE in testWass with the argument method=”TS”.
+See the corresponding values in the description of the function
+testWass, where the argument inclZero=TRUE in testWass has to be
+identified with the argument method=”OS”, and the argument inclZero=FALSE in
+testWass with the argument method=”TS”.
 }
 \description{
-Two-sample test for single-cell RNA-sequencing data to check for differences between two distributions (conditions) using the 2-Wasserstein distance: Semi-parametric implementation using a permutation test with a generalized Pareto distribution (GPD) approximation to estimate small p-values accurately
+Two-sample test for single-cell RNA-sequencing data to check for differences
+between two distributions (conditions) using the 2-Wasserstein distance:
+Semi-parametric implementation using a permutation test with a generalized
+Pareto distribution (GPD) approximation to estimate small p-values
+accurately
 }
 \details{
-Details concerning the permutation testing procedures for single-cell RNA-sequencing data can be found in Schefzik and Goncalves (2019). Corresponds to the function testWass when identifying the argument inclZero=TRUE in testWass with the argument method=”OS” and the argument inclZero=FALSE in testWass with the argument method=”TS”.
+Details concerning the permutation testing procedures for
+single-cell RNA-sequencing data can be found in Schefzik and Goncalves
+(2019). Corresponds to the function testWass when identifying the argument
+inclZero=TRUE in testWass with the argument method=”OS” and the argument
+inclZero=FALSE in testWass with the argument method=”TS”.
 }
 \examples{
 dat<-matrix(c(rnorm(100,42,1), rnorm(102,45,3)), nrow=1)

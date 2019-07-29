@@ -7,15 +7,19 @@
 wasserstein_metric(x, y, p = 1, wa_ = NULL, wb_ = NULL)
 }
 \arguments{
-\item{x}{NumericVector representing an empirical distribution under condition A}
+\item{x}{NumericVector representing an empirical distribution under
+condition A}
 
-\item{y}{NumericVector representing an empirical distribution under condition B}
+\item{y}{NumericVector representing an empirical distribution under
+condition B}
 
 \item{p}{exponent of the wasserstine distance}
 
-\item{wa_}{NumericVector representing the weights of datapoints (interpreted as clusters) in x}
+\item{wa_}{NumericVector representing the weights of datapoints
+(interpreted as clusters) in x}
 
-\item{wb_}{NumericVector representing the weights of datapoints (interpreted as clusters) in y}
+\item{wb_}{NumericVector representing the weights of datapoints
+(interpreted as clusters) in y}
 }
 \value{
 The wasserstein (transport) distance between x and y

@@ -32,8 +32,9 @@ wasserstein1d <- function (a, b, p = 1, wa = NULL, wb = NULL) {
   arep <- table(temp) + 1
   temp <- cut(cua, breaks = c(-Inf, cub, Inf))
   brep <- table(temp) + 1
-  
-  # repeat each element in a and b as often as the intervals in arep and brep are mentionned
+
+  # repeat each element in a and b as often as the intervals in arep and brep
+  # are mentionned
   aa <- rep(sort(a), times = arep)
   bb <- rep(sort(b), times = brep)
   
@@ -79,13 +80,16 @@ test_that("squared_wass_approx correctness", {
   b <- c(1,  1,  1,  2.3)
   p <- 2
   # case with equally long vectors a and b
-  expect_known("value", squared_wass_approx(a,b,p), file = "known.values/testresult_squared_wass_approx_correctness1")
-  expect_known("value", squared_wass_approx(a,b,1), file = "known.values/testresult_squared_wass_approx_correctness2")
+  expect_known("value", squared_wass_approx(a,b,p),
+               file="known.values/testresult_squared_wass_approx_correctness1")
+  expect_known("value", squared_wass_approx(a,b,1),
+               file="known.values/testresult_squared_wass_approx_correctness2")
   set.seed(42)
   a2 <- rnorm(100, 10, 1)
   set.seed(24)
   b2 <- rnorm(102, 10.5, 1)
-  expect_known("value", squared_wass_approx(a2,b2,p), file = "known.values/testresult_squared_wass_approx_correctness3")
+  expect_known("value", squared_wass_approx(a2,b2,p),
+               file="known.values/testresult_squared_wass_approx_correctness3")
 })
 
 
@@ -99,7 +103,8 @@ test_that("squared_wass_decomp correctness", {
   b <- c(1,  1,  1,  2.3)
   p <- 2
   # case with equally long vectors a and b
-  expect_known("value", squared_wass_approx(a,b,p), file = "known.values/testresult_squared_wass_decomp_correctness1")
+  expect_known("value", squared_wass_approx(a,b,p),
+               file="known.values/testresult_squared_wass_decomp_correctness1")
 })
 
 
@@ -129,8 +134,6 @@ test_that("wasserstein_metric correctness", {
 
 # test consistency of results
 test_that("wasserstein_metric consistency test", {
-  #skip("wasserstein_metric will be deprecated, skipping all test for it")
-  # check against a weird behaviour where NaN's were produced seemingly randomly
   x <- c(2, 1, 3) 
   y <- c(3, 3, 2, 6)
   results <- sapply(1:10000, function(i) { wasserstein_metric(x, y, p=2)})

@@ -3,8 +3,14 @@
 \docType{data}
 \name{empcdf.ref}
 \alias{empcdf.ref}
-\title{An empirical cumulative distribution function based on the values in value.integral}
+\title{An empirical cumulative distribution function based on the values in
+value.integral}
+\format{An object of class \code{NULL} of length 0.}
+\usage{
+empcdf.ref
+}
 \description{
-An empirical cumulative distribution function based on the values in value.integral
+An empirical cumulative distribution function based on the values in
+value.integral
 }
 \keyword{data}

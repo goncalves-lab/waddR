@@ -15,10 +15,14 @@ CombinePVal(r, s)
 A vector of length N of the combined p-values
 }
 \description{
-For a given set of N pairs of p-values, aggregates each respective pair of p-values into a combined p-value according to Fisher’s method
+For a given set of N pairs of p-values, aggregates each respective pair of 
+p-values into a combined p-value according to Fisher’s method
 }
 \details{
-For a given set of pairs of p-values, aggregates each respective pair of p-values into a combined p-value according to Fisher’s method. Applies the fishersCombinedPVal function to a whole set of N pairs of p-values.
+For a given set of pairs of p-values, aggregates each respective 
+pair of p-values into a combined p-value according to Fisher’s method.
+Applies the fishersCombinedPVal function to a whole set of N pairs of
+p-values.
 }
 \examples{
 r<-c(0.007,6e-23,0.77,0.23,2e-22)
