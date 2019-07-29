@@ -1,10 +1,3 @@
-if (requireNamespace(BiocParallel, quitely=TRUE) {
-  library(BiocParallel)
-} else {
-  bplapply <- lapply
-}
-library(arm)
-
 
 ######
 ###test for differential proportions of zeroes; adapted from scDD package

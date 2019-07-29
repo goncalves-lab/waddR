@@ -1,4 +1,3 @@
-library("eva")
 
 # Semi-parametric wasserstein test
 
