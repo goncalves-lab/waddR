@@ -1,31 +1,61 @@
+".renviron", ".rprofile", ".rproj", ".rproj.user", ".rhistory",
+    ".rapp.history", ".o", ".sl", ".so", ".dylib", ".a", ".dll",
+    ".def", ".ds_store", "unsrturl.bst", ".log", ".aux", ".backups",
+    ".cproject", ".directory", ".dropbox", ".exrc", ".gdb.history",
+    ".gitattributes", ".gitmodules", ".hgtags", ".project", ".seed",
+    ".settings", ".tm_properties"
+
 # always keep buildignore
 !Rbuildignore
+
+# git
+.gitattributes
+.gitigmodules
+.hgtags
 
 # Compilation to tex
 ..pdf
 .Rd2pdf*/
+.log
+.aux
+unsrturl.bst
+
 # References for some tests are kept in tests/testthat/know.values/
 tests/testthat/known.values/testresult*
 
 # Rcpp compiled files
-src/*.o
-src/*.so
-src/*.dll
-src/symbols.rds
+*.o
+*.so
+*.dll
+*.sl
+*.dylib
+symbols.rds
+.a
 
 # package builds
 build/*
 *.tar.gz
 
 # History files
+.gdb.history
 .Rhistory
+.rhistory
 .Rapp.history
+.rapp.history
 
 # Session Data files
+.renviron
 .RData
+.tm_properties
+.log
+.backups
+.directory
+.exrc
+.ds_store
 
 # User-specific files
 .Ruserdata
+.rprofile
 
 # Example code in package build process
 *-Ex.R
@@ -36,8 +66,17 @@ build/*
 # Output files from R CMD check
 /*.Rcheck/
 
-# RStudio files
+# IDE files
+# RStudio
+.rproj
 .Rproj.user/
+.rproj.user
+# vi / text editors
+.exrc
+# Eclipse / other
+.project
+.cproject
+.settings
 
 # produced vignettes
 vignettes/*.html
@@ -52,4 +91,13 @@ vignettes/*.pdf
 
 # Temporary files created by R markdown
 *.utf8.md
-*.knit.md
+*.knit.mdi
+
+# Dropbox files
+.dropbox
+
+# Installer files
+.seed
+
+# (KDE) directory property
+.directory
