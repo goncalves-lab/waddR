@@ -1,22 +1,26 @@
 Package: waddR
 Type: Package
-Title: Statistical Test for One-Dimensional Distributions Based on the Wasserstein Metric
-Version: 0.2.1
+Title: Statistical Test for Detecting Differential Distributions Based on the Wasserstein Metric
+Version: 0.2.2
 Date: 2019-06-17
 Author: Roman Schefzik <r.schefzik@dkfz-heidelberg.de> 
 Maintainer: Julian Flesch <j.flesch@dkfz-heidelberg.de> 
-Description: Wasserstein distance based functions and tests for detecting differential distributions in one-dimensional data. Includes Utilities for Wasserstein distance calculation, a statistical test, and a specialized test applicable to scRNA expression data.
+Description: Wasserstein distance based statistical test for detecting and describing differential distributions in one-dimensional data. Functions for wasserstein distance calculation, differential distribution testing, and a specialized test for differential expression in scRNA data are provided.
 License: MIT + file LICENSE
+biocViews: StatisticalMethod, SingleCell, DifferentialExpression
+BugReports: "https://github.com/goncalves-lab/waddR.git"
+URL: "https://github.com/goncalves-lab/waddR.git" 
 Encoding: UTF-8
 Imports: 
 	Rcpp (>= 1.0.1),
 	eva (>= 0.2.5),
 	arm (>= 1.10-1),	
-	BiocParallel,
 	methods,
 	stats
 Depends:
 	R (>= 3.6.0)
+Enhances:
+	BiocParallel
 Suggests:
 	devtools,
 	testthat,

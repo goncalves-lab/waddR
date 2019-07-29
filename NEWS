@@ -1,0 +1,11 @@
+Changes in 0.2.2 (2019-07-29)
++ Added this NEWS file for change announcements
++ Added a file inst/CITATION that is supposed to hold the citation (after publication)
++ DESCRIPTION file:
+	o Title and Description improved and shortened
+	o Added bioView Categories: StatisticalMethod, SingleCell, DifferentialExpression
+	o Added BugReports and URL in DESCRIPTION
+	o Changed the former Import BiocParallel to an Enhancement
++ Changes to NAMESPACE: 
+	o Explicitly declare the functions that should be imported from the packages arm, eva, and BiocParallel
++ Changed all code files in the package to have max. 80 Character per line
