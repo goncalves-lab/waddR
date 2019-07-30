@@ -30,7 +30,7 @@
 #'
 #'@export
 #'
-testZeroes <- function(dat, condition, these=1:nrow(dat)){
+testZeroes <- function(dat, condition, these=seq_len(nrow(dat))){
   detection <- colSums(dat>0)/nrow(dat)
   
   onegene <- function(j, dat, detection, cond, these){

@@ -89,7 +89,7 @@ wasserstein.test.sp<-function(x,y,permnum){
 
     shuffle <- permutations(z, num_permutations = bsn)
     wass.val <- apply(shuffle, 2, function (k) {
-      squared_wass_approx(k[1:length(x)], k[(length(x)+1):length(z)], p=2)
+      squared_wass_approx(k[seq_len(length(x))], k[seq((length(x)+1):length(z))], p=2)
       })
     
     # list of possible exceedance thresholds (decreasing)
@@ -118,7 +118,7 @@ wasserstein.test.sp<-function(x,y,permnum){
           N.exc<-poss.exc.num[r]
           
           # compute set of N.exc exceedances
-          exceedances<-wass.val.ordered[1:N.exc]
+          exceedances<-wass.val.ordered[seq_len(N.exc)]
           
           # check whether the N.exc largest permutation values follow a GPD
           # using an Anderson-Darling test
@@ -175,7 +175,7 @@ wasserstein.test.sp<-function(x,y,permnum){
     sigma.x<-sd(x)
     sigma.y<-sd(y)
     
-    pr<-((1:1000)-0.5)/1000
+    pr<-((seq_len(1000))-0.5)/1000
     
     quant.x<-quantile(x,probs=pr,type=1)
     quant.y<-quantile(y,probs=pr,type=1)
@@ -322,7 +322,7 @@ wasserstein.test.asy<-function(x,y){
     sigma.x<-sd(x)
     sigma.y<-sd(y)
     
-    pr<-((1:1000)-0.5)/1000
+    pr<-(seq_len(1000)-0.5)/1000
     
     quant.x<-quantile(x,probs=pr,type=1)
     quant.y<-quantile(y,probs=pr,type=1)
