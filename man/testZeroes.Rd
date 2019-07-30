@@ -4,7 +4,7 @@
 \alias{testZeroes}
 \title{testZeroes}
 \usage{
-testZeroes(dat, condition, these = 1:nrow(dat))
+testZeroes(dat, condition, these = seq_len(nrow(dat)))
 }
 \arguments{
 \item{dat}{matrix of single-cell RNA-sequencing expression data with genes in

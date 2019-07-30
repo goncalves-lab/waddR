@@ -17,33 +17,33 @@ condition B}
 A vector concerning the testing results, precisely (see Schefzik and
 Goncalves (2019) for details)
 \itemize{
-\item d.transport:		2-Wasserstein distance between the two samples computed
+\item d.transport: 2-Wasserstein distance between the two samples computed
 by quantile approximation
-\item d.transport^2:	squared 2-Wasserstein distance between the two samples
+\item d.transport^2 squared 2-Wasserstein distance between the two samples
 computed by quantile approximation
-\item d.comp^2:		squared 2-Wasserstein distance between the two samples
+\item d.comp^2: squared 2-Wasserstein distance between the two samples
 computed by decomposition approximation
-\item d.comp:		2-Wasserstein distance between the two samples computed by
+\item d.comp: 2-Wasserstein distance between the two samples computed by
 decomposition approximation
-\item location:		location term in the decomposition of the squared
+\item location: location term in the decomposition of the squared
 2-Wasserstein distance between the two samples
-\item size:		size term in the decomposition of the squared 2-Wasserstein
+\item size: size term in the decomposition of the squared 2-Wasserstein
 distance between the two samples
-\item shape:		shape term in the decomposition of the squared 2-Wasserstein
+\item shape: shape term in the decomposition of the squared 2-Wasserstein
 distance between the two samples
-\item rho:			correlation coefficient in the quantile-quantile plot	
-\item pval:		p-value of the 2-Wasserstein distance-based test using
+\item rho: correlation coefficient in the quantile-quantile plot
+\item pval: p-value of the 2-Wasserstein distance-based test using
 asymptotic theory
-\item perc.loc:		fraction (in %) of the location part with respect to the
+\item perc.loc: fraction (in %) of the location part with respect to the
 overall squared 2-Wasserstein distance obtained by the decomposition
 approximation
-\item perc.size:		fraction (in %) of the size part with respect to the
+\item perc.size: fraction (in %) of the size part with respect to the
 overall squared 2-Wasserstein distance obtained by the decomposition
 approximation
-\item perc.shape:		fraction (in %) of the shape part with respect to the
+\item perc.shape: fraction (in %) of the shape part with respect to the
 overall squared 2-Wasserstein distance obtained by the decomposition
 approximation
-\item decomp.error:		absolute difference between the squared 2-Wasserstein
+\item decomp.error: absolute difference between the squared 2-Wasserstein
 distance computed by the quantile approximation and the squared
 2-Wasserstein distance computed by the decomposition approximation
 }

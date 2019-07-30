@@ -14,7 +14,7 @@ that are to be performed.}
 }
 \value{
 a matrix containing in every column one permutations of the
-	input vector
+input vector
 }
 \description{
 Returns permutations of a given NumericVector as columns in a NumericMatrix

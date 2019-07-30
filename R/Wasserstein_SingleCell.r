@@ -12,10 +12,10 @@
 #' logistic regression model. Adapted from the scDD package (Korthauer et al.
 #' 2016).
 #'
-#'@param dat	matrix of single-cell RNA-sequencing expression data with genes in
+#'@param dat matrix of single-cell RNA-sequencing expression data with genes in
 #' rows and samples (cells) in columns
-#'@param condition	vector of condition labels
-#'@param these	vector of row numbers (i.e. gene numbers) employed to test for
+#'@param condition vector of condition labels
+#'@param these vector of row numbers (i.e. gene numbers) employed to test for
 #' differential proportions of zero expression. Default is 1:nrow(dat)
 #'
 #'@return A vector of (unadjusted) p-values 
@@ -31,24 +31,24 @@
 #'@export
 #'
 testZeroes <- function(dat, condition, these=seq_len(nrow(dat))){
-  detection <- colSums(dat>0)/nrow(dat)
-  
-  onegene <- function(j, dat, detection, cond, these){
-    y=dat[these[j],]
-    if (sum(y==0) > 0){
-      M1 <- suppressWarnings(bayesglm(y>0 ~ detection + factor(cond), 
-                                           family=binomial(link="logit"),
-                                           Warning=FALSE))
-      return(summary(M1)$coefficients[3,4])
-    }else{
-      return(NA)
+    detection <- colSums(dat>0)/nrow(dat)
+
+    onegene <- function(j, dat, detection, cond, these){
+        y=dat[these[j],]
+        if (sum(y==0) > 0){
+            M1 <- suppressWarnings(bayesglm(y>0 ~ detection + factor(cond), 
+                                    family=binomial(link="logit"),
+                                    Warning=FALSE))
+            return(summary(M1)$coefficients[3,4])
+        }else{
+            return(NA)
+        }
     }
-  }
-  
-  pval <- unlist(bplapply(seq_along(these), onegene, dat=dat, 
-                          detection=detection, cond=condition, these=these))
-  
-  return(pval)
+    
+    pval <- unlist(bplapply(seq_along(these), onegene, dat=dat, 
+                            detection=detection, cond=condition, these=these))
+
+    return(pval)
 }
 
 
@@ -62,7 +62,7 @@ testZeroes <- function(dat, condition, these=seq_len(nrow(dat))){
 #'@details Aggregates two p-values into a combined p-value according to
 #' Fisher’s method.
 #'
-#'@param x	vector of the two p-values that are to be aggregated
+#'@param x vector of the two p-values that are to be aggregated
 #'
 #'@return The combined p-value 
 #'
@@ -73,16 +73,16 @@ testZeroes <- function(dat, condition, these=seq_len(nrow(dat))){
 #'
 #'@export
 #'
-fishersCombinedPval<-function(x){ 
-  if(sum(is.na(x)) == 0){
-    ifelse(x==0,1e-100,x)
-    p.comb<-pchisq(-2 * sum(log(x)), df=2*length(x),lower.tail=FALSE)
-  }else if(sum(is.na(x)) == 1){
-    p.comb<-x[!is.na(x)]
-  }else{
-    p.comb<-NA
-  }
-  return(p.comb)
+fishersCombinedPval<-function(x) { 
+    if(sum(is.na(x)) == 0) {
+        ifelse(x==0,1e-100,x)
+        p.comb<-pchisq(-2 * sum(log(x)), df=2*length(x), lower.tail=FALSE)
+    } else if (sum(is.na(x)) == 1){
+        p.comb<-x[!is.na(x)]
+    } else {
+        p.comb<-NA
+    }
+    return(p.comb)
 }
 
 
@@ -98,8 +98,8 @@ fishersCombinedPval<-function(x){
 #' Applies the fishersCombinedPVal function to a whole set of N pairs of
 #' p-values. 
 #'
-#'@param r	vector of length N of the p-values corresponding to the first test
-#'@param s	vector of length N of the p-values corresponding to the second test
+#'@param r vector of length N of the p-values corresponding to the first test
+#'@param s vector of length N of the p-values corresponding to the second test
 #'
 #'@return A vector of length N of the combined p-values
 #'
@@ -112,8 +112,8 @@ fishersCombinedPval<-function(x){
 #'@export
 #'
 CombinePVal<-function(r,s){
-  apply(cbind(r,s), 1, function(x)
-    fishersCombinedPval(x))
+    apply(cbind(r,s), 1, function(x)
+            fishersCombinedPval(x))
 }
 
 
@@ -132,12 +132,12 @@ CombinePVal<-function(r,s){
 #' single-cell RNA-sequencing data can be found in Schefzik and 
 #' Goncalves (2019).
 #'
-#'@param dat	matrix of single-cell RNA-sequencing expression data with genes in
+#'@param dat matrix of single-cell RNA-sequencing expression data with genes in
 #' rows and samples (cells) in columns
-#'@param condition	vector of condition labels
-#'@param permnum	number of permutations used in the permutation testing
+#'@param condition vector of condition labels
+#'@param permnum number of permutations used in the permutation testing
 #' procedure
-#'@param inclZero	logical; if TRUE, the one-stage method (i.e. semi-parametric
+#'@param inclZero logical; if TRUE, the one-stage method (i.e. semi-parametric
 #' testing applied to all (zero and non-zero) expression values) is performed;
 #' if FALSE, the two-stage method (i.e. semi-parametric testing applied to
 #' non-zero expression values only, combined with a separate testing for
@@ -147,94 +147,94 @@ CombinePVal<-function(r,s){
 #'@return A vector concerning the testing results, precisely (see Schefzik and
 #' Goncalves (2019) for details) in case of inclZero=TRUE:
 #'\itemize{
-#'\item d.transport:		2-Wasserstein distance between the two samples computed
+#'\item d.transport: 2-Wasserstein distance between the two samples computed
 #' by quantile approximation
-#'\item d.transport^2:	squared 2-Wasserstein distance between the two samples
+#'\item d.transport^2: squared 2-Wasserstein distance between the two samples
 #' computed by quantile approximation
-#'\item d.comp^2:		squared 2-Wasserstein distance between the two samples
+#'\item d.comp^2: squared 2-Wasserstein distance between the two samples
 #' computed by decomposition approximation
-#'\item d.comp:		2-Wasserstein distance between the two samples computed by
+#'\item d.comp: 2-Wasserstein distance between the two samples computed by
 #' decomposition approximation
-#'\item location:		location term in the decomposition of the squared
+#'\item location: location term in the decomposition of the squared
 #' 2-Wasserstein distance between the two samples
-#'\item size:		size term in the decomposition of the squared 2-Wasserstein
+#'\item size: size term in the decomposition of the squared 2-Wasserstein
 #' distance between the two samples
-#'\item shape:		shape term in the decomposition of the squared 2-Wasserstein
+#'\item shape: shape term in the decomposition of the squared 2-Wasserstein
 #' distance between the two samples
-#'\item rho:			correlation coefficient in the quantile-quantile plot	
-#'\item pval:			p-value of the semi-parametric 2-Wasserstein distance-based
+#'\item rho: correlation coefficient in the quantile-quantile plot
+#'\item pval: p-value of the semi-parametric 2-Wasserstein distance-based
 #' test
-#'\item p.ad.gpd:		in case the GPD fitting is performed: p-value of the
+#'\item p.ad.gpd in case the GPD fitting is performed: p-value of the
 #' Anderson-Darling test to check whether the GPD actually fits the data well
 #' (otherwise NA)
-#'\item N.exc:		in case the GPD fitting is performed: number of exceedances
+#'\item N.exc: in case the GPD fitting is performed: number of exceedances
 #' (starting with 250 and iteratively decreased by 10 if necessary) that are
 #' required to obtain a good GPD fit (i.e. p-value of Anderson-Darling test
 #' greater or eqaul to 0.05)(otherwise NA)
-#'\item perc.loc:		fraction (in %) of the location part with respect to the
+#'\item perc.loc: fraction (in %) of the location part with respect to the
 #' overall squared 2-Wasserstein distance obtained by the decomposition
 #' approximation
-#'\item perc.size:		fraction (in %) of the size part with respect to the
+#'\item perc.size: fraction (in %) of the size part with respect to the
 #' overall squared 2-Wasserstein distance obtained by the decomposition
 #' approximation
-#'\item perc.shape:		fraction (in %) of the shape part with respect to the
+#'\item perc.shape: fraction (in %) of the shape part with respect to the
 #' overall squared 2-Wasserstein distance obtained by the decomposition
 #' approximation
-#'\item decomp.error:		absolute difference between the squared 2-Wasserstein
+#'\item decomp.error: absolute difference between the squared 2-Wasserstein
 #' distance computed by the quantile approximation and the squared
 #' 2-Wasserstein distance computed by the decomposition approximation
-#'\item pval.adj:	adjusted p-value of the semi-parametric 2-Wasserstein
+#'\item pval.adj: adjusted p-value of the semi-parametric 2-Wasserstein
 #' distance-based test according to the method of Benjamini-Hochberg
 #'}
 #'In case of inclZero=FALSE:
 #'\itemize{
-#'\item d.transport:		2-Wasserstein distance between the two samples computed
+#'\item d.transport: 2-Wasserstein distance between the two samples computed
 #' by quantile approximation
-#'\item d.transport^2:	squared 2-Wasserstein distance between the two samples
+#'\item d.transport^2: squared 2-Wasserstein distance between the two samples
 #' computed by quantile approximation
-#'\item d.comp^2:		squared 2-Wasserstein distance between the two samples
+#'\item d.comp^2: squared 2-Wasserstein distance between the two samples
 #' computed by decomposition approximation
-#'\item d.comp:		2-Wasserstein distance between the two samples computed by
+#'\item d.comp: 2-Wasserstein distance between the two samples computed by
 #' decomposition approximation
-#'\item location:		location term in the decomposition of the squared
+#'\item location: location term in the decomposition of the squared
 #' 2-Wasserstein distance between the two samples
-#'\item size:		size term in the decomposition of the squared 2-Wasserstein
+#'\item size: size term in the decomposition of the squared 2-Wasserstein
 #' distance between the two samples
-#'\item shape:		shape term in the decomposition of the squared 2-Wasserstein
+#'\item shape: shape term in the decomposition of the squared 2-Wasserstein
 #' distance between the two samples
-#'\item rho:			correlation coefficient in the quantile-quantile plot	
-#'\item p.nonzero:		p-value of the semi-parametric 2-Wasserstein distance-based
+#'\item rho: correlation coefficient in the quantile-quantile plot
+#'\item p.nonzero: p-value of the semi-parametric 2-Wasserstein distance-based
 #' test (based on non-zero expression only)
-#'\item p.ad.gpd:		in case the GPD fitting is performed: p-value of the
+#'\item p.ad.gpd: in case the GPD fitting is performed: p-value of the
 #' Anderson-Darling test to check whether the GPD actually fits the data well
 #' (otherwise NA)
-#'\item N.exc:		in case the GPD fitting is performed: number of exceedances
+#'\item N.exc: in case the GPD fitting is performed: number of exceedances
 #' (starting with 250 and iteratively decreased by 10 if necessary) that are
 #' required to obtain a good GPD fit (i.e. p-value of Anderson-Darling test
 #' greater or eqaul to 0.05)(otherwise NA)
-#'\item perc.loc:		fraction (in %) of the location part with respect to the
+#'\item perc.loc: fraction (in %) of the location part with respect to the
 #' overall squared 2-Wasserstein distance obtained by the decomposition
 #' approximation
-#'\item perc.size:		fraction (in %) of the size part with respect to the
+#'\item perc.size: fraction (in %) of the size part with respect to the
 #' overall squared 2-Wasserstein distance obtained by the decomposition
 #' approximation
-#'\item perc.shape:		fraction (in %) of the shape part with respect to the
+#'\item perc.shape: fraction (in %) of the shape part with respect to the
 #' overall squared 2-Wasserstein distance obtained by the decomposition
 #' approximation
-#'\item decomp.error:		absolute difference between the squared 2-Wasserstein
+#'\item decomp.error: absolute difference between the squared 2-Wasserstein
 #' distance computed by the quantile approximation and the squared 
 #' 2-Wasserstein distance computed by the decomposition approximation
-#'\item p.zero:	p-value of the test for differential proportions of zero
+#'\item p.zero: p-value of the test for differential proportions of zero
 #' expression (logistic regression model)
-#'\item p.combined:	combined p-value of p.nonzero and p.zero obtained by
+#'\item p.combined: combined p-value of p.nonzero and p.zero obtained by
 #' Fisher’s method
-#'\item p.adj.nonzero: 	adjusted p-value of the semi-parametric 2-Wasserstein
+#'\item p.adj.nonzero: adjusted p-value of the semi-parametric 2-Wasserstein
 #' distance-based test (based on non-zero expression only) according to the
 #' method of Benjamini-Hochberg
-#'\item p.adj.zero:	adjusted p-value of the test for differential proportions
+#'\item p.adj.zero: adjusted p-value of the test for differential proportions
 #' of zero expression (logistic regression model) according to the method of
 #' Benjamini-Hochberg
-#'\item p.adj.combined:	adjusted combined p-value of p.nonzero and p.zero
+#'\item p.adj.combined: adjusted combined p-value of p.nonzero and p.zero
 #' obtained by Fisher’s method according to the method of Benjamini-Hochberg
 #'}
 #'
@@ -250,64 +250,61 @@ CombinePVal<-function(r,s){
 #'@export
 #'        
 testWass<-function(dat, condition,permnum, inclZero=TRUE){
-  
-  if (!inclZero){
-    
-    onegene <- function(x, dat, condition){
-      x1 <- dat[x,][condition==unique(condition)[1]]
-      x2 <- dat[x,][condition==unique(condition)[2]]
-      
-      x1 <- (x1[x1>0])
-      x2 <- (x2[x2>0])
-      
-      suppressWarnings(wasserstein.test.sp(x1,x2,permnum))
-    }
-    
-    wass.res<- bplapply(seq_len(nrow(dat)), onegene, 
+
+    if (!inclZero){
+
+        onegene <- function(x, dat, condition){
+            x1 <- dat[x,][condition==unique(condition)[1]]
+            x2 <- dat[x,][condition==unique(condition)[2]]
+
+            x1 <- (x1[x1>0])
+            x2 <- (x2[x2>0])
+
+            suppressWarnings(wasserstein.test.sp(x1,x2,permnum))
+        }
+
+        wass.res <- bplapply(seq_len(nrow(dat)), onegene, 
+                            condition=condition, dat=dat)
+
+        wass.res1 <- do.call(rbind,wass.res)
+
+        wass.pval.adj <- p.adjust(wass.res1[,9], method="BH")
+
+        pval.zero <- testZeroes(dat,condition)
+        pval.adj.zero <- p.adjust(pval.zero,method="BH")  
+
+        pval.combined <- CombinePVal(wass.res1[,9],pval.zero)
+        pval.adj.combined <- p.adjust(pval.combined,method="BH")
+
+        RES <- cbind(wass.res1,pval.zero,pval.combined,wass.pval.adj,
+                    pval.adj.zero,pval.adj.combined)
+        row.names(RES) <- rownames(dat)
+        colnames(RES) <- c("d.transport","d.transport^2","d.comp^2","d.comp",
+            "location","size","shape","rho","p.nonzero","p.ad.gpd","N.exc",
+            "perc.loc","perc.size","perc.shape","decomp.error","p.zero",
+            "p.combined","p.adj.nonzero","p.adj.zero","p.adj.combined")
+
+    } else {
+
+        onegene <- function(x, dat, condition){
+            x1 <- dat[x,][condition==unique(condition)[1]]
+            x2 <- dat[x,][condition==unique(condition)[2]]
+
+            suppressWarnings(wasserstein.test.sp(x1,x2,permnum))
+        }
+
+        wass.res <- bplapply(seq_len(nrow(dat)), onegene, 
                         condition=condition, dat=dat)
-    
-    wass.res1<-do.call(rbind,wass.res)
-    
-    wass.pval.adj <- p.adjust(wass.res1[,9], method="BH")
-    
-    pval.zero<-testZeroes(dat,condition)
-    pval.adj.zero<-p.adjust(pval.zero,method="BH")  
-    
-    pval.combined<-CombinePVal(wass.res1[,9],pval.zero)
-    pval.adj.combined<-p.adjust(pval.combined,method="BH")
-    
-    RES<-cbind(wass.res1,pval.zero,pval.combined,wass.pval.adj,
-               pval.adj.zero,pval.adj.combined)
-    row.names(RES)<-rownames(dat)
-    colnames(RES)<-c("d.transport","d.transport^2","d.comp^2","d.comp",
-      "location","size","shape","rho","p.nonzero","p.ad.gpd","N.exc",
-      "perc.loc","perc.size","perc.shape","decomp.error","p.zero",
-      "p.combined","p.adj.nonzero","p.adj.zero","p.adj.combined")
-    
-  }
-  
-  if(inclZero){
-    
-    onegene <- function(x, dat, condition){
-      x1 <- dat[x,][condition==unique(condition)[1]]
-      x2 <- dat[x,][condition==unique(condition)[2]]
-      
-      suppressWarnings(wasserstein.test.sp(x1,x2,permnum))
+
+        wass.res1 <- do.call(rbind,wass.res)
+
+        wass.pval.adj <- p.adjust(wass.res1[,9], method="BH")
+
+        RES <- cbind(wass.res1,wass.pval.adj)
+        row.names(RES) <- rownames(dat)
     }
-    
-    wass.res<- bplapply(seq_len(nrow(dat)), onegene, 
-                        condition=condition, dat=dat)
-    
-    wass.res1<-do.call(rbind,wass.res)
-    
-    wass.pval.adj <- p.adjust(wass.res1[,9], method="BH")
-    
-    RES<-cbind(wass.res1,wass.pval.adj)
-    row.names(RES)<-rownames(dat)
-  }
-  
-  return(RES)
-  
+
+    return(RES)
 }
 
 
@@ -328,12 +325,12 @@ testWass<-function(dat, condition,permnum, inclZero=TRUE){
 #' inclZero=TRUE in testWass with the argument method=”OS” and the argument
 #' inclZero=FALSE in testWass with the argument method=”TS”.
 #'
-#'@param dat	matrix of single-cell RNA-sequencing expression data with genes in
+#'@param dat matrix of single-cell RNA-sequencing expression data with genes in
 #' rows and samples (cells) in columns
-#'@param condition	vector of condition labels
-#'@param permnum	number of permutations used in the permutation testing
+#'@param condition vector of condition labels
+#'@param permnum number of permutations used in the permutation testing
 #' procedure
-#'@param method	method employed in the testing procedure: “OS” for the
+#'@param method method employed in the testing procedure: “OS” for the
 #' one-stage method (i.e. semi-parametric testing applied to all (zero and
 #' non-zero) expression values); “TS” for the two-stage method (i.e.
 #' semi-parametric testing applied to non-zero expression values only, combined
@@ -355,12 +352,10 @@ testWass<-function(dat, condition,permnum, inclZero=TRUE){
 #'
 #'
 #'@export
-#'        
-wasserstein.sc<-function(dat,condition,permnum,method){
-  if(method=="OS")
-    RES<-testWass(dat, condition, permnum, inclZero=TRUE)
-  if(method=="TS")  
-    RES<-testWass(dat, condition, permnum, inclZero=FALSE)  
-  return(RES) 
+wasserstein.sc <- function(dat,condition,permnum,method){
+    if(method=="OS")
+        RES<-testWass(dat, condition, permnum, inclZero=TRUE)
+    if(method=="TS")  
+        RES<-testWass(dat, condition, permnum, inclZero=FALSE)  
+    return(RES) 
 }
-

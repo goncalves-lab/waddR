@@ -30,5 +30,5 @@ NONEXPORTS.AVAILABLE <- TRUE
 
 # cleanup after our cpp libraries
 .onUnload <- function (libpath) {
-  library.dynam.unload("waddR", libpath)
+    library.dynam.unload("waddR", libpath)
 }

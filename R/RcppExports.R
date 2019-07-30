@@ -147,12 +147,12 @@ NULL
 #'
 #' @param datavec vector with elements to be distributed over the intervals
 #' @param interval_breaks vector with n interval_borders that are
-#'		interpreted as interval breaks:\cr 
-#'		(-Inf, breaks[0]], (breaks[0], breaks[1]), ... , (breaks(n), Inf)
+#'  interpreted as interval breaks:\cr 
+#' (-Inf, breaks[0]], (breaks[0], breaks[1]), ... , (breaks(n), Inf)
 #' @param ini_value default frequency value
 #'
 #' @return frequency with which elements of datavec fall into each of the 
-#'		intervals defined by interval_breaks
+#'  intervals defined by interval_breaks
 #'
 NULL
 
@@ -162,9 +162,9 @@ NULL
 #' object.
 #' @param x NumericVector representing a vector that is to be permutated
 #' @param num_permutations Integer representing the number of permutations
-#'		that are to be performed.
+#' that are to be performed.
 #' @return a matrix containing in every column one permutations of the
-#'		input vector
+#' input vector
 #'
 #' @examples
 #' x <- seq(1:10)
@@ -188,9 +188,9 @@ permutations <- function(x, num_permutations) {
 #'
 #' @param x Vector representing an empirical distribution under condition A
 #' @param y Vector representing an empirical distribution under condition B
-#'	@param p exponent of the wasserstine distance
+#' @param p exponent of the wasserstine distance
 #' @return An named Rcpp::List with the wasserstein distance between x and y,
-#'    decomposed into terms for size, location, and shape
+#' decomposed into terms for size, location, and shape
 #' 
 #' @references 
 #' Schefzik and Goncalves 2019
@@ -225,7 +225,7 @@ squared_wass_decomp <- function(x, y, p = 1) {
 #'
 #' @param x Vector representing an empirical distribution under condition A
 #' @param y Vector representing an empirical distribution under condition B
-#'	@param p exponent of the wasserstine distance
+#' @param p exponent of the wasserstine distance
 #' @return The approximated squared wasserstein distance between x and y
 #'
 #' @references Schefzik and Goncalves 2019
@@ -268,15 +268,15 @@ squared_wass_approx <- function(x, y, p = 1) {
 #' condition A
 #' @param y NumericVector representing an empirical distribution under
 #' condition B
-#'	@param p order of the wasserstein distance
+#' @param p order of the wasserstein distance
 #' @param wa_ NumericVector representing the weights of datapoints
-#'		(interpreted as clusters) in x
+#'  (interpreted as clusters) in x
 #' @param wb_ NumericVector representing the weights of datapoints
-#'		(interpreted as clusters) in y
+#'  (interpreted as clusters) in y
 #' @return The wasserstein (transport) distance between x and y
 #'
 #' @references Schefzik and Goncalves 2019
-#'	
+#'
 #' @seealso [squared_wass_approx()], [squared_wass_decomp()] for
 #' different approximations of the wasserstein distance
 #'

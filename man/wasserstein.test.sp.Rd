@@ -4,7 +4,7 @@
 \alias{wasserstein.test.sp}
 \title{wasserstein.test.sp}
 \usage{
-wasserstein.test.sp(x, y, seedex, permnum)
+wasserstein.test.sp(x, y, permnum)
 }
 \arguments{
 \item{x}{univariate sample (vector) representing the distribution of
@@ -13,8 +13,6 @@ condition A}
 \item{y}{univariate sample (vector) representing the distribution of
 condition B}
 
-\item{seedex}{seed used for generating the permutations in a reproducible way}
-
 \item{permnum}{number of permutations used in the permutation testing
 procedure}
 }
@@ -22,40 +20,40 @@ procedure}
 A vector concerning the testing results, precisely (see Schefzik and
 Goncalves (2019) for details)
 \itemize{
-\item d.transport:	2-Wasserstein distance between the two samples computed by
+\item d.transport: 2-Wasserstein distance between the two samples computed by
 quantile approximation
-\item d.transport^2:	squared 2-Wasserstein distance between the two samples
+\item d.transport^2: squared 2-Wasserstein distance between the two samples
 computed by quantile approximation
-\item d.comp^2:		squared 2-Wasserstein distance between the two samples
+\item d.comp^2: squared 2-Wasserstein distance between the two samples
 computed by decomposition approximation
-\item d.comp:		2-Wasserstein distance between the two samples computed by
+\item d.comp: 2-Wasserstein distance between the two samples computed by
 decomposition approximation
-\item location:		location term in the decomposition of the squared
+\item location: location term in the decomposition of the squared
 2-Wasserstein distance between the two samples
-\item size:		size term in the decomposition of the squared 2-Wasserstein
+\item size: size term in the decomposition of the squared 2-Wasserstein
 distance between the two samples
-\item shape:		shape term in the decomposition of the squared 2-Wasserstein
+\item shape: shape term in the decomposition of the squared 2-Wasserstein
 distance between the two samples
-\item rho:			correlation coefficient in the quantile-quantile plot	
-\item pval:			p-value of the semi-parametric 2-Wasserstein distance-based
+\item rho: correlation coefficient in the quantile-quantile plot
+\item pval: p-value of the semi-parametric 2-Wasserstein distance-based
 test
-\item p.ad.gpd:		in case the GPD fitting is performed: p-value of the
+\item p.ad.gpd: in case the GPD fitting is performed: p-value of the
 Anderson-Darling test to check whether the GPD actually fits the data well
- (otherwise NA)
-\item N.exc:		in case the GPD fitting is performed: number of exceedances
+(otherwise NA)
+\item N.exc: in case the GPD fitting is performed: number of exceedances
 (starting with 250 and iteratively decreased by 10 if necessary) that are
- required to obtain a good GPD fit (i.e. p-value of Anderson-Darling test
-  greater or eqaul to 0.05)(otherwise NA)
-\item perc.loc:		fraction (in %) of the location part with respect to the
+required to obtain a good GPD fit (i.e. p-value of Anderson-Darling test
+greater or eqaul to 0.05) (otherwise NA)
+\item perc.loc: fraction (in %) of the location part with respect to the
 overall squared 2-Wasserstein distance obtained by the decomposition
 approximation
-\item perc.size:		fraction (in %) of the size part with respect to the
+\item perc.size: fraction (in %) of the size part with respect to the
 overall squared 2-Wasserstein distance obtained by the decomposition
 approximation
-\item perc.shape:		fraction (in %) of the shape part with respect to the
+\item perc.shape: fraction (in %) of the shape part with respect to the
 overall squared 2-Wasserstein distance obtained by the decomposition
 approximation
-\item decomp.error:		absolute difference between the squared 2-Wasserstein
+\item decomp.error: absolute difference between the squared 2-Wasserstein
 distance computed by the quantile approximation and the squared
 2-Wasserstein distance computed by the decomposition approximation
 }
@@ -75,7 +73,7 @@ and Goncalves (2019).
 set.seed(32)
 x<-rnorm(500)
 y<-rnorm(500,2,1.5)
-wasserstein.test.sp(x,y,24,10000)
+wasserstein.test.sp(x,y,10000)
 
 
 }

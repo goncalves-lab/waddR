@@ -15,7 +15,7 @@ squared_wass_decomp(x, y, p = 1)
 }
 \value{
 An named Rcpp::List with the wasserstein distance between x and y,
-   decomposed into terms for size, location, and shape
+decomposed into terms for size, location, and shape
 }
 \description{
 squared_wass_decomp

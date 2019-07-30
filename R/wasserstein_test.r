@@ -14,7 +14,7 @@
 #'
 #'@param x univariate sample (vector) representing the distribution of
 #' condition A
-#'@param y	univariate sample (vector) representing the distribution of
+#'@param y univariate sample (vector) representing the distribution of
 #' condition B
 #'@param permnum number of permutations used in the permutation testing
 #' procedure
@@ -22,40 +22,40 @@
 #'@return A vector concerning the testing results, precisely (see Schefzik and
 #' Goncalves (2019) for details)
 #'\itemize{
-#'\item d.transport:	2-Wasserstein distance between the two samples computed by
+#'\item d.transport: 2-Wasserstein distance between the two samples computed by
 #' quantile approximation
-#'\item d.transport^2:	squared 2-Wasserstein distance between the two samples
+#'\item d.transport^2: squared 2-Wasserstein distance between the two samples
 #' computed by quantile approximation
-#'\item d.comp^2:		squared 2-Wasserstein distance between the two samples
+#'\item d.comp^2: squared 2-Wasserstein distance between the two samples
 #' computed by decomposition approximation
-#'\item d.comp:		2-Wasserstein distance between the two samples computed by
+#'\item d.comp: 2-Wasserstein distance between the two samples computed by
 #' decomposition approximation
-#'\item location:		location term in the decomposition of the squared
+#'\item location: location term in the decomposition of the squared
 #' 2-Wasserstein distance between the two samples
-#'\item size:		size term in the decomposition of the squared 2-Wasserstein
+#'\item size: size term in the decomposition of the squared 2-Wasserstein
 #' distance between the two samples
-#'\item shape:		shape term in the decomposition of the squared 2-Wasserstein
+#'\item shape: shape term in the decomposition of the squared 2-Wasserstein
 #' distance between the two samples
-#'\item rho:			correlation coefficient in the quantile-quantile plot	
-#'\item pval:			p-value of the semi-parametric 2-Wasserstein distance-based
+#'\item rho: correlation coefficient in the quantile-quantile plot
+#'\item pval: p-value of the semi-parametric 2-Wasserstein distance-based
 #' test
-#'\item p.ad.gpd:		in case the GPD fitting is performed: p-value of the
+#'\item p.ad.gpd: in case the GPD fitting is performed: p-value of the
 #' Anderson-Darling test to check whether the GPD actually fits the data well
-#'  (otherwise NA)
-#'\item N.exc:		in case the GPD fitting is performed: number of exceedances
+#' (otherwise NA)
+#'\item N.exc: in case the GPD fitting is performed: number of exceedances
 #' (starting with 250 and iteratively decreased by 10 if necessary) that are
-#'  required to obtain a good GPD fit (i.e. p-value of Anderson-Darling test
-#'   greater or eqaul to 0.05)(otherwise NA)
-#'\item perc.loc:		fraction (in %) of the location part with respect to the
+#' required to obtain a good GPD fit (i.e. p-value of Anderson-Darling test
+#' greater or eqaul to 0.05) (otherwise NA)
+#'\item perc.loc: fraction (in %) of the location part with respect to the
 #' overall squared 2-Wasserstein distance obtained by the decomposition
 #' approximation
-#'\item perc.size:		fraction (in %) of the size part with respect to the
+#'\item perc.size: fraction (in %) of the size part with respect to the
 #' overall squared 2-Wasserstein distance obtained by the decomposition
 #' approximation
-#'\item perc.shape:		fraction (in %) of the shape part with respect to the
+#'\item perc.shape: fraction (in %) of the shape part with respect to the
 #' overall squared 2-Wasserstein distance obtained by the decomposition
 #' approximation
-#'\item decomp.error:		absolute difference between the squared 2-Wasserstein
+#'\item decomp.error: absolute difference between the squared 2-Wasserstein
 #' distance computed by the quantile approximation and the squared
 #' 2-Wasserstein distance computed by the decomposition approximation
 #'}
@@ -72,160 +72,160 @@
 #'@export
 #'
 wasserstein.test.sp<-function(x,y,permnum){
-  
 
-  #######Wasserstein part
-  
-  if (length(x)!=0&length(y)!=0){
-    
-    value <- squared_wass_approx(x,y,p=2)
-    value.sq<-value^2
-    
-    
-    # computation of an approximative p-value (permutation procedure)
-    z<-c(x,y)
-    nsample<-length(z)
-    bsn<-permnum
+    if (length(x) !=0 & length(y) != 0){
 
-    shuffle <- permutations(z, num_permutations = bsn)
-    wass.val <- apply(shuffle, 2, function (k) {
-      squared_wass_approx(k[seq_len(length(x))], k[seq((length(x)+1):length(z))], p=2)
-      })
-    
-    # list of possible exceedance thresholds (decreasing)
-    poss.exc.num<-rev(seq(from=10,to=250,by=10))
-    
-    # order the values of the permutation-based test statistics
-    wass.val.ordered<-sort(wass.val,decreasing=TRUE)
-    
-    # algorithm
-    num.extr<-sum(wass.val>=value.sq)
-    pvalue.ecdf<-num.extr/bsn
-    pvalue.ecdf.pseudo<-(1+num.extr)/(bsn+1)
-    
-    if (num.extr>=10){
-      pvalue.wass<-c(pvalue.ecdf,NA,NA)  
-    } else {
-      
-      procedure<-function(x){
-        
-        r<-1
-        
-        repeat {
-          
-          
-          # set threshold for exceedance according to paper
-          N.exc<-poss.exc.num[r]
-          
-          # compute set of N.exc exceedances
-          exceedances<-wass.val.ordered[seq_len(N.exc)]
-          
-          # check whether the N.exc largest permutation values follow a GPD
-          # using an Anderson-Darling test
-          gpd.ad.check<-gpdAd(exceedances)
-          ad.pval<-gpd.ad.check$p.value
-          
-          r<-r+1
-          
-          if(ad.pval>0.05){break}
-          
+        value <- squared_wass_approx(x,y,p=2)
+        value.sq <- value^2
+
+
+        # computation of an approximative p-value (permutation procedure)
+        z <- c(x,y)
+        nsample <- length(z)
+        bsn <- permnum
+
+        shuffle <- permutations(z, num_permutations=bsn)
+        wass.val <- apply(shuffle, 2, 
+                            function (k) {
+                                squared_wass_approx(
+                                    k[seq_len(length(x))],
+                                    k[seq((length(x)+1):length(z))],
+                                    p=2)
+                        })
+
+        # list of possible exceedance thresholds (decreasing)
+        poss.exc.num <- rev(seq(from=10, to=250, by=10))
+
+        # order the values of the permutation-based test statistics
+        wass.val.ordered <- sort(wass.val,decreasing=TRUE)
+
+        # algorithm
+        num.extr <- sum(wass.val >= value.sq)
+        pvalue.ecdf <- num.extr/bsn
+        pvalue.ecdf.pseudo <- (1 + num.extr) / (bsn + 1)
+
+        if (num.extr >= 10){
+            pvalue.wass <- c(pvalue.ecdf, NA, NA)  
+        } else {
+
+            procedure <- function(x) {
+            
+                r <- 1
+                
+                repeat {
+
+                    # set threshold for exceedance according to paper
+                    N.exc <- poss.exc.num[r]
+
+                    # compute set of N.exc exceedances
+                    exceedances <- wass.val.ordered[seq_len(N.exc)]
+
+                    # check whether the N.exc largest permutation values follow 
+                    # a GPD using an Anderson-Darling test
+                    gpd.ad.check <- gpdAd(exceedances)
+                    ad.pval <- gpd.ad.check$p.value
+
+                    r <- r + 1
+
+                    if (ad.pval > 0.05) {break}
+                }
+
+                # calculate exceedance threshold for so-obtained N.exc
+                t.exc <- (wass.val.ordered[N.exc] 
+                            + wass.val.ordered[N.exc+1]) / 2
+
+                # fit GPD distribution to the exceedances using maximum 
+                # likelihood estimation
+                gpd.fit <- gpdFit(data=wass.val.ordered,
+                                    threshold=t.exc,
+                                    method="mle")
+
+                # extract fitted parameters
+                fit.scale <- as.numeric(gpd.fit$par.ests[1])
+                fit.shape <- as.numeric(gpd.fit$par.ests[2])
+                
+                # compute GPD p-value (see paper)
+                pvalue.gpd <- (N.exc / bsn) * (1 - pgpd(q=value.sq-t.exc,
+                                                        loc=0,
+                                                        scale=fit.scale,
+                                                        shape=fit.shape))
+
+                pvalue.gpd <- as.numeric(pvalue.gpd)
+                
+                pvalue.wass <- c(pvalue.gpd, ad.pval, N.exc)
+
+                return(pvalue.wass)
+
+            }
+
+            tr <- try(procedure(25), silent=TRUE)
+
+            if (is(tr,"try-error")) {
+                pvalue.wass<-c(pvalue.ecdf.pseudo,NA,NA)
+            } else {
+                pvalue.wass<-tr
+            }
         }
-        
-        
-        # calculate exceedance threshold for so-obtained N.exc
-        t.exc<-(wass.val.ordered[N.exc]+wass.val.ordered[N.exc+1])/2
-        
-        # fit GPD distribution to the exceedances using maximum likelihood
-        # estimation
-        gpd.fit<-gpdFit(data=wass.val.ordered,threshold=t.exc,method="mle")
-        
-        # extract fitted parameters
-        fit.scale<-as.numeric(gpd.fit$par.ests[1])
-        fit.shape<-as.numeric(gpd.fit$par.ests[2])
-        
-        # check goodness-of-fit of the fitted GPD distribution via
-        # Anderson-Darling test 
-        #gof.test<-ad.test(exceedances, "pgpd", xi=fit.shape,beta=fit.scale)
-        #pvalue.gof<-gof.test$p.value
-        #goodfit<-pvalue.gof>0.05
-        
-        # compute GPD p-value (see paper)
-        pvalue.gpd<-(N.exc/bsn)*(1-pgpd(q=value.sq-t.exc,loc=0,scale=fit.scale,
-                                        shape=fit.shape))
-        pvalue.gpd<-as.numeric(pvalue.gpd)
-        
-        pvalue.wass<-c(pvalue.gpd,ad.pval,N.exc)
-        
-        return(pvalue.wass)
-        
-      }
-      
-      tr<-try(procedure(25),silent=TRUE)
-      
-      if(is(tr,"try-error")) {pvalue.wass<-c(pvalue.ecdf.pseudo,NA,NA)}
-      else {pvalue.wass<-tr}
-      
+
+
+        # decomposition of wasserstein distance
+        mu.x <- mean(x)
+        mu.y <- mean(y)
+
+        sigma.x <- sd(x)
+        sigma.y <- sd(y)
+
+        pr <- ((seq_len(1000)) - 0.5) / 1000
+
+        quant.x <- quantile(x, probs=pr, type=1)
+        quant.y <- quantile(y, probs=pr, type=1)
+
+        if (sd(quant.x) !=0 & sd(quant.y) != 0){
+            rho.xy <- cor(quant.x, quant.y, method="pearson")
+        } else {
+            rho.xy <- 0  
+        }
+
+        location <- (mu.x - mu.y) ^ 2
+        size <- (sigma.x - sigma.y) ^ 2
+        shape <- 2 * sigma.x * sigma.y * (1 - rho.xy)
+
+        wass.comp.sq <- location + size + shape
+        wass.comp <- sqrt(wass.comp.sq)
+
+        perc.loc <- round(((location / wass.comp.sq) * 100), 2)
+        perc.size <-round(((size / wass.comp.sq) * 100), 2)
+        perc.shape <- round(((shape / wass.comp.sq) * 100), 2)
+
+        decomp.error <- abs(value.sq - wass.comp.sq)
+
+    } else {
+        value <- NA
+        value.sq <- NA
+        wass.comp.sq <- NA
+        wass.comp <- NA
+        location <- NA
+        size <- NA
+        shape <- NA
+        rho.xy <- NA
+        pvalue.wass <- c(NA, NA, NA)
+        perc.loc <- NA
+        perc.size <- NA
+        perc.shape <- NA
+        decomp.error <- NA
     }
-    
-    
-    # decomposition of wasserstein distance
-    mu.x<-mean(x)
-    mu.y<-mean(y)
-    
-    sigma.x<-sd(x)
-    sigma.y<-sd(y)
-    
-    pr<-((seq_len(1000))-0.5)/1000
-    
-    quant.x<-quantile(x,probs=pr,type=1)
-    quant.y<-quantile(y,probs=pr,type=1)
-    
-    if(sd(quant.x)!=0&sd(quant.y)!=0){
-      rho.xy<-cor(quant.x,quant.y,method="pearson")
-    } else{
-      rho.xy<-0  
-    }
-    
-    location<-(mu.x-mu.y)^2
-    size<-(sigma.x-sigma.y)^2
-    shape<-2*sigma.x*sigma.y*(1-rho.xy)
-    
-    wass.comp.sq<-location+size+shape
-    wass.comp<-sqrt(wass.comp.sq)
-    
-    perc.loc<-round(((location/wass.comp.sq)*100),2)
-    perc.size<-round(((size/wass.comp.sq)*100),2)
-    perc.shape<-round(((shape/wass.comp.sq)*100),2)
-    
-    decomp.error<-abs(value.sq-wass.comp.sq)
-    
-    
-  } else {
-    value<-NA
-    value.sq<-NA
-    wass.comp.sq<-NA
-    wass.comp<-NA
-    location<-NA
-    size<-NA
-    shape<-NA
-    rho.xy<-NA
-    pvalue.wass<-c(NA,NA,NA)
-    perc.loc<-NA
-    perc.size<-NA
-    perc.shape<-NA
-    decomp.error<-NA
-  }
-  
-  
-  # create output
-  output<-c(value,value.sq,wass.comp.sq,wass.comp,location,size,shape,rho.xy,
-            pvalue.wass,perc.loc,perc.size,perc.shape,decomp.error)
-  names(output)<-c("d.transport","d.transport^2","d.comp^2","d.comp",
-                   "location","size","shape","rho","pval","p.ad.gpd","N.exc",
-                   "perc.loc","perc.size","perc.shape","decomp.error")
-  
-  return(output)
-  
+
+
+    # create output
+    output <- c(value, value.sq, wass.comp.sq, wass.comp, location, size, 
+                shape, rho.xy, pvalue.wass, perc.loc, perc.size, perc.shape,
+                decomp.error)
+    names(output)<-c("d.transport", "d.transport^2", "d.comp^2", "d.comp",
+                    "location", "size","shape", "rho","pval", "p.ad.gpd",
+                    "N.exc", "perc.loc", "perc.size", "perc.shape",
+                    "decomp.error")
+    return(output)
+
 }
 
 
@@ -240,41 +240,41 @@ wasserstein.test.sp<-function(x,y,permnum){
 #'@details Details concerning the testing procedure based on asymptotic theory
 #' can be found in Schefzik and Goncalves (2019).
 #'
-#'@param x	univariate sample (vector) representing the distribution of
+#'@param x univariate sample (vector) representing the distribution of
 #' condition A
-#'@param y	univariate sample (vector) representing the distribution of
+#'@param y univariate sample (vector) representing the distribution of
 #' condition B
 #'
 #'@return A vector concerning the testing results, precisely (see Schefzik and
 #' Goncalves (2019) for details)
 #'\itemize{
-#'\item d.transport:		2-Wasserstein distance between the two samples computed
+#'\item d.transport: 2-Wasserstein distance between the two samples computed
 #' by quantile approximation
-#'\item d.transport^2:	squared 2-Wasserstein distance between the two samples
+#'\item d.transport^2 squared 2-Wasserstein distance between the two samples
 #' computed by quantile approximation
-#'\item d.comp^2:		squared 2-Wasserstein distance between the two samples
+#'\item d.comp^2: squared 2-Wasserstein distance between the two samples
 #' computed by decomposition approximation
-#'\item d.comp:		2-Wasserstein distance between the two samples computed by
+#'\item d.comp: 2-Wasserstein distance between the two samples computed by
 #' decomposition approximation
-#'\item location:		location term in the decomposition of the squared
+#'\item location: location term in the decomposition of the squared
 #' 2-Wasserstein distance between the two samples
-#'\item size:		size term in the decomposition of the squared 2-Wasserstein
+#'\item size: size term in the decomposition of the squared 2-Wasserstein
 #' distance between the two samples
-#'\item shape:		shape term in the decomposition of the squared 2-Wasserstein
+#'\item shape: shape term in the decomposition of the squared 2-Wasserstein
 #' distance between the two samples
-#'\item rho:			correlation coefficient in the quantile-quantile plot	
-#'\item pval:		p-value of the 2-Wasserstein distance-based test using
+#'\item rho: correlation coefficient in the quantile-quantile plot
+#'\item pval: p-value of the 2-Wasserstein distance-based test using
 #' asymptotic theory
-#'\item perc.loc:		fraction (in %) of the location part with respect to the
+#'\item perc.loc: fraction (in %) of the location part with respect to the
 #' overall squared 2-Wasserstein distance obtained by the decomposition
 #' approximation
-#'\item perc.size:		fraction (in %) of the size part with respect to the
+#'\item perc.size: fraction (in %) of the size part with respect to the
 #' overall squared 2-Wasserstein distance obtained by the decomposition
 #' approximation
-#'\item perc.shape:		fraction (in %) of the shape part with respect to the
+#'\item perc.shape: fraction (in %) of the shape part with respect to the
 #' overall squared 2-Wasserstein distance obtained by the decomposition
 #' approximation
-#'\item decomp.error:		absolute difference between the squared 2-Wasserstein
+#'\item decomp.error: absolute difference between the squared 2-Wasserstein
 #' distance computed by the quantile approximation and the squared
 #' 2-Wasserstein distance computed by the decomposition approximation
 #'}
@@ -290,94 +290,94 @@ wasserstein.test.sp<-function(x,y,permnum){
 #'
 #'@export
 #'
-wasserstein.test.asy<-function(x,y){
-  
-  if (length(x)!=0&length(y)!=0){
-    
-    # Checking for and loading the R objects value.integral and empcdf.ref
-    if (is.null(global.empcdf.ref)) {
-      load(system.file("data/empcdf_ref.RData", package="waddR"))
-      global.empcdf.ref <- empcdf.ref
+wasserstein.test.asy <- function(x, y){
+
+    if (length(x) != 0 & length(y) != 0) {
+
+        # Checking for and loading the R objects value.integral and empcdf.ref
+        if (is.null(global.empcdf.ref)) {
+            load(system.file("data/empcdf_ref.RData", package="waddR"))
+            global.empcdf.ref <- empcdf.ref
+        }
+
+        value <- squared_wass_approx(x, y, p=2)
+        value.sq <- value **2 
+
+        # compute p-value based on asymptotoc theory (brownian bridge)
+        pr <- seq(from=0, to=1, by=1/10000)
+        empir.cdf.y <- ecdf(y)
+
+        parts.trf <- ((empir.cdf.y(quantile(x, probs=pr, type=1))) - pr) **2  
+
+        trf.int <- (1 / length(pr)) * sum(parts.trf)
+        test.stat <- (length(x) * length(y) 
+                    / (length(x) + length(y))) * trf.int
+
+        # p-value
+        pvalue.wass <- 1 - global.empcdf.ref(test.stat)
+
+        # decomposition of wasserstein distance
+        mu.x <- mean(x)
+        mu.y <- mean(y)
+
+        sigma.x <- sd(x)
+        sigma.y <- sd(y)
+
+        pr <- (seq_len(1000) - 0.5) / 1000
+
+        quant.x <- quantile(x, probs=pr, type=1)
+        quant.y <- quantile(y, probs=pr, type=1)
+
+        if (sd(quant.x) != 0 & sd(quant.y) != 0) {
+            rho.xy <- cor(quant.x, quant.y, method="pearson")
+        } else {
+            rho.xy <- 0  
+        }
+
+
+
+        location <- (mu.x - mu.y) **2
+        size <- (sigma.x - sigma.y) **2
+        shape <- 2 * sigma.x * sigma.y * (1 - rho.xy)
+
+        wass.comp.sq <- location + size + shape
+        wass.comp <- sqrt(wass.comp.sq)
+
+
+        perc.loc <- round(((location / wass.comp.sq) * 100), 2)
+        perc.size <- round(((size/wass.comp.sq) * 100), 2)
+        perc.shape <- round(((shape/wass.comp.sq)*100), 2)
+
+
+        decomp.error <- abs(value.sq - wass.comp.sq)
+
+
+    } else {
+        value <- NA
+        value.sq <- NA
+        wass.comp.sq <- NA
+        wass.comp <- NA
+        location <- NA
+        size <- NA
+        shape <- NA
+        rho.xy <- NA
+        pvalue.wass <- NA
+        perc.loc <- NA
+        perc.size <- NA
+        perc.shape <- NA
+        decomp.error <- NA
     }
 
-    value<-squared_wass_approx(x,y,p=2)
-    value.sq <- value **2 
-    
-    # compute p-value based on asymptotoc theory (brownian bridge)
-    pr<-seq(from=0,to=1,by=1/10000)
-    empir.cdf.y<-ecdf(y)
-    
-    parts.trf<-((empir.cdf.y(quantile(x,probs=pr,type=1)))-pr)^2  
-    
-    trf.int<-(1/length(pr))*sum(parts.trf)
-    test.stat<-(length(x)*length(y)/(length(x)+length(y)))*trf.int
 
-    # p-value
-    pvalue.wass<-1-global.empcdf.ref(test.stat)
-    
-    # decomposition of wasserstein distance
-    mu.x<-mean(x)
-    mu.y<-mean(y)
-    
-    sigma.x<-sd(x)
-    sigma.y<-sd(y)
-    
-    pr<-(seq_len(1000)-0.5)/1000
-    
-    quant.x<-quantile(x,probs=pr,type=1)
-    quant.y<-quantile(y,probs=pr,type=1)
-    
-    if(sd(quant.x)!=0&sd(quant.y)!=0){
-      rho.xy<-cor(quant.x,quant.y,method="pearson")
-    } else{
-      rho.xy<-0  
-    }
-    
-    
-    
-    location<-(mu.x-mu.y)^2
-    size<-(sigma.x-sigma.y)^2
-    shape<-2*sigma.x*sigma.y*(1-rho.xy)
-    
-    wass.comp.sq<-location+size+shape
-    wass.comp<-sqrt(wass.comp.sq)
-    
-    
-    perc.loc<-round(((location/wass.comp.sq)*100),2)
-    perc.size<-round(((size/wass.comp.sq)*100),2)
-    perc.shape<-round(((shape/wass.comp.sq)*100),2)
-    
-    
-    decomp.error<-abs(value.sq-wass.comp.sq)
-    
-    
-  } else {
-    value<-NA
-    value.sq<-NA
-    wass.comp.sq<-NA
-    wass.comp<-NA
-    location<-NA
-    size<-NA
-    shape<-NA
-    rho.xy<-NA
-    pvalue.wass<-NA
-    perc.loc<-NA
-    perc.size<-NA
-    perc.shape<-NA
-    decomp.error<-NA
-  }
-  
-  
-  ##create output
-  output<-c(value,value.sq,wass.comp.sq,wass.comp,location,size,shape,rho.xy,
-            pvalue.wass,perc.loc,perc.size,perc.shape,decomp.error)
-  names(output)<-c("d.transport","d.transport^2","d.comp^2","d.comp",
-                   "location","size","shape","rho","pval","perc.loc",
-                   "perc.size","perc.shape","decomp.error")
-  
-  
-  return(output)
-  
+    ##create output
+    output <- c(value, value.sq, wass.comp.sq, wass.comp, location, size,
+                shape, rho.xy, pvalue.wass, perc.loc, perc.size, perc.shape,
+                decomp.error)
+    names(output) <- c("d.transport", "d.transport^2", "d.comp^2", "d.comp",
+                        "location", "size", "shape", "rho", "pval", "perc.loc",
+                        "perc.size", "perc.shape", "decomp.error")
+
+    return(output)
 }
 
 
@@ -388,9 +388,9 @@ wasserstein.test.asy<-function(x,y){
 #'wasserstein.test
 #'
 #'Two-sample test to check for differences between two distributions
-#' (conditions) using the 2-Wasserstein distance, either using the
-#' semi-parametric permutation testing procedure with GPD approximation to
-#' estimate small p-values accurately or the test based on asymptotic theory
+#'(conditions) using the 2-Wasserstein distance, either using the
+#'semi-parametric permutation testing procedure with GPD approximation to
+#'estimate small p-values accurately or the test based on asymptotic theory
 #'
 #'@name wasserstein.test
 #'@details Details concerning the two testing procedures (i.e. the permutation
@@ -398,15 +398,15 @@ wasserstein.test.asy<-function(x,y){
 #' accurately and the test based on asymptotic theory) can be found in
 #' Schefzik and Goncalves (2019).
 #'
-#'@param x		univariate sample (vector) representing the distribution of
+#'@param x univariate sample (vector) representing the distribution of
 #' condition A
-#'@param y		univariate sample (vector) representing the distribution of
+#'@param y univariate sample (vector) representing the distribution of
 #' condition B
-#'@param permnum	number of permutations used in the permutation testing
+#'@param permnum number of permutations used in the permutation testing
 #' procedure (if method=”SP” is performed); default is 10000
-#'@param method	testing procedure to be employed: “SP” for the semi-parametric
+#'@param method testing procedure to be employed: “SP” for the semi-parametric
 #' permutation testing procedure with GPD approximation to estimate small
-#'  p-values accurately; “ASY” for the test based on asymptotic theory
+#' p-values accurately; “ASY” for the test based on asymptotic theory
 #'
 #'@return A vector concerning the testing results (see Schefzik and Goncalves
 #' (2019) for details), see the documentations for wasserstein.test.sp and
@@ -424,15 +424,13 @@ wasserstein.test.asy<-function(x,y){
 #'
 #'@export
 #'
-wasserstein.test<-function(x,y,permnum=10000,method){
-  if(toupper(method)=="SP"){
-    RES<-wasserstein.test.sp(x,y,permnum)
-  } else if(toupper(method)=="ASY") {
-    RES<-wasserstein.test.asy(x,y)  
-  } else {
-    stop("Argument 'method' must be one of {SP, ASY} : ", method)
-  }
-  return(RES) 
+wasserstein.test <- function(x, y, permnum=10000, method){
+    if(toupper(method) == "SP"){
+        RES <- wasserstein.test.sp(x, y, permnum)
+    } else if (toupper(method) == "ASY") {
+        RES <- wasserstein.test.asy(x, y)  
+    } else {
+        stop("Argument 'method' must be one of {SP, ASY} : ", method)
+    }
+    return(RES) 
 }
-
-

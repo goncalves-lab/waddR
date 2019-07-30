@@ -4,15 +4,13 @@
 \alias{wasserstein.sc}
 \title{wasserstein.sc}
 \usage{
-wasserstein.sc(dat, condition, seedex, permnum, method)
+wasserstein.sc(dat, condition, permnum, method)
 }
 \arguments{
 \item{dat}{matrix of single-cell RNA-sequencing expression data with genes in
 rows and samples (cells) in columns}
 
 \item{condition}{vector of condition labels}
-
-\item{seedex}{seed used for generating the permutations in a reproducible way}
 
 \item{permnum}{number of permutations used in the permutation testing
 procedure}
