@@ -556,12 +556,18 @@ vector<int> interval_table(	const vector<double> & datavec,
 //' permutations
 //'
 //' Returns permutations of a given NumericVector as columns in a NumericMatrix
-//' object. 
+//' object.
 //' @param x NumericVector representing a vector that is to be permutated
 //' @param num_permutations Integer representing the number of permutations
 //'		that are to be performed.
 //' @return a matrix containing in every column one permutations of the
 //'		input vector
+//'
+//' @examples
+//' x <- seq(1:10)
+//' m <- permutations(x, 5)
+//' dim(m)
+//' #[1] 10  5
 //'
 //' @export
 // [[Rcpp::export]]
@@ -592,8 +598,8 @@ NumericMatrix permutations(const NumericVector x, const int num_permutations)
 
 //' squared_wass_decomp
 //'
-//' Approximation of the squared Wasserstein distance between two vectors,
-//' decomposed into size, location and shape.
+//' Approximation of the squared Wasserstein distance \eqn{d_g}{W_g between two
+//' vectors decomposed into size, location and shape.
 //' Calculation based on the mean squared difference between the equidistant
 //' quantiles of the two input vectors a and b.
 //' As an approximation of the distribution, 1000 quantiles are computed for
@@ -604,7 +610,25 @@ NumericMatrix permutations(const NumericVector x, const int num_permutations)
 //'	@param p exponent of the wasserstine distance
 //' @return An named Rcpp::List with the wasserstein distance between x and y,
 //'    decomposed into terms for size, location, and shape
+//' 
+//' @references 
+//' Schefzik and Goncalves 2019
+//' Irpino and Verde (2015)
 //'
+//' @seealso [wasserstein_metric()], [squared_wass_approx()] for
+//' different implementations of the wasserstein distance
+//'
+//' @examples
+//' # input: one dimensional data in two conditions
+//' x <- rnorm(100, 42, 2)
+//' y <- c(rnorm(61, 20, 1), rnorm(41, 40,2))
+//' # output: squared Wasserstein distance decomposed into terms for location,
+//' # shape, size
+//' d.wass.decomp <- squared_wass_decomp(x,y,2)
+//' d.wass.decomp$location
+//' d.wass.decomp$size
+//' d.wass.decomp$shade
+//' 
 //' @export
 //[[Rcpp::export]]
 Rcpp::List squared_wass_decomp(	const NumericVector & x,
@@ -641,14 +665,27 @@ Rcpp::List squared_wass_decomp(	const NumericVector & x,
 //'
 //' Approximation of the squared wasserstein distance.
 //' Calculation based on the mean squared difference between the equidistant
-//' quantiles of the two input vectors a and b.
-//' As an approximation of the distribution, 1000 quantiles are computed for
-//' each vector.
+//' empirical quantiles of the two input vectors a and b.
+//' As an approximation of the quantile function, 1000 quantiles are computed
+//' for each vector.
 //'
 //' @param x Vector representing an empirical distribution under condition A
 //' @param y Vector representing an empirical distribution under condition B
 //'	@param p exponent of the wasserstine distance
 //' @return The approximated squared wasserstein distance between x and y
+//'
+//' @references Schefzik and Goncalves 2019
+//'
+//' @seealso [wasserstein_metric()], [squared_wass_decomp()] for
+//' different implementations of the wasserstein distance
+//'
+//' @examples
+//' # input: one dimensional data in two conditions
+//' x <- rnorm(100, 42, 2)
+//' y <- c(rnorm(61, 20, 1), rnorm(41, 40,2))
+//' # output: The squared Wasserstein distance approximated as described in
+//' # Schefzik and Goncalves 2019
+//' d.wass.approx <- squared_wass_approx(x,y,2)
 //'
 //' @export
 //[[Rcpp::export]]
@@ -674,16 +711,46 @@ double squared_wass_approx(	const NumericVector & x,
 
 //' wasserstein_metric
 //'
+//' The order \code{p} Wasserstein metric (or distance) is defined as the 
+//' \code{p}-th root of the total cost of turning one pile of mass x into a new
+//' pile of mass y.
+//' The cost a single trnasport \eqn{x_i} into \eqn{y_i} is the \code{p}-th
+//' power of the euclidean distance between \eqn{x_i} and \eqn{y_i}.
+//' 
+//' The masses in \eqn{x} and \eqn{y} can also be represented as clusters
+//' \eqn{P} and \eqn{Q} with weights \eqn{W_P} and \eqn{W_Q}.
+//' The wasserstein distance then becomes the optimal flow F, which is the sum
+//' of all optimal flows \eqn{f_{ij}} from \eqn{(p_i, w_{p,i})} to
+//' \eqn{(q_i, w_{q,i})}.
+//'
+//' This implementation of the Wasserstein metric is a Rcpp reimplementation of
+//' the wasserstein1d function by Dominic Schuhmacher from the package
+//' transport.
+//' 
 //' @param x NumericVector representing an empirical distribution under
 //' condition A
 //' @param y NumericVector representing an empirical distribution under
 //' condition B
-//'	@param p exponent of the wasserstine distance
+//'	@param p order of the wasserstein distance
 //' @param wa_ NumericVector representing the weights of datapoints
 //'		(interpreted as clusters) in x
 //' @param wb_ NumericVector representing the weights of datapoints
 //'		(interpreted as clusters) in y
 //' @return The wasserstein (transport) distance between x and y
+//'
+//' @references Schefzik and Goncalves 2019
+//'	
+//' @seealso [squared_wass_approx()], [squared_wass_decomp()] for
+//' different approximations of the wasserstein distance
+//'
+//' @examples
+//' # input: one dimensional data in two conditions
+//' x <- rnorm(100, 42, 2)
+//' y <- c(rnorm(61, 20, 1), rnorm(41, 40, 2))
+//' # output: The exact Wasserstein distance between the two input
+//' # vectors. Reimplementation of the wasserstein1d function found in
+//' # the packge transport.
+//' d.wass <- wasserstein_metric(x,y,2)
 //'
 //' @export
 //[[Rcpp::export]]
@@ -1022,15 +1089,4 @@ IntegerVector interval_table_test_export(	NumericVector & data_,
 
 	IntegerVector output(result.begin(), result.end());
 	return output;
-}
-
-
-
-/*
-	Program entry point for debugging
-*/
-int main() 
-{
-
-	return 0;
 }

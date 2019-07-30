@@ -19,7 +19,23 @@ The approximated squared wasserstein distance between x and y
 \description{
 Approximation of the squared wasserstein distance.
 Calculation based on the mean squared difference between the equidistant
-quantiles of the two input vectors a and b.
-As an approximation of the distribution, 1000 quantiles are computed for
-each vector.
+empirical quantiles of the two input vectors a and b.
+As an approximation of the quantile function, 1000 quantiles are computed
+for each vector.
+}
+\examples{
+# input: one dimensional data in two conditions
+x <- rnorm(100, 42, 2)
+y <- c(rnorm(61, 20, 1), rnorm(41, 40,2))
+# output: The squared Wasserstein distance approximated as described in
+# Schefzik and Goncalves 2019
+d.wass.approx <- squared_wass_approx(x,y,2)
+
+}
+\references{
+Schefzik and Goncalves 2019
+}
+\seealso{
+[wasserstein_metric()], [squared_wass_decomp()] for
+different implementations of the wasserstein distance
 }

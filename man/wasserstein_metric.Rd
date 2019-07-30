@@ -13,7 +13,7 @@ condition A}
 \item{y}{NumericVector representing an empirical distribution under
 condition B}
 
-\item{p}{exponent of the wasserstine distance}
+\item{p}{order of the wasserstein distance}
 
 \item{wa_}{NumericVector representing the weights of datapoints
 (interpreted as clusters) in x}
@@ -25,5 +25,37 @@ condition B}
 The wasserstein (transport) distance between x and y
 }
 \description{
-wasserstein_metric
+The order \code{p} Wasserstein metric (or distance) is defined as the 
+\code{p}-th root of the total cost of turning one pile of mass x into a new
+pile of mass y.
+The cost a single trnasport \eqn{x_i} into \eqn{y_i} is the \code{p}-th
+power of the euclidean distance between \eqn{x_i} and \eqn{y_i}.
+}
+\details{
+The masses in \eqn{x} and \eqn{y} can also be represented as clusters
+\eqn{P} and \eqn{Q} with weights \eqn{W_P} and \eqn{W_Q}.
+The wasserstein distance then becomes the optimal flow F, which is the sum
+of all optimal flows \eqn{f_{ij}} from \eqn{(p_i, w_{p,i})} to
+\eqn{(q_i, w_{q,i})}.
+
+This implementation of the Wasserstein metric is a Rcpp reimplementation of
+the wasserstein1d function by Dominic Schuhmacher from the package
+transport.
+}
+\examples{
+# input: one dimensional data in two conditions
+x <- rnorm(100, 42, 2)
+y <- c(rnorm(61, 20, 1), rnorm(41, 40, 2))
+# output: The exact Wasserstein distance between the two input
+# vectors. Reimplementation of the wasserstein1d function found in
+# the packge transport.
+d.wass <- wasserstein_metric(x,y,2)
+
+}
+\references{
+Schefzik and Goncalves 2019
+}
+\seealso{
+[squared_wass_approx()], [squared_wass_decomp()] for
+different approximations of the wasserstein distance
 }

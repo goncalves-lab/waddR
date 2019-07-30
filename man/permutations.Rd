@@ -20,3 +20,10 @@ a matrix containing in every column one permutations of the
 Returns permutations of a given NumericVector as columns in a NumericMatrix
 object.
 }
+\examples{
+x <- seq(1:10)
+m <- permutations(x, 5)
+dim(m)
+#[1] 10  5
+
+}
