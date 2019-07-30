@@ -8,17 +8,10 @@
 NULL
 
 # Documentation of the RData objects
-#
-#' This object contains a distribution
-#'
-#' @name value.integral
-#' @docType data
-#' @keywords data
-value.integral <- NULL
-
-#' An empirical cumulative distribution function based on the values in
-#' value.integral
-#'
+#' An empirical cumulative distribution function of a simulated Brownian bridge
+#' distribution. It is used an empirical quantile function to determine 
+#' p-values in the asymptotic wasserstein test function wasserstein.test.asy
+#' 
 #' @name empcdf.ref  
 #' @docType data
 #' @keywords data

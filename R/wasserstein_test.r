@@ -301,8 +301,7 @@ wasserstein.test.asy<-function(x,y){
     
     # Checking for and loading the R objects value.integral and empcdf.ref
     if (is.null(global.empcdf.ref)) {
-      load(system.file("data/VALUE_INTEGRAL.RData", package="waddR"))
-      load(system.file("data/EMPCDF.RData", package="waddR"))
+      load(system.file("data/empcdf_ref.RData", package="waddR"))
       global.empcdf.ref <- empcdf.ref
     }
 
