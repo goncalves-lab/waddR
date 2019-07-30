@@ -135,8 +135,6 @@ CombinePVal<-function(r,s){
 #'@param dat	matrix of single-cell RNA-sequencing expression data with genes in
 #' rows and samples (cells) in columns
 #'@param condition	vector of condition labels
-#'@param seedex		seed used for generating the permutations in a reproducible
-#' way
 #'@param permnum	number of permutations used in the permutation testing
 #' procedure
 #'@param inclZero	logical; if TRUE, the one-stage method (i.e. semi-parametric
@@ -251,7 +249,7 @@ CombinePVal<-function(r,s){
 #'
 #'@export
 #'        
-testWass<-function(dat, condition,seedex,permnum, inclZero=TRUE){
+testWass<-function(dat, condition,permnum, inclZero=TRUE){
   
   if (!inclZero){
     
@@ -262,7 +260,7 @@ testWass<-function(dat, condition,seedex,permnum, inclZero=TRUE){
       x1 <- (x1[x1>0])
       x2 <- (x2[x2>0])
       
-      suppressWarnings(wasserstein.test.sp(x1,x2,seedex,permnum))
+      suppressWarnings(wasserstein.test.sp(x1,x2,permnum))
     }
     
     wass.res<- bplapply(seq_len(nrow(dat)), onegene, 
@@ -294,7 +292,7 @@ testWass<-function(dat, condition,seedex,permnum, inclZero=TRUE){
       x1 <- dat[x,][condition==unique(condition)[1]]
       x2 <- dat[x,][condition==unique(condition)[2]]
       
-      suppressWarnings(wasserstein.test.sp(x1,x2,seedex,permnum))
+      suppressWarnings(wasserstein.test.sp(x1,x2,permnum))
     }
     
     wass.res<- bplapply(seq_len(nrow(dat)), onegene, 
@@ -333,7 +331,6 @@ testWass<-function(dat, condition,seedex,permnum, inclZero=TRUE){
 #'@param dat	matrix of single-cell RNA-sequencing expression data with genes in
 #' rows and samples (cells) in columns
 #'@param condition	vector of condition labels
-#'@param seedex	seed used for generating the permutations in a reproducible way
 #'@param permnum	number of permutations used in the permutation testing
 #' procedure
 #'@param method	method employed in the testing procedure: “OS” for the
@@ -359,11 +356,11 @@ testWass<-function(dat, condition,seedex,permnum, inclZero=TRUE){
 #'
 #'@export
 #'        
-wasserstein.sc<-function(dat,condition,seedex,permnum,method){
+wasserstein.sc<-function(dat,condition,permnum,method){
   if(method=="OS")
-    RES<-testWass(dat, condition,seedex,permnum, inclZero=TRUE)
+    RES<-testWass(dat, condition, permnum, inclZero=TRUE)
   if(method=="TS")  
-    RES<-testWass(dat, condition,seedex,permnum, inclZero=FALSE)  
+    RES<-testWass(dat, condition, permnum, inclZero=FALSE)  
   return(RES) 
 }
 

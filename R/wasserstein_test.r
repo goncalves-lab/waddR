@@ -16,7 +16,6 @@
 #' condition A
 #'@param y	univariate sample (vector) representing the distribution of
 #' condition B
-#'@param seedex	seed used for generating the permutations in a reproducible way
 #'@param permnum number of permutations used in the permutation testing
 #' procedure
 #'
@@ -67,16 +66,14 @@
 #'set.seed(32)
 #'x<-rnorm(500)
 #'y<-rnorm(500,2,1.5)
-#'wasserstein.test.sp(x,y,24,10000)
+#'wasserstein.test.sp(x,y,10000)
 #'
 #'
 #'@export
 #'
-wasserstein.test.sp<-function(x,y,seedex,permnum){
+wasserstein.test.sp<-function(x,y,permnum){
   
-  set.seed(seedex)  
-  
-  
+
   #######Wasserstein part
   
   if (length(x)!=0&length(y)!=0){
@@ -295,8 +292,6 @@ wasserstein.test.sp<-function(x,y,seedex,permnum){
 #'
 wasserstein.test.asy<-function(x,y){
   
-  set.seed(24)  
-  
   if (length(x)!=0&length(y)!=0){
     
     # Checking for and loading the R objects value.integral and empcdf.ref
@@ -407,8 +402,6 @@ wasserstein.test.asy<-function(x,y){
 #' condition A
 #'@param y		univariate sample (vector) representing the distribution of
 #' condition B
-#'@param seedex	seed used for generating the permutations in a reproducible way
-#' procedure (if method=”SP” is performed); default seed is 24
 #'@param permnum	number of permutations used in the permutation testing
 #' procedure (if method=”SP” is performed); default is 10000
 #'@param method	testing procedure to be employed: “SP” for the semi-parametric
@@ -425,15 +418,15 @@ wasserstein.test.asy<-function(x,y){
 #'set.seed(32)
 #'x<-rnorm(500)
 #'y<-rnorm(500,2,1.5)
-#'wasserstein.test(x,y,24,10000,method="SP")
+#'wasserstein.test(x,y,10000,method="SP")
 #'wasserstein.test(x,y,method="asy")
 #'
 #'
 #'@export
 #'
-wasserstein.test<-function(x,y,seedex=24,permnum=10000,method){
+wasserstein.test<-function(x,y,permnum=10000,method){
   if(toupper(method)=="SP"){
-    RES<-wasserstein.test.sp(x,y,seedex,permnum)
+    RES<-wasserstein.test.sp(x,y,permnum)
   } else if(toupper(method)=="ASY") {
     RES<-wasserstein.test.asy(x,y)  
   } else {

@@ -40,7 +40,7 @@ test_that("Example Run of Wasserstein Test", {
   
   expect_named(wasserstein.test(v,w,method="SP"),
                expected=names.sp, ignore.order=TRUE)
-  expect_named(wasserstein.test(v,w,seedex=34,permnum=1000,method="SP"),
+  expect_named(wasserstein.test(v,w,permnum=1000,method="SP"),
                expected=names.sp, ignore.order=TRUE)
   expect_named(wasserstein.test(v,w,method="asy"),
                expected=names.asy, ignore.order=TRUE)
