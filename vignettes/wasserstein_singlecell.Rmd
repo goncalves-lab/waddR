@@ -1,0 +1,90 @@
+---
+title: "Detecting Differential Expression in Single-Cell RNAseq data"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{wasserstein_singlecell}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+  
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+
+With [`waddR`](waddR.html) we present an alternative procedure to identify differential distributions in single-cell RNAseq data, that is capable of characterizing different types of differential distribution.
+Here, we will show that we are able to distinguish differences between two conditions with regard to location, shape and size.
+
+## Application to an Example Data Set from Conquer Database
+
+This an example on how to analyse the expression of 18 immune cell in two hypothetical conditions.
+For an example dataset we use GSE41265, which can be downloaded from the [conquer database](http://imlspenticton.uzh.ch:3838/conquer/).
+To read it, install the packages `MultiAssayExperiment` and `SummarizedExperiment` from BioConductor.
+
+(For a more detailed description of how to handle datasets from the conquer database, see the [conquer R tutorial](https://github.com/markrobinsonuzh/conquer/blob/master/shiny-download/tutorial.md).)
+
+First, load all required libraries and the example .rds data file.
+
+```{r}
+library(waddR)
+suppressPackageStartupMessages(library(SummarizedExperiment))
+suppressPackageStartupMessages(library(MultiAssayExperiment))
+
+example.dataset <- "GSE41265.rds"
+if (!file.exists(example.dataset)) {
+  download.file(
+    "http://imlspenticton.uzh.ch/robinson_lab/conquer/data-mae/GSE41265.rds",
+    destfile = example.dataset)
+}
+gse41265 <- readRDS(example.dataset)
+```
+
+Extract gene abundance from the dataset
+```{r}
+gene_abd <- experiments(gse41265)[[1]]
+```
+
+We are interested in looking at the "Transcripts per Million" matrix, which we will interprete as gene expression levels. 
+The `wasserstein.sc` function provided in `waddR` can only consider one value per sample in a distribution and gene -- the individual gene expression levels.
+```{r}
+data <- assays(gene_abd)[["TPM"]]
+```
+
+For this demonstration we randomly select 100 out of the 45,686 transcripts and define arbitrary conditions that we will compare in the `wasserstein.sc` test.
+```{r}
+rand_rows <- sort(sample(dim(data)[1], 100))
+data <- data[rand_rows, ]
+conditions <- c(rep(1,10), rep(2,8))
+```
+
+First we do a one-step test of all transcripts in the two conditions with p-values based on one thousand permutations
+```{r}
+onestep <- "OS"
+permutations <- 1000
+testresults.os <- wasserstein.sc(data, conditions, permutations, onestep)
+```
+
+Seeing, that a lot of zero expression levels are present int the data we repeat our test, looking at zero and non-zero expression levels separately this time
+```{r}
+twostep <- "TS"
+permutations <- 1000
+testresults.ts <- wasserstein.sc(data, conditions, permutations, twostep)
+```
+
+For every gene, a test result is printed, describing how the distribution differs in size,
+shape and location between the two conditions, while providing p-values and errors
+```{r}
+head(testresults.ts)
+
+```
+
+## See Also
+
+* Fast and accurate [calculation of the  Wasserstein distance](wasserstein_metric.html)
+
+* [Two-sample test](wasserstein_test.html) to check for differences between two distributions
+

@@ -1,7 +1,7 @@
 Package: waddR
 Type: Package
 Title: Statistical Test for Detecting Differential Distributions Based on the Wasserstein Metric
-Version: 0.2.3
+Version: 0.2.4
 Date: 2019-06-17
 Author: Roman Schefzik <r.schefzik@dkfz-heidelberg.de> 
 Maintainer: Julian Flesch <j.flesch@dkfz-heidelberg.de> 
@@ -20,13 +20,16 @@ Imports:
 	stats
 Depends:
 	R (>= 3.6.0)
-Enhances:
 Suggests:
-	devtools,
-	testthat,
-	roxygen2,
-	rprojroot
+    knitr,
+    rmarkdown,
+    devtools,
+    testthat,
+    roxygen2,
+    rprojroot,
+    rmarkdown
 LinkingTo:
 	Rcpp,
 	RcppArmadillo,
+VignetteBuilder: knitr
 RoxygenNote: 6.1.1

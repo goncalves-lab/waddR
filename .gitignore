@@ -20,6 +20,9 @@
 .aux
 unsrturl.bst
 
+# Compilation of Vignettes to HTML
+vignettes/*.html
+vignettes/*.R
 # References for some tests are kept in tests/testthat/know.values/
 tests/testthat/known.values/testresult*
 
@@ -101,3 +104,4 @@ vignettes/*.pdf
 
 # (KDE) directory property
 .directory
+inst/doc

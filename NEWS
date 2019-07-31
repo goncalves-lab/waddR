@@ -1,3 +1,11 @@
+Changes in 0.2.4 (2019-07-31)
++ Added Vignettes for wasserstein distance, wasserstein.test, and wasserstein.sc
++ Fixed examples and unparsable comments
++ Adressing Notes of R CMD BiocCheck ...:
+	o Removed use of 1:... in favor of seq() or seq_len()
+	o Removed use of set.seed(), which changed the signature of testing functions
+	o Using 4 spaces instead of tabs and multiples of 4 spaces for indentation
+
 Changes in 0.2.3 (2019-07-29)
 + Adressing Notes and Warnings of R CMD check ...:
 	o Reverted changes of BiocParallel from Import to Enhancement
