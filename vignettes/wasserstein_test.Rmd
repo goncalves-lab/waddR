@@ -2,7 +2,7 @@
 title: "The Two-Sample Wasserstein Test"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{waddR}
+  %\VignetteIndexEntry{wasserstein_test}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
