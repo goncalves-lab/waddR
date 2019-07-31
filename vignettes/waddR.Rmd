@@ -2,15 +2,15 @@
 title: "The `waddR` package"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{waddR}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+    %\VignetteIndexEntry{waddR}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
+    collapse = TRUE,
+    comment = "#>"
 )
 ```
 
@@ -20,10 +20,16 @@ knitr::opts_chunk$set(
 The package `waddR` comes with three sets of utilities, for distinct use cases.
 Each is described in a separate vignette:
 
-* Fast and accurate [calculation of the  Wasserstein distance](wasserstein_metric.html)
+* Fast and accurate 
+[calculation of the  Wasserstein distance](wasserstein_metric.html)
 
-* [Two-sample test](wasserstein_test.html) to check for differences between two distributions
+* [Two-sample test](wasserstein_test.html) to check for differences between two
+distributions
 
-* Detect and describe [differential expression in single-cell RNA sequencing data](wasserstein_singlecell.html)
+* Detect and describe 
+[differential distributions in scRNAseq data](wasserstein_singlecell.html)
 
-These are bundled into the same package, because they are internally dependent: The procedure for detecting differential distributions in single-cell data is a refinement of the more generalized two-sample test, which itself is based on a decomposition of the Wasserstein distance between two distributions.
+These are bundled into the same package, because they are internally dependent:
+The procedure for detecting differential distributions in single-cell data is a
+refinement of the more generalized two-sample test, which itself is based on a 
+decomposition of the Wasserstein distance between two distributions.
