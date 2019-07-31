@@ -22,7 +22,6 @@ Depends:
 	R (>= 3.6.0)
 Suggests:
     knitr,
-    rmarkdown,
     devtools,
     testthat,
     roxygen2,
