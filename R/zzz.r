@@ -8,6 +8,8 @@
 NULL
 
 # Documentation of the RData objects
+#' empcdf.ref
+#'
 #' An empirical cumulative distribution function of a simulated Brownian bridge
 #' distribution. It is used an empirical quantile function to determine 
 #' p-values in the asymptotic wasserstein test function wasserstein.test.asy
@@ -17,7 +19,10 @@ NULL
 #' @keywords data
 empcdf.ref <- NULL
 
+#' global.empcdf.ref
+#'
 #' A global reference to empcdf.ref
+#'
 #' @name global.empcdf.ref
 #' @docType data
 #' @keywords data

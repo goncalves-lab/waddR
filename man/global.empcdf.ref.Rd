@@ -3,7 +3,7 @@
 \docType{data}
 \name{global.empcdf.ref}
 \alias{global.empcdf.ref}
-\title{A global reference to empcdf.ref}
+\title{global.empcdf.ref}
 \format{An object of class \code{NULL} of length 0.}
 \usage{
 global.empcdf.ref

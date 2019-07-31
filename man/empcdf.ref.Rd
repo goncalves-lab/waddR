@@ -3,9 +3,7 @@
 \docType{data}
 \name{empcdf.ref}
 \alias{empcdf.ref}
-\title{An empirical cumulative distribution function of a simulated Brownian bridge
-distribution. It is used an empirical quantile function to determine 
-p-values in the asymptotic wasserstein test function wasserstein.test.asy}
+\title{empcdf.ref}
 \format{An object of class \code{NULL} of length 0.}
 \usage{
 empcdf.ref
