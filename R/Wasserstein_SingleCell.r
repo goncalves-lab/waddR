@@ -241,10 +241,10 @@ CombinePVal<-function(r,s){
 #'@references Schefzik and Goncalves (2019).
 #'
 #'@examples
-#'dat<-matrix(c(rnorm(100,42,1), rnorm(102,45,3)), nrow=1)
-#'condition<-c(rep(1,100), rep(2,102))
-#'testWass(dat,condition,24,10000,inclZero=TRUE)
-#'testWass(dat,condition,24,10000,inclZero=FALSE)
+#'dat <- matrix(c(rnorm(100, 42, 1), rnorm(102, 45, 3)), nrow=1)
+#'condition <- c(rep(1, 100), rep(2, 102))
+#'testWass(dat, condition, 10000, inclZero=TRUE)
+#'testWass(dat, condition, 10000, inclZero=FALSE)
 #'
 #'
 #'@export

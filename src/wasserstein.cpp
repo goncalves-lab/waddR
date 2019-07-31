@@ -598,8 +598,8 @@ NumericMatrix permutations(const NumericVector x, const int num_permutations)
 
 //' squared_wass_decomp
 //'
-//' Approximation of the squared Wasserstein distance \eqn{d_g}{W_g between two
-//' vectors decomposed into size, location and shape.
+//' Approximation of the squared Wasserstein distance \eqn{d_g}{W_g} between
+//' two vectors decomposed into size, location and shape.
 //' Calculation based on the mean squared difference between the equidistant
 //' quantiles of the two input vectors a and b.
 //' As an approximation of the distribution, 1000 quantiles are computed for
