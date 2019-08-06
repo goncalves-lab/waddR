@@ -59,7 +59,7 @@ approximation
 \item perc.shape: fraction (in %) of the shape part with respect to the
 overall squared 2-Wasserstein distance obtained by the decomposition
 approximation
-\item decomp.error: absolute difference between the squared 2-Wasserstein
+\item decomp.error: relative error between the squared 2-Wasserstein
 distance computed by the quantile approximation and the squared
 2-Wasserstein distance computed by the decomposition approximation
 \item pval.adj: adjusted p-value of the semi-parametric 2-Wasserstein
@@ -100,7 +100,7 @@ approximation
 \item perc.shape: fraction (in %) of the shape part with respect to the
 overall squared 2-Wasserstein distance obtained by the decomposition
 approximation
-\item decomp.error: absolute difference between the squared 2-Wasserstein
+\item decomp.error: relative error between the squared 2-Wasserstein
 distance computed by the quantile approximation and the squared 
 2-Wasserstein distance computed by the decomposition approximation
 \item p.zero: p-value of the test for differential proportions of zero

@@ -55,7 +55,7 @@
 #'\item perc.shape: fraction (in %) of the shape part with respect to the
 #' overall squared 2-Wasserstein distance obtained by the decomposition
 #' approximation
-#'\item decomp.error: absolute difference between the squared 2-Wasserstein
+#'\item decomp.error: relative error between the squared 2-Wasserstein
 #' distance computed by the quantile approximation and the squared
 #' 2-Wasserstein distance computed by the decomposition approximation
 #'}
@@ -196,7 +196,7 @@ wasserstein.test.sp<-function(x,y,permnum){
         perc.size <-round(((size / wass.comp.sq) * 100), 2)
         perc.shape <- round(((shape / wass.comp.sq) * 100), 2)
 
-        decomp.error <- abs(value.sq - wass.comp.sq)
+        decomp.error <- abs(1 - (value.sq / wass.comp.sq))
 
     } else {
         value <- NA
@@ -273,7 +273,7 @@ wasserstein.test.sp<-function(x,y,permnum){
 #'\item perc.shape: fraction (in %) of the shape part with respect to the
 #' overall squared 2-Wasserstein distance obtained by the decomposition
 #' approximation
-#'\item decomp.error: absolute difference between the squared 2-Wasserstein
+#'\item decomp.error: relative error between the squared 2-Wasserstein
 #' distance computed by the quantile approximation and the squared
 #' 2-Wasserstein distance computed by the decomposition approximation
 #'}
@@ -352,7 +352,7 @@ wasserstein.test.asy <- function(x, y){
         perc.shape <- round(((shape/wass.comp.sq)*100), 2)
 
 
-        decomp.error <- abs(value.sq - wass.comp.sq)
+        decomp.error <- abs(1 - (value.sq / wass.comp.sq))
 
 
     } else {
