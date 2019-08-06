@@ -21,18 +21,19 @@ NULL
 #' @keywords data
 empcdf.ref <- NULL
 
-#' global.empcdf.ref
+#' brownianbridge.empcdf
 #'
 #' A global reference to empcdf.ref.
 #' It is used an empirical quantile function to determine 
 #' p-values in the asymptotic wasserstein test function wasserstein.test.asy
 #'
-#' @name global.empcdf.ref
+#' @name brownianbridge.empcdf
 #' @docType data
 #' @keywords data
 #' @export
 brownianbridge.empcdf <- NULL
 
+# TODO: FTP hosting or data package!!
 #' brownianbridge.empcdf.url
 #'
 #' Url for downloading the simulated Brownian bridge distribution. 

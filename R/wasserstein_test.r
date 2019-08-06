@@ -76,6 +76,7 @@ wasserstein.test.sp<-function(x,y,permnum){
     if (length(x) !=0 & length(y) != 0){
 
         value.sq <- squared_wass_approx(x,y,p=2)
+        value <- sqrt(value.sq)
 
         # computation of an approximative p-value (permutation procedure)
         z <- c(x,y)
