@@ -14,7 +14,8 @@ Encoding: UTF-8
 Imports: 
 	Rcpp (>= 1.0.1),
 	eva (>= 0.2.5),
-	arm (>= 1.10-1),	
+	arm (>= 1.10-1),
+	BiocFileCache,
 	BiocParallel,
 	methods,
 	stats

@@ -1,13 +1,6 @@
 library("testthat")
 library("waddR")
 
-# load the reference data
-# Checking for and loading the R object empcdf.ref
-if (!exists("empcdf.ref")) {
-  load(system.file("data/empcdf_ref.RData", package="waddR"))
-}
-
-
 ##########################################################################
 ##                    WASSERSTEIN.TEST FUNCTION                         ##
 ##########################################################################
@@ -23,7 +16,8 @@ test_that("Correctness of wasserstein test", {
   set.seed(42)
   x<- rnorm(100,20,3)
   y <- rnorm(134, 30,10)
-  expect_known("value", wasserstein.test(x, y, method="ASY"),
+  output <- wasserstein.test(x, y, method="ASY")
+  expect_known("value", output,
                file="known.values/testresult_correctness_wasserstein_test_1")
 })
 

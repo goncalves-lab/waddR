@@ -5,6 +5,8 @@
 #'@importFrom arm bayesglm
 #'@importFrom eva gpdAd gpdFit pgpd
 #'@importFrom BiocParallel bplapply
+#'@importFrom BiocFileCache BiocFileCache bfcadd bfcquery bfcdownload
+#'@importFrom BiocFileCache bfcpath bfcrpath bfccount bfcneedsupdate
 NULL
 
 # Documentation of the RData objects
@@ -21,12 +23,26 @@ empcdf.ref <- NULL
 
 #' global.empcdf.ref
 #'
-#' A global reference to empcdf.ref
+#' A global reference to empcdf.ref.
+#' It is used an empirical quantile function to determine 
+#' p-values in the asymptotic wasserstein test function wasserstein.test.asy
 #'
 #' @name global.empcdf.ref
 #' @docType data
 #' @keywords data
-global.empcdf.ref <- NULL
+#' @export
+brownianbridge.empcdf <- NULL
+
+#' brownianbridge.empcdf.url
+#'
+#' Url for downloading the simulated Brownian bridge distribution. 
+#' It is used an empirical quantile function to determine 
+#' p-values in the asymptotic wasserstein test function wasserstein.test.asy
+#' 
+#' @name brownianbridge.empcdf.url
+#' @docType data
+#' @export
+brownianbridge.empcdf.url <- "ftp://0.0.0.0/data/empcdf_ref.RData"
 
 # Non-exported definition to check if non-exported functions are available.
 # This will cause tests for these functions (causing issues on build systems)

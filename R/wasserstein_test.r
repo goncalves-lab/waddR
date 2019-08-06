@@ -76,7 +76,7 @@ wasserstein.test.sp<-function(x,y,permnum){
     if (length(x) !=0 & length(y) != 0){
 
         value <- squared_wass_approx(x,y,p=2)
-        value.sq <- value^2
+        value.sq <- squared_wass_approx(x,y,p=2)
 
 
         # computation of an approximative p-value (permutation procedure)
@@ -294,10 +294,14 @@ wasserstein.test.asy <- function(x, y){
 
     if (length(x) != 0 & length(y) != 0) {
 
-        # Checking for and loading the R objects value.integral and empcdf.ref
-        if (is.null(global.empcdf.ref)) {
-            load(system.file("data/empcdf_ref.RData", package="waddR"))
-            global.empcdf.ref <- empcdf.ref
+        # Load the reference distributions from cache
+        if (is.null(brownianbridge.empcdf)) {
+            brownianbridge.empcdf.path <- cache.getOrDownload(
+                url = brownianbridge.empcdf.url,
+                rname = "empcdf.ref")
+            load(brownianbridge.empcdf.path)
+            # make the variable empcdf.ref in local scope globally available
+            brownianbridge.empcdf <- empcdf.ref
         }
 
         value <- squared_wass_approx(x, y, p=2)
@@ -314,7 +318,7 @@ wasserstein.test.asy <- function(x, y){
                     / (length(x) + length(y))) * trf.int
 
         # p-value
-        pvalue.wass <- 1 - global.empcdf.ref(test.stat)
+        pvalue.wass <- 1 - brownianbridge.empcdf(test.stat)
 
         # decomposition of wasserstein distance
         mu.x <- mean(x)
