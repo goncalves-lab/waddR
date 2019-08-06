@@ -1,3 +1,10 @@
+Changes in 0.2.5 (2019-08-06)
++ Fixing R CMD check size error by reducing package size: Brownian bridge
+  distribution, used in the asymptotic implementation of wasserstein.test
+  now is downloaded into a local cache during the first run of
+  wasserstein.test. From there it is loaded in all subsequent runs.
++ Fixed Bug in wasserstein.test  
+
 Changes in 0.2.4 (2019-07-31)
 + Added Vignettes for wasserstein distance, wasserstein.test, and wasserstein.sc
 + Fixed examples and unparsable comments
