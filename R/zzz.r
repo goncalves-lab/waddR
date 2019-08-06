@@ -43,7 +43,9 @@ brownianbridge.empcdf <- NULL
 #' @name brownianbridge.empcdf.url
 #' @docType data
 #' @export
-brownianbridge.empcdf.url <- "ftp://0.0.0.0/data/empcdf_ref.RData"
+brownianbridge.empcdf.url <- paste0("https://github.com/goncalves-lab/",
+                                    "waddR-data/blob/master/data/",
+                                    "empcdf_ref.RData?raw=true")
 
 # Non-exported definition to check if non-exported functions are available.
 # This will cause tests for these functions (causing issues on build systems)
