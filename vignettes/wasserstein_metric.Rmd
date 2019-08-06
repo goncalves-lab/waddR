@@ -1,0 +1,102 @@
+---
+title: "Wasserstein Distance calculation"
+output: rmarkdown::html_vignette
+vignette: >
+    %\VignetteIndexEntry{wasserstein_metric}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+    collapse = TRUE,
+    comment = "#>"
+)
+```
+
+
+## Mathematical definition
+
+The Wasserstein distance (sometimes also: Wasserstein metric, earth mover
+distance [EMD], transport distance) is a metric to describe the distance
+between two continuous distributions.
+
+To compare two distributions $A$ and $B$ we make use of the $L^2$ Wasserstein
+distance $W$ in the representation
+$$W := W(F_A, F_B) 
+= \bigg( \int_0^1 \big|F^{-1}(u) - F^{-1}(u) \big|^2 du \bigg)^\frac{1}{2}$$
+with $F_A$ and $F_B$ as the cumulative distribution functions (CDFs) of A and
+B.
+
+The squared $L^2$ Wasserstein distance $d := W^2$ is of special interest to us,
+as it offers the following decomposition into location, shape, and size terms:
+$$d := d(F_A, F_B) 
+= \int_0^1 \big|F^{-1}(u) - F^{-1}(u) \big|^2 du 
+= \underbrace{\big(\mu_A - \mu_B\big)^2}_{\text{location}} 
++ \underbrace{\big(\sigma_A - \sigma_B\big)^2}_{\text{size}} 
++ \underbrace{2\sigma_A \sigma_B \big(1 - \rho^{A,B}\big)}_{\text{shape}}$$
+
+with $\mu_A, \mu_B$ the means, $\sigma_A, \sigma_B$ the standard deviations,
+and $\rho^{A,B}$ the Pearson correlation of $A$ and $B$.
+
+
+## Approximation on Discrete Distributions
+
+For discrete empirical distributions $\hat{A}$ and $\hat{B}$ we will instead
+model the distributions with the empirical CDFs $\hat{F}_A$ and $\hat{F}_B$. 
+The squared $L^2$ Wasserstein distance $d$ is the approximated as the mean
+difference between $K$ empirical equidistant quantiles $\alpha_k$ of the
+quantile functions $Q_A$ and $Q_B$ of $\hat{A}$ and $\hat{B}$.
+$$d(\hat{F}_A, \hat{F}_B) 
+\approx \frac{1}{K} \sum_{k=1}^K \big(Q_A^{\alpha_k} - Q_B^{\alpha_k} \big)
+\approx \big(\hat{\mu}_A - \hat{\mu}_B\big)^2 
++  \big(\hat{\sigma}_A - \hat{\sigma}_B\big)^2
++ 2\hat{\sigma}_A \hat{\sigma}_B \big(1 - \hat{\rho}^{A,B}\big)$$
+
+## Three Implementations
+
+
+The package `waddR` offers functions for an exact computation and the two
+approximations explained above.
+
+We will use pseudo-random normal distributed samples to show all three
+functions.
+```{r setup}
+library(waddR)
+
+set.seed(24)
+x <- rnorm(100, mean = 42, sd = 2)
+y <- rnorm(100, mean = 38, sd = 2)
+```
+
+The most exact computation is a faster reimplementation in Cpp of the
+`wasserstein1d` function from the package `transport`.
+```{r wassersein_exact}
+wasserstein_metric(x, y)
+```
+
+The other two implementations are approximation based on the formula above.
+The first one is `squared_wass_approx` and approximates the squared $L^2$
+Wasserstein distance by calculating the mean squared difference of the
+empirical equidistant quantile functions of the two input vectors.
+By default, 1000 quantiles are used.
+```{r wassersein_approx}
+squared_wass_approx(x, y)
+```
+
+The function `squared_wass_decomp` approximates the squared $L^2$ Wasserstein
+distance by calculating and adding the decomposites location, size, and shape.
+It also returns the decomposite values.
+```{r wassersein_decomp}
+squared_wass_decomp(x, y)
+```
+
+
+
+## See Also
+
+* [Two-sample test](wasserstein_test.html) based on a decomposition of the
+Wasserstein distance between two distributions to check for differences
+
+* Detect and describe 
+[differential expression in scRNAseq data](wasserstein_singlecell.html)

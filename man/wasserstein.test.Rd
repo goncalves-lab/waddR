@@ -4,33 +4,44 @@
 \alias{wasserstein.test}
 \title{wasserstein.test}
 \usage{
-wasserstein.test(x, y, seedex = 24, permnum = 10000, method)
+wasserstein.test(x, y, permnum = 10000, method)
 }
 \arguments{
-\item{x}{univariate sample (vector) representing the distribution of condition A}
+\item{x}{univariate sample (vector) representing the distribution of
+condition A}
 
-\item{y}{univariate sample (vector) representing the distribution of condition B}
+\item{y}{univariate sample (vector) representing the distribution of
+condition B}
 
-\item{seedex}{seed used for generating the permutations in a reproducible way procedure (if method=”SP” is performed); default seed is 24}
+\item{permnum}{number of permutations used in the permutation testing
+procedure (if method=”SP” is performed); default is 10000}
 
-\item{permnum}{number of permutations used in the permutation testing procedure (if method=”SP” is performed); default is 10000}
-
-\item{method}{testing procedure to be employed: “SP” for the semi-parametric permutation testing procedure with GPD approximation to estimate small p-values accurately; “ASY” for the test based on asymptotic theory}
+\item{method}{testing procedure to be employed: “SP” for the semi-parametric
+permutation testing procedure with GPD approximation to estimate small
+p-values accurately; “ASY” for the test based on asymptotic theory}
 }
 \value{
-A vector concerning the testing results (see Schefzik and Goncalves (2019) for details), see the documentations for wasserstein.test.sp and wasserstein.test.asy, respectively, for detailed descriptions.
+A vector concerning the testing results (see Schefzik and Goncalves
+(2019) for details), see the documentations for wasserstein.test.sp and
+wasserstein.test.asy, respectively, for detailed descriptions.
 }
 \description{
-Two-sample test to check for differences between two distributions (conditions) using the 2-Wasserstein distance, either using the semi-parametric permutation testing procedure with GPD approximation to estimate small p-values accurately or the test based on asymptotic theory
+Two-sample test to check for differences between two distributions
+(conditions) using the 2-Wasserstein distance, either using the
+semi-parametric permutation testing procedure with GPD approximation to
+estimate small p-values accurately or the test based on asymptotic theory
 }
 \details{
-Details concerning the two testing procedures (i.e. the permutation testing procedure with GPD approximation to estimate small p-values accurately and the test based on asymptotic theory) can be found in Schefzik and Goncalves (2019).
+Details concerning the two testing procedures (i.e. the permutation
+testing procedure with GPD approximation to estimate small p-values
+accurately and the test based on asymptotic theory) can be found in
+Schefzik and Goncalves (2019).
 }
 \examples{
 set.seed(32)
 x<-rnorm(500)
 y<-rnorm(500,2,1.5)
-wasserstein.test(x,y,24,10000,method="SP")
+wasserstein.test(x,y,10000,method="SP")
 wasserstein.test(x,y,method="asy")
 
 

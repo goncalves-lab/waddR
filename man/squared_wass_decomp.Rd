@@ -15,12 +15,33 @@ squared_wass_decomp(x, y, p = 1)
 }
 \value{
 An named Rcpp::List with the wasserstein distance between x and y,
-   decomposed into terms for size, location, and shape
+decomposed into terms for size, location, and shape
 }
 \description{
-Approximation of the squared Wasserstein distance between two vectors,
-decomposed into size, location and shape. 
-Calculation based on the mean squared difference between the equidistant 
+Approximation of the squared Wasserstein distance \eqn{d_g}{W_g} between
+two vectors decomposed into size, location and shape.
+Calculation based on the mean squared difference between the equidistant
 quantiles of the two input vectors a and b.
-As an approximation of the distribution, 1000 quantiles are computed for each vector.
+As an approximation of the distribution, 1000 quantiles are computed for
+each vector.
+}
+\examples{
+# input: one dimensional data in two conditions
+x <- rnorm(100, 42, 2)
+y <- c(rnorm(61, 20, 1), rnorm(41, 40,2))
+# output: squared Wasserstein distance decomposed into terms for location,
+# shape, size
+d.wass.decomp <- squared_wass_decomp(x,y,2)
+d.wass.decomp$location
+d.wass.decomp$size
+d.wass.decomp$shade
+
+}
+\references{
+Schefzik and Goncalves 2019
+Irpino and Verde (2015)
+}
+\seealso{
+[wasserstein_metric()], [squared_wass_approx()] for
+different implementations of the wasserstein distance
 }

@@ -1,0 +1,89 @@
+---
+title: "The Two-Sample Wasserstein Test"
+output: rmarkdown::html_vignette
+vignette: >
+    %\VignetteIndexEntry{wasserstein_test}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+    collapse = TRUE,
+    comment = "#>"
+)
+```
+
+
+## Test for Differences Between Two Distributions 
+
+The package `waddR` offers a generalized testing procedure to detect if two
+samples $A$ and $B$ (e.g. from two different conditions) are differentially
+distributed.
+We are essentially testing the null hypothesis $\mathcal{H}_0: F_A = F_B$
+against $\mathcal{H}_1: F_A \neq F_B$.
+
+
+## Showcasing the Comparison of Distributions
+
+For showcasing the capabilities of this testing procedure we will compare a
+vector of 500 elements drawn from a normal $\mathcal{N}(30,2)$ distribution
+with four different vectors of around 500 elements.
+
+The first vector we are comparing to is also $\mathcal{N}(30,2)$ distributed,
+but only 498 elements in size.
+The other three vectors differ in mean, standard deviation, and shape and
+should show up as differentially distributed.
+
+For all tests we only want to look at the p-value and the location, shape, and
+size statistics.
+```{r setup}
+library(waddR)
+
+x <- rnorm(500, 30, 2)
+same.dist1 <- rnorm(498, 30,2)
+diff.dist1 <- rnorm(503, 30, 10)
+diff.dist2 <- rnorm(511, 20, 2)
+diff.dist3 <- c(rnorm(234, 27, 2), rnorm(260, 33, 2))
+
+output.fields <- c("pval","location","shape","size")
+```
+
+Comparing the two observations drawn from the same distribution yields a rather
+high p-value thus indicating that $\mathcal{H}_0$ can not be rejected.
+
+```{r test_eq}
+wasserstein.test(x, same.dist1, method = "SP")[output.fields]
+```
+
+For the two distributions that differ in location (`diff.dist2`) and size
+(`diff.dist1`), we obtain very low p-values indicating significant differential
+distribution.
+We can confidently reject $\mathcal{H}_0$ in favor of $\mathcal{H}_1$
+
+```{r test_diff1}
+# diff.dist1 differs from x in its size (standard deviation)
+wasserstein.test(x, diff.dist1, method = "SP")[output.fields]
+
+# diff.dist2 differs from x in its location (mean)
+wasserstein.test(x, diff.dist2, method = "Sp")[output.fields]
+```
+
+For the third distribution that we designed to be differentially distributed,
+we also obtain a low enough p-value to reject  $\mathcal{H}_0$ in favor of
+$\mathcal{H}_1$ 
+
+```{r test_diff3}
+# diff.dist3 differs from x in its shape
+wasserstein.test(x, diff.dist3, method = "SP")[output.fields]
+```
+
+
+
+## See Also
+
+* Fast and accurate 
+[calculation of the  Wasserstein distance](wasserstein_metric.html)
+
+* Detect and describe 
+[differential expression in scRNAseq data](wasserstein_singlecell.html)

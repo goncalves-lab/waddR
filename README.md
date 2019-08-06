@@ -49,7 +49,7 @@ gse41265 <- readRDS("GSE41265.rds")
 gene_abd <- experiments(gse41265)[[1]]
 
 # we are interested in looking at the "Transcripts per Million" matrix
-data <- assays(gse41265_gene)[["TPM"]]
+data <- assays(gene_abd)[["TPM"]]
 
 # for faster runtime, we randomly select 100 of the 45,686 transcripts
 rand_rows <- sort(sample(dim(data)[1], 100))

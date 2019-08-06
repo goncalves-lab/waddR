@@ -2,19 +2,57 @@
 #'@importFrom Rcpp sourceCpp
 #'@importFrom methods is
 #'@importFrom stats binomial cor ecdf p.adjust pchisq quantile sd
-#'@import arm
-#'@import eva
-#'@import BiocParallel
+#'@importFrom arm bayesglm
+#'@importFrom eva gpdAd gpdFit pgpd
+#'@importFrom BiocParallel bplapply
+#'@importFrom BiocFileCache BiocFileCache bfcadd bfcquery bfcdownload
+#'@importFrom BiocFileCache bfcpath bfcrpath bfccount bfcneedsupdate
 NULL
 
-# load asymptotic reference distribution
-# contains:
-#   value.integral  : a distribution
-#   empcdf.ref      : an empirical cumulative distribution function
-#                     based on the values in value.integral
-load(system.file("data/ref_distr.dat", package="waddR"))
+# Documentation of the RData objects
+#' empcdf.ref
+#'
+#' An empirical cumulative distribution function of a simulated Brownian bridge
+#' distribution. It is used an empirical quantile function to determine 
+#' p-values in the asymptotic wasserstein test function wasserstein.test.asy
+#' 
+#' @name empcdf.ref  
+#' @docType data
+#' @keywords data
+empcdf.ref <- NULL
+
+#' brownianbridge.empcdf
+#'
+#' A global reference to empcdf.ref.
+#' It is used an empirical quantile function to determine 
+#' p-values in the asymptotic wasserstein test function wasserstein.test.asy
+#'
+#' @name brownianbridge.empcdf
+#' @docType data
+#' @keywords data
+#' @export
+brownianbridge.empcdf <- NULL
+
+# TODO: FTP hosting or data package!!
+#' brownianbridge.empcdf.url
+#'
+#' Url for downloading the simulated Brownian bridge distribution. 
+#' It is used an empirical quantile function to determine 
+#' p-values in the asymptotic wasserstein test function wasserstein.test.asy
+#' 
+#' @name brownianbridge.empcdf.url
+#' @docType data
+#' @export
+brownianbridge.empcdf.url <- paste0("https://github.com/goncalves-lab/",
+                                    "waddR-data/blob/master/data/",
+                                    "empcdf_ref.RData?raw=true")
+
+# Non-exported definition to check if non-exported functions are available.
+# This will cause tests for these functions (causing issues on build systems)
+# to be skipped.
+NONEXPORTS.AVAILABLE <- TRUE
 
 # cleanup after our cpp libraries
 .onUnload <- function (libpath) {
-  library.dynam.unload("waddR", libpath)
+    library.dynam.unload("waddR", libpath)
 }

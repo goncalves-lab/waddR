@@ -4,23 +4,29 @@
 \alias{testZeroes}
 \title{testZeroes}
 \usage{
-testZeroes(dat, condition, these = 1:nrow(dat))
+testZeroes(dat, condition, these = seq_len(nrow(dat)))
 }
 \arguments{
-\item{dat}{matrix of single-cell RNA-sequencing expression data with genes in rows and samples (cells) in columns}
+\item{dat}{matrix of single-cell RNA-sequencing expression data with genes in
+rows and samples (cells) in columns}
 
 \item{condition}{vector of condition labels}
 
-\item{these}{vector of row numbers (i.e. gene numbers) employed to test for differential proportions of zero expression; default is 1:nrow(dat)}
+\item{these}{vector of row numbers (i.e. gene numbers) employed to test for
+differential proportions of zero expression. Default is 1:nrow(dat)}
 }
 \value{
 A vector of (unadjusted) p-values
 }
 \description{
-Test for differential proportions of zero expression between two conditions for a specified set of genes
+Test for differential proportions of zero expression between two conditions
+for a specified set of genes
 }
 \details{
-Test for differential proportions of zero expression between two conditions that is not explained by the detection rate using a (Bayesian) logistic regression model. Adapted from the scDD package (Korthauer et al. 2016).
+Test for differential proportions of zero expression between two
+conditions that is not explained by the detection rate using a (Bayesian)
+logistic regression model. Adapted from the scDD package (Korthauer et al.
+2016).
 }
 \examples{
 dat<-matrix(c(rnorm(100,42,1), rnorm(102,45,3)), nrow=1)

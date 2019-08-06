@@ -16,7 +16,8 @@ The combined p-value
 Aggregates two p-values into a combined p-value according to Fisher’s method
 }
 \details{
-Aggregates two p-values into a combined p-value according to Fisher’s method.
+Aggregates two p-values into a combined p-value according to
+Fisher’s method.
 }
 \examples{
 x<-c(0.0004,2e-7)
