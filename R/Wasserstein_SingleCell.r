@@ -352,7 +352,8 @@ testWass<-function(dat, condition,permnum, inclZero=TRUE){
 #'
 #'
 #'@export
-wasserstein.sc <- function(dat,condition,permnum,method){
+wasserstein.sc <- function(dat, condition, permnum, method=c("OS", "TS")){
+    stopifnot(method %in% c("OS", "TS"))
     if(method=="OS")
         RES<-testWass(dat, condition, permnum, inclZero=TRUE)
     if(method=="TS")  
