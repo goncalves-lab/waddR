@@ -17,19 +17,20 @@ knitr::opts_chunk$set(
 
 ### Use Cases
 
-The package `waddR` comes with three sets of utilities, for distinct use cases.
-Each is described in a separate vignette:
+The package `waddR` provides with three sets of utilities, for distinct use
+cases, each described in a separate vignette:
 
 * Fast and accurate 
-[calculation of the  Wasserstein distance](wasserstein_metric.html)
+[calculation of the  2-Wasserstein distance](wasserstein_metric.html)
 
 * [Two-sample test](wasserstein_test.html) to check for differences between two
 distributions
 
-* Detect and describe 
-[differential distributions in scRNAseq data](wasserstein_singlecell.html)
+* Detect
+[differential gene expression distributions](wasserstein_singlecell.html)
+in scRNAseq data
 
 These are bundled into the same package, because they are internally dependent:
 The procedure for detecting differential distributions in single-cell data is a
-refinement of the more generalized two-sample test, which itself is based on a 
-decomposition of the Wasserstein distance between two distributions.
+refinement of the general two-sample test, which itself uses the 2-Wasserstein
+distance to compare two distributions.
