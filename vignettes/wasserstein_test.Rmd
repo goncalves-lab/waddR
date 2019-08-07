@@ -1,5 +1,5 @@
 ---
-title: "The Two-Sample Wasserstein Test"
+title: "Two Sample Testing Based on The 2-Wasserstein Distance"
 output: rmarkdown::html_vignette
 vignette: >
     %\VignetteIndexEntry{wasserstein_test}
@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 ```
 
 
-## Test for Differences Between Two Distributions 
+## Testing Procedures
 
 The package `waddR` provides two testing procedures using the 2-Wasserstein
 distance to test whether two distributions $F_A$ and $F_B$ given in the form of
