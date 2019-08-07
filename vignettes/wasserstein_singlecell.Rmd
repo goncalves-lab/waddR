@@ -16,13 +16,19 @@ knitr::opts_chunk$set(
 
 
 
-With [`waddR`](waddR.html) we present an alternative procedure to identify
-differential distributions in single-cell RNAseq data, that is capable of 
-characterizing different types of differential distribution.
-Here, we will show that we are able to distinguish differences between two 
-conditions with regard to location, shape and size.
+The [`waddR`](waddR.html) package provides an adaptation of the semi-parametric
+testing procedure based on the 2-Wasserstein distance which is specifically
+tailored to identify differential distributions in single-cell RNA-seqencing
+data. (scRNA-seq) 
 
-## Application to an Example Data Set from Conquer Database
+
+In particular, a two-stage (TS) approach has been implemented that takes account
+of the specific nature of scRNA-seq data by separately testing for differential
+proportions of zero gene expression (using a logistic regression model) and
+differences in non-zero gene expression (using the semi-parametric
+2-Wasserstein distance-based test) between two conditions.
+
+## Application to an example data set
 
 This an example on how to analyse the expression of 18 immune cell in two 
 hypothetical conditions.
