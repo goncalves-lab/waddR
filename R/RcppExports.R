@@ -350,10 +350,6 @@ cor_test_export <- function(x_, y_) {
     .Call('_waddR_cor_test_export', PACKAGE = 'waddR', x_, y_)
 }
 
-emp_equi_quantiles_test_export <- function(x_, K) {
-    .Call('_waddR_emp_equi_quantiles_test_export', PACKAGE = 'waddR', x_, K)
-}
-
 rep_weighted_test_export <- function(x_, weights_) {
     .Call('_waddR_rep_weighted_test_export', PACKAGE = 'waddR', x_, weights_)
 }
@@ -364,5 +360,9 @@ concat_test_export <- function(x_, y_) {
 
 interval_table_test_export <- function(data_, breaks_, default_freq = 0L) {
     .Call('_waddR_interval_table_test_export', PACKAGE = 'waddR', data_, breaks_, default_freq)
+}
+
+equidist_quantile_test_export <- function(x_, K, d = 0, type = 1L) {
+    .Call('_waddR_equidist_quantile_test_export', PACKAGE = 'waddR', x_, K, d, type)
 }
 

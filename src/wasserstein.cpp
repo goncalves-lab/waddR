@@ -353,60 +353,33 @@ vector<T> cumSum(const std::vector<T> & x, const int last_index=0)
 
 
 template <typename T>
-vector<T> lin_interpolated_quantiles(const vector<T> & x, const int K)
+vector<T> quantile(const vector<T> & x, const vector<double> qs, const int type=1)
 {
-	std::stringstream warning_ss;
-	warning_ss	<< "NotYetImplemented: Using a function that "
-				<< "currently produces dummy output!";
-	warning(warning_ss.str());
+	vector<T>	x_sorted(x.begin(), x.end()),
+				out(qs.size());
 
-	vector<T> FOO(x.begin(), x.end());
+	std::sort(x_sorted.begin(), x_sorted.end());
+	
+	for (int i=0; i<qs.size(); i++) {
 
-	return FOO;
+		out[i] = x_sorted[floor(x_sorted.size() * qs[i])];
+	}
+
+	return out;
 }
 
 
 template <typename T>
-vector<T> emp_equi_quantiles(const vector<T> & x_, const int & K=1000,
-	const bool USE_ECDF=false, const bool INTERPOLATE=false)
+vector<T> equidist_quantile(const vector<T> & x, const int K, const double d=0, const int type=1)
 {
-	int n = x_.size();
-	vector<T> x(n), equi_quantiles(K);
+	vector<double> 	out(K),
+					quantiles(K);
 
-	if (USE_ECDF) {
-		x = cumSum(x_);
-	} else {
-		x = vector<T>(x_.begin(), x_.end());
-		std::sort(x.begin(), x.end());
-	}
+	for (int i=0; i<K; i++) { quantiles[i] = (i + 1 - d) / K; }
 
-	if (INTERPOLATE){
-		//NOT YET IMPLEMENTED
-		equi_quantiles = lin_interpolated_quantiles(x, K);
+	out = quantile(x, quantiles, type);
 
-	} else {
-
-		double x_pos = 0.0;
-		int q_idx=0, q_num = 1, x_idx;
-		for (; q_idx < K; q_num++, q_idx++) {
-
-			x_pos = n * q_num / K ;
-			x_idx = (int) min(	max(	(double) 0.0,
-										ceil(x_pos) - 1),
-								(double) n-1);
-			
-			// check if the data index x_pos is a whole number
-			if (x_pos == (double) x_idx) {
-				equi_quantiles[q_idx] = 1/2 * (x[x_idx] + x[x_idx + 1]);
-			} else { // not a whole number 
-				// => x_idx has been rounded down to be used as an index
-				equi_quantiles[q_idx] = x[x_idx];
-			}
-		}
-
-	}
-
-	return equi_quantiles;
+	return out;
 }
 
 
@@ -638,8 +611,8 @@ Rcpp::List squared_wass_decomp(	const NumericVector & x,
 
 	int NUM_QUANTILES = 1000;
 	vector<double> 		a(x.begin(), x.end()), b(y.begin(), y.end()),
-						quantiles_a = emp_equi_quantiles(a, NUM_QUANTILES),
-						quantiles_b = emp_equi_quantiles(b, NUM_QUANTILES);
+						quantiles_a = equidist_quantile(a, NUM_QUANTILES, (double) 0.5),
+						quantiles_b = equidist_quantile(b, NUM_QUANTILES, (double) 0.5);
 
 	double 	location, shape, size, d, 
 			mean_a = mean(a), mean_b = mean(b),
@@ -697,8 +670,8 @@ double squared_wass_approx(	const NumericVector & x,
 	double				distance_approx;
 	int 				NUM_QUANTILES = 1000;
 	vector<double> 		a(x.begin(), x.end()), b(y.begin(), y.end()),
-						quantiles_a = emp_equi_quantiles(a, NUM_QUANTILES),
-						quantiles_b = emp_equi_quantiles(b, NUM_QUANTILES),
+						quantiles_a = equidist_quantile(a, NUM_QUANTILES, (double) 0.5),
+						quantiles_b = equidist_quantile(b, NUM_QUANTILES, (double) 0.5),
 						squared_quantile_diff(NUM_QUANTILES);
 
 
@@ -1038,17 +1011,6 @@ double cor_test_export(NumericVector x_, NumericVector y_)
 	return result;
 }
 
-// [[Rcpp::export]]
-NumericVector emp_equi_quantiles_test_export(NumericVector & x_, const int & K)
-{
-	const 	vector<double> 	x(x_.begin(), x_.end());
-			vector<double>	result(x.size());
-
-	result = emp_equi_quantiles(x,K);
-	
-	NumericVector output(result.begin(), result.end());
-	return output;
-}
 
 // [[Rcpp::export]]
 NumericVector rep_weighted_test_export(NumericVector & x_, NumericVector & weights_)
@@ -1088,5 +1050,35 @@ IntegerVector interval_table_test_export(	NumericVector & data_,
 	result = interval_table(x, y, default_freq);
 
 	IntegerVector output(result.begin(), result.end());
+	return output;
+}
+
+// [[Rcpp::export]]
+NumericVector equidist_quantile_test_export(	NumericVector & x_,
+												double K,
+												double d=0,
+												int type=1)
+{
+	vector<double>	x(x_.begin(), x_.end()),
+					res(K);
+
+	res = equidist_quantile(x, K, d, type);
+
+	NumericVector output(res.begin(), res.end());
+	return output;
+}
+
+
+NumericVector quantile_test_export(	NumericVector & x_,
+									NumericVector & q_,
+									int type=1)
+{
+	vector<double>	x(x_.begin(), x_.end()),
+					q(q_.begin(), q_.end()),
+					res(q_.size());
+
+	res = quantile(x, q, type);
+
+	NumericVector output(res.begin(), res.end());
 	return output;
 }

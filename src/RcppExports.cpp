@@ -223,18 +223,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// emp_equi_quantiles_test_export
-NumericVector emp_equi_quantiles_test_export(NumericVector& x_, const int& K);
-RcppExport SEXP _waddR_emp_equi_quantiles_test_export(SEXP x_SEXP, SEXP KSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector& >::type x_(x_SEXP);
-    Rcpp::traits::input_parameter< const int& >::type K(KSEXP);
-    rcpp_result_gen = Rcpp::wrap(emp_equi_quantiles_test_export(x_, K));
-    return rcpp_result_gen;
-END_RCPP
-}
 // rep_weighted_test_export
 NumericVector rep_weighted_test_export(NumericVector& x_, NumericVector& weights_);
 RcppExport SEXP _waddR_rep_weighted_test_export(SEXP x_SEXP, SEXP weights_SEXP) {
@@ -272,6 +260,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// equidist_quantile_test_export
+NumericVector equidist_quantile_test_export(NumericVector& x_, double K, double d, int type);
+RcppExport SEXP _waddR_equidist_quantile_test_export(SEXP x_SEXP, SEXP KSEXP, SEXP dSEXP, SEXP typeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector& >::type x_(x_SEXP);
+    Rcpp::traits::input_parameter< double >::type K(KSEXP);
+    Rcpp::traits::input_parameter< double >::type d(dSEXP);
+    Rcpp::traits::input_parameter< int >::type type(typeSEXP);
+    rcpp_result_gen = Rcpp::wrap(equidist_quantile_test_export(x_, K, d, type));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_waddR_permutations", (DL_FUNC) &_waddR_permutations, 2},
@@ -292,10 +294,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_waddR_sd_test_export", (DL_FUNC) &_waddR_sd_test_export, 1},
     {"_waddR_cumSum_test_export", (DL_FUNC) &_waddR_cumSum_test_export, 2},
     {"_waddR_cor_test_export", (DL_FUNC) &_waddR_cor_test_export, 2},
-    {"_waddR_emp_equi_quantiles_test_export", (DL_FUNC) &_waddR_emp_equi_quantiles_test_export, 2},
     {"_waddR_rep_weighted_test_export", (DL_FUNC) &_waddR_rep_weighted_test_export, 2},
     {"_waddR_concat_test_export", (DL_FUNC) &_waddR_concat_test_export, 2},
     {"_waddR_interval_table_test_export", (DL_FUNC) &_waddR_interval_table_test_export, 3},
+    {"_waddR_equidist_quantile_test_export", (DL_FUNC) &_waddR_equidist_quantile_test_export, 4},
     {NULL, NULL, 0}
 };
 

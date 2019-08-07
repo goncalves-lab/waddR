@@ -195,14 +195,25 @@ test_that("cor_test_export", {
                cor(c(1,34,134,13,50,5,1,2), c(2,20,55, 18, 55, 6, 2, 2)))
 })
 
-#### empirical equidistant quantiles
-test_that("emp_equi_quantiles_test_export",{
+#### empirical equidistant quantile
+test_that("equidist_quantile_test_export",{
   skip_if_not_exported()
-  expect_equal(emp_equi_quantiles_test_export(c(1:10),10),
+  expect_equal(equidist_quantile_test_export(c(1:10),10),
                c(1:10))
-  expect_equal(emp_equi_quantiles_test_export(c(1:10),5),
+  expect_equal(equidist_quantile_test_export(c(1:10),5),
                c(2,4,6,8,10))
-  expect_equal(emp_equi_quantiles_test_export(c(1:5),10),
+  expect_equal(equidist_quantile_test_export(c(1:5),10),
+               c(0,1,1,2,2,3,3,4,4,5))
+})
+
+####quantile
+test_that("quantile_test_export",{
+  skip_if_not_exported()
+  expect_equal(quantile_test_export(c(1:10),seq(1:10)/10),
+               c(1:10))
+  expect_equal(quantile_test_export(c(1:10),seq(1:5)/5),
+               c(2,4,6,8,10))
+  expect_equal(quantile_test_export(c(1:5),seq(1:10)/10),
                c(0,1,1,2,2,3,3,4,4,5))
 })
 
