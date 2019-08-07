@@ -88,9 +88,9 @@ ctrl <- rnorm(300, 6.5, sqrt(13.25))
 sam1 <- rnorm(300, 3, 1)
 sam2 <- rnorm(300, 10, 1)
 dd3 <- rep(NA, 300)
-for (n in 1:300){
-  dd3[n] <- sample(c(sam1[n], sam2[n]), 1, prob=c(0.5, 0.5))
-}
+dd3 <- sapply(seq(1:300), 
+              function(n) {
+                sample(c(sam1[n], sam2[n]), 1, prob=c(0.5, 0.5))})
 wasserstein.test(ctrl, dd3, method="SP")[spec.output]
 wasserstein.test(ctrl, dd3, method="ASY")[spec.output]
 ```
