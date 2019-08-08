@@ -1,3 +1,10 @@
+Changes in 0.2.6 (2019-08-08)
++ Fix in wasserstein_metric where a result was squared
++ Work on CPP implementations:
+	o Rework on the quantile computation in CPP that now produces more accurate approximations
+	o Removal of obsolete parameter "p" in approximation functions
++ Now using wasserstein_metric in two sample testing procedures
+
 Changes in 0.2.5 (2019-08-06)
 + Fixing R CMD check size error by reducing package size: Brownian bridge
   distribution, used in the asymptotic implementation of wasserstein.test
