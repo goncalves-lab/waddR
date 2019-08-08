@@ -75,8 +75,8 @@ wasserstein.test.sp<-function(x,y,permnum){
 
     if (length(x) !=0 & length(y) != 0){
 
-        value.sq <- wasserstein_metric(x, y, p=2)
-        value <- sqrt(value.sq)
+        value <- wasserstein_metric(x, y, p=2)
+        value.sq <- value**2
 
         # computation of an approximative p-value (permutation procedure)
         z <- c(x,y)
@@ -91,6 +91,7 @@ wasserstein.test.sp<-function(x,y,permnum){
                                     k[seq((length(x)+1):length(z))],
                                     p=2)
                         })
+        wass.val <- wass.val**2
 
         # list of possible exceedance thresholds (decreasing)
         poss.exc.num <- rev(seq(from=10, to=250, by=10))
@@ -213,7 +214,6 @@ wasserstein.test.sp<-function(x,y,permnum){
         perc.shape <- NA
         decomp.error <- NA
     }
-
 
     # create output
     output <- c(value, value.sq, wass.comp.sq, wass.comp, location, size, 
