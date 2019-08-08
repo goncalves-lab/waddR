@@ -274,6 +274,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// quantile_test_export
+NumericVector quantile_test_export(NumericVector& x_, NumericVector& q_, int type);
+RcppExport SEXP _waddR_quantile_test_export(SEXP x_SEXP, SEXP q_SEXP, SEXP typeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector& >::type x_(x_SEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type q_(q_SEXP);
+    Rcpp::traits::input_parameter< int >::type type(typeSEXP);
+    rcpp_result_gen = Rcpp::wrap(quantile_test_export(x_, q_, type));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_waddR_permutations", (DL_FUNC) &_waddR_permutations, 2},
@@ -298,6 +311,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_waddR_concat_test_export", (DL_FUNC) &_waddR_concat_test_export, 2},
     {"_waddR_interval_table_test_export", (DL_FUNC) &_waddR_interval_table_test_export, 3},
     {"_waddR_equidist_quantile_test_export", (DL_FUNC) &_waddR_equidist_quantile_test_export, 4},
+    {"_waddR_quantile_test_export", (DL_FUNC) &_waddR_quantile_test_export, 3},
     {NULL, NULL, 0}
 };
 

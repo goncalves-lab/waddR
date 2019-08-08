@@ -266,11 +266,128 @@ vector<T> abs(const vector<T> & x)
 }
 
 
+//' max
+//'
+//' @param x unsorted vector with numerals
+//' @return the maximum value in x
+template <typename T>
+vector<T> max(const vector<T> & x)
+{	
+	if (x.size() < 1) {
+		stop("max: vector x contains no elements.");
+	}
+	
+	T max_val = x[0];
+	for (const T & el : x) {
+		if (el > max_val) {
+			max_val = el;
+		}
+	}
+	return max_val;
+}
+
+
+//' min
+//'
+//' @param x unsorted vector with numerals
+//' @return the minimum value in x
+template <typename T>
+vector<T> min(const vector<T> & x)
+{
+	if (x.size() < 1) {
+		stop("min: vector x contains no elements.");
+	}
+	
+	T min_val = x[0];
+	for (const T & el : x) {
+		if (el < min_val) {
+			min_val = el;
+		}
+	}
+	return min_val;
+}
+
+
 /*=============================================
 
 			ALGORITHMS ON VECTORS
 
 ==============================================*/ 
+
+
+//' Repeat weighted
+//'
+//' Each element x[i] in the given input vector x is repeated according
+//' to the weight vector at position i
+//'
+//' @param x vector with numeric elements
+//' @param freq_table vector<int> representing the numer of repeats
+//' @return the weight-repeated NumericVector of x
+//'
+vector<double> rep_weighted(vector<double> x,
+						   vector<int> freq_table)
+{
+	// build a new vector x_weighted, that repeats every element at position i
+	// in x according to the frequency given at position i in freq_table
+	int length = sum(freq_table);
+	vector<double> x_weighted(length);
+
+	// iterate over all fields of the new weighted vector
+	vector<double>::iterator it = x_weighted.begin();
+	vector<double>::iterator it_end = x_weighted.end();
+
+	if(it != it_end) {
+
+    	// iterator over all elements in the original vector
+    	for(int i=0; i<x.size(); i++) {
+
+    		// iterator over the number of repeats assigned 
+    		// to each element in the original vector
+    		for (int n=0; n<freq_table[i]; n++) {
+    			
+    			// copy value from original vector
+    			*it = x[i];
+
+    			// increment the iterator
+    			++it;
+    		}
+    	}
+    }
+
+    return x_weighted;
+
+}
+
+
+//' vector_concatenate
+//'
+//' `concat` returns a vector that represents the concatenation of two input
+//' vectors. The elements of the second given vector are appended to a copy of
+//' the first vector.
+//'
+//' @param x vector
+//' @param y vector
+//' @return concatenation of y after x
+//'
+vector<double> concat(vector<double> & x, vector<double> & y)
+{	
+	vector<double> out(x.size() + y.size());
+	vector<double>::iterator x_it = x.begin();
+	vector<double>::iterator x_it_end = x.end();
+	vector<double>::iterator y_it = y.begin();
+	vector<double>::iterator y_it_end = y.end();
+	vector<double>::iterator out_it = out.begin();
+	vector<double>::iterator out_it_end = out.end();
+
+	for(; x_it != x_it_end; ++x_it, ++out_it){
+		*out_it = *x_it;
+	}
+	for(; y_it != y_it_end; ++y_it, ++out_it){
+		*out_it = *y_it;
+	}
+
+	return out;
+}
 
 
 //' vector_vector_correlation
@@ -353,19 +470,41 @@ vector<T> cumSum(const std::vector<T> & x, const int last_index=0)
 
 
 template <typename T>
-vector<T> quantile(const vector<T> & x, const vector<double> qs, const int type=1)
-{
-	vector<T>	x_sorted(x.begin(), x.end()),
-				out(qs.size());
+vector<T> quantile(const vector<T> & x, const vector<double> probs, const int type=1)
+{	
+	int 		n = x.size(),
+				np = probs.size();
+
+	vector<T>   x_sorted(x.begin(), x.end()),
+				qs(probs.size());
 
 	std::sort(x_sorted.begin(), x_sorted.end());
 	
-	for (int i=0; i<qs.size(); i++) {
+	T max_x = x_sorted[n-1];
 
-		out[i] = x_sorted[floor(x_sorted.size() * qs[i])];
+	// ---------- TYPE 1 QUANTILES -----------
+	vector<T> 	nppm(probs.size());
+	nppm = probs * (double) n;
+
+	// vector j is a floored copy of nppm representing provisional idices in x
+	vector<T> j(probs.size());
+	for (int i=0; i<np; i++) { j[i] = floor(nppm[i]); }
+
+	// vector h is equal to 1, where (nppm > j); 
+	// indicates where the provisional indices in j have to be adjusted
+	vector<int> h(probs.size());
+	for (int i=0; i<np; i++) { h[i] = (nppm[i] > j[i]) ? 1 : 0; }
+
+	for (int i=0; i<np; i++) {
+
+		if (h[i] == 0) {
+			qs[i] = x_sorted[max(j[i] - 1, (double) 0.0)];
+		} else {
+			qs[i] = x_sorted[j[i]];
+		}
 	}
 
-	return out;
+	return qs;
 }
 
 
@@ -380,82 +519,6 @@ vector<T> equidist_quantile(const vector<T> & x, const int K, const double d=0, 
 	out = quantile(x, quantiles, type);
 
 	return out;
-}
-
-
-//' Repeat weighted
-//'
-//' Each element x[i] in the given input vector x is repeated according
-//' to the weight vector at position i
-//'
-//' @param x vector with numeric elements
-//' @param freq_table vector<int> representing the numer of repeats
-//' @return the weight-repeated NumericVector of x
-//'
-vector<double> rep_weighted(vector<double> x,
-						   vector<int> freq_table)
-{
-	// build a new vector x_weighted, that repeats every element at position i
-	// in x according to the frequency given at position i in freq_table
-	int length = sum(freq_table);
-	vector<double> x_weighted(length);
-
-	// iterate over all fields of the new weighted vector
-	vector<double>::iterator it = x_weighted.begin();
-	vector<double>::iterator it_end = x_weighted.end();
-
-	if(it != it_end) {
-
-    	// iterator over all elements in the original vector
-    	for(int i=0; i<x.size(); i++) {
-
-    		// iterator over the number of repeats assigned 
-    		// to each element in the original vector
-    		for (int n=0; n<freq_table[i]; n++) {
-    			
-    			// copy value from original vector
-    			*it = x[i];
-
-    			// increment the iterator
-    			++it;
-    		}
-    	}
-    }
-
-    return x_weighted;
-
-}
-
-
-//' vector_concatenate
-//'
-//' `concat` returns a vector that represents the concatenation of two input
-//' vectors. The elements of the second given vector are appended to a copy of
-//' the first vector.
-//'
-//' @param x vector
-//' @param y vector
-//' @return concatenation of y after x
-//'
-vector<double> concat(vector<double> & x, vector<double> & y)
-{	
-	vector<double> out(x.size() + y.size());
-	vector<double>::iterator x_it = x.begin();
-	vector<double>::iterator x_it_end = x.end();
-	vector<double>::iterator y_it = y.begin();
-	vector<double>::iterator y_it_end = y.end();
-	vector<double>::iterator out_it = out.begin();
-	vector<double>::iterator out_it_end = out.end();
-
-	for(; x_it != x_it_end; ++x_it, ++out_it){
-		*out_it = *x_it;
-	}
-	for(; y_it != y_it_end; ++y_it, ++out_it){
-		*out_it = *y_it;
-	}
-
-	return out;
-
 }
 
 
@@ -1068,7 +1131,7 @@ NumericVector equidist_quantile_test_export(	NumericVector & x_,
 	return output;
 }
 
-
+// [[Rcpp::export]]
 NumericVector quantile_test_export(	NumericVector & x_,
 									NumericVector & q_,
 									int type=1)

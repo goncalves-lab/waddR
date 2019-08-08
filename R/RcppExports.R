@@ -96,24 +96,16 @@ NULL
 #'
 NULL
 
-#' vector_vector_correlation
+#' max
 #'
-#' @param x vector with numericals
-#' @param y vector with numericals
-#' @param mean_x optional pre-calculated mean of x
-#' @param mean_y optional pre-calculated mean of y
-#' @return pearsons correlation of the vectors x and y
-#'
+#' @param x unsorted vector with numerals
+#' @return the maximum value in x
 NULL
 
-#' vector_cumulative_sum
-#' 
-#' The cumulative sum x[i] is the sum of all previous elements in x:
-#' x[i] = x[i-1] + x[i-2] + ... + x[0]
+#' min
 #'
-#' @param x vector of numericals
-#' @return a vector containing cumulative sums of the values in x
-#'
+#' @param x unsorted vector with numerals
+#' @return the minimum value in x
 NULL
 
 #' Repeat weighted
@@ -136,6 +128,26 @@ NULL
 #' @param x vector
 #' @param y vector
 #' @return concatenation of y after x
+#'
+NULL
+
+#' vector_vector_correlation
+#'
+#' @param x vector with numericals
+#' @param y vector with numericals
+#' @param mean_x optional pre-calculated mean of x
+#' @param mean_y optional pre-calculated mean of y
+#' @return pearsons correlation of the vectors x and y
+#'
+NULL
+
+#' vector_cumulative_sum
+#' 
+#' The cumulative sum x[i] is the sum of all previous elements in x:
+#' x[i] = x[i-1] + x[i-2] + ... + x[0]
+#'
+#' @param x vector of numericals
+#' @return a vector containing cumulative sums of the values in x
 #'
 NULL
 
@@ -364,5 +376,9 @@ interval_table_test_export <- function(data_, breaks_, default_freq = 0L) {
 
 equidist_quantile_test_export <- function(x_, K, d = 0, type = 1L) {
     .Call('_waddR_equidist_quantile_test_export', PACKAGE = 'waddR', x_, K, d, type)
+}
+
+quantile_test_export <- function(x_, q_, type = 1L) {
+    .Call('_waddR_quantile_test_export', PACKAGE = 'waddR', x_, q_, type)
 }
 
