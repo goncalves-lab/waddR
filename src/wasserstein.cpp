@@ -659,10 +659,10 @@ NumericMatrix permutations(const NumericVector x, const int num_permutations)
 //' y <- c(rnorm(61, 20, 1), rnorm(41, 40,2))
 //' # output: squared Wasserstein distance decomposed into terms for location,
 //' # shape, size
-//' d.wass.decomp <- squared_wass_decomp(x,y,2)
+//' d.wass.decomp <- squared_wass_decomp(x,y)
 //' d.wass.decomp$location
 //' d.wass.decomp$size
-//' d.wass.decomp$shade
+//' d.wass.decomp$shape
 //' 
 //' @export
 //[[Rcpp::export]]
@@ -718,7 +718,7 @@ Rcpp::List squared_wass_decomp(	const NumericVector & x,
 //' y <- c(rnorm(61, 20, 1), rnorm(41, 40,2))
 //' # output: The squared Wasserstein distance approximated as described in
 //' # Schefzik and Goncalves 2019
-//' d.wass.approx <- squared_wass_approx(x,y,2)
+//' d.wass.approx <- squared_wass_approx(x,y)
 //'
 //' @export
 //[[Rcpp::export]]

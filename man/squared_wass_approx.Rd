@@ -27,7 +27,7 @@ x <- rnorm(100, 42, 2)
 y <- c(rnorm(61, 20, 1), rnorm(41, 40,2))
 # output: The squared Wasserstein distance approximated as described in
 # Schefzik and Goncalves 2019
-d.wass.approx <- squared_wass_approx(x,y,2)
+d.wass.approx <- squared_wass_approx(x,y)
 
 }
 \references{

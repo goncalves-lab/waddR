@@ -29,10 +29,10 @@ x <- rnorm(100, 42, 2)
 y <- c(rnorm(61, 20, 1), rnorm(41, 40,2))
 # output: squared Wasserstein distance decomposed into terms for location,
 # shape, size
-d.wass.decomp <- squared_wass_decomp(x,y,2)
+d.wass.decomp <- squared_wass_decomp(x,y)
 d.wass.decomp$location
 d.wass.decomp$size
-d.wass.decomp$shade
+d.wass.decomp$shape
 
 }
 \references{
