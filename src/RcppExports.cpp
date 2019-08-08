@@ -19,28 +19,26 @@ BEGIN_RCPP
 END_RCPP
 }
 // squared_wass_decomp
-Rcpp::List squared_wass_decomp(const NumericVector& x, const NumericVector& y, const double& p);
-RcppExport SEXP _waddR_squared_wass_decomp(SEXP xSEXP, SEXP ySEXP, SEXP pSEXP) {
+Rcpp::List squared_wass_decomp(const NumericVector& x, const NumericVector& y);
+RcppExport SEXP _waddR_squared_wass_decomp(SEXP xSEXP, SEXP ySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const NumericVector& >::type x(xSEXP);
     Rcpp::traits::input_parameter< const NumericVector& >::type y(ySEXP);
-    Rcpp::traits::input_parameter< const double& >::type p(pSEXP);
-    rcpp_result_gen = Rcpp::wrap(squared_wass_decomp(x, y, p));
+    rcpp_result_gen = Rcpp::wrap(squared_wass_decomp(x, y));
     return rcpp_result_gen;
 END_RCPP
 }
 // squared_wass_approx
-double squared_wass_approx(const NumericVector& x, const NumericVector& y, const double& p);
-RcppExport SEXP _waddR_squared_wass_approx(SEXP xSEXP, SEXP ySEXP, SEXP pSEXP) {
+double squared_wass_approx(const NumericVector& x, const NumericVector& y);
+RcppExport SEXP _waddR_squared_wass_approx(SEXP xSEXP, SEXP ySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const NumericVector& >::type x(xSEXP);
     Rcpp::traits::input_parameter< const NumericVector& >::type y(ySEXP);
-    Rcpp::traits::input_parameter< const double& >::type p(pSEXP);
-    rcpp_result_gen = Rcpp::wrap(squared_wass_approx(x, y, p));
+    rcpp_result_gen = Rcpp::wrap(squared_wass_approx(x, y));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -290,8 +288,8 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_waddR_permutations", (DL_FUNC) &_waddR_permutations, 2},
-    {"_waddR_squared_wass_decomp", (DL_FUNC) &_waddR_squared_wass_decomp, 3},
-    {"_waddR_squared_wass_approx", (DL_FUNC) &_waddR_squared_wass_approx, 3},
+    {"_waddR_squared_wass_decomp", (DL_FUNC) &_waddR_squared_wass_decomp, 2},
+    {"_waddR_squared_wass_approx", (DL_FUNC) &_waddR_squared_wass_approx, 2},
     {"_waddR_wasserstein_metric", (DL_FUNC) &_waddR_wasserstein_metric, 5},
     {"_waddR_add_test_export", (DL_FUNC) &_waddR_add_test_export, 2},
     {"_waddR_add_test_export_sv", (DL_FUNC) &_waddR_add_test_export_sv, 2},

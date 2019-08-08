@@ -200,7 +200,6 @@ permutations <- function(x, num_permutations) {
 #'
 #' @param x Vector representing an empirical distribution under condition A
 #' @param y Vector representing an empirical distribution under condition B
-#' @param p exponent of the wasserstine distance
 #' @return An named Rcpp::List with the wasserstein distance between x and y,
 #' decomposed into terms for size, location, and shape
 #' 
@@ -223,8 +222,8 @@ permutations <- function(x, num_permutations) {
 #' d.wass.decomp$shade
 #' 
 #' @export
-squared_wass_decomp <- function(x, y, p = 1) {
-    .Call('_waddR_squared_wass_decomp', PACKAGE = 'waddR', x, y, p)
+squared_wass_decomp <- function(x, y) {
+    .Call('_waddR_squared_wass_decomp', PACKAGE = 'waddR', x, y)
 }
 
 #' squared_wass_approx
@@ -237,7 +236,6 @@ squared_wass_decomp <- function(x, y, p = 1) {
 #'
 #' @param x Vector representing an empirical distribution under condition A
 #' @param y Vector representing an empirical distribution under condition B
-#' @param p exponent of the wasserstine distance
 #' @return The approximated squared wasserstein distance between x and y
 #'
 #' @references Schefzik and Goncalves 2019
@@ -254,8 +252,8 @@ squared_wass_decomp <- function(x, y, p = 1) {
 #' d.wass.approx <- squared_wass_approx(x,y,2)
 #'
 #' @export
-squared_wass_approx <- function(x, y, p = 1) {
-    .Call('_waddR_squared_wass_approx', PACKAGE = 'waddR', x, y, p)
+squared_wass_approx <- function(x, y) {
+    .Call('_waddR_squared_wass_approx', PACKAGE = 'waddR', x, y)
 }
 
 #' wasserstein_metric

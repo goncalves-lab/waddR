@@ -643,7 +643,6 @@ NumericMatrix permutations(const NumericVector x, const int num_permutations)
 //'
 //' @param x Vector representing an empirical distribution under condition A
 //' @param y Vector representing an empirical distribution under condition B
-//' @param p exponent of the wasserstine distance
 //' @return An named Rcpp::List with the wasserstein distance between x and y,
 //' decomposed into terms for size, location, and shape
 //' 
@@ -668,8 +667,7 @@ NumericMatrix permutations(const NumericVector x, const int num_permutations)
 //' @export
 //[[Rcpp::export]]
 Rcpp::List squared_wass_decomp(	const NumericVector & x,
-								const NumericVector & y,
-								const double & p=1)
+								const NumericVector & y)
 {
 
 	int NUM_QUANTILES = 1000;
@@ -707,7 +705,6 @@ Rcpp::List squared_wass_decomp(	const NumericVector & x,
 //'
 //' @param x Vector representing an empirical distribution under condition A
 //' @param y Vector representing an empirical distribution under condition B
-//' @param p exponent of the wasserstine distance
 //' @return The approximated squared wasserstein distance between x and y
 //'
 //' @references Schefzik and Goncalves 2019
@@ -726,8 +723,7 @@ Rcpp::List squared_wass_decomp(	const NumericVector & x,
 //' @export
 //[[Rcpp::export]]
 double squared_wass_approx(	const NumericVector & x,
-							const NumericVector & y,
-							const double & p=1)
+							const NumericVector & y)
 {
 
 	double				distance_approx;
@@ -845,49 +841,34 @@ double wasserstein_metric(NumericVector x,
 	vector<double> cub(ub.size());
 	cub = cumSum(ub);
 
-	//Rcout << "cua = "; for (double ecua : cua) { Rcout << ecua << ", "; } Rcout << END;
-	//Rcout << "cub = "; for (double ecub : cub) { Rcout << ecub << ", "; } Rcout << END;
 
 	vector<int> a_rep = interval_table(cub, cua, 0);
 	vector<int> b_rep = interval_table(cua, cub, 0);
 	a_rep = a_rep + 1;
 	b_rep = b_rep + 1;
 
-	//Rcout << "a_rep = "; for (int ea : a_rep) { Rcout << ea << ", "; } Rcout << END;
-	//Rcout << "b_rep = "; for (int eb : b_rep) { Rcout << eb << ", "; } Rcout << END;
-
 	int len_a_weighted = sum(a_rep);
 	int len_b_weighted = sum(b_rep);
-	//Rcout << "len_b_weighted = " << sum(b_rep) << END;
-	//Rcout << "len_a_weighted = " << sum(a_rep) << END;
 
 	vector<double> a_weighted(len_b_weighted);
 	vector<double> b_weighted(len_a_weighted);
 	a_weighted = rep_weighted(a, a_rep);
 	b_weighted = rep_weighted(b, b_rep);
 
-	///Rcout << "aa = "; for (double eaa : a_weighted) { Rcout << eaa << ", "; } Rcout << END;
-	//Rcout << "bb = "; for (double ebb : b_weighted) { Rcout << ebb << ", "; } Rcout << END;
 
 	vector<double> uu(cua.size() + cub.size());
 	vector<double> uu0(cua.size() + cub.size()+1);
 	vector<double> uu1(cua.size() + cub.size()+1);
 	vector<double> ONE{(double) 1.0};
 	vector<double> ZERO{(double) 0.0};
-	//Rcout << "AFTER INITIALIZATION: uu1.size() = " << uu1.size() << ", uu0.size() = " << uu0.size() <<END;
 
 	uu = concat(cua, cub);
 	std::sort(uu.begin(), uu.end());
 	uu0 = concat(ZERO, uu);
 	uu1 = concat(uu, ONE);
-	//Rcout << "uu0 = "; for (double euu0 : uu0) { Rcout << euu0 << ", "; } Rcout << END;
-	//Rcout << "uu1 = "; for (double euu1 : uu1) { Rcout << euu1 << ", "; } Rcout << END;
 
 	double wsum = 0.0;
 	double areap = 0.0;
-
-	//Rcout << "AFTER CONCATENATING SOMETHING: uu1.size() = " << uu1.size() << ", uu0.size() = " << uu0.size() <<END;
-	//Rcout << "b_weighted.size() = " << b_weighted.size() << ", a_weighted.size() = " << a_weighted.size() <<END;
 
 	wsum = sum((uu1 - uu0) * pow(abs(b_weighted - a_weighted), p));
 	areap = pow(wsum, (double) (1/p));

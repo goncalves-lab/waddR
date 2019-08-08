@@ -78,17 +78,14 @@ test_that("squared_wass_approx correctness", {
   
   a <- c(13, 21, 34, 23)
   b <- c(1,  1,  1,  2.3)
-  p <- 2
   # case with equally long vectors a and b
-  expect_known("value", squared_wass_approx(a,b,p),
+  expect_known("value", squared_wass_approx(a,b),
                file="known.values/testresult_squared_wass_approx_correctness1")
-  expect_known("value", squared_wass_approx(a,b,1),
-               file="known.values/testresult_squared_wass_approx_correctness2")
   set.seed(42)
   a2 <- rnorm(100, 10, 1)
   set.seed(24)
   b2 <- rnorm(102, 10.5, 1)
-  expect_known("value", squared_wass_approx(a2,b2,p),
+  expect_known("value", squared_wass_approx(a2,b2),
                file="known.values/testresult_squared_wass_approx_correctness3")
 })
 
@@ -101,9 +98,8 @@ test_that("squared_wass_approx correctness", {
 test_that("squared_wass_decomp correctness", {
   a <- c(13, 21, 34, 23)
   b <- c(1,  1,  1,  2.3)
-  p <- 2
   # case with equally long vectors a and b
-  expect_known("value", squared_wass_approx(a,b,p),
+  expect_known("value", squared_wass_approx(a,b),
                file="known.values/testresult_squared_wass_decomp_correctness1")
 })
 
