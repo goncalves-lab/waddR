@@ -75,7 +75,7 @@ wasserstein.test.sp<-function(x,y,permnum){
 
     if (length(x) !=0 & length(y) != 0){
 
-        value.sq <- squared_wass_approx(x,y)
+        value.sq <- wasserstein_metric(x, y, p=2)
         value <- sqrt(value.sq)
 
         # computation of an approximative p-value (permutation procedure)
@@ -86,9 +86,10 @@ wasserstein.test.sp<-function(x,y,permnum){
         shuffle <- permutations(z, num_permutations=bsn)
         wass.val <- apply(shuffle, 2, 
                             function (k) {
-                                squared_wass_approx(
+                                wasserstein_metric(
                                     k[seq_len(length(x))],
-                                    k[seq((length(x)+1):length(z))])
+                                    k[seq((length(x)+1):length(z))],
+                                    p=2)
                         })
 
         # list of possible exceedance thresholds (decreasing)
@@ -302,7 +303,7 @@ wasserstein.test.asy <- function(x, y){
             brownianbridge.empcdf <- empcdf.ref
         }
 
-        value <- squared_wass_approx(x, y)
+        value <- wasserstein_metric(x, y, p=2)
         value.sq <- value **2 
 
         # compute p-value based on asymptotoc theory (brownian bridge)
