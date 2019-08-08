@@ -44,7 +44,8 @@ tryCatch({
   rep_weighted_test_export <- dummy
   concat_test_export <- dummy
   cor_test_export <- dummy
-  emp_equi_quantiles_test_export <- dummy
+  equidist_quantile_test_export <- dummy
+  quantile_test_export <- dummy
 
 }, finally = {
 

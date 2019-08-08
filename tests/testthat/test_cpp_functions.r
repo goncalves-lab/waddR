@@ -195,14 +195,27 @@ test_that("cor_test_export", {
                cor(c(1,34,134,13,50,5,1,2), c(2,20,55, 18, 55, 6, 2, 2)))
 })
 
-#### empirical equidistant quantiles
-test_that("emp_equi_quantiles_test_export",{
+#### empirical equidistant quantile
+test_that("equidist_quantile_test_export",{
   skip_if_not_exported()
-  expect_equal(emp_equi_quantiles_test_export(c(1:10),10),
-               c(1:10))
-  expect_equal(emp_equi_quantiles_test_export(c(1:10),5),
-               c(2,4,6,8,10))
-  expect_equal(emp_equi_quantiles_test_export(c(1:5),10),
-               c(0,1,1,2,2,3,3,4,4,5))
+  probs = (seq(1:10)) / 10
+  probs2 = (seq(1:5)) / 5
+  expect_true(all(equidist_quantile_test_export(c(1:10), 10) ==
+                  quantile(seq(1:10), probs=probs, type=1)))
+  expect_true(all(equidist_quantile_test_export(c(1:10), 5) ==
+                  quantile(c(1:10), probs=probs2, type=1)))
+  expect_true(all(equidist_quantile_test_export(c(1:5), 5) ==
+                  quantile(c(1:5), probs=probs2, type=1)))
+})
+
+####quantile
+test_that("quantile_test_export",{
+  skip_if_not_exported()
+  expect_true(all(quantile_test_export(c(1:10),seq(1:10)/10) ==
+                  quantile(c(1:10), probs=seq(1:10)/10, type=1)))
+  expect_true(all(quantile_test_export(c(1:10),seq(1:5)/5) ==
+                  quantile(c(1:10), probs=seq(1:5)/5, type=1)))
+  expect_true(all(quantile_test_export(c(1:5), seq(1:10)/10) ==
+                  quantile(c(1:5), probs=seq(1:10)/10, type=1)))
 })
 

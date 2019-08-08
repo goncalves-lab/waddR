@@ -4,14 +4,12 @@
 \alias{squared_wass_decomp}
 \title{squared_wass_decomp}
 \usage{
-squared_wass_decomp(x, y, p = 1)
+squared_wass_decomp(x, y)
 }
 \arguments{
 \item{x}{Vector representing an empirical distribution under condition A}
 
 \item{y}{Vector representing an empirical distribution under condition B}
-
-\item{p}{exponent of the wasserstine distance}
 }
 \value{
 An named Rcpp::List with the wasserstein distance between x and y,
@@ -31,10 +29,10 @@ x <- rnorm(100, 42, 2)
 y <- c(rnorm(61, 20, 1), rnorm(41, 40,2))
 # output: squared Wasserstein distance decomposed into terms for location,
 # shape, size
-d.wass.decomp <- squared_wass_decomp(x,y,2)
+d.wass.decomp <- squared_wass_decomp(x,y)
 d.wass.decomp$location
 d.wass.decomp$size
-d.wass.decomp$shade
+d.wass.decomp$shape
 
 }
 \references{

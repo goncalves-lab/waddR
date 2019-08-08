@@ -4,14 +4,12 @@
 \alias{squared_wass_approx}
 \title{squared_wass_approx}
 \usage{
-squared_wass_approx(x, y, p = 1)
+squared_wass_approx(x, y)
 }
 \arguments{
 \item{x}{Vector representing an empirical distribution under condition A}
 
 \item{y}{Vector representing an empirical distribution under condition B}
-
-\item{p}{exponent of the wasserstine distance}
 }
 \value{
 The approximated squared wasserstein distance between x and y
@@ -29,7 +27,7 @@ x <- rnorm(100, 42, 2)
 y <- c(rnorm(61, 20, 1), rnorm(41, 40,2))
 # output: The squared Wasserstein distance approximated as described in
 # Schefzik and Goncalves 2019
-d.wass.approx <- squared_wass_approx(x,y,2)
+d.wass.approx <- squared_wass_approx(x,y)
 
 }
 \references{
