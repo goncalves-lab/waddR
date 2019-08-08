@@ -266,11 +266,128 @@ vector<T> abs(const vector<T> & x)
 }
 
 
+//' max
+//'
+//' @param x unsorted vector with numerals
+//' @return the maximum value in x
+template <typename T>
+vector<T> max(const vector<T> & x)
+{	
+	if (x.size() < 1) {
+		stop("max: vector x contains no elements.");
+	}
+	
+	T max_val = x[0];
+	for (const T & el : x) {
+		if (el > max_val) {
+			max_val = el;
+		}
+	}
+	return max_val;
+}
+
+
+//' min
+//'
+//' @param x unsorted vector with numerals
+//' @return the minimum value in x
+template <typename T>
+vector<T> min(const vector<T> & x)
+{
+	if (x.size() < 1) {
+		stop("min: vector x contains no elements.");
+	}
+	
+	T min_val = x[0];
+	for (const T & el : x) {
+		if (el < min_val) {
+			min_val = el;
+		}
+	}
+	return min_val;
+}
+
+
 /*=============================================
 
 			ALGORITHMS ON VECTORS
 
 ==============================================*/ 
+
+
+//' Repeat weighted
+//'
+//' Each element x[i] in the given input vector x is repeated according
+//' to the weight vector at position i
+//'
+//' @param x vector with numeric elements
+//' @param freq_table vector<int> representing the numer of repeats
+//' @return the weight-repeated NumericVector of x
+//'
+vector<double> rep_weighted(vector<double> x,
+						   vector<int> freq_table)
+{
+	// build a new vector x_weighted, that repeats every element at position i
+	// in x according to the frequency given at position i in freq_table
+	int length = sum(freq_table);
+	vector<double> x_weighted(length);
+
+	// iterate over all fields of the new weighted vector
+	vector<double>::iterator it = x_weighted.begin();
+	vector<double>::iterator it_end = x_weighted.end();
+
+	if(it != it_end) {
+
+    	// iterator over all elements in the original vector
+    	for(int i=0; i<x.size(); i++) {
+
+    		// iterator over the number of repeats assigned 
+    		// to each element in the original vector
+    		for (int n=0; n<freq_table[i]; n++) {
+    			
+    			// copy value from original vector
+    			*it = x[i];
+
+    			// increment the iterator
+    			++it;
+    		}
+    	}
+    }
+
+    return x_weighted;
+
+}
+
+
+//' vector_concatenate
+//'
+//' `concat` returns a vector that represents the concatenation of two input
+//' vectors. The elements of the second given vector are appended to a copy of
+//' the first vector.
+//'
+//' @param x vector
+//' @param y vector
+//' @return concatenation of y after x
+//'
+vector<double> concat(vector<double> & x, vector<double> & y)
+{	
+	vector<double> out(x.size() + y.size());
+	vector<double>::iterator x_it = x.begin();
+	vector<double>::iterator x_it_end = x.end();
+	vector<double>::iterator y_it = y.begin();
+	vector<double>::iterator y_it_end = y.end();
+	vector<double>::iterator out_it = out.begin();
+	vector<double>::iterator out_it_end = out.end();
+
+	for(; x_it != x_it_end; ++x_it, ++out_it){
+		*out_it = *x_it;
+	}
+	for(; y_it != y_it_end; ++y_it, ++out_it){
+		*out_it = *y_it;
+	}
+
+	return out;
+}
 
 
 //' vector_vector_correlation
@@ -353,136 +470,55 @@ vector<T> cumSum(const std::vector<T> & x, const int last_index=0)
 
 
 template <typename T>
-vector<T> lin_interpolated_quantiles(const vector<T> & x, const int K)
-{
-	std::stringstream warning_ss;
-	warning_ss	<< "NotYetImplemented: Using a function that "
-				<< "currently produces dummy output!";
-	warning(warning_ss.str());
+vector<T> quantile(const vector<T> & x, const vector<double> probs, const int type=1)
+{	
+	int 		n = x.size(),
+				np = probs.size();
 
-	vector<T> FOO(x.begin(), x.end());
+	vector<T>   x_sorted(x.begin(), x.end()),
+				qs(probs.size());
 
-	return FOO;
+	std::sort(x_sorted.begin(), x_sorted.end());
+	
+	T max_x = x_sorted[n-1];
+
+	// ---------- TYPE 1 QUANTILES -----------
+	vector<T> 	nppm(probs.size());
+	nppm = probs * (double) n;
+
+	// vector j is a floored copy of nppm representing provisional idices in x
+	vector<T> j(probs.size());
+	for (int i=0; i<np; i++) { j[i] = floor(nppm[i]); }
+
+	// vector h is equal to 1, where (nppm > j); 
+	// indicates where the provisional indices in j have to be adjusted
+	vector<int> h(probs.size());
+	for (int i=0; i<np; i++) { h[i] = (nppm[i] > j[i]) ? 1 : 0; }
+
+	for (int i=0; i<np; i++) {
+
+		if (h[i] == 0) {
+			qs[i] = x_sorted[max(j[i] - 1, (double) 0.0)];
+		} else {
+			qs[i] = x_sorted[j[i]];
+		}
+	}
+
+	return qs;
 }
 
 
 template <typename T>
-vector<T> emp_equi_quantiles(const vector<T> & x_, const int & K=1000,
-	const bool USE_ECDF=false, const bool INTERPOLATE=false)
+vector<T> equidist_quantile(const vector<T> & x, const int K, const double d=0, const int type=1)
 {
-	int n = x_.size();
-	vector<T> x(n), equi_quantiles(K);
+	vector<double> 	out(K),
+					quantiles(K);
 
-	if (USE_ECDF) {
-		x = cumSum(x_);
-	} else {
-		x = vector<T>(x_.begin(), x_.end());
-		std::sort(x.begin(), x.end());
-	}
+	for (int i=0; i<K; i++) { quantiles[i] = (i + 1 - d) / K; }
 
-	if (INTERPOLATE){
-		//NOT YET IMPLEMENTED
-		equi_quantiles = lin_interpolated_quantiles(x, K);
-
-	} else {
-
-		double x_pos = 0.0;
-		int q_idx=0, q_num = 1, x_idx;
-		for (; q_idx < K; q_num++, q_idx++) {
-
-			x_pos = n * q_num / K ;
-			x_idx = (int) min(	max(	(double) 0.0,
-										ceil(x_pos) - 1),
-								(double) n-1);
-			
-			// check if the data index x_pos is a whole number
-			if (x_pos == (double) x_idx) {
-				equi_quantiles[q_idx] = 1/2 * (x[x_idx] + x[x_idx + 1]);
-			} else { // not a whole number 
-				// => x_idx has been rounded down to be used as an index
-				equi_quantiles[q_idx] = x[x_idx];
-			}
-		}
-
-	}
-
-	return equi_quantiles;
-}
-
-
-//' Repeat weighted
-//'
-//' Each element x[i] in the given input vector x is repeated according
-//' to the weight vector at position i
-//'
-//' @param x vector with numeric elements
-//' @param freq_table vector<int> representing the numer of repeats
-//' @return the weight-repeated NumericVector of x
-//'
-vector<double> rep_weighted(vector<double> x,
-						   vector<int> freq_table)
-{
-	// build a new vector x_weighted, that repeats every element at position i
-	// in x according to the frequency given at position i in freq_table
-	int length = sum(freq_table);
-	vector<double> x_weighted(length);
-
-	// iterate over all fields of the new weighted vector
-	vector<double>::iterator it = x_weighted.begin();
-	vector<double>::iterator it_end = x_weighted.end();
-
-	if(it != it_end) {
-
-    	// iterator over all elements in the original vector
-    	for(int i=0; i<x.size(); i++) {
-
-    		// iterator over the number of repeats assigned 
-    		// to each element in the original vector
-    		for (int n=0; n<freq_table[i]; n++) {
-    			
-    			// copy value from original vector
-    			*it = x[i];
-
-    			// increment the iterator
-    			++it;
-    		}
-    	}
-    }
-
-    return x_weighted;
-
-}
-
-
-//' vector_concatenate
-//'
-//' `concat` returns a vector that represents the concatenation of two input
-//' vectors. The elements of the second given vector are appended to a copy of
-//' the first vector.
-//'
-//' @param x vector
-//' @param y vector
-//' @return concatenation of y after x
-//'
-vector<double> concat(vector<double> & x, vector<double> & y)
-{	
-	vector<double> out(x.size() + y.size());
-	vector<double>::iterator x_it = x.begin();
-	vector<double>::iterator x_it_end = x.end();
-	vector<double>::iterator y_it = y.begin();
-	vector<double>::iterator y_it_end = y.end();
-	vector<double>::iterator out_it = out.begin();
-	vector<double>::iterator out_it_end = out.end();
-
-	for(; x_it != x_it_end; ++x_it, ++out_it){
-		*out_it = *x_it;
-	}
-	for(; y_it != y_it_end; ++y_it, ++out_it){
-		*out_it = *y_it;
-	}
+	out = quantile(x, quantiles, type);
 
 	return out;
-
 }
 
 
@@ -607,7 +643,6 @@ NumericMatrix permutations(const NumericVector x, const int num_permutations)
 //'
 //' @param x Vector representing an empirical distribution under condition A
 //' @param y Vector representing an empirical distribution under condition B
-//' @param p exponent of the wasserstine distance
 //' @return An named Rcpp::List with the wasserstein distance between x and y,
 //' decomposed into terms for size, location, and shape
 //' 
@@ -624,22 +659,21 @@ NumericMatrix permutations(const NumericVector x, const int num_permutations)
 //' y <- c(rnorm(61, 20, 1), rnorm(41, 40,2))
 //' # output: squared Wasserstein distance decomposed into terms for location,
 //' # shape, size
-//' d.wass.decomp <- squared_wass_decomp(x,y,2)
+//' d.wass.decomp <- squared_wass_decomp(x,y)
 //' d.wass.decomp$location
 //' d.wass.decomp$size
-//' d.wass.decomp$shade
+//' d.wass.decomp$shape
 //' 
 //' @export
 //[[Rcpp::export]]
 Rcpp::List squared_wass_decomp(	const NumericVector & x,
-								const NumericVector & y,
-								const double & p=1)
+								const NumericVector & y)
 {
 
 	int NUM_QUANTILES = 1000;
 	vector<double> 		a(x.begin(), x.end()), b(y.begin(), y.end()),
-						quantiles_a = emp_equi_quantiles(a, NUM_QUANTILES),
-						quantiles_b = emp_equi_quantiles(b, NUM_QUANTILES);
+						quantiles_a = equidist_quantile(a, NUM_QUANTILES, (double) 0.5),
+						quantiles_b = equidist_quantile(b, NUM_QUANTILES, (double) 0.5);
 
 	double 	location, shape, size, d, 
 			mean_a = mean(a), mean_b = mean(b),
@@ -671,7 +705,6 @@ Rcpp::List squared_wass_decomp(	const NumericVector & x,
 //'
 //' @param x Vector representing an empirical distribution under condition A
 //' @param y Vector representing an empirical distribution under condition B
-//' @param p exponent of the wasserstine distance
 //' @return The approximated squared wasserstein distance between x and y
 //'
 //' @references Schefzik and Goncalves 2019
@@ -685,20 +718,19 @@ Rcpp::List squared_wass_decomp(	const NumericVector & x,
 //' y <- c(rnorm(61, 20, 1), rnorm(41, 40,2))
 //' # output: The squared Wasserstein distance approximated as described in
 //' # Schefzik and Goncalves 2019
-//' d.wass.approx <- squared_wass_approx(x,y,2)
+//' d.wass.approx <- squared_wass_approx(x,y)
 //'
 //' @export
 //[[Rcpp::export]]
 double squared_wass_approx(	const NumericVector & x,
-							const NumericVector & y,
-							const double & p=1)
+							const NumericVector & y)
 {
 
 	double				distance_approx;
 	int 				NUM_QUANTILES = 1000;
 	vector<double> 		a(x.begin(), x.end()), b(y.begin(), y.end()),
-						quantiles_a = emp_equi_quantiles(a, NUM_QUANTILES),
-						quantiles_b = emp_equi_quantiles(b, NUM_QUANTILES),
+						quantiles_a = equidist_quantile(a, NUM_QUANTILES, (double) 0.5),
+						quantiles_b = equidist_quantile(b, NUM_QUANTILES, (double) 0.5),
 						squared_quantile_diff(NUM_QUANTILES);
 
 
@@ -809,49 +841,34 @@ double wasserstein_metric(NumericVector x,
 	vector<double> cub(ub.size());
 	cub = cumSum(ub);
 
-	//Rcout << "cua = "; for (double ecua : cua) { Rcout << ecua << ", "; } Rcout << END;
-	//Rcout << "cub = "; for (double ecub : cub) { Rcout << ecub << ", "; } Rcout << END;
 
 	vector<int> a_rep = interval_table(cub, cua, 0);
 	vector<int> b_rep = interval_table(cua, cub, 0);
 	a_rep = a_rep + 1;
 	b_rep = b_rep + 1;
 
-	//Rcout << "a_rep = "; for (int ea : a_rep) { Rcout << ea << ", "; } Rcout << END;
-	//Rcout << "b_rep = "; for (int eb : b_rep) { Rcout << eb << ", "; } Rcout << END;
-
 	int len_a_weighted = sum(a_rep);
 	int len_b_weighted = sum(b_rep);
-	//Rcout << "len_b_weighted = " << sum(b_rep) << END;
-	//Rcout << "len_a_weighted = " << sum(a_rep) << END;
 
 	vector<double> a_weighted(len_b_weighted);
 	vector<double> b_weighted(len_a_weighted);
 	a_weighted = rep_weighted(a, a_rep);
 	b_weighted = rep_weighted(b, b_rep);
 
-	///Rcout << "aa = "; for (double eaa : a_weighted) { Rcout << eaa << ", "; } Rcout << END;
-	//Rcout << "bb = "; for (double ebb : b_weighted) { Rcout << ebb << ", "; } Rcout << END;
 
 	vector<double> uu(cua.size() + cub.size());
 	vector<double> uu0(cua.size() + cub.size()+1);
 	vector<double> uu1(cua.size() + cub.size()+1);
 	vector<double> ONE{(double) 1.0};
 	vector<double> ZERO{(double) 0.0};
-	//Rcout << "AFTER INITIALIZATION: uu1.size() = " << uu1.size() << ", uu0.size() = " << uu0.size() <<END;
 
 	uu = concat(cua, cub);
 	std::sort(uu.begin(), uu.end());
 	uu0 = concat(ZERO, uu);
 	uu1 = concat(uu, ONE);
-	//Rcout << "uu0 = "; for (double euu0 : uu0) { Rcout << euu0 << ", "; } Rcout << END;
-	//Rcout << "uu1 = "; for (double euu1 : uu1) { Rcout << euu1 << ", "; } Rcout << END;
 
 	double wsum = 0.0;
 	double areap = 0.0;
-
-	//Rcout << "AFTER CONCATENATING SOMETHING: uu1.size() = " << uu1.size() << ", uu0.size() = " << uu0.size() <<END;
-	//Rcout << "b_weighted.size() = " << b_weighted.size() << ", a_weighted.size() = " << a_weighted.size() <<END;
 
 	wsum = sum((uu1 - uu0) * pow(abs(b_weighted - a_weighted), p));
 	areap = pow(wsum, (double) (1/p));
@@ -1038,17 +1055,6 @@ double cor_test_export(NumericVector x_, NumericVector y_)
 	return result;
 }
 
-// [[Rcpp::export]]
-NumericVector emp_equi_quantiles_test_export(NumericVector & x_, const int & K)
-{
-	const 	vector<double> 	x(x_.begin(), x_.end());
-			vector<double>	result(x.size());
-
-	result = emp_equi_quantiles(x,K);
-	
-	NumericVector output(result.begin(), result.end());
-	return output;
-}
 
 // [[Rcpp::export]]
 NumericVector rep_weighted_test_export(NumericVector & x_, NumericVector & weights_)
@@ -1088,5 +1094,35 @@ IntegerVector interval_table_test_export(	NumericVector & data_,
 	result = interval_table(x, y, default_freq);
 
 	IntegerVector output(result.begin(), result.end());
+	return output;
+}
+
+// [[Rcpp::export]]
+NumericVector equidist_quantile_test_export(	NumericVector & x_,
+												double K,
+												double d=0,
+												int type=1)
+{
+	vector<double>	x(x_.begin(), x_.end()),
+					res(K);
+
+	res = equidist_quantile(x, K, d, type);
+
+	NumericVector output(res.begin(), res.end());
+	return output;
+}
+
+// [[Rcpp::export]]
+NumericVector quantile_test_export(	NumericVector & x_,
+									NumericVector & q_,
+									int type=1)
+{
+	vector<double>	x(x_.begin(), x_.end()),
+					q(q_.begin(), q_.end()),
+					res(q_.size());
+
+	res = quantile(x, q, type);
+
+	NumericVector output(res.begin(), res.end());
 	return output;
 }

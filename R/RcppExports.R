@@ -96,24 +96,16 @@ NULL
 #'
 NULL
 
-#' vector_vector_correlation
+#' max
 #'
-#' @param x vector with numericals
-#' @param y vector with numericals
-#' @param mean_x optional pre-calculated mean of x
-#' @param mean_y optional pre-calculated mean of y
-#' @return pearsons correlation of the vectors x and y
-#'
+#' @param x unsorted vector with numerals
+#' @return the maximum value in x
 NULL
 
-#' vector_cumulative_sum
-#' 
-#' The cumulative sum x[i] is the sum of all previous elements in x:
-#' x[i] = x[i-1] + x[i-2] + ... + x[0]
+#' min
 #'
-#' @param x vector of numericals
-#' @return a vector containing cumulative sums of the values in x
-#'
+#' @param x unsorted vector with numerals
+#' @return the minimum value in x
 NULL
 
 #' Repeat weighted
@@ -136,6 +128,26 @@ NULL
 #' @param x vector
 #' @param y vector
 #' @return concatenation of y after x
+#'
+NULL
+
+#' vector_vector_correlation
+#'
+#' @param x vector with numericals
+#' @param y vector with numericals
+#' @param mean_x optional pre-calculated mean of x
+#' @param mean_y optional pre-calculated mean of y
+#' @return pearsons correlation of the vectors x and y
+#'
+NULL
+
+#' vector_cumulative_sum
+#' 
+#' The cumulative sum x[i] is the sum of all previous elements in x:
+#' x[i] = x[i-1] + x[i-2] + ... + x[0]
+#'
+#' @param x vector of numericals
+#' @return a vector containing cumulative sums of the values in x
 #'
 NULL
 
@@ -188,7 +200,6 @@ permutations <- function(x, num_permutations) {
 #'
 #' @param x Vector representing an empirical distribution under condition A
 #' @param y Vector representing an empirical distribution under condition B
-#' @param p exponent of the wasserstine distance
 #' @return An named Rcpp::List with the wasserstein distance between x and y,
 #' decomposed into terms for size, location, and shape
 #' 
@@ -205,14 +216,14 @@ permutations <- function(x, num_permutations) {
 #' y <- c(rnorm(61, 20, 1), rnorm(41, 40,2))
 #' # output: squared Wasserstein distance decomposed into terms for location,
 #' # shape, size
-#' d.wass.decomp <- squared_wass_decomp(x,y,2)
+#' d.wass.decomp <- squared_wass_decomp(x,y)
 #' d.wass.decomp$location
 #' d.wass.decomp$size
-#' d.wass.decomp$shade
+#' d.wass.decomp$shape
 #' 
 #' @export
-squared_wass_decomp <- function(x, y, p = 1) {
-    .Call('_waddR_squared_wass_decomp', PACKAGE = 'waddR', x, y, p)
+squared_wass_decomp <- function(x, y) {
+    .Call('_waddR_squared_wass_decomp', PACKAGE = 'waddR', x, y)
 }
 
 #' squared_wass_approx
@@ -225,7 +236,6 @@ squared_wass_decomp <- function(x, y, p = 1) {
 #'
 #' @param x Vector representing an empirical distribution under condition A
 #' @param y Vector representing an empirical distribution under condition B
-#' @param p exponent of the wasserstine distance
 #' @return The approximated squared wasserstein distance between x and y
 #'
 #' @references Schefzik and Goncalves 2019
@@ -239,11 +249,11 @@ squared_wass_decomp <- function(x, y, p = 1) {
 #' y <- c(rnorm(61, 20, 1), rnorm(41, 40,2))
 #' # output: The squared Wasserstein distance approximated as described in
 #' # Schefzik and Goncalves 2019
-#' d.wass.approx <- squared_wass_approx(x,y,2)
+#' d.wass.approx <- squared_wass_approx(x,y)
 #'
 #' @export
-squared_wass_approx <- function(x, y, p = 1) {
-    .Call('_waddR_squared_wass_approx', PACKAGE = 'waddR', x, y, p)
+squared_wass_approx <- function(x, y) {
+    .Call('_waddR_squared_wass_approx', PACKAGE = 'waddR', x, y)
 }
 
 #' wasserstein_metric
@@ -350,10 +360,6 @@ cor_test_export <- function(x_, y_) {
     .Call('_waddR_cor_test_export', PACKAGE = 'waddR', x_, y_)
 }
 
-emp_equi_quantiles_test_export <- function(x_, K) {
-    .Call('_waddR_emp_equi_quantiles_test_export', PACKAGE = 'waddR', x_, K)
-}
-
 rep_weighted_test_export <- function(x_, weights_) {
     .Call('_waddR_rep_weighted_test_export', PACKAGE = 'waddR', x_, weights_)
 }
@@ -364,5 +370,13 @@ concat_test_export <- function(x_, y_) {
 
 interval_table_test_export <- function(data_, breaks_, default_freq = 0L) {
     .Call('_waddR_interval_table_test_export', PACKAGE = 'waddR', data_, breaks_, default_freq)
+}
+
+equidist_quantile_test_export <- function(x_, K, d = 0, type = 1L) {
+    .Call('_waddR_equidist_quantile_test_export', PACKAGE = 'waddR', x_, K, d, type)
+}
+
+quantile_test_export <- function(x_, q_, type = 1L) {
+    .Call('_waddR_quantile_test_export', PACKAGE = 'waddR', x_, q_, type)
 }
 
