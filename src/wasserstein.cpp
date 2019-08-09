@@ -528,7 +528,8 @@ vector<T> equidist_quantile(const vector<T> & x, const int K, const double d=0, 
 //' a histogram with the number of elements in datavec that fall into each
 //' of the intervals is returned.
 //'
-//' @param datavec vector with elements to be distributed over the intervals
+//' @param datavec sorted vector with elements to be distributed over the
+//'  intervals
 //' @param interval_breaks vector with n interval_borders that are
 //'  interpreted as interval breaks:\cr 
 //' (-Inf, breaks[0]], (breaks[0], breaks[1]), ... , (breaks(n), Inf)
@@ -786,11 +787,11 @@ double squared_wass_approx(	const NumericVector & x,
 //'
 //' @export
 //[[Rcpp::export]]
-double wasserstein_metric(NumericVector x, 
-						  NumericVector y,
+double wasserstein_metric(const NumericVector x, 
+						  const NumericVector y,
 						  const double p=1,
-						  Nullable<NumericVector> wa_=R_NilValue, 
-						  Nullable<NumericVector> wb_=R_NilValue) 
+						  const Nullable<NumericVector> wa_=R_NilValue, 
+						  const Nullable<NumericVector> wb_=R_NilValue) 
 {
 
 	vector<double> a(x.begin(), x.end());
@@ -818,11 +819,11 @@ double wasserstein_metric(NumericVector x,
 	std::vector<double> wb(b.size(), default_weight);
 
 	if (!wa_.isNull()) {
-	  NumericVector dumpwa = wa_.get();
+	  	NumericVector dumpwa = wa_.get();
 		wa = vector<double>(dumpwa.begin(), dumpwa.end());
 	}
 	if (!wb_.isNull()) {
-	  NumericVector dumpwb =wb_.get();
+	  	NumericVector dumpwb = wb_.get();
 		wb = vector<double>(dumpwb.begin(), dumpwb.end());
 	}
 
@@ -833,40 +834,58 @@ double wasserstein_metric(NumericVector x,
 	vector<double> ub(wb.size());
 	ub = wb / sum(wb);
 	ub.pop_back();
-
+	Rcout << "DEBUG OUTPUT:" <<END;
+	Rcout << "==============================================="<<END;
+	Rcout << "sorted a = "; for (double ea : a) { Rcout << ea << ", "; } Rcout << END;
+	Rcout << "sorted b = "; for (double eb : b) { Rcout << eb << ", "; } Rcout << END;
+	
 	// cumulative distribution without the last value
 	// => last value will be considered as an open interval to Infinity
 	vector<double> cua(ua.size());
 	cua = cumSum(ua);
 	vector<double> cub(ub.size());
 	cub = cumSum(ub);
+	vector<int> a_rep = interval_table(cub, cua, 1);
+	vector<int> b_rep = interval_table(cua, cub, 1);
+	Rcout << "[!] ISSUE LIKELY HERE: " << END;
+	Rcout << "a_rep = "; for (int ea : a_rep) { Rcout << ea << ", "; } Rcout << END;
+	Rcout << "b_rep = "; for (int eb : b_rep) { Rcout << eb << ", "; } Rcout << END;
 
+	//a_rep = a_rep + 1;
+	//b_rep = b_rep + 1;
 
-	vector<int> a_rep = interval_table(cub, cua, 0);
-	vector<int> b_rep = interval_table(cua, cub, 0);
-	a_rep = a_rep + 1;
-	b_rep = b_rep + 1;
+	//Rcout << "a_rep + 1 = "; for (int ea : a_rep) { Rcout << ea << ", "; } Rcout << END;
+	//Rcout << "b_rep + 1 = "; for (int eb : b_rep) { Rcout << eb << ", "; } Rcout << END;
 
 	int len_a_weighted = sum(a_rep);
 	int len_b_weighted = sum(b_rep);
+	Rcout << "[sum(a_rep)] len_b_weighted = " << len_a_weighted << "; ";
+	Rcout << "[sum(b_rep)] len_a_weighted = " << len_b_weighted << END;
 
 	vector<double> a_weighted(len_b_weighted);
 	vector<double> b_weighted(len_a_weighted);
 	a_weighted = rep_weighted(a, a_rep);
 	b_weighted = rep_weighted(b, b_rep);
 
+	//Rcout << "aa = "; for (double eaa : a_weighted) { Rcout << eaa << ", "; } Rcout << END;
+	//Rcout << "bb = "; for (double ebb : b_weighted) { Rcout << ebb << ", "; } Rcout << END;
 
 	vector<double> uu(cua.size() + cub.size());
 	vector<double> uu0(cua.size() + cub.size()+1);
 	vector<double> uu1(cua.size() + cub.size()+1);
+	//Rcout << "AFTER INITIALIZATION: uu1.size() = " << uu1.size() << ", uu0.size() = " << uu0.size() <<END;
 	vector<double> ONE{(double) 1.0};
 	vector<double> ZERO{(double) 0.0};
-
 	uu = concat(cua, cub);
 	std::sort(uu.begin(), uu.end());
 	uu0 = concat(ZERO, uu);
 	uu1 = concat(uu, ONE);
+	//Rcout << "uu0 = "; for (double euu0 : uu0) { Rcout << euu0 << ", "; } Rcout << END;
+	//Rcout << "uu1 = "; for (double euu1 : uu1) { Rcout << euu1 << ", "; } Rcout << END;
 
+	//Rcout << "AFTER CONCATENATIONS: uu1.size() = " << uu1.size() << ", uu0.size() = " << uu0.size() <<END;
+	//Rcout << "b_weighted.size() = " << b_weighted.size() << ", a_weighted.size() = " << a_weighted.size() <<END;
+	Rcout << END;
 	double wsum = 0.0;
 	double areap = 0.0;
 
