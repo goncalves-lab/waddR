@@ -543,51 +543,58 @@ vector<int> interval_table(	const vector<double> & datavec,
 							const vector<double> & interval_breaks,
 							const int init_value=0)
 {
-	std::raise(SIGINT);
+	// CPP BREAKPOINT
+	//std::raise(SIGINT);
+	int n = interval_breaks.size();
+
 	// count the elements in cua that occur
 	// in the intervals defined by cub
-	vector<int> freq_table(interval_breaks.size()+1, init_value);
+	vector<int> freq_table(n+1, init_value);
 
-	double lower_bound(- numeric_limits<double>::infinity());
-	double upper_bound = interval_breaks[0];
-	int data_i = 0, interval_i=0;
+	if (n > 0) {
 
-	// iteration over the intervals (lower_bond, upper_bound]
-	// defined by interval_breaks
-	for (; interval_i<interval_breaks.size()+1; interval_i++){
+		double lower_bound(- numeric_limits<double>::infinity());
+		double upper_bound = interval_breaks[0];
+		int data_i = 0, interval_i=0;
 
-
-		// iteration over the elements in cua, to count
-		// how many elemtents fall into each of the intervals
+		// iteration over the intervals (lower_bond, upper_bound]
 		// defined by interval_breaks
-		while (data_i < datavec.size()) {
+		for (; interval_i<n+1; interval_i++){
 
-			// if value at data_i in cua lies in interval
-			// (lower_bound, upper_bound] 
-			if ((datavec[data_i] > lower_bound) 
-				&& (datavec[data_i] <= upper_bound)){ 
 
-				// => increment the freq_table count for that interval
-				// and don't check value at data_i in cua again
-				++data_i;
-				++freq_table[interval_i];
+			// iteration over the elements in cua, to count
+			// how many elemtents fall into each of the intervals
+			// defined by interval_breaks
+			while (data_i < datavec.size()) {
 
-			} else {
-				break;
+				// if value at data_i in cua lies in interval
+				// (lower_bound, upper_bound] 
+				if ((datavec[data_i] > lower_bound) 
+					&& (datavec[data_i] <= upper_bound)){ 
+
+					// => increment the freq_table count for that interval
+					// and don't check value at data_i in cua again
+					++data_i;
+					++freq_table[interval_i];
+
+				} else {
+					break;
+				}
+			}
+
+			// update the interval:
+			if (interval_i == n-1) {
+				upper_bound = numeric_limits<double>::infinity();
+				lower_bound = interval_breaks[interval_i];
+			}
+			else {
+				upper_bound = interval_breaks[interval_i + 1];
+				lower_bound = interval_breaks[interval_i];
 			}
 		}
-
-		// update the interval:
-		if (interval_i == interval_breaks.size()-1) {
-			upper_bound = numeric_limits<double>::infinity();
-			lower_bound = interval_breaks[interval_breaks.size()];
-		}
-		else {
-			upper_bound = interval_breaks[interval_i + 1];
-			lower_bound = interval_breaks[interval_i];
-		}
+	} else {
+		freq_table = vector<int>({datavec.size()});
 	}
-
 	return freq_table;
 }
 
@@ -836,10 +843,10 @@ double wasserstein_metric(const NumericVector x,
 	vector<double> ub(wb.size());
 	ub = wb / sum(wb);
 	ub.pop_back();
-	Rcout << "DEBUG OUTPUT:" <<END;
-	Rcout << "==============================================="<<END;
-	Rcout << "sorted a = "; for (double ea : a) { Rcout << ea << ", "; } Rcout << END;
-	Rcout << "sorted b = "; for (double eb : b) { Rcout << eb << ", "; } Rcout << END;
+	//Rcout << "DEBUG OUTPUT:" <<END;
+	////Rcout << "==============================================="<<END;
+	//Rcout << "sorted a = "; for (double ea : a) { Rcout << ea << ", "; } Rcout << END;
+	//Rcout << "sorted b = "; for (double eb : b) { Rcout << eb << ", "; } Rcout << END;
 	
 	// cumulative distribution without the last value
 	// => last value will be considered as an open interval to Infinity
@@ -849,9 +856,9 @@ double wasserstein_metric(const NumericVector x,
 	cub = cumSum(ub);
 	vector<int> a_rep = interval_table(cub, cua, 1);
 	vector<int> b_rep = interval_table(cua, cub, 1);
-	Rcout << "[!] ISSUE LIKELY HERE: " << END;
-	Rcout << "a_rep = "; for (int ea : a_rep) { Rcout << ea << ", "; } Rcout << END;
-	Rcout << "b_rep = "; for (int eb : b_rep) { Rcout << eb << ", "; } Rcout << END;
+	//Rcout << "[!] ISSUE LIKELY HERE: " << END;
+	//Rcout << "a_rep = "; for (int ea : a_rep) { Rcout << ea << ", "; } Rcout << END;
+	//Rcout << "b_rep = "; for (int eb : b_rep) { Rcout << eb << ", "; } Rcout << END;
 
 	//a_rep = a_rep + 1;
 	//b_rep = b_rep + 1;
@@ -861,8 +868,8 @@ double wasserstein_metric(const NumericVector x,
 
 	int len_a_weighted = sum(a_rep);
 	int len_b_weighted = sum(b_rep);
-	Rcout << "[sum(a_rep)] len_b_weighted = " << len_a_weighted << "; ";
-	Rcout << "[sum(b_rep)] len_a_weighted = " << len_b_weighted << END;
+	//Rcout << "[sum(a_rep)] len_b_weighted = " << len_a_weighted << "; ";
+	//Rcout << "[sum(b_rep)] len_a_weighted = " << len_b_weighted << END;
 
 	vector<double> a_weighted(len_b_weighted);
 	vector<double> b_weighted(len_a_weighted);
@@ -887,7 +894,7 @@ double wasserstein_metric(const NumericVector x,
 
 	//Rcout << "AFTER CONCATENATIONS: uu1.size() = " << uu1.size() << ", uu0.size() = " << uu0.size() <<END;
 	//Rcout << "b_weighted.size() = " << b_weighted.size() << ", a_weighted.size() = " << a_weighted.size() <<END;
-	Rcout << END;
+	//Rcout << END;
 	double wsum = 0.0;
 	double areap = 0.0;
 
