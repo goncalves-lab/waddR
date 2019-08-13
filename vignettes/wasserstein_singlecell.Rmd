@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 The [`waddR`](waddR.html) package provides an adaptation of the semi-parametric
 testing procedure based on the 2-Wasserstein distance which is specifically
 tailored to identify differential distributions in single-cell RNA-seqencing
-data. (scRNA-seq) 
+(scRNA-seq) data. 
 
 
 In particular, a two-stage (TS) approach has been implemented that takes account
@@ -43,6 +43,9 @@ database, see the
 First, we load all required libraries needed for our example.
 
 ```{r}
+library("tictoc")
+tic()
+
 library(waddR)
 suppressPackageStartupMessages({
     library("HCAData")
@@ -100,7 +103,9 @@ the `wasserstein.sc` testing procedure.
 ```{r}
 dat <- cbind(assay(sce_bm, "counts"), assay(sce_ucb, "counts"))
 conditions <- c(rep(1,100), rep(2,100))
-res <- wasserstein.sc(dat, conditions, method="TS")
+res <- wasserstein.sc(dat, conditions, 1000, method="TS")
+
+toc()
 ```
 
 ## See Also
