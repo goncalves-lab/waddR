@@ -1,3 +1,7 @@
+Changes in 0.2.7 (2019-08-13)
++ Bug fix in interval table / wasserstein_metric causing wasserstein.sc runs to fail
++ Tests for that bug added
+
 Changes in 0.2.6 (2019-08-08)
 + Fix in wasserstein_metric where a result was squared
 + Work on CPP implementations:

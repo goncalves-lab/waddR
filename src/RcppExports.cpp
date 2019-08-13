@@ -43,16 +43,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // wasserstein_metric
-double wasserstein_metric(NumericVector x, NumericVector y, const double p, Nullable<NumericVector> wa_, Nullable<NumericVector> wb_);
+double wasserstein_metric(const NumericVector x, const NumericVector y, const double p, const Nullable<NumericVector> wa_, const Nullable<NumericVector> wb_);
 RcppExport SEXP _waddR_wasserstein_metric(SEXP xSEXP, SEXP ySEXP, SEXP pSEXP, SEXP wa_SEXP, SEXP wb_SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type y(ySEXP);
     Rcpp::traits::input_parameter< const double >::type p(pSEXP);
-    Rcpp::traits::input_parameter< Nullable<NumericVector> >::type wa_(wa_SEXP);
-    Rcpp::traits::input_parameter< Nullable<NumericVector> >::type wb_(wb_SEXP);
+    Rcpp::traits::input_parameter< const Nullable<NumericVector> >::type wa_(wa_SEXP);
+    Rcpp::traits::input_parameter< const Nullable<NumericVector> >::type wb_(wb_SEXP);
     rcpp_result_gen = Rcpp::wrap(wasserstein_metric(x, y, p, wa_, wb_));
     return rcpp_result_gen;
 END_RCPP

@@ -157,7 +157,8 @@ NULL
 #' a histogram with the number of elements in datavec that fall into each
 #' of the intervals is returned.
 #'
-#' @param datavec vector with elements to be distributed over the intervals
+#' @param datavec sorted vector with elements to be distributed over the
+#'  intervals
 #' @param interval_breaks vector with n interval_borders that are
 #'  interpreted as interval breaks:\cr 
 #' (-Inf, breaks[0]], (breaks[0], breaks[1]), ... , (breaks(n), Inf)

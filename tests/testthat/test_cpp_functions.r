@@ -115,36 +115,37 @@ test_that("cumSum_test_export", {
 #### INTERVAL TABLE
 test_that("Interval_table_test_export", {
   skip_if_not_exported()
-  # setup
-  set.seed(42)
-  wa<- rnorm(200, 20, 1)
-  set.seed(43)
-  wb <- rnorm(210, 21, 1) 
-  ua <- (wa/sum(wa))[-2000]
-  ub <- (wb/sum(wb))[-2010]
-  cua <- c(cumsum(ua))
-  cub <- c(cumsum(ub))
+  wa <- c(1)
+  wb <- c(0,1,0,0,0,0)
+  ua <- (wa/sum(wa))[-1]
+  ub <- (wb/sum(wb))[-1]
+  cua <- cumsum(ua)
+  cub <- cumsum(ub)
   
-  wa2 <- c(1, 1)
-  wb2 <- c(2) 
-  ua2 <- (wa/sum(wa))[-2]
-  ub2 <- (wb/sum(wb))[-1]
-  cua2 <- c(cumsum(ua))
-  cub2 <- c(cumsum(ub))
+  wa2 <- c(0, 0, 0, 10)
+  wb2 <- c(13)
+  ua2 <- (wa2/sum(wa2))[-1]
+  ub2 <- (wb2/sum(wb2))[-1]
+  cua2 <- cumsum(ua2)
+  cub2 <- cumsum(ub2)
   
   set.seed(123)
   wa3 <- runif(c(1:60))
   set.seed(234)
   wb3 <- runif(c(1:100))
-  ua3 <- (wa/sum(wa))[-2]
-  ub3 <- (wb/sum(wb))[-1]
-  cua3 <- c(cumsum(ua))
-  cub3 <- c(cumsum(ub))
+  ua3 <- (wa2/sum(wa2))[-1]
+  ub3 <- (wb2/sum(wb2))[-1]
+  cua3 <- cumsum(ua3)
+  cub3 <- cumsum(ub3)
+  
+  empty_vector <- c(1)[-1]
   
   # cpp implementation
   cppresult1 <- interval_table_test_export(cub, cua,1)
   cppresult2 <- interval_table_test_export(cua2, cub2,1)
   cppresult3 <- interval_table_test_export(cua3, cub3,1)
+  cppresult4 <- interval_table_test_export(c(1,2,3), empty_vector, 1)
+  cppresult5 <- interval_table_test_export(empty_vector, c(1,2,3), 1)
   
   # pure R
   temp <- cut(cub, breaks = c(-Inf, cua, Inf))
@@ -153,11 +154,15 @@ test_that("Interval_table_test_export", {
   rresult2 <- table(temp) + 1
   temp <- cut(cua3, breaks = c(-Inf, cub3, Inf))
   rresult3 <- table(temp) + 1
+  rresult4 <- table(cut(c(1,2,3), breaks=c(-Inf, empty_vector, Inf))) + 1
+  rresult5 <- table(cut(empty_vector, breaks=c(-Inf, c(1,2,3), Inf))) + 1
   
   expect_true(all(rresult1 == cppresult1))
   expect_true(length(rresult1) == length(cppresult1))
   expect_true(all(rresult2 == cppresult2))
   expect_true(all(rresult3 == cppresult3))
+  expect_true(all(rresult4 == cppresult4))
+  expect_true(all(rresult5 == cppresult5))
   expect_type(interval_table_test_export(rnorm(1000, 10,0.3),
                                          rnorm(834, 20, 10)),
               "integer")

@@ -110,7 +110,6 @@ test_that("squared_wass_decomp correctness", {
 
 # test correctnes of wasserstein_metric versus an R implementation 
 test_that("wasserstein_metric correctness", {
-  #skip("wasserstein_metric will be deprecated, skipping all test for it")
   a <- c(13, 21, 34, 23)
   b <- c(1,  1,  1,  2.3)
   p <- 2
@@ -126,6 +125,12 @@ test_that("wasserstein_metric correctness", {
   b2 <- rnorm(102,10.5, 1)
   expect_equal(wasserstein_metric(a2,b2,p), wasserstein1d(a2,b2,p))
   expect_equal(wasserstein_metric(a,x,p), wasserstein1d(a,x,p))
+  
+  # Bug when length(a) == 1 and legth(b) > 2
+  a3 <- c(23)
+  b3 <- c(0,1,0,0)
+  expect_equal(wasserstein_metric(a3, b3, p), wasserstein1d(a3,b3,p))
+  
 })
 
 # test consistency of results
