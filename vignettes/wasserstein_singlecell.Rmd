@@ -30,83 +30,88 @@ differences in non-zero gene expression (using the semi-parametric
 
 ## Application to an example data set
 
+The waddR package can be loaded with 
+```{R}
+library(waddR)
+```
+
 This an example on how to analyse the expression of single cell data in two
 conditions.
-As example data we will look at single cell data from bone marrow and umbilical
-cord blood cells, which can be read be downloaded with the `HCAData` package
-which returns `SummarizedExperiment` representations of the data.
+As example data we will look at single cell data from decidua and blood samples
+analysed by Vento-Tormo et al. 2018 
+(https://doi.org/10.1038/s41586-018-0698-6).
+The replicate f20 has been normalized, scaled and is available for download on
+ [github](https://github.com/goncalves-lab/waddR-data/).
 
-(For a more detailed description of how to handle datasets from the conquer
-database, see the 
-[conquer R tutorial](https://github.com/markrobinsonuzh/conquer/blob/master/shiny-download/tutorial.md).)
-
-First, we load all required libraries needed for our example.
+For this demonstration we will first load all required packages.
 
 ```{r}
-library("tictoc")
-tic()
-
-library(waddR)
 suppressPackageStartupMessages({
-    library("HCAData")
-    library("ExperimentHub")
-    library("SingleCellExperiment")})
-
+    library("scater")
+    library("SingleCellExperiment")
+    library("BiocFileCache")
+})
 ```
 
 Download the example data
 
-```
-eh <- ExperimentHub()
-bonemarrow_h5densematrix <- eh[["EH2047"]]
-bonemarrow_coldata <- eh[["EH2048"]]
-bonemarrow_rowdata <- eh[["EH2049"]]
-```
-
-And combine into `SingleCellExperiment` representations:
 ```{r}
-sce_bonemarrow <- HCAData("ica_bone_marrow")
-sce_umbcordblood <- HCAData("ica_cord_blood")
+url.base <- "https://github.com/goncalves-lab/waddR-data/blob/master/data/"
+sce.blood.url <- paste0(url.base, "sce_blood.RDa?raw=true")
+sce.decidua.url <- paste0(url.base, "sce_decidua.RDa?raw=true")
+
+getCachedPath <- function(url, rname){
+    bfc <- BiocFileCache() # fire up cache
+    res <- bfcquery(bfc, url, field="fpath", exact=TRUE)
+    if (bfccount(res) == 0L)
+        cachedFilePath <- bfcadd(bfc, rname=rname, fpath=url)
+    else
+        cachedFilePath <- bfcpath(bfc, res[["rid"]])
+    cachedFilePath
+}
+
+load(getCachedPath(sce.blood.url, "sce.blood"))
+load(getCachedPath(sce.decidua.url, "sce.decidua"))
 ```
 
-Because analyzing the entire 378000 bone marrow and 384000 umbilical cord
-blood cells is out of scope for this vignette, we will use random subsets of
-the two groups.
+We have downloaded the two `SingleCellExperiment` objects `sce.blood` and
+`sce.decidua`.
+Next we will randomly select a small set of genes, a whole analysis would be
+out of scope for this vignette.
 
 ```{r}
 set.seed(24)
-sce_bm <- sce_bonemarrow[, sample(colnames(sce_bonemarrow),
-                                  100, replace=FALSE)]
-set.seed(24)
-sce_ucb <- sce_umbcordblood[, sample(colnames(sce_umbcordblood),
-                                     100, replace=FALSE)]
+randgenes <- sample(rownames(sce.blood), 5000, replace=FALSE)
+sce.blood <- sce.blood[randgenes, ]
+sce.decidua <- sce.decidua[randgenes, ]
 ```
 
-Before testing for differential expression in the two groups we normalie
-cell-specific biases with the normalize function from the `scran` package.
+
+Next we prepare the input for the function `wasserstein.sc` which for now is a
+dataframe or matrix object and a vector, assigning their columns to conditions.
+
+```{r}
+dat <- cbind(counts(sce.blood), counts(sce.decidua))
+condition <- c(rep(1, length(colnames(sce.blood))),   # condition 1
+               rep(2, length(colnames(sce.decidua)))) # condition 2
+```
+
+
+Before testing for differential expression in the two groups the data would
+usually be normalized for cell-specific biases or technical effects.
 To avoid losing actual differences in expression between cells of the same
-condition, we cluster for internal differences first and then normalize on
-these clusters.
+condition, cells are also assigned to clusters and normalization only be 
+performed per cluster.
+
+Since these cells have already been preprocessed, we can run the wasserstein
+test for single cell data right away.
 
 ```{r}
-library("scran")
-#bm.clusters <- quickCluster(sce_bm, method="igraph", irlba.args=list(maxit=1000))
-#sce_bm <- computeSumFactors(sce_bm, clusters=bm.clusters)
-sce_bm <- computeSumFactors(sce_bm)
-#ucb.clusters <- quickCluster(sce_bm, method="igraph", irlba.args=list(maxit=1000))
-#sce_ucb <- computeSumFactors(sce_bm, clusters=ucb.clusters)
-sce_ucb <- computeSumFactors(sce_ucb)
+wsres <- wasserstein.sc(dat, condition, permnum = 10000, "TS")
+head(wsres)
 ```
 
-Now we will test for differential expression between the two conditions with
-the `wasserstein.sc` testing procedure.
-```{r}
-dat <- cbind(assay(sce_bm, "counts"), assay(sce_ucb, "counts"))
-conditions <- c(rep(1,100), rep(2,100))
-res <- wasserstein.sc(dat, conditions, 1000, method="TS")
 
-toc()
-```
 
 ## See Also
 
