@@ -1,7 +1,4 @@
 
-######
-###test for differential proportions of zeroes; adapted from scDD package
-
 #'testZeroes
 #'
 #' Test for differential proportions of zero expression between two conditions
@@ -52,9 +49,6 @@ testZeroes <- function(dat, condition, these=seq_len(nrow(dat))){
 }
 
 
-###########
-####compute Fisher's combined p-value (zero&non-zero)
-
 #'fishersCombinedPval
 #'
 #'Aggregates two p-values into a combined p-value according to Fisher’s method 
@@ -85,8 +79,6 @@ fishersCombinedPval<-function(x) {
     return(p.comb)
 }
 
-
-### compute combined p-value
 
 #'CombinePVal
 #'
@@ -147,9 +139,9 @@ CombinePVal<-function(r,s){
 #'@return A vector concerning the testing results, precisely (see Schefzik and
 #' Goncalves (2019) for details) in case of inclZero=TRUE:
 #'\itemize{
-#'\item d.transport: 2-Wasserstein distance between the two samples computed
+#'\item d.wass: 2-Wasserstein distance between the two samples computed
 #' by quantile approximation
-#'\item d.transport^2: squared 2-Wasserstein distance between the two samples
+#'\item d.wass^2: squared 2-Wasserstein distance between the two samples
 #' computed by quantile approximation
 #'\item d.comp^2: squared 2-Wasserstein distance between the two samples
 #' computed by decomposition approximation
@@ -188,9 +180,9 @@ CombinePVal<-function(r,s){
 #'}
 #'In case of inclZero=FALSE:
 #'\itemize{
-#'\item d.transport: 2-Wasserstein distance between the two samples computed
+#'\item d.wass: 2-Wasserstein distance between the two samples computed
 #' by quantile approximation
-#'\item d.transport^2: squared 2-Wasserstein distance between the two samples
+#'\item d.wass^2: squared 2-Wasserstein distance between the two samples
 #' computed by quantile approximation
 #'\item d.comp^2: squared 2-Wasserstein distance between the two samples
 #' computed by decomposition approximation
@@ -279,7 +271,7 @@ testWass<-function(dat, condition,permnum, inclZero=TRUE){
         RES <- cbind(wass.res1,pval.zero,pval.combined,wass.pval.adj,
                     pval.adj.zero,pval.adj.combined)
         row.names(RES) <- rownames(dat)
-        colnames(RES) <- c("d.transport","d.transport^2","d.comp^2","d.comp",
+        colnames(RES) <- c("d.wass","d.wass^2","d.comp^2","d.comp",
             "location","size","shape","rho","p.nonzero","p.ad.gpd","N.exc",
             "perc.loc","perc.size","perc.shape","decomp.error","p.zero",
             "p.combined","p.adj.nonzero","p.adj.zero","p.adj.combined")

@@ -1,13 +1,39 @@
 
-# Semi-parametric wasserstein test
+#' relativeError
+#'
+#' Computes the relative error between two numericals (in the sense of
+#' is.numeric) x and y.
+#' If x and y are vectors, it is assumed that length(x) == length(y).
+#' 
+#' The relative error $\delta$ is defined as: 
+#' $$ \delta = \bigg| 1 -  \frac{x}{y} \bigg| $$
+#' 
+#' @param x numerical (in the sense of is.numeric)
+#' @param y numerical (in the sense of is.numeric)
+#' 
+#' @return The relative error between x and y
+#' 
+#' @example 
+#' pi1 <- 3.1415
+#' pi2 <- 3.141
+#' relativeError(x,y)
+#' 
+relativeError <- function(x,y) {
+    rel.error <- abs(1 - (x / y))  
+    return(rel.error)
+}
+
 
 #'wasserstein.test.sp
-#'
+#' 
 #' Two-sample test to check for differences between two distributions
 #' (conditions) using the 2-Wasserstein distance: Semi-parametric
 #' implementation using a permutation test with a generalized Pareto
 #' distribution (GPD) approximation to estimate small p-values accurately
-#'
+#' 
+#' This is the semi-parametric version of wasserstein.test, for the
+#' asymptotic procedure see wasserstein.test.asy
+#' 
 #'@details Details concerning the permutation testing procedure with GPD
 #' approximation to estimate small p-values accurately can be found in Schefzik
 #' and Goncalves (2019).
@@ -22,9 +48,9 @@
 #'@return A vector concerning the testing results, precisely (see Schefzik and
 #' Goncalves (2019) for details)
 #'\itemize{
-#'\item d.transport: 2-Wasserstein distance between the two samples computed by
+#'\item d.wass: 2-Wasserstein distance between the two samples computed by
 #' quantile approximation
-#'\item d.transport^2: squared 2-Wasserstein distance between the two samples
+#'\item d.wass^2: squared 2-Wasserstein distance between the two samples
 #' computed by quantile approximation
 #'\item d.comp^2: squared 2-Wasserstein distance between the two samples
 #' computed by decomposition approximation
@@ -186,18 +212,19 @@ wasserstein.test.sp<-function(x,y,permnum){
             rho.xy <- 0  
         }
 
-        location <- (mu.x - mu.y) ^ 2
-        size <- (sigma.x - sigma.y) ^ 2
-        shape <- 2 * sigma.x * sigma.y * (1 - rho.xy)
-
-        wass.comp.sq <- location + size + shape
-        wass.comp <- sqrt(wass.comp.sq)
-
-        perc.loc <- round(((location / wass.comp.sq) * 100), 2)
-        perc.size <-round(((size / wass.comp.sq) * 100), 2)
-        perc.shape <- round(((shape / wass.comp.sq) * 100), 2)
-
-        decomp.error <- abs(1 - (value.sq / wass.comp.sq))
+        wass.comp <- squared_wass_decomp(x, y)
+        location <- wass.comp$location
+        size <- wass.comp$size
+        shape <- wass.comp$shape
+        
+        d.comp.sq <- wass.comp$distance
+        d.comp <- sqrt(d.comp.sq)
+        
+        perc.loc <- round(((location / d.comp.sq) * 100), 2)
+        perc.size <- round(((size / d.comp.sq) * 100), 2)
+        perc.shape <- round(((shape / d.comp.sq)*100), 2)
+        
+        decomp.error <- relativeError(value.sq, d.comp.sq)
 
     } else {
         value <- NA
@@ -216,10 +243,10 @@ wasserstein.test.sp<-function(x,y,permnum){
     }
 
     # create output
-    output <- c(value, value.sq, wass.comp.sq, wass.comp, location, size, 
+    output <- c(value, value.sq, d.comp.sq, d.comp, location, size, 
                 shape, rho.xy, pvalue.wass, perc.loc, perc.size, perc.shape,
                 decomp.error)
-    names(output)<-c("d.transport", "d.transport^2", "d.comp^2", "d.comp",
+    names(output)<-c("d.wass", "d.wass^2", "d.comp^2", "d.comp",
                     "location", "size","shape", "rho","pval", "p.ad.gpd",
                     "N.exc", "perc.loc", "perc.size", "perc.shape",
                     "decomp.error")
@@ -228,13 +255,14 @@ wasserstein.test.sp<-function(x,y,permnum){
 }
 
 
-# Asymptotic wasserstein test
-
 #'wasserstein.test.asy
-#'
-#'Two-sample test to check for differences between two distributions
+#' 
+#' Two-sample test to check for differences between two distributions
 #' (conditions) using the 2-Wasserstein distance: Implementation using a test
 #' based on asymptotic theory
+#'
+#' This is the asymptotic version of wasserstein.test, for the
+#' semi-parametric procedure see wasserstein.test.sp
 #'
 #'@details Details concerning the testing procedure based on asymptotic theory
 #' can be found in Schefzik and Goncalves (2019).
@@ -247,9 +275,9 @@ wasserstein.test.sp<-function(x,y,permnum){
 #'@return A vector concerning the testing results, precisely (see Schefzik and
 #' Goncalves (2019) for details)
 #'\itemize{
-#'\item d.transport: 2-Wasserstein distance between the two samples computed
+#'\item d.wass: 2-Wasserstein distance between the two samples computed
 #' by quantile approximation
-#'\item d.transport^2 squared 2-Wasserstein distance between the two samples
+#'\item d.wass^2 squared 2-Wasserstein distance between the two samples
 #' computed by quantile approximation
 #'\item d.comp^2: squared 2-Wasserstein distance between the two samples
 #' computed by decomposition approximation
@@ -337,28 +365,25 @@ wasserstein.test.asy <- function(x, y){
             rho.xy <- 0  
         }
 
+        wass.comp <- squared_wass_decomp(x, y)
+        location <- wass.comp$location
+        size <- wass.comp$size
+        shape <- wass.comp$shape
 
+        d.comp.sq <- wass.comp$distance
+        d.comp <- sqrt(d.comp.sq)
 
-        location <- (mu.x - mu.y) **2
-        size <- (sigma.x - sigma.y) **2
-        shape <- 2 * sigma.x * sigma.y * (1 - rho.xy)
+        perc.loc <- round(((location / d.comp.sq) * 100), 2)
+        perc.size <- round(((size / d.comp.sq) * 100), 2)
+        perc.shape <- round(((shape / d.comp.sq)*100), 2)
 
-        wass.comp.sq <- location + size + shape
-        wass.comp <- sqrt(wass.comp.sq)
-
-
-        perc.loc <- round(((location / wass.comp.sq) * 100), 2)
-        perc.size <- round(((size/wass.comp.sq) * 100), 2)
-        perc.shape <- round(((shape/wass.comp.sq)*100), 2)
-
-
-        decomp.error <- abs(1 - (value.sq / wass.comp.sq))
+        decomp.error <- relativeError(value.sq, d.comp.sq)
 
 
     } else {
         value <- NA
         value.sq <- NA
-        wass.comp.sq <- NA
+        d.comp.sq <- NA
         wass.comp <- NA
         location <- NA
         size <- NA
@@ -373,10 +398,10 @@ wasserstein.test.asy <- function(x, y){
 
 
     ##create output
-    output <- c(value, value.sq, wass.comp.sq, wass.comp, location, size,
+    output <- c(value, value.sq, d.comp.sq, wass.comp, location, size,
                 shape, rho.xy, pvalue.wass, perc.loc, perc.size, perc.shape,
                 decomp.error)
-    names(output) <- c("d.transport", "d.transport^2", "d.comp^2", "d.comp",
+    names(output) <- c("d.wass", "d.wass^2", "d.comp^2", "d.comp",
                         "location", "size", "shape", "rho", "pval", "perc.loc",
                         "perc.size", "perc.shape", "decomp.error")
 
