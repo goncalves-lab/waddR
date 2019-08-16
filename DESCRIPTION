@@ -17,6 +17,7 @@ Imports:
 	arm (>= 1.10-1),
 	BiocFileCache,
 	BiocParallel,
+	SingleCellExperiment,
 	methods,
 	stats
 Depends:
@@ -27,7 +28,8 @@ Suggests:
     testthat,
     roxygen2,
     rprojroot,
-    rmarkdown
+    rmarkdown,
+    scater
 LinkingTo:
 	Rcpp,
 	RcppArmadillo,

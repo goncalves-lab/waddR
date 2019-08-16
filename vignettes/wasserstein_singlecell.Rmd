@@ -30,22 +30,21 @@ differences in non-zero gene expression (using the semi-parametric
 
 ## Application to an example data set
 
-The waddR package can be loaded with 
-```{R}
-library(waddR)
-```
 
 This an example on how to analyse the expression of single cell data in two
 conditions.
 As example data we will look at single cell data from decidua and blood samples
 analysed by Vento-Tormo et al. 2018 
 (https://doi.org/10.1038/s41586-018-0698-6).
-The replicate f20 has been normalized, scaled and is available for download on
- [github](https://github.com/goncalves-lab/waddR-data/).
+For this demonstration we use only one replicate of the two conditions that has
+been normalized, scaled and is available for download on
+[github](https://github.com/goncalves-lab/waddR-data/).
 
-For this demonstration we will first load all required packages.
+First, we will first load all required packages:
 
 ```{r}
+library(waddR)
+
 suppressPackageStartupMessages({
     library("scater")
     library("SingleCellExperiment")
@@ -53,7 +52,7 @@ suppressPackageStartupMessages({
 })
 ```
 
-Download the example data
+Download the example data set
 
 ```{r}
 url.base <- "https://github.com/goncalves-lab/waddR-data/blob/master/data/"
@@ -76,41 +75,78 @@ load(getCachedPath(sce.decidua.url, "sce.decidua"))
 
 We have downloaded the two `SingleCellExperiment` objects `sce.blood` and
 `sce.decidua`.
-Next we will randomly select a small set of genes, a whole analysis would be
-out of scope for this vignette.
+Next we will randomly select a subset of genes with which we will proceed, a
+whole analysis would be out of scope for this vignette.
 
 ```{r}
-set.seed(24)
+set.seed(28)
 randgenes <- sample(rownames(sce.blood), 5000, replace=FALSE)
 sce.blood <- sce.blood[randgenes, ]
 sce.decidua <- sce.decidua[randgenes, ]
 ```
 
-
-Next we prepare the input for the function `wasserstein.sc` which for now is a
+Next we prepare the input for the function `wasserstein.sc` which can be a
 dataframe or matrix object and a vector, assigning their columns to conditions.
 
 ```{r}
 dat <- cbind(counts(sce.blood), counts(sce.decidua))
-condition <- c(rep(1, length(colnames(sce.blood))),   # condition 1
-               rep(2, length(colnames(sce.decidua)))) # condition 2
+condition <- c( rep(1, length(colnames(sce.blood))),   # condition 1
+                rep(2, length(colnames(sce.decidua)))) # condition 2
 ```
 
-
-Before testing for differential expression in the two groups the data would
-usually be normalized for cell-specific biases or technical effects.
+Before testing for differential expression in the two conditions, all data
+must be normalized for cell-specific biases.
 To avoid losing actual differences in expression between cells of the same
-condition, cells are also assigned to clusters and normalization only be 
-performed per cluster.
+condition, cells should be clusterd for similarities first.
 
-Since these cells have already been preprocessed, we can run the wasserstein
-test for single cell data right away.
+Since the decidua and blood cells have already been preprocessed, we can run
+the wasserstein test for single cell now.
 
 ```{r}
 wsres <- wasserstein.sc(dat, condition, permnum = 10000, "TS")
-head(wsres)
+head(wsres, n=2L)
 ```
 
+The 2-Wasserstein single-cell testing procedure is performed on all genes in
+the data set -- one line of the output describes the result of testing one
+gene.
+
+
+Note: The two-stage (TS) procedure includes a test for differential proportions
+of zero gene expression, considering the proportion of zeroes over all
+conditions and genes in a model.
+This method might yield misleading results, if only a subset of genes is
+given.
+
+
+
+: 2-Wasserstein single cell test output 
+
+| Output Column | Description                                                 |
+|:--------------|:------------------------------------------------------------|
+| d.wass        | 2-Wasserstein distance between the two samples              |
+| d.wass^2      | squared 2-Wasserstein distance between the two samples      |
+| d.comp^2      | squared 2-Wasserstein distance (decomposition approx.)      |
+| d.comp        | 2-Wasserstein distance (decomposition approx.)              |
+| location      | location term in the squared 2-Wasserstein decomposition    |
+| size          | size term in the squared 2-Wasserstein decomposition        |
+| shape         | shape term in the squared 2-Wasserstein decomposition       |
+| rho           | correlation coefficient in the quantile-quantile plot       |
+| pval          | p-value of the semi-parametric test                         |
+| p.ad.gpd      | p-value of the  Anderson-Darling test to check whether the GPD actually fits the data well (otherwise NA) \* |
+| N.exc         | number of exceedances (starting with 250 and iteratively decreased by 10 if necessary) that are required to obtain a good GPD fit (i.e. p-value of Anderson-Darling test  greater or eqaul to 0.05) \* |
+| perc.loc      | fraction (in %) of the location part with respect to the overall squared 2-Wasserstein distance obtained by the decomposition approximation |
+| perc.size     | fraction (in %) of the size part with respect to the overall squared 2-Wasserstein distance obtained by the decomposition approximation |
+| perc.shape    | fraction (in %) of the shape part with respect to the overall squared 2-Wasserstein distance obtained by the decomposition approximation |
+| decomp.error | relative error between the squared 2-Wasserstein distance computed by the quantile approximation and the squared 2-Wasserstein distance computed by the decomposition approximation |
+| p.zero        | p-value of the test for differential proportions of zero expression (logistic regression model) \*\* |
+| p.combined    | combined p-value of p.nonzero and p.zero obtained by Fisher’s method \*\* |
+| pval.adj      | adjusted p-value of the semi-parametric 2-Wasserstein distance-based test according to the method of Benjamini-Hochberg |
+| p.adj.zero    | adjusted p-value of the test for differential proportions of zero expression (logistic regression model) according to the method of Benjamini-Hochberg \*\* |
+|  p.adj.combined | adjusted combined p-value of p.nonzero and p.zero obtained by Fisher’s method according to the method of Benjamini-Hochberg \*\* |
+
+*\* only if GDP fitting is performed, NA otherwise;* 
+*\*\* only if the two-stage test is run*
 
 
 ## See Also

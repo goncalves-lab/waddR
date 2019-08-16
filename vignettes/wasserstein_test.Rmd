@@ -50,8 +50,8 @@ the functions also provide additional output.
 ```{r setup}
 library(waddR)
 
-spec.output <- c("pval", "d.transport^2", "perc.loc",
-                 "perc.size", "perc.shape")
+spec.output <- c(   "pval", "d.transport^2", "perc.loc",
+                    "perc.size", "perc.shape")
 ```
 
 We start with an example, in which the two distributions (samples) only differ
