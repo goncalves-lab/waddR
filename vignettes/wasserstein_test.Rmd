@@ -1,5 +1,5 @@
 ---
-title: "The Two-Sample Wasserstein Test"
+title: "Two Sample Testing Based on The 2-Wasserstein Distance"
 output: rmarkdown::html_vignette
 vignette: >
     %\VignetteIndexEntry{wasserstein_test}
@@ -15,75 +15,104 @@ knitr::opts_chunk$set(
 ```
 
 
-## Test for Differences Between Two Distributions 
+## Testing Procedures
 
-The package `waddR` offers a generalized testing procedure to detect if two
-samples $A$ and $B$ (e.g. from two different conditions) are differentially
-distributed.
-We are essentially testing the null hypothesis $\mathcal{H}_0: F_A = F_B$
-against $\mathcal{H}_1: F_A \neq F_B$.
+The package `waddR` provides two testing procedures using the 2-Wasserstein
+distance to test whether two distributions $F_A$ and $F_B$ given in the form of
+samples are different by specifically testing the null hypothesis
+$\mathcal{H}_0: F_A = F_B$ against the alternative
+$\mathcal{H}_1: F_A \neq F_B$.
 
 
-## Showcasing the Comparison of Distributions
+The first, semi-parametric (SP), procedure uses a test based on permutations
+combined with a generaltized Pareto distribution approximation to estimate
+small p-values accurately.
 
-For showcasing the capabilities of this testing procedure we will compare a
-vector of 500 elements drawn from a normal $\mathcal{N}(30,2)$ distribution
-with four different vectors of around 500 elements.
 
-The first vector we are comparing to is also $\mathcal{N}(30,2)$ distributed,
-but only 498 elements in size.
-The other three vectors differ in mean, standard deviation, and shape and
-should show up as differentially distributed.
+The second procedure (ASY) uses a test based on asymptotic theory which is
+valid only if the samples can be assumed to come from continuous distributions.
 
-For all tests we only want to look at the p-value and the location, shape, and
-size statistics.
+## Examples
+
+To demonstrate the capabilities of the testing procedures, we consider models
+based on normal distributions here.
+We exemplarily construct three cases in which two distributions (samples)
+differ with respect to location, size, and shape, respectively, and one case
+without a difference.
+For convenience, we focus on the p-value, the value of the (squared)
+2_wasserstein distance, and the fractions of the location, size, and shape
+terms (in \%) with respect to the (squared) 2-Wasserstein distance here, while
+the functions also provide additional output.
+
+
+
+
 ```{r setup}
 library(waddR)
 
-x <- rnorm(500, 30, 2)
-same.dist1 <- rnorm(498, 30,2)
-diff.dist1 <- rnorm(503, 30, 10)
-diff.dist2 <- rnorm(511, 20, 2)
-diff.dist3 <- c(rnorm(234, 27, 2), rnorm(260, 33, 2))
-
-output.fields <- c("pval","location","shape","size")
+spec.output <- c(   "pval", "d.transport^2", "perc.loc",
+                    "perc.size", "perc.shape")
 ```
 
-Comparing the two observations drawn from the same distribution yields a rather
-high p-value thus indicating that $\mathcal{H}_0$ can not be rejected.
-
-```{r test_eq}
-wasserstein.test(x, same.dist1, method = "SP")[output.fields]
+We start with an example, in which the two distributions (samples) only differ
+with respect to the location, and show the results for the two testing
+procedures (semi-parametric (SP) and asymptotic theory-based (ASY)).
+```{r diff_loc}
+set.seed(24)
+ctrl <- rnorm(300 ,0 ,1)
+dd1 <- rnorm(300, 1, 1)
+wasserstein.test(ctrl, dd1, method="SP")[spec.output]
+wasserstein.test(ctrl, dd1, method="ASY")[spec.output]
 ```
+We obtain a very low p-value, pointing at the existence of a difference, and
+see that differences with respect to location make up by far the most part of
+the 2-Wasserstein distance.
 
-For the two distributions that differ in location (`diff.dist2`) and size
-(`diff.dist1`), we obtain very low p-values indicating significant differential
-distribution.
-We can confidently reject $\mathcal{H}_0$ in favor of $\mathcal{H}_1$
 
-```{r test_diff1}
-# diff.dist1 differs from x in its size (standard deviation)
-wasserstein.test(x, diff.dist1, method = "SP")[output.fields]
-
-# diff.dist2 differs from x in its location (mean)
-wasserstein.test(x, diff.dist2, method = "Sp")[output.fields]
-```
-
-For the third distribution that we designed to be differentially distributed,
-we also obtain a low enough p-value to reject  $\mathcal{H}_0$ in favor of
-$\mathcal{H}_1$ 
-
-```{r test_diff3}
-# diff.dist3 differs from x in its shape
-wasserstein.test(x, diff.dist3, method = "SP")[output.fields]
+Analogously, we look at a case in which the two distributions (samples) only
+differ with respect to the size.
+```{r diff_size}
+set.seed(24)
+ctrl <- rnorm(300, 0, 1)
+dd2 <- rnorm(300, 0, 2)
+wasserstein.test(ctrl, dd2, method="SP")[spec.output]
+wasserstein.test(ctrl, dd2, method="ASY")[spec.output]
 ```
 
 
+Similarly, we consider an example in which the two distributions (samples) only
+differ with respect to the shape.
+```{r diff_shape}
+set.seed(24)
+ctrl <- rnorm(300, 6.5, sqrt(13.25))
+sam1 <- rnorm(300, 3, 1)
+sam2 <- rnorm(300, 10, 1)
+dd3 <- rep(NA, 300)
+dd3 <- sapply(seq(1:300), 
+              function(n) {
+                sample(c(sam1[n], sam2[n]), 1, prob=c(0.5, 0.5))})
+wasserstein.test(ctrl, dd3, method="SP")[spec.output]
+wasserstein.test(ctrl, dd3, method="ASY")[spec.output]
+```
+
+
+Finally, we show an example in which there is no difference between the
+distributions. We obtain a high p-value, indicatring that the null hypothesis
+cannot be rejected.
+```{r no_diff}
+set.seed(24)
+ctrl <- rnorm(300, 0, 1)
+set.seed(25)
+nodd <- rnorm(300, 0, 1)
+wasserstein.test(ctrl, nodd, method="SP")[spec.output]
+wasserstein.test(ctrl, nodd, method="ASY")[spec.output]
+```
 
 ## See Also
 
 * Fast and accurate 
 [calculation of the  Wasserstein distance](wasserstein_metric.html)
 
-* Detect and describe 
-[differential expression in scRNAseq data](wasserstein_singlecell.html)
+* Detect 
+[differential gene expression distributions](wasserstein_singlecell.html)
+in scRNAseq data
