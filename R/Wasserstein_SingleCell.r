@@ -9,9 +9,9 @@
 #' logistic regression model. Adapted from the scDD package (Korthauer et al.
 #' 2016).
 #'
-#'@param dat matrix of single-cell RNA-sequencing expression data with genes in
+#'@param x matrix of single-cell RNA-sequencing expression data with genes in
 #' rows and samples (cells) in columns
-#'@param condition vector of condition labels
+#'@param y vector of condition labels
 #'@param these vector of row numbers (i.e. gene numbers) employed to test for
 #' differential proportions of zero expression. Default is 1:nrow(dat)
 #'
@@ -27,26 +27,40 @@
 #'
 #'@export
 #'
-testZeroes <- function(dat, condition, these=seq_len(nrow(dat))){
-    detection <- colSums(dat>0)/nrow(dat)
+setGeneric("testZeroes",
+    function(x, y, ...) standardGeneric("testZeroes"))
 
-    onegene <- function(j, dat, detection, cond, these){
-        y=dat[these[j],]
-        if (sum(y==0) > 0){
-            M1 <- suppressWarnings(bayesglm(y>0 ~ detection + factor(cond), 
-                                    family=binomial(link="logit"),
-                                    Warning=FALSE))
-            return(summary(M1)$coefficients[3,4])
-        }else{
-            return(NA)
+
+#'@export
+setMethod("testZeroes",
+    c(x="matrix", y="vector"),
+    function(x, y, these=seq_len(nrow(x))) {
+        detection <- colSums(dat>0)/nrow(dat)
+        onegene <- function(j, dat, detection, cond, these){
+            y=dat[these[j],]
+            if (sum(y==0) > 0){
+                M1 <- suppressWarnings(bayesglm(y>0 ~ detection + factor(cond),
+                                        family=binomial(link="logit"),
+                                        Warning=FALSE))
+                return(summary(M1)$coefficients[3,4])
+            }else{
+                return(NA)
+            }
         }
-    }
-    
-    pval <- unlist(bplapply(seq_along(these), onegene, dat=dat, 
-                            detection=detection, cond=condition, these=these))
+        pval <- unlist(bplapply(seq_along(these), onegene, dat=dat,
+                                detection=detection, cond=condition, these=these))
+        return(pval)
+    })
 
-    return(pval)
-}
+
+#'@export
+setMethod("testZeroes",
+    c(x="SingleCellExperiment", y="SingleCellExperiment"),
+    function(x, y) {
+        dat <- cbind(counts(x), counts(y))
+        condition <- c(rep(1, dim(counts(x))[2]), rep(2, dim(counts(y))[2]))
+        return(testZeroes(dat, condition))
+    })
 
 
 #'fishersCombinedPval
@@ -317,9 +331,9 @@ testWass<-function(dat, condition,permnum, inclZero=TRUE){
 #' inclZero=TRUE in testWass with the argument method=”OS” and the argument
 #' inclZero=FALSE in testWass with the argument method=”TS”.
 #'
-#'@param dat matrix of single-cell RNA-sequencing expression data with genes in
+#'@param x matrix of single-cell RNA-sequencing expression data with genes in
 #' rows and samples (cells) in columns
-#'@param condition vector of condition labels
+#'@param y vector of condition labels
 #'@param permnum number of permutations used in the permutation testing
 #' procedure
 #'@param method method employed in the testing procedure: “OS” for the
@@ -337,18 +351,55 @@ testWass<-function(dat, condition,permnum, inclZero=TRUE){
 #'@references Schefzik and Goncalves (2019).
 #'
 #'@examples
-#'dat<-matrix(c(rnorm(100,42,1), rnorm(102,45,3)), nrow=1)
-#'condition<-c(rep(1,100), rep(2,102))
-#'wasserstein.sc(dat,condition,10000,method="OS")
-#'wasserstein.sc(dat,condition,10000,method="TS")
 #'
+#'# some data in two conditions
+#'cond1 <- matrix(rnorm(100, 42, 1), nrow=1)
+#'cond2 <- matrix(rnorm(100, 45, 3), nrow=1)
+#'
+#'# call wasserstein.sc with a matrix
+#'# and a vector denoting conditions
+#'dat <- cbind(cond1, cond2)
+#'condition <- c(rep(1, 100), rep(2, 100))
+#'wasserstein.sc(dat, condition, 100, method="TS")
+#'
+#'# call wasserstein.sc with two SingleCellExperiment objects
+#'sce1 <- SingleCellExperiment(
+#'            assays=list(counts=cond1, logcounts=log10(cond1)))
+#'sce2 <- SingleCellExperiment(
+#'            assays=list(counts=cond2, logcounts=log10(cond2)))
+#'wasserstein.sc(sce1, sce2, 100, method="TS")
 #'
 #'@export
-wasserstein.sc <- function(dat, condition, permnum, method=c("OS", "TS")){
-    stopifnot(method %in% c("OS", "TS"))
-    if(method=="OS")
-        RES<-testWass(dat, condition, permnum, inclZero=TRUE)
-    if(method=="TS")  
-        RES<-testWass(dat, condition, permnum, inclZero=FALSE)  
-    return(RES) 
-}
+setGeneric("wasserstein.sc",
+    function(x, y, ...) standardGeneric("wasserstein.sc"))
+
+
+#'@export
+setMethod("wasserstein.sc", 
+    c(x="matrix", y="vector"),
+    function(x, y, permnum, method) {
+        method <- toupper(method)
+        stopifnot(method %in% c("OS", "TS"))
+        if(method == "OS")
+            testWass(x, y, permnum, inclZero=TRUE)
+        if(method == "TS")
+            testWass(x, y, permnum, inclZero=FALSE)
+    })
+
+
+#'@export
+setMethod("wasserstein.sc",
+    c(x="SingleCellExperiment", y="SingleCellExperiment"),
+    function(x, y, permnum, method) {
+        method <- toupper(method)
+        stopifnot(method %in% c("OS", "TS"))
+        stopifnot(dim(counts(x))[1] == dim(counts(y))[1])
+
+        dat <- cbind(counts(x), counts(y))
+        condition <- c(rep(1, dim(counts(x))[2]), rep(2, dim(counts(y))[2]))
+        if(method == "OS")
+            testWass(dat, condition, permnum, inclZero=TRUE)
+        if(method == "TS")
+            testWass(dat, condition, permnum, inclZero=FALSE)
+    })
+

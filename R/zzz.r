@@ -7,6 +7,7 @@
 #'@importFrom BiocParallel bplapply
 #'@importFrom BiocFileCache BiocFileCache bfcadd bfcquery bfcdownload
 #'@importFrom BiocFileCache bfcpath bfcrpath bfccount bfcneedsupdate
+#'@importFrom SingleCellExperiment SingleCellExperiment counts logcounts
 NULL
 
 # Documentation of the RData objects
