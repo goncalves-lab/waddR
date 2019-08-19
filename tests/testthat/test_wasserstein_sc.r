@@ -17,18 +17,18 @@ test_that("Example run wasserstein single cell", {
   ## shorter input z
   z <- c( 100, 120.00, 0, 1, 100, 150, 200)
   
-  data <- matrix(c(x,y), nrow=1)
-  data2 <- matrix(c(x,z), nrow=1)
+  dat <- matrix(c(x,y), nrow=1)
+  dat2 <- matrix(c(x,z), nrow=1)
   condition1 <- c(rep(0, length(x)), rep(1, length(y)))
   condition2 <- c(rep(0, length(x)), rep(2, length(z)))
 
   # test for wasserstein.test.sc( ... method="OS")
-  expect_known("value", wasserstein.sc(data, condition1, 100, method="OS"),
+  expect_known("value", wasserstein.sc(dat, condition1, 100, method="OS"),
                file="known.values/testresult_example_run_wass_sc1")
   # test missing for wasserstein.test.sc( ... method="TS")
-  expect_known("value", wasserstein.sc(data, condition1, 100, method="TS"),
+  expect_known("value", wasserstein.sc(dat, condition1, 100, method="TS"),
                file="known.values/testresult_example_run_wass_sc2")
   # test for different length input vectors
-  expect_known("value", wasserstein.sc(data2, condition2, 100, method="OS"),
+  expect_known("value", wasserstein.sc(dat2, condition2, 100, method="OS"),
                file="known.values/testresult_example_run_wass_sc3")
 })

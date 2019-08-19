@@ -1,5 +1,5 @@
 
-cache.getOrDownload <- function(url, rname) {
+.cache.getOrDownload <- function(url, rname) {
     bfc <- BiocFileCache(ask = FALSE)
 
     # check if url is tracked in local cache
@@ -10,14 +10,14 @@ cache.getOrDownload <- function(url, rname) {
         # download the file located at url and add to cache
         print("Downloading Reference Distribution: \n")
         cachedFilePath <- bfcadd(bfc, rname = rname, fpath = url)
-        
+
     } else {
 
         # get the ID if the file is already in the cache
         rid <- result[["rid"]]
         cachedFilePath <- bfcpath(bfc, rid)
 
-        
+
         # TODO: Find hosting where the bfcneedsupdate functionality can
         # be utilized. While hosting this file on github, timestamps 
         # and expiry dates cannot be determined correctly. 
@@ -36,7 +36,5 @@ cache.getOrDownload <- function(url, rname) {
             cachedFilePath <- bfcdownload(bfc, rid, ask = FALSE)
         }
     }
-    
     return(cachedFilePath)
-    
 }

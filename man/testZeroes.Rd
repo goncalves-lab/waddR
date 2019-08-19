@@ -4,13 +4,13 @@
 \alias{testZeroes}
 \title{testZeroes}
 \usage{
-testZeroes(dat, condition, these = seq_len(nrow(dat)))
+testZeroes(x, y, ...)
 }
 \arguments{
-\item{dat}{matrix of single-cell RNA-sequencing expression data with genes in
+\item{x}{matrix of single-cell RNA-sequencing expression data with genes in
 rows and samples (cells) in columns}
 
-\item{condition}{vector of condition labels}
+\item{y}{vector of condition labels}
 
 \item{these}{vector of row numbers (i.e. gene numbers) employed to test for
 differential proportions of zero expression. Default is 1:nrow(dat)}

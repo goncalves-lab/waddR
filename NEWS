@@ -1,3 +1,12 @@
+Changes in 0.2.8 (2019-08-19)
++ R Code redesign:
+	o new unexported functions to help avoiding repeats
+	o Redesign of all single-cell methods as S4 methods that are also capable to take SingleCellExperiment objects as input
+	o Bioc-style function naming implemented
+	o Now using the cpp decomp functions instead computations in R
++ Output names changed
++ Descriptions changed to match altered code
+
 Changes in 0.2.7 (2019-08-13)
 + Bug fix in interval table / wasserstein_metric causing wasserstein.sc runs to fail
 + Tests for that bug added

@@ -85,13 +85,19 @@ sce.blood <- sce.blood[randgenes, ]
 sce.decidua <- sce.decidua[randgenes, ]
 ```
 
+The input data to `wasserstein.sc` always discriminates two conditions.
+It can be given either as a data matrix and a vector explaining the condition
+of each column, or a `SingleCellExperiment` for each condition.
+
+We will just proceed to use the two `SingleCellExperiment` objects we loaded.
 Next we prepare the input for the function `wasserstein.sc` which can be a
 dataframe or matrix object and a vector, assigning their columns to conditions.
+The `SingleCellExperiment` objects passed to `wasserstein.sc` must contain a
+`counts` assay each.
 
 ```{r}
-dat <- cbind(counts(sce.blood), counts(sce.decidua))
-condition <- c( rep(1, length(colnames(sce.blood))),   # condition 1
-                rep(2, length(colnames(sce.decidua)))) # condition 2
+assays(sce.blood)
+assays(sce.decidua)
 ```
 
 Before testing for differential expression in the two conditions, all data
@@ -100,10 +106,10 @@ To avoid losing actual differences in expression between cells of the same
 condition, cells should be clusterd for similarities first.
 
 Since the decidua and blood cells have already been preprocessed, we can run
-the wasserstein test for single cell now.
+the test now.
 
 ```{r}
-wsres <- wasserstein.sc(dat, condition, permnum = 10000, "TS")
+wsres <- wasserstein.sc(sce.blood, sce.decidua, permnum = 10000, "TS")
 head(wsres, n=2L)
 ```
 
