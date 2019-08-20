@@ -96,18 +96,19 @@ setMethod("testZeroes",
     c(x="matrix", y="vector"),
     function(x, y, these=seq_len(nrow(x))) {
         detection <- colSums(x > 0) / nrow(x)
-        onegene <- function(j, dat, detection, cond, these){
+        onegene <- function(j, dat, detection, cond, these) {
             trows = dat[these[j], ]
-            if (sum( y== 0) > 0){
+            if (sum( y== 0) > 0) {
                 M1 <- suppressWarnings(
                             bayesglm(   trows > 0 ~ detection + factor(cond),
                                         family=binomial(link="logit"),
                                         Warning=FALSE))
                 return(summary(M1)$coefficients[3, 4])
-            }else{
+            } else {
                 return(NA)
             }
         }
+        
         pval <- unlist(bplapply(seq_along(these), onegene, dat=x,
                                 detection=detection, cond=y, these=these))
         return(pval)
@@ -240,6 +241,7 @@ setMethod("testZeroes",
 #' \item p.adj.combined: adjusted combined p-value of p.nonzero and p.zero
 #'  obtained by Fisher’s method according to the method of Benjamini-Hochberg
 #' }
+#' If 
 #'
 #'@references Schefzik and Goncalves (2019).
 #'
@@ -268,7 +270,7 @@ setMethod("testZeroes",
         wass.res <- bplapply(seq_len(nrow(dat)), onegene, 
                             condition=condition, dat=dat)
 
-        wass.res1 <- do.call(rbind,wass.res)
+        wass.res1 <- do.call(rbind, wass.res)
 
         wass.pval.adj <- p.adjust(wass.res1[,9], method="BH")
 
@@ -281,32 +283,29 @@ setMethod("testZeroes",
         RES <- cbind(wass.res1,pval.zero,pval.combined,wass.pval.adj,
                     pval.adj.zero,pval.adj.combined)
         row.names(RES) <- rownames(dat)
-        colnames(RES) <- c("d.wass","d.wass^2","d.comp^2","d.comp",
-            "location","size","shape","rho","p.nonzero","p.ad.gpd","N.exc",
-            "perc.loc","perc.size","perc.shape","decomp.error","p.zero",
-            "p.combined","p.adj.nonzero","p.adj.zero","p.adj.combined")
-
+        colnames(RES) <- c( colnames(wass.res1), "p.zero", "p.combined",
+                            "p.adj.nonzero","p.adj.zero","p.adj.combined")
+        return(RES)
     } else {
 
         onegene <- function(x, dat, condition){
             x1 <- dat[x,][condition==unique(condition)[1]]
             x2 <- dat[x,][condition==unique(condition)[2]]
-
+            
             suppressWarnings(wasserstein.test.sp(x1,x2,permnum))
         }
-
+        
         wass.res <- bplapply(seq_len(nrow(dat)), onegene, 
                         condition=condition, dat=dat)
 
         wass.res1 <- do.call(rbind,wass.res)
 
         wass.pval.adj <- p.adjust(wass.res1[,9], method="BH")
-
-        RES <- cbind(wass.res1,wass.pval.adj)
+        
+        RES <- cbind(wass.res1, wass.pval.adj)
         row.names(RES) <- rownames(dat)
+        return(RES)
     }
-
-    return(RES)
 }
 
 

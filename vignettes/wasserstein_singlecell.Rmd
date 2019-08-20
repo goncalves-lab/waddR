@@ -43,9 +43,8 @@ been normalized, scaled and is available for download on
 First, we will first load all required packages:
 
 ```{r}
-library(waddR)
-
 suppressPackageStartupMessages({
+    library("waddR")
     library("scater")
     library("SingleCellExperiment")
     library("BiocFileCache")
@@ -105,8 +104,8 @@ must be normalized for cell-specific biases.
 To avoid losing actual differences in expression between cells of the same
 condition, cells should be clusterd for similarities first.
 
-Since the decidua and blood cells have already been preprocessed, we can run
-the test now.
+The processing steps performed on this data can be seen 
+[here](https://github.com/goncalves-lab/waddr-data.git).
 
 ```{r}
 wsres <- wasserstein.sc(sce.blood, sce.decidua, permnum = 10000, "TS")
@@ -139,7 +138,7 @@ given.
 | shape         | shape term in the squared 2-Wasserstein decomposition       |
 | rho           | correlation coefficient in the quantile-quantile plot       |
 | pval          | p-value of the semi-parametric test                         |
-| p.ad.gpd      | p-value of the  Anderson-Darling test to check whether the GPD actually fits the data well (otherwise NA) \* |
+| p.ad.gpd      | p-value of the Anderson-Darling test to check whether the GPD actually fits the data well \* |
 | N.exc         | number of exceedances (starting with 250 and iteratively decreased by 10 if necessary) that are required to obtain a good GPD fit (i.e. p-value of Anderson-Darling test  greater or eqaul to 0.05) \* |
 | perc.loc      | fraction (in %) of the location part with respect to the overall squared 2-Wasserstein distance obtained by the decomposition approximation |
 | perc.size     | fraction (in %) of the size part with respect to the overall squared 2-Wasserstein distance obtained by the decomposition approximation |
@@ -151,7 +150,7 @@ given.
 | p.adj.zero    | adjusted p-value of the test for differential proportions of zero expression (logistic regression model) according to the method of Benjamini-Hochberg \*\* |
 |  p.adj.combined | adjusted combined p-value of p.nonzero and p.zero obtained by Fisher’s method according to the method of Benjamini-Hochberg \*\* |
 
-*\* only if GDP fitting is performed, NA otherwise;* 
+*\* only if GDP fitting is performed (NA otherwise);* 
 *\*\* only if the two-stage test is run*
 
 

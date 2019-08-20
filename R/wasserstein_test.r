@@ -88,6 +88,7 @@
 #' @param pvalue estimated p value of this observation
 #' @return pvalue.adjusted, Anderson-Darling p-value of gdp fitting, number
 #'  of exceedances for calculating a pvalue from the empirical distribution
+#'  
 .gdpFittedPValue <- function(val, distr.ordered, pvalue) {
     
     # list of possible exceedance thresholds (decreasing)
@@ -265,21 +266,21 @@ wasserstein.test.sp<-function(x,y,permnum=10000){
         perc.size <- round(((size / d.comp.sq) * 100), 2)
         perc.shape <- round(((shape / d.comp.sq)*100), 2)
         decomp.error <- .relativeError(value.sq, d.comp.sq)
-        
+
         output <- c("d.wass"=value, "d.wass^2"=value.sq, "d.comp^2"=d.comp.sq,
                     "d.comp"=d.comp, "location"=location, "size"=size,
                     "shape"=shape, "rho"=rho.xy, "pval"=pvalue.wass,
                     "p.ad.gdp"=pvalue.gdpfit, "N.exc"=N.exc,
                     "perc.loc"=perc.loc, "perc.size"=perc.size,
                     "perc.shape"=perc.shape, "decomp.error"=decomp.error)
-        
+
     } else { output <- c("d.wass"=NA, "d.wass^2"=NA, "d.comp^2"=NA,
                          "d.comp"=NA, "location"=NA, "size"=NA,
                          "shape"=NA, "rho"=NA, "pval"=NA,
                          "p.ad.gdp"=NA, "N.exc"=NA,
                          "perc.loc"=NA, "perc.size"=NA,
                          "perc.shape"=NA, "decomp.error"=NA) }
-    
+
     return(output)
 }
 
@@ -376,7 +377,7 @@ wasserstein.test.asy <- function(x, y){
 
         # correlation of quantile-quantile plot
         rho.xy <- .quantileCorrelation(x, y)
-        
+
         # decomposition of wasserstein distance
         wass.comp <- squared_wass_decomp(x, y)
         location <- wass.comp$location
