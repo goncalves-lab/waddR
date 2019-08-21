@@ -115,7 +115,6 @@ test_that("squared_wass_decomp correctness", {
   x <- rep(0,107)
   y <- c(rep(0,154), 0.8463086, rep(0, 26))
   res <- squared_wass_decomp(x, y)
-  print(res)
   location <- (mean(x) - mean(y))**2
   expect_equal(res$location, location)
   size <- (sd(x) - sd(y))**2
@@ -123,7 +122,6 @@ test_that("squared_wass_decomp correctness", {
   x.quant <- quantile(x, probs=(seq(1000)-0.5)/1000, type=1)
   y.quant <- quantile(y, probs=(seq(1000)-0.5)/1000, type=1)
   shape <- (2 * sd(x) * sd(y) * (1 - cor(x.quant, y.quant)))
-  print(shape)
   expect_equal(res$shape, shape)
   expect_equal(res$distance, location + size + shape)
 })
