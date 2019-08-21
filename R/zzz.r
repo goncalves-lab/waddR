@@ -10,31 +10,19 @@
 #'@importFrom SingleCellExperiment SingleCellExperiment counts logcounts
 NULL
 
-# Documentation of the RData objects
-#' empcdf.ref
+
+#' brownianbridge.empcdf
 #'
 #' An empirical cumulative distribution function of a simulated Brownian bridge
 #' distribution. It is used an empirical quantile function to determine 
 #' p-values in the asymptotic wasserstein test function wasserstein.test.asy
-#' 
-#' @name empcdf.ref  
-#' @docType data
-#' @keywords data
-empcdf.ref <- NULL
-
-#' brownianbridge.empcdf
-#'
-#' A global reference to empcdf.ref.
-#' It is used an empirical quantile function to determine 
-#' p-values in the asymptotic wasserstein test function wasserstein.test.asy
 #'
 #' @name brownianbridge.empcdf
-#' @docType data
-#' @keywords data
-#' @export
-brownianbridge.empcdf <- NULL
+#' 
+.brownianBridgeEmpcdf <- NULL
 
-# TODO: FTP hosting or data package!!
+
+# TODO: upload as data package
 #' brownianbridge.empcdf.url
 #'
 #' Url for downloading the simulated Brownian bridge distribution. 
@@ -43,15 +31,30 @@ brownianbridge.empcdf <- NULL
 #' 
 #' @name brownianbridge.empcdf.url
 #' @docType data
-#' @export
-brownianbridge.empcdf.url <- paste0("https://github.com/goncalves-lab/",
+#' 
+.brownianBridgeEmpcdf.url <- paste0("https://github.com/goncalves-lab/",
                                     "waddR-data/blob/master/data/",
                                     "empcdf_ref.RData?raw=true")
+
 
 # Non-exported definition to check if non-exported functions are available.
 # This will cause tests for these functions (causing issues on build systems)
 # to be skipped.
 NONEXPORTS.AVAILABLE <- TRUE
+
+
+.onLoad <- function (libname, pkgname) {
+
+    # Load the reference distributions from cache
+    if (is.null(.brownianBridgeEmpcdf)) {
+        brownianBridgeEmpcdf.path <- .cache.getOrDownload(
+            url=.brownianBridgeEmpcdf.url,
+            rname="empcdf.ref")
+        load(brownianBridgeEmpcdf.path)
+        assign(".brownianBridgeEmpcdf", empcdf.ref, .GlobalEnv)
+    }
+}
+
 
 # cleanup after our cpp libraries
 .onUnload <- function (libpath) {

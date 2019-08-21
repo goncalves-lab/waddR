@@ -239,14 +239,6 @@ wasserstein.test.sp<-function(x,y,permnum=10000){
 wasserstein.test.asy <- function(x, y){
 
     if (length(x) != 0 & length(y) != 0) {
-        # Load the reference distributions from cache
-        if (is.null(brownianbridge.empcdf)) {
-            brownianbridge.empcdf.path <- .cache.getOrDownload(
-                url=brownianbridge.empcdf.url,
-                rname="empcdf.ref")
-            load(brownianbridge.empcdf.path)
-            brownianbridge.empcdf <- empcdf.ref
-        }
 
         value <- wasserstein_metric(x, y, p=2)
         value.sq <- value **2 
