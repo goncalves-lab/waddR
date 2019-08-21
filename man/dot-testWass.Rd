@@ -116,6 +116,7 @@ In case of inclZero=FALSE:
 \item p.adj.combined: adjusted combined p-value of p.nonzero and p.zero
  obtained by Fisher’s method according to the method of Benjamini-Hochberg
 }
+If
 }
 \description{
 Two-sample test for single-cell RNA-sequencing data to check for differences
@@ -131,11 +132,9 @@ Goncalves (2019).
 \examples{
 dat <- matrix(c(rnorm(100, 42, 1), rnorm(102, 45, 3)), nrow=1)
 condition <- c(rep(1, 100), rep(2, 102))
-testWass(dat, condition, 10000, inclZero=TRUE)
-testWass(dat, condition, 10000, inclZero=FALSE)
+.testWass(dat, condition, 10000, inclZero=TRUE)
+.testWass(dat, condition, 10000, inclZero=FALSE)
 
-
-       
 }
 \references{
 Schefzik and Goncalves (2019).

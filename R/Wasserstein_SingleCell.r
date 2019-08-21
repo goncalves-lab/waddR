@@ -17,9 +17,9 @@
 #'
 #'@export
 #'
-.fishersCombinedPval<-function(x) { 
+.fishersCombinedPval<-function(x) {
     if(sum(is.na(x)) == 0) {
-        x <- ifelse(x==0,1e-100,x)
+        ifelse(x==0,1e-100,x)
         p.comb <- pchisq(-2 * sum(log(x)), df=2*length(x), lower.tail=FALSE)
     } else if (sum(is.na(x)) == 1){
         p.comb <- x[!is.na(x)]
@@ -97,10 +97,10 @@ setMethod("testZeroes",
     function(x, y, these=seq_len(nrow(x))) {
         detection <- colSums(x > 0) / nrow(x)
         onegene <- function(j, dat, detection, cond, these) {
-            trows = dat[these[j], ]
-            if (sum( y== 0) > 0) {
+            trow = dat[these[j], ]
+            if (sum(trow == 0) > 0) {
                 M1 <- suppressWarnings(
-                            bayesglm(   trows > 0 ~ detection + factor(cond),
+                            bayesglm(   trow > 0 ~ detection + factor(cond),
                                         family=binomial(link="logit"),
                                         Warning=FALSE))
                 return(summary(M1)$coefficients[3, 4])
@@ -248,11 +248,9 @@ setMethod("testZeroes",
 #'@examples
 #'dat <- matrix(c(rnorm(100, 42, 1), rnorm(102, 45, 3)), nrow=1)
 #'condition <- c(rep(1, 100), rep(2, 102))
-#'testWass(dat, condition, 10000, inclZero=TRUE)
-#'testWass(dat, condition, 10000, inclZero=FALSE)
+#'.testWass(dat, condition, 10000, inclZero=TRUE)
+#'.testWass(dat, condition, 10000, inclZero=FALSE)
 #'
-#'
-#'        
 .testWass <- function(dat, condition, permnum, inclZero=TRUE){
 
     if (!inclZero){
@@ -274,8 +272,8 @@ setMethod("testZeroes",
 
         wass.pval.adj <- p.adjust(wass.res1[,9], method="BH")
 
-        pval.zero <- testZeroes(dat,condition)
-        pval.adj.zero <- p.adjust(pval.zero,method="BH")  
+        pval.zero <- testZeroes(dat, condition)
+        pval.adj.zero <- p.adjust(pval.zero, method="BH")
 
         pval.combined <- .combinePVal(wass.res1[,9],pval.zero)
         pval.adj.combined <- p.adjust(pval.combined,method="BH")
@@ -304,6 +302,7 @@ setMethod("testZeroes",
         
         RES <- cbind(wass.res1, wass.pval.adj)
         row.names(RES) <- rownames(dat)
+        colnames(RES) <- c( colnames(wass.res1), "pval.adj")
         return(RES)
     }
 }
@@ -371,13 +370,14 @@ setMethod("wasserstein.sc",
     c(x="matrix", y="vector"),
     function(x, y, permnum, method) {
         method <- toupper(method)
+        stopifnot(length(unique(y)) == 2)
         stopifnot(method %in% c("OS", "TS"))
         stopifnot(dim(x)[2] == length(y))
 
         if(method == "OS")
-            .testWass(x, y, permnum, inclZero=TRUE)
+            return(.testWass(x, y, permnum, inclZero=TRUE))
         if(method == "TS")
-            .testWass(x, y, permnum, inclZero=FALSE)
+            return(.testWass(x, y, permnum, inclZero=FALSE))
     })
 
 
@@ -392,8 +392,8 @@ setMethod("wasserstein.sc",
         dat <- cbind(counts(x), counts(y))
         condition <- c(rep(1, dim(counts(x))[2]), rep(2, dim(counts(y))[2]))
         if(method == "OS")
-            .testWass(dat, condition, permnum, inclZero=TRUE)
+            return(.testWass(dat, condition, permnum, inclZero=TRUE))
         if(method == "TS")
-            .testWass(dat, condition, permnum, inclZero=FALSE)
+            return(.testWass(dat, condition, permnum, inclZero=FALSE))
     })
 

@@ -237,21 +237,22 @@ wasserstein.test.sp<-function(x,y,permnum=10000){
         pvalue.wass <- pvalue.ecdf
         pvalue.gdpfit <- NA
         N.exc <- NA
-        if (FALSE) {#(num.extr < 10) {
+        if (num.extr < 10) {
             tryCatch({
-                res <- .gdpFittedPValue(value.sq,
-                                        wass.values.ordered,
-                                        pvalue.ecdf)
-                pvalue.wass <- res$pvalue.gdp
-                pvalue.gdpfit <- res$ad.pval
-                N.exc <- res$N.exc
+                    res <- .gdpFittedPValue(value.sq,
+                                            wass.values.ordered,
+                                            pvalue.ecdf)
+                    pvalue.wass <<- res$pvalue.gdp
+                    pvalue.gdpfit <<- res$ad.pval
+                    N.exc <<- res$N.exc
                 }, error=function(...) {
-                pvalue.wass <- pvalue.ecdf.pseudo
-                pvalue.gdpfit <- NA
-                N.exc <- NA
+                    pvalue.wass <<- pvalue.ecdf.pseudo
+                    pvalue.gdpfit <<- NA
+                    N.exc <<- NA
                 })
         }
 
+        
         # correlation of quantile-quantile plot
         rho.xy <- .quantileCorrelation(x, y)
 
@@ -261,6 +262,9 @@ wasserstein.test.sp<-function(x,y,permnum=10000){
         size <- wass.comp$size
         shape <- wass.comp$shape
         d.comp.sq <- wass.comp$distance
+        if (is.na(d.comp.sq)) {
+            d.comp.sq <- sum(na.exclude(location, shape, size))
+        }
         d.comp <- sqrt(d.comp.sq)
         perc.loc <- round(((location / d.comp.sq) * 100), 2)
         perc.size <- round(((size / d.comp.sq) * 100), 2)
@@ -384,6 +388,9 @@ wasserstein.test.asy <- function(x, y){
         size <- wass.comp$size
         shape <- wass.comp$shape
         d.comp.sq <- wass.comp$distance
+        if (is.na(d.comp.sq)) {
+            d.comp.sq <- sum(na.exclude(location, shape, size))
+        }
         d.comp <- sqrt(d.comp.sq)
         perc.loc <- round(((location / d.comp.sq) * 100), 2)
         perc.size <- round(((size / d.comp.sq) * 100), 2)

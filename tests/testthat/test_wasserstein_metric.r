@@ -98,9 +98,34 @@ test_that("squared_wass_approx correctness", {
 test_that("squared_wass_decomp correctness", {
   a <- c(13, 21, 34, 23)
   b <- c(1,  1,  1,  2.3)
+  
   # case with equally long vectors a and b
-  expect_known("value", squared_wass_approx(a,b),
-               file="known.values/testresult_squared_wass_decomp_correctness1")
+  res <- squared_wass_decomp(a,b)
+  location <- (mean(a) - mean(b))**2
+  expect_equal(res$location, location)
+  size <- (sd(a) - sd(b))**2
+  expect_equal(res$size, size)
+  a.quant <- quantile(a, probs=(seq(1000)-0.5)/1000, type=1)
+  b.quant <- quantile(b, probs=(seq(1000)-0.5)/1000, type=1)
+  shape <- (2 * sd(a) * sd(b) * (1 - cor(a.quant, b.quant)))
+  expect_equal(res$shape, shape)
+  expect_equal(res$distance, location + size + shape)
+
+  # test for special case that caused the shape calculation to fail
+  x <- rep(0,107)
+  y <- c(rep(0,154), 0.8463086, rep(0, 26))
+  res <- squared_wass_decomp(x, y)
+  print(res)
+  location <- (mean(x) - mean(y))**2
+  expect_equal(res$location, location)
+  size <- (sd(x) - sd(y))**2
+  expect_equal(res$size, size)
+  x.quant <- quantile(x, probs=(seq(1000)-0.5)/1000, type=1)
+  y.quant <- quantile(y, probs=(seq(1000)-0.5)/1000, type=1)
+  shape <- (2 * sd(x) * sd(y) * (1 - cor(x.quant, y.quant)))
+  print(shape)
+  expect_equal(res$shape, shape)
+  expect_equal(res$distance, location + size + shape)
 })
 
 

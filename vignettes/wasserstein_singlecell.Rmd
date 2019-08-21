@@ -79,7 +79,7 @@ whole analysis would be out of scope for this vignette.
 
 ```{r}
 set.seed(28)
-randgenes <- sample(rownames(sce.blood), 5000, replace=FALSE)
+randgenes <- sample(rownames(sce.blood), 2500, replace=FALSE)
 sce.blood <- sce.blood[randgenes, ]
 sce.decidua <- sce.decidua[randgenes, ]
 ```
@@ -108,8 +108,8 @@ The processing steps performed on this data can be seen
 [here](https://github.com/goncalves-lab/waddr-data.git).
 
 ```{r}
-wsres <- wasserstein.sc(sce.blood, sce.decidua, permnum = 10000, "TS")
-head(wsres, n=2L)
+wsres <- wasserstein.sc(sce.blood, sce.decidua, permnum = 10000, "OS")
+head(wsres, n=10L)
 ```
 
 The 2-Wasserstein single-cell testing procedure is performed on all genes in
@@ -120,7 +120,7 @@ gene.
 Note: The two-stage (TS) procedure includes a test for differential proportions
 of zero gene expression, considering the proportion of zeroes over all
 conditions and genes in a model.
-This method might yield misleading results, if only a subset of genes is
+It method might yield incorrect results, if only a subset of genes is
 given.
 
 
