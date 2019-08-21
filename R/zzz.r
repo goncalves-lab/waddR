@@ -1,7 +1,7 @@
 #'@useDynLib waddR
 #'@importFrom Rcpp sourceCpp
 #'@importFrom methods is
-#'@importFrom stats binomial cor ecdf p.adjust pchisq quantile sd
+#'@importFrom stats binomial cor ecdf p.adjust pchisq quantile sd na.exclude
 #'@importFrom arm bayesglm
 #'@importFrom eva gpdAd gpdFit pgpd
 #'@importFrom BiocParallel bplapply
