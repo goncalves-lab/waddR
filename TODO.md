@@ -6,13 +6,14 @@
 - [x] Wasserstein Metric Rcpp implementation differs from wasserstein1d
 
 ## IMPORTANT
+- [ ] Check and BiocCheck has Warnings
 - [x] <s> Write Man pages</s> Use Roxygen
-- [ ] update new cpp code comments for roxygen2
-- [ ] Biological application
+- [x] update new cpp code comments for roxygen2
+- [x] Biological application
 - [x] Fix tests to run with devtools::test()
 - [ ] Upload to CRAN / Bioconductor
 - [x] Make use of Cpp references
-- [ ] change decomposition error in Test output from absolute to relative measure
+- [x] change decomposition error in Test output from absolute to relative measure
 
 ## FEATURES
 - [ ] <s> CI Testing </s> Not necessary at this point
