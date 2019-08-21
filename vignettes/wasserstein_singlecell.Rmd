@@ -116,11 +116,10 @@ The 2-Wasserstein single-cell testing procedure is performed on all genes in
 the data set -- one line of the output describes the result of testing one
 gene.
 
-
 Note: The two-stage (TS) procedure includes a test for differential proportions
 of zero gene expression, considering the proportion of zeroes over all
 conditions and genes in a model.
-It method might yield incorrect results, if only a subset of genes is
+It may yield incorrect results, if it is applied on only a subset of genes is
 given.
 
 
