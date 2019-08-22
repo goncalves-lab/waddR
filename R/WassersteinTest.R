@@ -254,7 +254,7 @@ wasserstein.test.asy <- function(x, y){
                     / (length(x) + length(y))) * trf.int
 
         # p-value
-        pvalue.wass <- 1 - brownianbridge.empcdf(test.stat)
+        pvalue.wass <- 1 - .brownianBridgeEmpcdf(test.stat)
 
         # correlation of quantile-quantile plot
         rho.xy <- .quantileCorrelation(x, y)
