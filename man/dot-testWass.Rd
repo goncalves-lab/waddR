@@ -23,100 +23,12 @@ differential proportions of zero expression using logistic regression) is
 performed. Default is TRUE}
 }
 \value{
-A vector concerning the testing results, precisely (see Schefzik and
-Goncalves (2019) for details) in case of inclZero=TRUE:
-\itemize{
-\item d.wass: 2-Wasserstein distance between the two samples computed
- by quantile approximation
-\item d.wass^2: squared 2-Wasserstein distance between the two samples
- computed by quantile approximation
-\item d.comp^2: squared 2-Wasserstein distance between the two samples
- computed by decomposition approximation
-\item d.comp: 2-Wasserstein distance between the two samples computed by
- decomposition approximation
-\item location: location term in the decomposition of the squared
- 2-Wasserstein distance between the two samples
-\item size: size term in the decomposition of the squared 2-Wasserstein
- distance between the two samples
-\item shape: shape term in the decomposition of the squared 2-Wasserstein
- distance between the two samples
-\item rho: correlation coefficient in the quantile-quantile plot
-\item pval: p-value of the semi-parametric 2-Wasserstein distance-based
- test
-\item p.ad.gpd in case the GPD fitting is performed: p-value of the
- Anderson-Darling test to check whether the GPD actually fits the data well
- (otherwise NA)
-\item N.exc: in case the GPD fitting is performed: number of exceedances
- (starting with 250 and iteratively decreased by 10 if necessary) that are
- required to obtain a good GPD fit (i.e. p-value of Anderson-Darling test
- greater or eqaul to 0.05)(otherwise NA)
-\item perc.loc: fraction (in %) of the location part with respect to the
- overall squared 2-Wasserstein distance obtained by the decomposition
- approximation
-\item perc.size: fraction (in %) of the size part with respect to the
- overall squared 2-Wasserstein distance obtained by the decomposition
- approximation
-\item perc.shape: fraction (in %) of the shape part with respect to the
- overall squared 2-Wasserstein distance obtained by the decomposition
- approximation
-\item decomp.error: relative error between the squared 2-Wasserstein
- distance computed by the quantile approximation and the squared
- 2-Wasserstein distance computed by the decomposition approximation
-\item pval.adj: adjusted p-value of the semi-parametric 2-Wasserstein
- distance-based test according to the method of Benjamini-Hochberg
-}
-In case of inclZero=FALSE:
-\itemize{
-\item d.wass: 2-Wasserstein distance between the two samples computed
- by quantile approximation
-\item d.wass^2: squared 2-Wasserstein distance between the two samples
- computed by quantile approximation
-\item d.comp^2: squared 2-Wasserstein distance between the two samples
- computed by decomposition approximation
-\item d.comp: 2-Wasserstein distance between the two samples computed by
- decomposition approximation
-\item location: location term in the decomposition of the squared
- 2-Wasserstein distance between the two samples
-\item size: size term in the decomposition of the squared 2-Wasserstein
- distance between the two samples
-\item shape: shape term in the decomposition of the squared 2-Wasserstein
- distance between the two samples
-\item rho: correlation coefficient in the quantile-quantile plot
-\item p.nonzero: p-value of the semi-parametric 2-Wasserstein distance-based
- test (based on non-zero expression only)
-\item p.ad.gpd: in case the GPD fitting is performed: p-value of the
- Anderson-Darling test to check whether the GPD actually fits the data well
- (otherwise NA)
-\item N.exc: in case the GPD fitting is performed: number of exceedances
- (starting with 250 and iteratively decreased by 10 if necessary) that are
- required to obtain a good GPD fit (i.e. p-value of Anderson-Darling test
- greater or eqaul to 0.05)(otherwise NA)
-\item perc.loc: fraction (in %) of the location part with respect to the
- overall squared 2-Wasserstein distance obtained by the decomposition
- approximation
-\item perc.size: fraction (in %) of the size part with respect to the
- overall squared 2-Wasserstein distance obtained by the decomposition
- approximation
-\item perc.shape: fraction (in %) of the shape part with respect to the
- overall squared 2-Wasserstein distance obtained by the decomposition
- approximation
-\item decomp.error: relative error between the squared 2-Wasserstein
- distance computed by the quantile approximation and the squared 
- 2-Wasserstein distance computed by the decomposition approximation
-\item p.zero: p-value of the test for differential proportions of zero
- expression (logistic regression model)
-\item p.combined: combined p-value of p.nonzero and p.zero obtained by
- Fisher’s method
-\item p.adj.nonzero: adjusted p-value of the semi-parametric 2-Wasserstein
- distance-based test (based on non-zero expression only) according to the
- method of Benjamini-Hochberg
-\item p.adj.zero: adjusted p-value of the test for differential proportions
- of zero expression (logistic regression model) according to the method of
- Benjamini-Hochberg
-\item p.adj.combined: adjusted combined p-value of p.nonzero and p.zero
- obtained by Fisher’s method according to the method of Benjamini-Hochberg
-}
-If
+matrix with every row being the wasserstein test of one gene between
+the two conditions.
+ See the corresponding values in the description of the function
+wasserstein.sc, where the argument inclZero=TRUE in .testWass has to be
+identified with the argument method=”OS”, and the argument inclZero=FALSE in
+.testWass with the argument method=”TS”.
 }
 \description{
 Two-sample test for single-cell RNA-sequencing data to check for differences
@@ -129,13 +41,6 @@ Details concerning the permutation testing procedures for
 single-cell RNA-sequencing data can be found in Schefzik and 
 Goncalves (2019).
 }
-\examples{
-dat <- matrix(c(rnorm(100, 42, 1), rnorm(102, 45, 3)), nrow=1)
-condition <- c(rep(1, 100), rep(2, 102))
-.testWass(dat, condition, 10000, inclZero=TRUE)
-.testWass(dat, condition, 10000, inclZero=FALSE)
-
-}
 \references{
-Schefzik and Goncalves (2019).
+Schefzik and Goncalves 2019
 }

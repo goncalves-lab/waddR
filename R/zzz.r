@@ -17,11 +17,11 @@ NULL
 #' distribution. It is used an empirical quantile function to determine 
 #' p-values in the asymptotic wasserstein test function wasserstein.test.asy
 #'
-#' @param x numeric in the Brownian distribution
+#' @param v distribution funtion input value
 #' @return Value at x of the Brownian distribution
 #' @name .brownianBridgeEmpcdf
 #' 
-.brownianBridgeEmpcdf <- function(x) NULL # distribution loaded in .onLoad
+.brownianBridgeEmpcdf <- function(v) NULL # distribution loaded in .onLoad
 
 
 # TODO: upload as data package

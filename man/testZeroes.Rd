@@ -12,8 +12,10 @@ rows and samples (cells) in columns}
 
 \item{y}{vector of condition labels}
 
+\item{...}{further arguments that can be given include `these`}
+
 \item{these}{vector of row numbers (i.e. gene numbers) employed to test for
-differential proportions of zero expression. Default is 1:nrow(dat)}
+differential proportions of zero expression. Default is seq_len(dat)}
 }
 \value{
 A vector of (unadjusted) p-values
@@ -31,8 +33,7 @@ logistic regression model. Adapted from the scDD package (Korthauer et al.
 \examples{
 dat<-matrix(c(rnorm(100,42,1), rnorm(102,45,3)), nrow=1)
 condition<-c(rep(1,100), rep(2,102))
-testZeroes(dat,condition)
-
+testZeroes(dat, condition, these=seq_len(dat))
 
 }
 \references{

@@ -7,7 +7,7 @@
 .brownianBridgeEmpcdf(v)
 }
 \arguments{
-\item{x}{numeric in the Brownian distribution}
+\item{v}{distribution funtion input value}
 }
 \value{
 Value at x of the Brownian distribution
