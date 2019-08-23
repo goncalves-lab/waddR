@@ -52,8 +52,11 @@ NONEXPORTS.AVAILABLE <- TRUE
         brownianBridgeEmpcdf.path <- .cache.getOrDownload(
             url=.brownianBridgeEmpcdf.url,
             rname="empcdf.ref")
+        empcdf.ref <- NULL # this variable will be loaded from the file
         load(brownianBridgeEmpcdf.path)
-        assign(".brownianBridgeEmpcdf", empcdf.ref, environment(.brownianBridgeEmpcdf))
+        assign(".brownianBridgeEmpcdf", 
+               empcdf.ref,
+               environment(.brownianBridgeEmpcdf))
     }
 }
 
