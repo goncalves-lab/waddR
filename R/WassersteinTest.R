@@ -122,18 +122,19 @@ wasserstein.test.sp<-function(x,y,permnum=10000){
         pvalue.wass <- pvalue.ecdf
         pvalue.gdpfit <- NA
         N.exc <- NA
+        env <- environment()
         if (num.extr < 10) {
             tryCatch({
                     res <- .gdpFittedPValue(value.sq,
                                             wass.values.ordered,
                                             pvalue.ecdf)
-                    pvalue.wass <<- res$pvalue.gdp
-                    pvalue.gdpfit <<- res$ad.pval
-                    N.exc <<- res$N.exc
+                    assign("pvalue.wass", res$pvalue.gdp, env)
+                    assign("pvalue.gdpfit", res$ad.pval, env)
+                    assign("N.exc", res$N.exc, env)
                 }, error=function(...) {
-                    pvalue.wass <<- pvalue.ecdf.pseudo
-                    pvalue.gdpfit <<- NA
-                    N.exc <<- NA
+                    assign("pvalue.wass", pvalue.ecdf.pseudo, env)
+                    assign("pvalue.gdpfit", NA, env)
+                    assign("N.exc", NA, env)
                 })
         }
 
@@ -247,7 +248,7 @@ wasserstein.test.asy <- function(x, y){
         pr <- seq(from=0, to=1, by=1/10000)
         empir.cdf.y <- ecdf(y)
 
-        parts.trf <- ((empir.cdf.y(quantile(x, probs=pr, type=1))) - pr) **2  
+        parts.trf <- ((empir.cdf.y(quantile(x, probs=pr, type=1))) - pr) **2
 
         trf.int <- (1 / length(pr)) * sum(parts.trf)
         test.stat <- (length(x) * length(y) 
