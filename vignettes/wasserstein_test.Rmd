@@ -25,7 +25,7 @@ $\mathcal{H}_1: F_A \neq F_B$.
 
 
 The first, semi-parametric (SP), procedure uses a test based on permutations
-combined with a generaltized Pareto distribution approximation to estimate
+combined with a generalized Pareto distribution approximation to estimate
 small p-values accurately.
 
 
