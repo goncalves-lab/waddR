@@ -1,37 +1,44 @@
 
-#'testZeroes
+#' testZeroes: Test for differential proportions of zero values
 #'
 #' Test for differential proportions of zero expression between two conditions
 #' for a specified set of genes
 #'
-#'@details Test for differential proportions of zero expression between two
+#' Test for differential proportions of zero expression between two
 #' conditions that is not explained by the detection rate using a (Bayesian)
 #' logistic regression model. Adapted from the scDD package (Korthauer et al.
 #' 2016).
 #'
-#'@param x matrix of single-cell RNA-sequencing expression data with genes in
-#' rows and samples (cells) in columns
-#'@param y vector of condition labels
-#'@param ... further arguments that can be given include `these`
-#'@param these vector of row numbers (i.e. gene numbers) employed to test for
-#' differential proportions of zero expression. Default is seq_len(dat)
+#' @param x matrix of single-cell RNA-sequencing expression data with genes in
+#'   rows and samples (cells) in columns
+#' @param y vector of condition labels
+#' @param these vector of row numbers (i.e. gene numbers) employed to test for
+#'   differential proportions of zero expression. Default is seq_len(nrow(dat))
 #'
-#'@return A vector of (unadjusted) p-values 
+#' @return A vector of (unadjusted) p-values
 #'
-#'@references Korthauer et al. (2016).
+#' @references Korthauer et al. (2016).
 #'
-#'@examples
-#'dat<-matrix(c(rnorm(100,42,1), rnorm(102,45,3)), nrow=1)
-#'condition<-c(rep(1,100), rep(2,102))
-#'testZeroes(dat, condition, these=seq_len(dat))
+#' @examples
+#' x1 <- c(rnorm(100,42,1), rnorm(102,45,3))
+#' x2 <- c(rnorm(100,0,1), rnorm(102,0,2))
+#' dat <- matrix(c(x1,x2), nrow=2, byrow=TRUE)
+#' condition <- c(rep(1,100), rep(2,102))
+#' # test over all rows
+#' testZeroes(dat, condition)
+#' # only consider the second row
+#' testZeroes(dat, condition, these=c(2))
 #'
-#'@export
-#'
+#' @name testZeroes
+#' @export
+#' @docType methods
+#' @rdname testZeroes-method
 setGeneric("testZeroes",
-    function(x, y, ...) standardGeneric("testZeroes"))
+    function(x, y, these=seq_len(nrow(x))) standardGeneric("testZeroes"))
 
 
-#'@export
+#'@rdname testZeroes-method
+#'@aliases testZeroes,matrix,vector,ANY-method
 setMethod("testZeroes",
     c(x="matrix", y="vector"),
     function(x, y, these=seq_len(nrow(x))) {
@@ -55,13 +62,14 @@ setMethod("testZeroes",
     })
 
 
-#'@export
+#'@rdname testZeroes-method
+#'@aliases testZeroes,SingleCellExperiment,SingleCellExperiment,vector-method
 setMethod("testZeroes",
-    c(x="SingleCellExperiment", y="SingleCellExperiment"),
-    function(x, y) {
+    c(x="SingleCellExperiment", y="SingleCellExperiment", these="vector"),
+    function(x, y, these=seq_len(nrow(x))) {
         dat <- cbind(counts(x), counts(y))
         condition <- c(rep(1, dim(counts(x))[2]), rep(2, dim(counts(y))[2]))
-        return(testZeroes(dat, condition))
+        return(testZeroes(dat, condition, these))
     })
 
 
@@ -104,7 +112,6 @@ setMethod("testZeroes",
         onegene <- function(x, dat, condition){
             x1 <- dat[x,][condition==unique(condition)[1]]
             x2 <- dat[x,][condition==unique(condition)[2]]
-
             x1 <- (x1[x1>0])
             x2 <- (x2[x2>0])
 
@@ -113,14 +120,11 @@ setMethod("testZeroes",
 
         wass.res <- bplapply(seq_len(nrow(dat)), onegene, 
                             condition=condition, dat=dat)
-
         wass.res1 <- do.call(rbind, wass.res)
 
         wass.pval.adj <- p.adjust(wass.res1[,9], method="BH")
-
         pval.zero <- testZeroes(dat, condition)
         pval.adj.zero <- p.adjust(pval.zero, method="BH")
-
         pval.combined <- .combinePVal(wass.res1[,9],pval.zero)
         pval.adj.combined <- p.adjust(pval.combined,method="BH")
 
@@ -141,9 +145,7 @@ setMethod("testZeroes",
         
         wass.res <- bplapply(seq_len(nrow(dat)), onegene, 
                         condition=condition, dat=dat)
-
         wass.res1 <- do.call(rbind,wass.res)
-
         wass.pval.adj <- p.adjust(wass.res1[,9], method="BH")
         
         RES <- cbind(wass.res1, wass.pval.adj)
@@ -162,7 +164,7 @@ setMethod("testZeroes",
 #' Pareto distribution (GPD) approximation to estimate small p-values
 #' accurately
 #'
-#'@details Details concerning the permutation testing procedures for
+#' Details concerning the permutation testing procedures for
 #' single-cell RNA-sequencing data can be found in Schefzik and Goncalves
 #' (2019). Corresponds to the function .testWass when identifying the argument
 #' inclZero=TRUE in .testWass with the argument method=”OS” and the argument
@@ -293,18 +295,23 @@ setMethod("testZeroes",
 #'wasserstein.sc(dat, condition, 100, method="TS")
 #'
 #'# call wasserstein.sc with two SingleCellExperiment objects
-#'sce1 <- SingleCellExperiment(
+#'sce1 <- SingleCellExperiment::SingleCellExperiment(
 #'            assays=list(counts=cond1, logcounts=log10(cond1)))
-#'sce2 <- SingleCellExperiment(
+#'sce2 <- SingleCellExperiment::SingleCellExperiment(
 #'            assays=list(counts=cond2, logcounts=log10(cond2)))
 #'wasserstein.sc(sce1, sce2, 100, method="TS")
 #'
-#'@export
+#'
+#' @name wasserstein.sc
+#' @export
+#' @docType methods
+#' @rdname wasserstein.sc-method
 setGeneric("wasserstein.sc",
-    function(x, y, ...) standardGeneric("wasserstein.sc"))
+    function(x, y, permnum, method) standardGeneric("wasserstein.sc"))
 
 
-#'@export
+#'@rdname wasserstein.sc-method
+#'@aliases wasserstein.sc-method,matrix,vector,ANY,ANY-method
 setMethod("wasserstein.sc", 
     c(x="matrix", y="vector"),
     function(x, y, permnum, method) {
@@ -320,7 +327,9 @@ setMethod("wasserstein.sc",
     })
 
 
-#'@export
+#'@rdname wasserstein.sc-method
+#'@aliases
+#'  wasserstein.sc,SingleCellExperiment,SingleCellExperiment,ANY,ANY-method
 setMethod("wasserstein.sc",
     c(x="SingleCellExperiment", y="SingleCellExperiment"),
     function(x, y, permnum, method) {

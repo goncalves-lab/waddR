@@ -52,7 +52,7 @@ differential gene expression distributions in scRNAseq data }
   distributions.
 
   See the documentation of these functions \code{?wasserstein.test.sp},
-  \test{?wasserstein.test.asy} for more details.
+  \code{?wasserstein.test.asy} for more details.
 }
 
 \section{Single Cell Test}{
