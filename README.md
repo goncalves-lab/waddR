@@ -1,4 +1,4 @@
-# Differential Expression Detection in scRNA seq Data
+# Statistical Test for Detecting Differential Distributions Based on the Wasserstein Metric
 
 `waddR` is an R package that provides a Wasserstein distance based statistical
 test for detecting and describing differential distributions in one-dimensional
@@ -12,22 +12,30 @@ The Wasserstein package offers utilities for three distinct use cases:
     * Check for differences between two distributions
     * Detect differential gene expression distributions in scRNAseq data
 
-# Installation
+## Installation
 
-## Via Package Repository
+### Via Package Repository
 
 The package is in development and not yet available via an official package
 repository.
 
-## From Github
+### From Github
 
 The latest package version can be installed with the `install_github` utility from the 
 `devtools` package.
 Simply run `devtools::install_github("goncalves-lab/waddR")` from an R session.
 
-# Using `waddR`
 
-## Wasserstein Distance functions
+## Running Tests
+
+Tests can be run by calling `test()` from the `devtools` package.
+All tests are implemented using the `testthat` package and reside in `tests/testhat`
+
+
+
+## Using `waddR`
+
+### Wasserstein Distance functions
 
 The 2-Wasserstein distance is a metric to describe the distance between two
 distributions, representing two diferent conditions A and B. This package
@@ -43,9 +51,9 @@ results.
 The functions `squared_wass_approx` and `squared_wass_decomp` compute
 approximations of the squared 2-Wasserstein distance with `squared_wass_decomp`
 also returning the decomosition terms for location, size, and shape. 
+See `?wasserstein_metric`, `?squared_wass_aprox`, and `?squared_wass_decomp`.
 
-
-## Two-Sample Testing
+### Two-Sample Testing
 
 This package provides two testing procedures using the 2-Wasserstein distance
 to test whether two distributions F_A and F_B given in the form of samples are
@@ -63,7 +71,7 @@ distributions.
 See the documentation of these functions `?wasserstein.test`,
 `?wasserstein.test.sp`, `?wasserstein.test.asy` for more details.
 
-## Single Cell Test: The waddR package provides an adaptation of the
+### Single Cell Test: The waddR package provides an adaptation of the
 
 semi-parametric testing procedure based on the 2-Wasserstein distance
 which is specifically tailored to identify differential distributions in
@@ -77,19 +85,16 @@ and differences in non-zero gene expression (using the semi-parametric
 See the documentation of the Single Cell testing function `?wasserstein.sc`
 and the test for zero expression levels `?testZeroes` for more details.
 
-# Documentation
+## Documentation
 
 We have included detailed examples of how to use all functions provided with
 `waddR` in our vignettes.
 They are available online [here](https://github.com/goncalves-lab/waddR) 
-(update this link!) or from an R session with the following command:
+*(update this link once it is final)* or from an R session with the
+following command: 
 `browseVignettes("waddR")`
 
-# Running Tests
-
-Tests can be run by calling `test()` from the `devtools` package.
-All tests are implemented using the `testthat` package and reside in `tests/testhat`
-
-
 # References
+
+*Update this once the citation is final*: Schefzik and Goncalves 2019
 
