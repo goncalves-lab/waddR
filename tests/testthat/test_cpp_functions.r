@@ -28,6 +28,7 @@ test_that("mean_test_export", {
   v2 <- c(-1,3.5,100)
   expect_equal(mean_test_export(v), base::mean(v))
   expect_equal(mean_test_export(v2), base::mean(v2))
+  expect_equal(mean_test_export(c(23)), base::mean(c(23)))
 })
 
 #### NUMERIC VECTOR SD
@@ -38,6 +39,8 @@ test_that("sd_test_export", {
   v2 <- c(-1,3.5,100)
   expect_equal(sd_test_export(v), sd(v))
   expect_equal(sd_test_export(v2), sd(v2))
+  # special case: Input vectors of length 1 should have sd=0
+  expect_equal(sd_test_export(c(1)), 0)
 })
 
 #### Vector add
@@ -193,6 +196,7 @@ test_that("concat_test_export", {
 #### correlation of vectors
 test_that("cor_test_export", {
   skip_if_not_exported()
+  expect_equal(cor_test_export(c(1), c(11)), 1)
   expect_equal(cor_test_export(c(1.0,2.0,3,4,5), c(2,3,4,5,6)), 1)
   expect_equal(cor_test_export(c(1,2,3,4,5), c(2,3,4,5,6)*-1), -1)
   expect_equal(cor_test_export(c(1,34,134,13,50,5,1,2),

@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 ## Background
 
 The 2-Wasserstein distance W is a metric to describe the distance
-between two distributions, representing two differnt conditions $A$ and $B$.
+between two distributions, representing two different conditions $A$ and $B$.
 
 For continuous distributions, it is given by
 

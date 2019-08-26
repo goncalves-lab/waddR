@@ -43,9 +43,8 @@ been normalized, scaled and is available for download on
 First, we will first load all required packages:
 
 ```{r}
-library(waddR)
-
 suppressPackageStartupMessages({
+    library("waddR")
     library("scater")
     library("SingleCellExperiment")
     library("BiocFileCache")
@@ -80,18 +79,24 @@ whole analysis would be out of scope for this vignette.
 
 ```{r}
 set.seed(28)
-randgenes <- sample(rownames(sce.blood), 5000, replace=FALSE)
+randgenes <- sample(rownames(sce.blood), 2500, replace=FALSE)
 sce.blood <- sce.blood[randgenes, ]
 sce.decidua <- sce.decidua[randgenes, ]
 ```
 
+The input data to `wasserstein.sc` always discriminates two conditions.
+It can be given either as a data matrix and a vector explaining the condition
+of each column, or a `SingleCellExperiment` for each condition.
+
+We will just proceed to use the two `SingleCellExperiment` objects we loaded.
 Next we prepare the input for the function `wasserstein.sc` which can be a
 dataframe or matrix object and a vector, assigning their columns to conditions.
+The `SingleCellExperiment` objects passed to `wasserstein.sc` must contain a
+`counts` assay each.
 
 ```{r}
-dat <- cbind(counts(sce.blood), counts(sce.decidua))
-condition <- c( rep(1, length(colnames(sce.blood))),   # condition 1
-                rep(2, length(colnames(sce.decidua)))) # condition 2
+assays(sce.blood)
+assays(sce.decidua)
 ```
 
 Before testing for differential expression in the two conditions, all data
@@ -99,23 +104,22 @@ must be normalized for cell-specific biases.
 To avoid losing actual differences in expression between cells of the same
 condition, cells should be clusterd for similarities first.
 
-Since the decidua and blood cells have already been preprocessed, we can run
-the wasserstein test for single cell now.
+The processing steps performed on this data can be seen 
+[here](https://github.com/goncalves-lab/waddr-data.git).
 
 ```{r}
-wsres <- wasserstein.sc(dat, condition, permnum = 10000, "TS")
-head(wsres, n=2L)
+wsres <- wasserstein.sc(sce.blood, sce.decidua, permnum = 10000, "OS")
+head(wsres, n=10L)
 ```
 
 The 2-Wasserstein single-cell testing procedure is performed on all genes in
 the data set -- one line of the output describes the result of testing one
 gene.
 
-
 Note: The two-stage (TS) procedure includes a test for differential proportions
 of zero gene expression, considering the proportion of zeroes over all
 conditions and genes in a model.
-This method might yield misleading results, if only a subset of genes is
+It may yield incorrect results, if it is applied on only a subset of genes is
 given.
 
 
@@ -133,7 +137,7 @@ given.
 | shape         | shape term in the squared 2-Wasserstein decomposition       |
 | rho           | correlation coefficient in the quantile-quantile plot       |
 | pval          | p-value of the semi-parametric test                         |
-| p.ad.gpd      | p-value of the  Anderson-Darling test to check whether the GPD actually fits the data well (otherwise NA) \* |
+| p.ad.gpd      | p-value of the Anderson-Darling test to check whether the GPD actually fits the data well \* |
 | N.exc         | number of exceedances (starting with 250 and iteratively decreased by 10 if necessary) that are required to obtain a good GPD fit (i.e. p-value of Anderson-Darling test  greater or eqaul to 0.05) \* |
 | perc.loc      | fraction (in %) of the location part with respect to the overall squared 2-Wasserstein distance obtained by the decomposition approximation |
 | perc.size     | fraction (in %) of the size part with respect to the overall squared 2-Wasserstein distance obtained by the decomposition approximation |
@@ -145,7 +149,7 @@ given.
 | p.adj.zero    | adjusted p-value of the test for differential proportions of zero expression (logistic regression model) according to the method of Benjamini-Hochberg \*\* |
 |  p.adj.combined | adjusted combined p-value of p.nonzero and p.zero obtained by Fisher’s method according to the method of Benjamini-Hochberg \*\* |
 
-*\* only if GDP fitting is performed, NA otherwise;* 
+*\* only if GDP fitting is performed (NA otherwise);* 
 *\*\* only if the two-stage test is run*
 
 

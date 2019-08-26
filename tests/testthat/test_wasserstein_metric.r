@@ -98,9 +98,32 @@ test_that("squared_wass_approx correctness", {
 test_that("squared_wass_decomp correctness", {
   a <- c(13, 21, 34, 23)
   b <- c(1,  1,  1,  2.3)
+  
   # case with equally long vectors a and b
-  expect_known("value", squared_wass_approx(a,b),
-               file="known.values/testresult_squared_wass_decomp_correctness1")
+  res <- squared_wass_decomp(a,b)
+  location <- (mean(a) - mean(b))**2
+  expect_equal(res$location, location)
+  size <- (sd(a) - sd(b))**2
+  expect_equal(res$size, size)
+  a.quant <- quantile(a, probs=(seq(1000)-0.5)/1000, type=1)
+  b.quant <- quantile(b, probs=(seq(1000)-0.5)/1000, type=1)
+  shape <- (2 * sd(a) * sd(b) * (1 - cor(a.quant, b.quant)))
+  expect_equal(res$shape, shape)
+  expect_equal(res$distance, location + size + shape)
+
+  # test for special case that caused the shape calculation to fail
+  x <- rep(0,107)
+  y <- c(rep(0,154), 0.8463086, rep(0, 26))
+  res <- squared_wass_decomp(x, y)
+  location <- (mean(x) - mean(y))**2
+  expect_equal(res$location, location)
+  size <- (sd(x) - sd(y))**2
+  expect_equal(res$size, size)
+  x.quant <- quantile(x, probs=(seq(1000)-0.5)/1000, type=1)
+  y.quant <- quantile(y, probs=(seq(1000)-0.5)/1000, type=1)
+  shape <- (2 * sd(x) * sd(y) * (1 - cor(x.quant, y.quant)))
+  expect_equal(res$shape, shape)
+  expect_equal(res$distance, location + size + shape)
 })
 
 
@@ -131,7 +154,30 @@ test_that("wasserstein_metric correctness", {
   b3 <- c(0,1,0,0)
   expect_equal(wasserstein_metric(a3, b3, p), wasserstein1d(a3,b3,p))
   
+  # a simulated permutation procedure as used in the wasserstein.test method
+  set.seed(24)
+  ctrl <- rnorm(300 ,0 ,1)
+  set.seed(24)
+  dd1 <- rnorm(300, 1, 1)
+  z <- c(ctrl,dd1)
+  shuffle <- permutations(z, num_permutations=1000)
+  wass_metric.values <- apply(  shuffle, 2,
+                                function (k) {
+                                    w <- wasserstein_metric(
+                                        k[seq_len(length(x))],
+                                        k[seq((length(x)+1):length(z))],
+                                        p=2) **2
+                                    return(w)})
+  wass1d.values <- apply(  shuffle, 2,
+                           function (k) {
+                               w <- wasserstein1d(
+                                   k[seq_len(length(x))],
+                                   k[seq((length(x)+1):length(z))],
+                                   p=2) **2
+                               return(w)})
+  expect_equal(wass_metric.values, wass1d.values)
 })
+
 
 # test consistency of results
 test_that("wasserstein_metric consistency test", {

@@ -216,17 +216,18 @@ template <typename T>
 double mean(const vector<T> & x)
 {	
 
- 		double sum = 0.0;
- 		double result = 0.0;
+	double sum = 0.0;
+	double result = 0.0;
 
- 		for (const double& element : x)
- 		{
- 			sum += element;
- 		}
+	for (const double& element : x)
+	{
+		sum += element;
+	}
 
- 		result = sum / x.size();
- 		return result;
+	result = sum / x.size();
+	return result;
 }
+
 
 //' vector_standard_deviation
 //'
@@ -236,15 +237,19 @@ double mean(const vector<T> & x)
 template <typename T>
 double sd(const vector<T> & x)
 {
-	double mean_x = mean(x);
-	double sum = 0.0;
+	if (x.size() > 1) { 
+		double mean_x = mean(x);
+		double sum = 0.0;
 
-	for (const T& number : x) {
-		sum += pow((number - mean_x), 2);
+		for (const T& number : x) {
+			sum += pow((number - mean_x), 2);
+		}
+
+		double result = sqrt(sum / (x.size() - 1));
+		return result;
+	} else {
+		return (double) 0.0;
 	}
-
-	double result = sqrt(sum / (x.size() - 1));
-	return result;
 }
 
 //' vector_absolute
@@ -404,8 +409,20 @@ double cor(const vector<T> & x, const vector<T> & y,
 	double mean_x = std::numeric_limits<double>::infinity(), 
 	double mean_y = std::numeric_limits<double>::infinity())
 {	
+
+	// Stop if the vectors have different lengths
 	if (x.size() != y.size()){
 		stop("cor: Vector x and y have incompatible size.");
+	}
+
+	// return 1 if the vectors are only of length 1
+	if (x.size() == 1) {
+		return (double) 1;
+	}
+
+	// return 1, if both vectors have a standard deviation of 0
+	if (sd(x) == 0 and sd(y) == 0){
+		return (double) 1;
 	}
 
 	// calculate empirical means if needed
@@ -679,10 +696,14 @@ NumericMatrix permutations(const NumericVector x, const int num_permutations)
 Rcpp::List squared_wass_decomp(	const NumericVector & x,
 								const NumericVector & y)
 {
+	vector<double> 		a(x.begin(), x.end()), b(y.begin(), y.end());
+
+	if (a.empty() || b.empty()){
+		stop("squared_wass_approx: Vectors can't be empty");
+	}
 
 	int NUM_QUANTILES = 1000;
-	vector<double> 		a(x.begin(), x.end()), b(y.begin(), y.end()),
-						quantiles_a = equidist_quantile(a, NUM_QUANTILES, (double) 0.5),
+	vector<double> 		quantiles_a = equidist_quantile(a, NUM_QUANTILES, (double) 0.5),
 						quantiles_b = equidist_quantile(b, NUM_QUANTILES, (double) 0.5);
 
 	double 	location, shape, size, d, 
@@ -693,7 +714,7 @@ Rcpp::List squared_wass_decomp(	const NumericVector & x,
 
 	location 	= pow(mean_a - mean_b, 2);
 	size 		= pow(sd_a - sd_b, 2);
-	shape 		= 2 * sd_a * sd_b * (1 - quantile_cor_ab);
+	shape 		= abs(2 * sd_a * sd_b * (1 - quantile_cor_ab));
 	d 			= location + size + shape;
 	
 	return Rcpp::List::create(
@@ -735,11 +756,15 @@ Rcpp::List squared_wass_decomp(	const NumericVector & x,
 double squared_wass_approx(	const NumericVector & x,
 							const NumericVector & y)
 {
+	vector<double> 		a(x.begin(), x.end()), b(y.begin(), y.end());
+
+	if (a.empty() || b.empty()){
+		stop("squared_wass_approx: Vectors can't be empty");
+	}
 
 	double				distance_approx;
 	int 				NUM_QUANTILES = 1000;
-	vector<double> 		a(x.begin(), x.end()), b(y.begin(), y.end()),
-						quantiles_a = equidist_quantile(a, NUM_QUANTILES, (double) 0.5),
+	vector<double> 		quantiles_a = equidist_quantile(a, NUM_QUANTILES, (double) 0.5),
 						quantiles_b = equidist_quantile(b, NUM_QUANTILES, (double) 0.5),
 						squared_quantile_diff(NUM_QUANTILES);
 
@@ -805,6 +830,11 @@ double wasserstein_metric(const NumericVector x,
 
 	vector<double> a(x.begin(), x.end());
 	vector<double> b(y.begin(), y.end());
+
+	if (a.empty() or b.empty()) {
+		stop("wasserstin_metric: Vectors can't be empty");
+	}
+
 	sort(a.begin(), a.end());
 	sort(b.begin(), b.end());
 
