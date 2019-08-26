@@ -102,7 +102,7 @@ test_that("Correctness of wasserstein single cell output", {
     res.os2 <- wasserstein.sc(dat3, condition3, 10, "OS")
     res.os.dup2 <- wasserstein.sc(sce.a2, sce.b2, 10, "OS")
     res.os.values2 <- matrix(c(0, 0, 0, 0, 0, 0, 0, 0, 1, NA, NA, NaN, NaN,
-                               NaN, NaN, 1), nrow=1)
+                               NaN, 0, 1), nrow=1)
     colnames(res.os.values2) <- os.names
     expect_equal(res.os2, res.os.values2)
     expect_equal(res.os.dup2, res.os.values2)

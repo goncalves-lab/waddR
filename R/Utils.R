@@ -13,7 +13,11 @@
 #' @return The relative error between x and y
 #'
 .relativeError <- function(x,y) {
-    rel.error <- abs(1 - (x / y))  
+    if ((x == y) || ((x == 0) && (y == 0)))
+        rel.error <- 0
+    else {
+        rel.error <- abs(1 - (x / y))  
+    }
     return(rel.error)
 }
 
