@@ -1,106 +1,95 @@
 # Differential Expression Detection in scRNA seq Data
 
-`waddR` is an R package for detecting differential expression in scRNA Data from two different conditions using the Wasserstein distance and a differential proportion test.
+`waddR` is an R package that provides a Wasserstein distance based statistical
+test for detecting and describing differential distributions in one-dimensional
+data.
+Functions for wasserstein distance calculation, differential distribution
+testing, and a specialized test for differential expression in scRNA data are
+provided.
+
+The Wasserstein package offers utilities for three distinct use cases:
+    * Computation of the 2-Wasserstein distance 
+    * Check for differences between two distributions
+    * Detect differential gene expression distributions in scRNAseq data
 
 # Installation
 
-## Enable Bioconductor Repositories
-This project imports other packages that are hosted on the Bioconductor Software repository.
-It is required to select a Bioconductor mirror, or the installation of `waddR` will fail.
-Repositories where R queries for packages upon calling `install.packages()`can be set from within an R session can be set by calling: `setRepositories()`.
-Entering `1 2` selects the CRAN and Bioconductor Software repositories.
+## Via Package Repository
 
-For the best experience when using and testing the package, it is also recommended to have the `devtools` package installed.
+The package is in development and not yet available via an official package
+repository.
 
 ## From Github
 
-The package can be installed with the `install_github` utility from the `devtools` package.
-Simply run `install_github("goncalves-lab/waddR")` from an R session.
+The latest package version can be installed with the `install_github` utility from the 
+`devtools` package.
+Simply run `devtools::install_github("goncalves-lab/waddR")` from an R session.
 
-## Via Package Repository
+# Using `waddR`
 
-The package is not yet available via the official repositories.
+## Wasserstein Distance functions
+
+The 2-Wasserstein distance is a metric to describe the distance between two
+distributions, representing two diferent conditions A and B. This package
+specifically considers the squared 2-Wasserstein distance d := W^2 which
+offers a decomposition into location, size, and shape terms.
+
+The package `waddR` offers three functions to calculate the 2-Wasserstein
+distance, all of which are implemented in Cpp and exported to R with Rcpp for
+better performance.
+The function `wasserstein_metric` is a Cpp reimplementation of the
+function `wasserstein1d` from the package `transport` and offers the most exact
+results.
+The functions `squared_wass_approx` and `squared_wass_decomp` compute
+approximations of the squared 2-Wasserstein distance with `squared_wass_decomp`
+also returning the decomosition terms for location, size, and shape. 
 
 
-# Running `waddR`
+## Two-Sample Testing
 
-## Wasserstein Distance
+This package provides two testing procedures using the 2-Wasserstein distance
+to test whether two distributions F_A and F_B given in the form of samples are
+different ba specifically testing the null hypothesis H0: F_A = F_B against the
+alternative hypothesis H1: F_A != F_B.
 
-## Wasserstein Test
+The first, semi-parametric (SP), procedure uses a test based on permutations
+combined with a generalized pareto distribution approximation to estimate small
+pvalues accurately.
 
-## Running on single cell RNA sequencing data
+The second procedure (ASY) uses a test based on asymptotic theory which is
+valid only if the samples can be assumed to come from continuous
+distributions.
 
-This an example on how to analyse the expression of 18 immune cell in two hypothetical conditions.
-For an example dataset we use GSE41265, which can be downloaded from the [conquer database](http://imlspenticton.uzh.ch:3838/conquer/). 
-We will assume that the file `GSE41265.rds` is already available in working directory.
-To read it, install the packages `MultiAssayExperiment` and `SummarizedExperiment` from BioConductor.
+See the documentation of these functions `?wasserstein.test`,
+`?wasserstein.test.sp`, `?wasserstein.test.asy` for more details.
 
-### Loading all required Libraries and Data
+## Single Cell Test: The waddR package provides an adaptation of the
 
-For a more detailed description of how to handle datasets from the conquer database, see the [conqer R tutorial](https://github.com/markrobinsonuzh/conquer/blob/master/shiny-download/tutorial.md).
-```
-# load libraries and the .rds data file
-suppressPackageStartupMessages(library(waddR))
-suppressPackageStartupMessages(library(SummarizedExperiment))
-suppressPackageStartupMessages(library(MultiAssayExperiment))
-gse41265 <- readRDS("GSE41265.rds")
+semi-parametric testing procedure based on the 2-Wasserstein distance
+which is specifically tailored to identify differential distributions in
+single-cell RNA-seqencing (scRNA-seq) data. In particular, a two-stage
+(TS) approach has been implemented that takes account of the specific
+nature of scRNA-seq data by separately testing for differential
+proportions of zero gene expression (using a logistic regression model)
+and differences in non-zero gene expression (using the semi-parametric
+2-Wasserstein distance-based test) between two conditions.
 
-# extract gene abundance from the dataset
-gene_abd <- experiments(gse41265)[[1]]
+See the documentation of the Single Cell testing function `?wasserstein.sc`
+and the test for zero expression levels `?testZeroes` for more details.
 
-# we are interested in looking at the "Transcripts per Million" matrix
-data <- assays(gene_abd)[["TPM"]]
+# Documentation
 
-# for faster runtime, we randomly select 100 of the 45,686 transcripts
-rand_rows <- sort(sample(dim(data)[1], 100))
-data <- data[rand_rows, ]
-
-# for this demonstration, we define arbitrary conditions
-conditions <- c(rep(1,9), rep(2,9))
-
-# we want a one step test of all transcripts in the two conditions
-test_results <- wasserstein.sc(data, conditions, 24, 1000, "TS")
-
-# for every gene, a test result is printed, describing how the distribution differs in size,
-# shape and location between the two conditions, while providing p-values and errors
-head(results)
-                      d.transport d.transport^2     d.comp^2     d.comp
-ENSMUSG00000000215.10   0.0000000     0.0000000    0.0000000  0.0000000
-ENSMUSG00000008999.7    0.6087344     0.3705575    0.4049929  0.6363905
-ENSMUSG00000013523.13  55.1313604  3039.4669034 3371.4203244 58.0639331
-ENSMUSG00000017204.4    1.0423733     1.0865420    1.2220874  1.1054806
-ENSMUSG00000018401.17   4.5537914    20.7370158   22.8496752  4.7801334
-ENSMUSG00000018634.10   0.0000000     0.0000000    0.0000000  0.0000000
-                          location         size      shape       rho  pval
-ENSMUSG00000000215.10 0.000000e+00    0.0000000 0.00000000 0.0000000 1.000
-ENSMUSG00000008999.7  9.524064e-02    0.2988548 0.01089746 0.9837274 0.659
-ENSMUSG00000013523.13 3.838363e+02 2984.8860996 2.69795548 0.8202325 0.444
-ENSMUSG00000017204.4  1.807983e-03    0.8105763 0.40970319 0.8391326 0.469
-ENSMUSG00000018401.17 3.835737e+00   18.9428596 0.07107891 0.9599687 0.296
-ENSMUSG00000018634.10 0.000000e+00    0.0000000 0.00000000 0.0000000 1.000
-                      p.ad.gpd N.exc perc.loc perc.size perc.shape decomp.error
-ENSMUSG00000000215.10       NA    NA      NaN       NaN        NaN   0.00000000
-ENSMUSG00000008999.7        NA    NA    23.52     73.79       2.69   0.03443539
-ENSMUSG00000013523.13       NA    NA    11.39     88.53       0.08 331.95342096
-ENSMUSG00000017204.4        NA    NA     0.15     66.33      33.52   0.13554541
-ENSMUSG00000018401.17       NA    NA    16.79     82.90       0.31   2.11265936
-ENSMUSG00000018634.10       NA    NA      NaN       NaN        NaN   0.00000000
-                      pval.adj
-ENSMUSG00000000215.10        1
-ENSMUSG00000008999.7         1
-ENSMUSG00000013523.13        1
-ENSMUSG00000017204.4         1
-ENSMUSG00000018401.17        1
-ENSMUSG00000018634.10        1
-
-```
+We have included detailed examples of how to use all functions provided with
+`waddR` in our vignettes.
+They are available online [here](https://github.com/goncalves-lab/waddR) 
+(update this link!) or from an R session with the following command:
+`browseVignettes("waddR")`
 
 # Running Tests
 
 Tests can be run by calling `test()` from the `devtools` package.
 All tests are implemented using the `testthat` package and reside in `tests/testhat`
 
-# Documentation
 
 # References
 
