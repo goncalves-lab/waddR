@@ -15,14 +15,13 @@
 .wassPermProcedure <- function(x, y, permnum) {
     z <- c(x,y)
     shuffle <- permutations(z, num_permutations=permnum)
-    wass.values <- apply(   shuffle, 2, 
-                            function (k) {
-                                wasserstein_metric(
-                                    k[seq_len(length(x))],
-                                    k[seq((length(x)+1):length(z))],
-                                    p=2) **2
-                            })
-    return(wass.values)
+    return(apply(   shuffle, 2, 
+                    function (k) {
+                        return( wasserstein_metric(
+                                k[seq_len(length(x))],
+                                k[seq((length(x)+1):length(z))],
+                                p=2) **2)
+                    }))
 }
 
 

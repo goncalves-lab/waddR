@@ -60,6 +60,7 @@ procedures (semi-parametric (SP) and asymptotic theory-based (ASY)).
 ```{r diff_loc}
 set.seed(24)
 ctrl <- rnorm(300 ,0 ,1)
+set.seed(24)
 dd1 <- rnorm(300, 1, 1)
 wasserstein.test(ctrl, dd1, permnum=10000, method="SP")[spec.output]
 wasserstein.test(ctrl, dd1, method="ASY")[spec.output]
@@ -74,6 +75,7 @@ differ with respect to the size.
 ```{r diff_size}
 set.seed(24)
 ctrl <- rnorm(300, 0, 1)
+set.seed(24)
 dd2 <- rnorm(300, 0, 2)
 wasserstein.test(ctrl, dd2, permnum=10000, method="SP")[spec.output]
 wasserstein.test(ctrl, dd2, method="ASY")[spec.output]
@@ -85,7 +87,9 @@ differ with respect to the shape.
 ```{r diff_shape}
 set.seed(24)
 ctrl <- rnorm(300, 6.5, sqrt(13.25))
+set.seed(24)
 sam1 <- rnorm(300, 3, 1)
+set.seed(24)
 sam2 <- rnorm(300, 10, 1)
 dd3 <- sapply(seq(1:300), 
               function(n) {
@@ -101,7 +105,7 @@ cannot be rejected.
 ```{r no_diff}
 set.seed(24)
 ctrl <- rnorm(300, 0, 1)
-set.seed(25)
+set.seed(24)
 nodd <- rnorm(300, 0, 1)
 wasserstein.test(ctrl, nodd, permnum=10000, method="SP")[spec.output]
 wasserstein.test(ctrl, nodd, method="ASY")[spec.output]

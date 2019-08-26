@@ -154,7 +154,30 @@ test_that("wasserstein_metric correctness", {
   b3 <- c(0,1,0,0)
   expect_equal(wasserstein_metric(a3, b3, p), wasserstein1d(a3,b3,p))
   
+  # a simulated permutation procedure as used in the wasserstein.test method
+  set.seed(24)
+  ctrl <- rnorm(300 ,0 ,1)
+  set.seed(24)
+  dd1 <- rnorm(300, 1, 1)
+  z <- c(ctrl,dd1)
+  shuffle <- permutations(z, num_permutations=1000)
+  wass_metric.values <- apply(  shuffle, 2,
+                                function (k) {
+                                    w <- wasserstein_metric(
+                                        k[seq_len(length(x))],
+                                        k[seq((length(x)+1):length(z))],
+                                        p=2) **2
+                                    return(w)})
+  wass1d.values <- apply(  shuffle, 2,
+                           function (k) {
+                               w <- wasserstein1d(
+                                   k[seq_len(length(x))],
+                                   k[seq((length(x)+1):length(z))],
+                                   p=2) **2
+                               return(w)})
+  expect_equal(wass_metric.values, wass1d.values)
 })
+
 
 # test consistency of results
 test_that("wasserstein_metric consistency test", {

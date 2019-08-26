@@ -714,7 +714,7 @@ Rcpp::List squared_wass_decomp(	const NumericVector & x,
 
 	location 	= pow(mean_a - mean_b, 2);
 	size 		= pow(sd_a - sd_b, 2);
-	shape 		= 2 * sd_a * sd_b * (1 - quantile_cor_ab);
+	shape 		= abs(2 * sd_a * sd_b * (1 - quantile_cor_ab));
 	d 			= location + size + shape;
 	
 	return Rcpp::List::create(
