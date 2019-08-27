@@ -50,8 +50,7 @@ the functions also provide additional output.
 ```{r setup}
 library(waddR)
 
-spec.output <- c(   "pval", "d.wass^2", "perc.loc",
-                    "perc.size", "perc.shape")
+spec.output <- c("pval", "d.wass^2", "perc.loc", "perc.size", "perc.shape")
 ```
 
 We start with an example, in which the two distributions (samples) only differ
@@ -100,7 +99,7 @@ wasserstein.test(ctrl, dd3, method="ASY")[spec.output]
 
 
 Finally, we show an example in which there is no difference between the
-distributions. We obtain a high p-value, indicatring that the null hypothesis
+distributions. We obtain a high p-value, indicating that the null hypothesis
 cannot be rejected.
 ```{r no_diff}
 set.seed(24)

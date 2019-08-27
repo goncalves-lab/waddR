@@ -7,7 +7,7 @@ Functions for wasserstein distance calculation, differential distribution
 testing, and a specialized test for differential expression in scRNA data are
 provided.
 
-The Wasserstein package offers utilities for three distinct use cases:
+The package offers utilities for three distinct use cases:
     * Computation of the 2-Wasserstein distance 
     * Check for differences between two distributions
     * Detect differential gene expression distributions in scRNAseq data
