@@ -112,6 +112,8 @@ wasserstein.test(ctrl, nodd, method="ASY")[spec.output]
 
 ## See Also
 
+* The [`waddR` package](waddR.html)
+
 * Fast and accurate 
 [calculation of the  Wasserstein distance](wasserstein_metric.html)
 

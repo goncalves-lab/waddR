@@ -117,6 +117,8 @@ and shape, thus confirming the underlying normal model.
 
 ## See Also
 
+* The [`waddR` package](waddR.html)
+
 * [Two-sample test](wasserstein_test.html) based on a decomposition of the
 Wasserstein distance between two distributions to check for differences
 

@@ -88,9 +88,7 @@ The input data to `wasserstein.sc` always discriminates two conditions.
 It can be given either as a data matrix and a vector explaining the condition
 of each column, or a `SingleCellExperiment` for each condition.
 
-We will just proceed to use the two `SingleCellExperiment` objects we loaded.
-Next we prepare the input for the function `wasserstein.sc` which can be a
-dataframe or matrix object and a vector, assigning their columns to conditions.
+We will proceed to use the two `SingleCellExperiment` objects we loaded.
 The `SingleCellExperiment` objects passed to `wasserstein.sc` must contain a
 `counts` assay each.
 
@@ -99,12 +97,11 @@ assays(sce.blood)
 assays(sce.decidua)
 ```
 
-Before testing for differential expression in the two conditions, all data
-must be normalized for cell-specific biases.
-To avoid losing actual differences in expression between cells of the same
-condition, cells should be clusterd for similarities first.
-
-The processing steps performed on this data can be seen 
+Before testing for differential expression in the two conditions, the counts
+should be normalized for cell or gene-specific biases.
+We can skip this here since the example data has already been normalized and
+an entire analysis would be out of scope for this vignette.
+The detailed processing steps performed on this data can be seen 
 [here](https://github.com/goncalves-lab/waddr-data.git).
 
 ```{r}
@@ -154,6 +151,8 @@ given.
 
 
 ## See Also
+
+* The [`waddR` package](waddR.html)
 
 * Fast and accurate 
 [calculation of the  Wasserstein distance](wasserstein_metric.html)
