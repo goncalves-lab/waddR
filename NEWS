@@ -1,3 +1,14 @@
+Changes in 0.99.0 (2019-08-27)
++ Version Bump for BioC Submission
++ Vignettes:
+	o Added introduction section and sessionInfo() to main vignette
+	o Added link to main vignette
++ Code style:
+	o renaming where possible to conform with BioC convention
+	o file renaming to uniform upper camel-case
+	o comments edited
+	o additional helper functions introduced
+
 Changes in 0.2.8 (2019-08-19)
 + R Code redesign:
 	o new unexported functions to help avoiding repeats
