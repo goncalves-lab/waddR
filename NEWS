@@ -1,3 +1,8 @@
+Changes in 0.99.2 (2019-08-27)
++ Changes to DESCRIPTION:
+	o removed the "Maintainer" field in favor of "Authors@R" to address build warnings
+	o Changed roles: 'cre' = Maintainer, 'aut' = author
+
 Changes in 0.99.0 (2019-08-27)
 + Version Bump for BioC Submission
 + Vignettes:

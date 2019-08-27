@@ -1,12 +1,11 @@
 Package: waddR
 Type: Package
 Title: Statistical Test for Detecting Differential Distributions Based on the Wasserstein Metric
-Version: 0.99.1
+Version: 0.99.2
 Date: 2019-06-17
 Authors@R: c(
-	person("Roman", "Schefzik", email="r.schefzik@dkfz-heidelberg.de", role=c("aut", "cre")),
-	person("Julian", "Flesch", email="julianflesch@gmail.com", role="ctb"))
-Maintainer: Julian Flesch <julianflesch@gmail.com>
+	person("Roman", "Schefzik", email="r.schefzik@dkfz-heidelberg.de", role="aut"),
+	person("Julian", "Flesch", email="julianflesch@gmail.com", role="cre"))
 Description: Wasserstein distance based statistical test for detecting and describing differential distributions in one-dimensional data. Functions for wasserstein distance calculation, differential distribution testing, and a specialized test for differential expression in scRNA data are provided.
 License: MIT + file LICENSE
 biocViews: Software, StatisticalMethod, SingleCell, DifferentialExpression
