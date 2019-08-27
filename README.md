@@ -71,8 +71,9 @@ distributions.
 See the documentation of these functions `?wasserstein.test`,
 `?wasserstein.test.sp`, `?wasserstein.test.asy` for more details.
 
-### Single Cell Test: The waddR package provides an adaptation of the
+### Single Cell Test:
 
+The waddR package provides an adaptation of the
 semi-parametric testing procedure based on the 2-Wasserstein distance
 which is specifically tailored to identify differential distributions in
 single-cell RNA-seqencing (scRNA-seq) data. In particular, a two-stage
