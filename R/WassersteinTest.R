@@ -19,7 +19,7 @@
                     function (k) {
                         return( wasserstein_metric(
                                 k[seq_len(length(x))],
-                                k[seq((length(x)+1):length(z))],
+                                k[seq((length(x)+1), length(z))],
                                 p=2) **2)
                     }))
 }
