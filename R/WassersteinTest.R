@@ -18,9 +18,9 @@
     return(apply(   shuffle, 2, 
                     function (k) {
                         return( wasserstein_metric(
-                                k[seq_len(length(x))],
-                                k[seq((length(x)+1), length(z))],
-                                p=2) **2)
+                                    k[seq_len(length(x))],
+                                    k[seq((length(x)+1), length(z))],
+                                    p=2) **2)
                     }))
 }
 
@@ -137,7 +137,6 @@ wasserstein.test.sp<-function(x,y,permnum=10000){
                 })
         }
 
-        
         # correlation of quantile-quantile plot
         rho.xy <- .quantileCorrelation(x, y)
 
