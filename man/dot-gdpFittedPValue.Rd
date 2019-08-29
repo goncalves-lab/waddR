@@ -4,14 +4,12 @@
 \alias{.gdpFittedPValue}
 \title{.gdpFittedPValue}
 \usage{
-.gdpFittedPValue(val, distr.ordered, pvalue)
+.gdpFittedPValue(val, distr.ordered)
 }
 \arguments{
 \item{val}{atomic result of an observation}
 
 \item{distr.ordered}{distribution of random atomic observations}
-
-\item{pvalue}{estimated p value of this observation}
 }
 \value{
 pvalue.adjusted, Anderson-Darling p-value of gdp fitting, number

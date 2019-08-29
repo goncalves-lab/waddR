@@ -65,11 +65,10 @@
 #' 
 #' @param val atomic result of an observation
 #' @param distr.ordered distribution of random atomic observations
-#' @param pvalue estimated p value of this observation
 #' @return pvalue.adjusted, Anderson-Darling p-value of gdp fitting, number
 #'  of exceedances for calculating a pvalue from the empirical distribution
 #'  
-.gdpFittedPValue <- function(val, distr.ordered, pvalue) {
+.gdpFittedPValue <- function(val, distr.ordered) {
     
     # list of possible exceedance thresholds (decreasing)
     poss.exc.num <- seq(from=250, to=10, by=-10)
@@ -114,7 +113,7 @@
                                             shape=fit.shape))
     
     pvalue.gpd <- as.numeric(pvalue.gpd)
-    pvalue.wass <- c("pvalue.gpd"=pvalue.wass,
+    pvalue.wass <- c("pvalue.gpd"=pvalue.gpd,
                      "ad.pval"=ad.pval,
                      "N.exc"=N.exc)
     return(pvalue.wass)

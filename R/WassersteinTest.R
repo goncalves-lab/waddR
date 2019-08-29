@@ -125,8 +125,7 @@ wasserstein.test.sp<-function(x,y,permnum=10000){
         if (num.extr < 10) {
             tryCatch({
                     res <- .gdpFittedPValue(value.sq,
-                                            wass.values.ordered,
-                                            pvalue.ecdf)
+                                            wass.values.ordered)
                     assign("pvalue.wass", res$pvalue.gdp, env)
                     assign("pvalue.gdpfit", res$ad.pval, env)
                     assign("N.exc", res$N.exc, env)
