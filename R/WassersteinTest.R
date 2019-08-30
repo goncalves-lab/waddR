@@ -152,7 +152,7 @@ wasserstein.test.sp<-function(x,y,permnum=10000){
         perc.loc <- round(((location / d.comp.sq) * 100), 2)
         perc.size <- round(((size / d.comp.sq) * 100), 2)
         perc.shape <- round(((shape / d.comp.sq)*100), 2)
-        decomp.error <- .relativeError(value.sq, d.comp.sq)
+        decomp.error <- .relativeError(d.comp.sq, value.sq)
 
         output <- c("d.wass"=value, "d.wass^2"=value.sq, "d.comp^2"=d.comp.sq,
                     "d.comp"=d.comp, "location"=location, "size"=size,
