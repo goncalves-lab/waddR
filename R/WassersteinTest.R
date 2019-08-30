@@ -18,9 +18,9 @@
     return(apply(   shuffle, 2, 
                     function (k) {
                         return( wasserstein_metric(
-                                k[seq_len(length(x))],
-                                k[seq((length(x)+1):length(z))],
-                                p=2) **2)
+                                    k[seq_len(length(x))],
+                                    k[seq((length(x)+1), length(z))],
+                                    p=2) **2)
                     }))
 }
 
@@ -125,11 +125,10 @@ wasserstein.test.sp<-function(x,y,permnum=10000){
         if (num.extr < 10) {
             tryCatch({
                     res <- .gdpFittedPValue(value.sq,
-                                            wass.values.ordered,
-                                            pvalue.ecdf)
-                    assign("pvalue.wass", res$pvalue.gdp, env)
-                    assign("pvalue.gdpfit", res$ad.pval, env)
-                    assign("N.exc", res$N.exc, env)
+                                            wass.values.ordered)
+                    assign("pvalue.wass", res["pvalue.gpd"], env)
+                    assign("pvalue.gdpfit", res["ad.pval"], env)
+                    assign("N.exc", res["N.exc"], env)
                 }, error=function(...) {
                     assign("pvalue.wass", pvalue.ecdf.pseudo, env)
                     assign("pvalue.gdpfit", NA, env)
@@ -137,7 +136,6 @@ wasserstein.test.sp<-function(x,y,permnum=10000){
                 })
         }
 
-        
         # correlation of quantile-quantile plot
         rho.xy <- .quantileCorrelation(x, y)
 
@@ -154,7 +152,7 @@ wasserstein.test.sp<-function(x,y,permnum=10000){
         perc.loc <- round(((location / d.comp.sq) * 100), 2)
         perc.size <- round(((size / d.comp.sq) * 100), 2)
         perc.shape <- round(((shape / d.comp.sq)*100), 2)
-        decomp.error <- .relativeError(value.sq, d.comp.sq)
+        decomp.error <- .relativeError(d.comp.sq, value.sq)
 
         output <- c("d.wass"=value, "d.wass^2"=value.sq, "d.comp^2"=d.comp.sq,
                     "d.comp"=d.comp, "location"=location, "size"=size,

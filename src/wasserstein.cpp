@@ -702,14 +702,24 @@ Rcpp::List squared_wass_decomp(	const NumericVector & x,
 		stop("squared_wass_approx: Vectors can't be empty");
 	}
 
-	int NUM_QUANTILES = 1000;
-	vector<double> 		quantiles_a = equidist_quantile(a, NUM_QUANTILES, (double) 0.5),
-						quantiles_b = equidist_quantile(b, NUM_QUANTILES, (double) 0.5);
-
 	double 	location, shape, size, d, 
 			mean_a = mean(a), mean_b = mean(b),
-			sd_a = sd(a), sd_b = sd(b), 
-			quantile_cor_ab = cor(quantiles_a, quantiles_b);
+			sd_a = sd(a), sd_b = sd(b),
+			quantile_cor_ab;
+
+	if (sd_a == 0 or sd_b == 0) {
+	
+		quantile_cor_ab = 0;
+	
+	} else {
+
+		int NUM_QUANTILES = 1000;
+		vector<double> 	quantiles_a = equidist_quantile(a, NUM_QUANTILES, (double) 0.5),
+						quantiles_b = equidist_quantile(b, NUM_QUANTILES, (double) 0.5);
+
+		quantile_cor_ab = cor(quantiles_a, quantiles_b);
+	
+	}
 
 
 	location 	= pow(mean_a - mean_b, 2);

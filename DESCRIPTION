@@ -1,7 +1,7 @@
 Package: waddR
 Type: Package
 Title: Statistical Test for Detecting Differential Distributions Based on the Wasserstein Metric
-Version: 0.99.2
+Version: 0.99.3
 Date: 2019-06-17
 Authors@R: c(
 	person("Roman", "Schefzik", email="r.schefzik@dkfz-heidelberg.de", role="aut"),

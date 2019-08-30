@@ -1,3 +1,11 @@
+Changes in 0.99.3 (2019-08-30)
++ Fixes:
+	o Fixed a bug in wasserstein.test that led to NAs during gpd fitting
+	o Fixed a bug in .gpdFittedPValue that led to NAs during gpd fitting
++ Modified wasserstein.sc tests and added new tests to reproduce the bugs and challenge the fixes
++ Change in squared_wass_decomp: If the standard deviation of one condition is 0, quantile-quantile corelation is not computed, since the shape term would be zero anyway. Previously, NAs were produced in some cases.
++ Swapped 'true' and 'test' values in call to .relativeError
+
 Changes in 0.99.2 (2019-08-27)
 + Changes to DESCRIPTION:
 	o removed the "Maintainer" field in favor of "Authors@R" to address build warnings

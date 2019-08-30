@@ -121,7 +121,8 @@ test_that("squared_wass_decomp correctness", {
   expect_equal(res$size, size)
   x.quant <- quantile(x, probs=(seq(1000)-0.5)/1000, type=1)
   y.quant <- quantile(y, probs=(seq(1000)-0.5)/1000, type=1)
-  shape <- (2 * sd(x) * sd(y) * (1 - cor(x.quant, y.quant)))
+  # shape is zero, because sd(x) == 0
+  shape <- 0
   expect_equal(res$shape, shape)
   expect_equal(res$distance, location + size + shape)
 })
