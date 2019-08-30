@@ -55,27 +55,56 @@ sce.a2 <- SingleCellExperiment(assays=list(counts=matrix(z, nrow=1)))
 sce.b2 <- SingleCellExperiment(assays=list(counts=matrix(z2, nrow=1)))
 
 test_that("Correctness of wasserstein single cell output", {
+    
+    # these are the fields of the two stage output that don't depend on random
+    # sampling (during permutation procedure), but purely on the input
+    ts.stable.fields <- c(1, 2, 3, 4, 5, 6, 7, 8, 12, 13, 14, 15, 16, 19)
+    
+    # these fields of the two stage output involve random sampling and might
+    # change slightly between runs
+    ts.volatile.fields <- c(9, 10, 17, 18, 20)
+    
+    # these are the fields of the one stage output that depend on a random
+    # sampling (during permutation procedure), but purely on the input
+    os.stable.fields <- c(1, 2, 3, 4, 5, 6, 7, 8, 12, 13, 14, 15)
 
-    # "normal" expression values -- Two Stage test
-    res <- wasserstein.sc(dat, condition1, 10, "TS")
-    res.dup <- wasserstein.sc(sce.a, sce.b, 10, "TS")
+    # these fields of the two stage output involve random sampling and might
+    # change slightly between runs
+    os.volatile.fields <- c(9, 16)
+
+    #########################################################################
+    #           Test with two expressed genes in two conditions             #
+    #########################################################################
+
+    # TWO STAGE TEST
+    res <- wasserstein.sc(dat, condition1, 10000, "TS")
+    res.dup <- wasserstein.sc(sce.a, sce.b, 10000, "TS")
 
     # reference results
     res.values <- matrix(c(0.3237935, 0.1048422, 0.1060877, 0.3257111,
                            0.07527902, 0.0007892882, 0.0300194, 0.9262569,
-                           0.09090909, NA, NA, 70.96, 0.74, 28.3,
-                           0.01173997, 0.9434837, 0.2964316, 0.09090909,
-                           0.9434837, 0.2964316), nrow=1)
+                           0.01, NA, NA, 70.96, 0.74, 28.3,
+                           0.01173997, 0.9434837, 0.05, 0.01,
+                           0.9434837, 0.05), nrow=1)
     colnames(res.values) <- ts.names
 
     # compare
-    expect_equal(res.dup, res.values, tolerance=0.00001)
-    expect_equal(res, res.values, tolerance=0.00001)
-    expect_equal(res, res.dup)
+    expect_equal(res.dup[ts.stable.fields],
+                 res.values[ts.stable.fields],
+                 tolerance=0.00001)
+    expect_equal(res.dup[ts.volatile.fields],
+                 res.values[ts.volatile.fields],
+                 tolerance=0.1)
+    expect_equal(res[ts.stable.fields],
+                 res.values[ts.stable.fields],
+                 tolerance=0.00001)
+    expect_equal(res[ts.volatile.fields],
+                 res.values[ts.volatile.fields],
+                 tolerance=0.1)
 
-    # "normal" expression values -- One Stage test
-    res.os1 <- wasserstein.sc(dat, condition1, 10, "OS")
-    res.os.dup1 <- wasserstein.sc(sce.a, sce.b, 10, "OS")
+    # ONE STAGE TEST
+    res.os1 <- wasserstein.sc(dat, condition1, 10000, "OS")
+    res.os.dup1 <- wasserstein.sc(sce.a, sce.b, 10000, "OS")
 
     # reference results
     res.os.values1 <- matrix(c(0.4926601, 0.242714, 0.2474003, 0.4973935,
@@ -84,11 +113,71 @@ test_that("Correctness of wasserstein single cell output", {
                                0.01894254, 0.09090909), nrow=1)
     colnames(res.os.values1) <- os.names
 
-    expect_equal(res.os1, res.os.values1, tolerance=0.0000001)
-    expect_equal(res.os.dup1, res.os.values1, tolerance=0.0000001)
-    expect_equal(res.os.dup1, res.os1)
+    expect_equal(res.os1[os.stable.fields],
+                 res.os.values1[os.stable.fields],
+                 tolerance=0.0000001)
+    expect_equal(res.os1[os.volatile.fields],
+                 res.os.values1[os.volatile.fields],
+                 tolerance=0.1)
+    expect_equal(res.os.dup1[os.stable.fields],
+                 res.os.values1[os.stable.fields],
+                 tolerance=0.0000001)
+    expect_equal(res.os.dup1[os.volatile.fields],
+                 res.os.values1[os.volatile.fields],
+                 tolerance=0.1)
+    
+    
+    #########################################################################
+    #           Test with one expressed + one zero-epressed gene            #
+    #########################################################################
+    
+    # TWO STAGE TEST
+    res.ts.3 <- wasserstein.sc(dat2, condition2, 10000, "TS")
+    res.ts.dup.3 <- wasserstein.sc(sce.a, sce.a2, 10000, "TS")
+    
+    # reference results
+    res.ts.values.3 <- matrix(c( NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,
+                                 NA, NA, NA, NA, 0.8148052, 0.8, NA,
+                                 0.8148052, 0.8), nrow=1)
+    
+    # we only test the stable fields here, because the volatile fields are
+    # unchanging
+    expect_equal(res.ts.3[ts.stable.fields],
+                 res.ts.values.3[ts.stable.fields],
+                 tolerance=0.0000001)
+    expect_equal(res.ts.dup.3[ts.stable.fields],
+                 res.ts.values.3[ts.stable.fields],
+                 tolerance=0.0000001)
 
-    # case of a zero-expressed gene -- Two Stage
+
+    # ONE STAGE TEST
+    res.os.3 <- wasserstein.sc(dat2, condition2, 10000, "OS")
+    res.os.dup.3 <- wasserstein.sc(sce.a, sce.a2, 10000, "OS")
+    
+    # reference results
+    res.os.values.3 <- matrix(c(1.27496, 1.625523, 1.633163, 1.277952,
+                                1.113671, 0.5194913, 0, 0, 0, 0.3815411, 250,
+                                68.19, 31.81, 0, 0.004677782, 0), nrow=1)
+    
+    expect_equal(res.os.3[os.stable.fields],
+                 res.os.values.3[os.stable.fields],
+                 tolerance=0.000001)
+    expect_equal(res.os.3[os.volatile.fields],
+                 res.os.values.3[os.volatile.fields],
+                 tolerance=0.1)
+    expect_equal(res.os.dup.3[os.stable.fields],
+                 res.os.values.3[os.stable.fields],
+                 tolerance=0.000001)
+    expect_equal(res.os.dup.3[os.volatile.fields],
+                 res.os.values.3[os.volatile.fields],
+                 tolerance=0.1)
+
+
+    #########################################################################
+    #           Test with a zero-expressed gene in both conditions          #
+    #########################################################################
+    
+    # TWO STAGE PROCEDURE
     res.ts <- wasserstein.sc(dat3, condition3, 10, "TS")
     res.ts.dup <- wasserstein.sc(sce.a2, sce.b2, 10, "TS")
     res.ts.values2 <- matrix(c(NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,
@@ -98,7 +187,7 @@ test_that("Correctness of wasserstein single cell output", {
     expect_equal(res.ts.dup, res.ts.values2)
     expect_equal(res.ts, res.ts.dup)
 
-    # case of a zero-expressed gene -- One Stage
+    # ONE STAGE PROCEDURE
     res.os2 <- wasserstein.sc(dat3, condition3, 10, "OS")
     res.os.dup2 <- wasserstein.sc(sce.a2, sce.b2, 10, "OS")
     res.os.values2 <- matrix(c(0, 0, 0, 0, 0, 0, 0, 0, 1, NA, NA, NaN, NaN,
