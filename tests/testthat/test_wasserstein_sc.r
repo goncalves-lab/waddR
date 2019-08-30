@@ -84,7 +84,7 @@ test_that("Correctness of wasserstein single cell output", {
     res.values <- matrix(c(0.3237935, 0.1048422, 0.1060877, 0.3257111,
                            0.07527902, 0.0007892882, 0.0300194, 0.9262569,
                            0.01, NA, NA, 70.96, 0.74, 28.3,
-                           0.01173997, 0.9434837, 0.05, 0.01,
+                           0.01187943, 0.9434837, 0.05, 0.01,
                            0.9434837, 0.05), nrow=1)
     colnames(res.values) <- ts.names
 
@@ -110,7 +110,7 @@ test_that("Correctness of wasserstein single cell output", {
     res.os.values1 <- matrix(c(0.4926601, 0.242714, 0.2474003, 0.4973935,
                                0.03169485, 0.03660025, 0.1791052, 0.8637736,
                                0.09090909, NA, NA, 12.81, 14.79, 72.39,
-                               0.01894254, 0.09090909), nrow=1)
+                               0.01930829, 0.09090909), nrow=1)
     colnames(res.os.values1) <- os.names
 
     expect_equal(res.os1[os.stable.fields],
@@ -157,7 +157,7 @@ test_that("Correctness of wasserstein single cell output", {
     # reference results
     res.os.values.3 <- matrix(c(1.27496, 1.625523, 1.633163, 1.277952,
                                 1.113671, 0.5194913, 0, 0, 0, 0.3815411, 250,
-                                68.19, 31.81, 0, 0.004677782, 0), nrow=1)
+                                68.19, 31.81, 0, 0.004699766, 0), nrow=1)
     
     expect_equal(res.os.3[os.stable.fields],
                  res.os.values.3[os.stable.fields],
