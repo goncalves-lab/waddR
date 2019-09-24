@@ -157,14 +157,14 @@ cond2 <- matrix(rnorm(100, 45, 3), nrow=1)
 # and a vector denoting conditions
 dat <- cbind(cond1, cond2)
 condition <- c(rep(1, 100), rep(2, 100))
-wasserstein.sc(dat, condition, 100, method="TS")
+wasserstein.sc(dat, condition, "TS", 100)
 
 # call wasserstein.sc with two SingleCellExperiment objects
 sce1 <- SingleCellExperiment::SingleCellExperiment(
            assays=list(counts=cond1, logcounts=log10(cond1)))
 sce2 <- SingleCellExperiment::SingleCellExperiment(
            assays=list(counts=cond2, logcounts=log10(cond2)))
-wasserstein.sc(sce1, sce2, 100, method="TS")
+wasserstein.sc(sce1, sce2, "TS", 100)
 
 
 }
