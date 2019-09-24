@@ -4,7 +4,7 @@
 \alias{wasserstein.test}
 \title{wasserstein.test}
 \usage{
-wasserstein.test(x, y, permnum = 10000, method)
+wasserstein.test(x, y, method = c("SP", "ASY"), permnum = 10000)
 }
 \arguments{
 \item{x}{univariate sample (vector) representing the distribution of
@@ -13,12 +13,13 @@ condition A}
 \item{y}{univariate sample (vector) representing the distribution of
 condition B}
 
+\item{method}{testing procedure to be employed: "SP" for the semi-parametric
+permutation testing procedure with GPD approximation to estimate small
+p-values accurately; "ASY" for the test based on asymptotic theory.
+If no method is given, "SP" will be used by default.}
+
 \item{permnum}{number of permutations used in the permutation testing
 procedure (if method=”SP” is performed); default is 10000}
-
-\item{method}{testing procedure to be employed: “SP” for the semi-parametric
-permutation testing procedure with GPD approximation to estimate small
-p-values accurately; “ASY” for the test based on asymptotic theory}
 }
 \value{
 A vector concerning the testing results (see Schefzik and Goncalves
@@ -40,9 +41,11 @@ Schefzik and Goncalves (2019).
 \examples{
 set.seed(32)
 x<-rnorm(500)
+set.seed(32)
 y<-rnorm(500,2,1.5)
-wasserstein.test(x,y,10000,method="SP")
-wasserstein.test(x,y,method="asy")
+wasserstein.test(x,y,method="ASY", 9000)
+# Run with default options: method="SP", permnum=10000
+wasserstein.test(x,y)
 
 
 }

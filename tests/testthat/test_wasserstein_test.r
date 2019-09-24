@@ -16,7 +16,7 @@ test_that("Correctness of wasserstein test", {
   set.seed(42)
   x<- rnorm(100,20,3)
   y <- rnorm(134, 30,10)
-  output <- wasserstein.test(x, y, permnum=1000, method="ASY")
+  output <- wasserstein.test(x, y, method="ASY", permnum=1000)
   expect_known("value", output,
                file="known.values/testresult_correctness_wasserstein_test_1")
 })
@@ -32,9 +32,9 @@ test_that("Example Run of Wasserstein Test", {
                  "location","size","shape","rho","pval","perc.loc",
                  "perc.size","perc.shape","decomp.error")
   
-  expect_named(wasserstein.test(v,w, permnum=10, method="SP"),
+  expect_named(wasserstein.test(v, w, method="SP", permnum=10),
                expected=names.sp, ignore.order=TRUE)
-  expect_named(wasserstein.test(v,w,method="asy"),
+  expect_named(wasserstein.test(v, w, method="ASY"),
                expected=names.asy, ignore.order=TRUE)
 
 })
