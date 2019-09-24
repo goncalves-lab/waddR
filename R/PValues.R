@@ -15,9 +15,7 @@
 #'.fishersCombinedPval(x)
 #'
 #'
-#'@export
-#'
-.fishersCombinedPval<-function(x) {
+.fishersCombinedPval <- function(x) {
     if(sum(is.na(x)) == 0) {
         ifelse(x==0,1e-100,x)
         p.comb <- pchisq(-2 * sum(log(x)), df=2*length(x), lower.tail=FALSE)
@@ -50,10 +48,7 @@
 #'s<-c(1e-6,3e-54,0.55,0.001,4e-5)
 #'.combinePVal(r,s)
 #'
-#'
-#'@export
-#'
-.combinePVal<-function(r,s){
+.combinePVal <- function(r,s){
     apply(cbind(r,s), 1, function(x)
         .fishersCombinedPval(x))
 }
