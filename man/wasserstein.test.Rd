@@ -85,7 +85,7 @@ set.seed(32)
 x<-rnorm(500)
 set.seed(32)
 y<-rnorm(500,2,1.5)
-wasserstein.test(x,y,method="ASY", 9000)
+wasserstein.test(x,y,method="ASY")
 # Run with default options: method="SP", permnum=10000
 wasserstein.test(x,y)
 

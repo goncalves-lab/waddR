@@ -359,7 +359,7 @@
 #'x<-rnorm(500)
 #'set.seed(32)
 #'y<-rnorm(500,2,1.5)
-#'wasserstein.test(x,y,method="ASY", 9000)
+#'wasserstein.test(x,y,method="ASY")
 #'# Run with default options: method="SP", permnum=10000
 #'wasserstein.test(x,y)
 #'
@@ -367,6 +367,7 @@
 #'@export
 #'
 wasserstein.test <- function(x, y, method=c("SP", "ASY"), permnum=10000){
+    method <- match.arg(method)
     switch(toupper(method),
            "SP"=.wassersteinTestSp(x, y, permnum),
            "ASY"=.wassersteinTestAsy(x, y),
