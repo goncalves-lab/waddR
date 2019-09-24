@@ -75,7 +75,7 @@ differential gene expression distributions in scRNAseq data }
 Useful links:
 \itemize{
   \item \url{https://github.com/goncalves-lab/waddR.git}
-  \item Report bugs at \url{https://github.com/goncalves-lab/waddR.git}
+  \item Report bugs at \url{https://github.com/goncalves-lab/waddR/issues}
 }
 
 }
