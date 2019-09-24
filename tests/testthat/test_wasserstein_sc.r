@@ -77,8 +77,8 @@ test_that("Correctness of wasserstein single cell output", {
     #########################################################################
 
     # TWO STAGE TEST
-    res <- wasserstein.sc(dat, condition1, 10000, "TS")
-    res.dup <- wasserstein.sc(sce.a, sce.b, 10000, "TS")
+    res <- wasserstein.sc(dat, condition1)
+    res.dup <- wasserstein.sc(sce.a, sce.b)
 
     # reference results
     res.values <- matrix(c(0.3237935, 0.1048422, 0.1060877, 0.3257111,
@@ -103,8 +103,8 @@ test_that("Correctness of wasserstein single cell output", {
                  tolerance=0.1)
 
     # ONE STAGE TEST
-    res.os1 <- wasserstein.sc(dat, condition1, 10000, "OS")
-    res.os.dup1 <- wasserstein.sc(sce.a, sce.b, 10000, "OS")
+    res.os1 <- wasserstein.sc(dat, condition1, "OS")
+    res.os.dup1 <- wasserstein.sc(sce.a, sce.b, "OS")
 
     # reference results
     res.os.values1 <- matrix(c(0.4926601, 0.242714, 0.2474003, 0.4973935,
@@ -132,8 +132,8 @@ test_that("Correctness of wasserstein single cell output", {
     #########################################################################
     
     # TWO STAGE TEST
-    res.ts.3 <- wasserstein.sc(dat2, condition2, 10000, "TS")
-    res.ts.dup.3 <- wasserstein.sc(sce.a, sce.a2, 10000, "TS")
+    res.ts.3 <- wasserstein.sc(dat2, condition2)
+    res.ts.dup.3 <- wasserstein.sc(sce.a, sce.a2)
     
     # reference results
     res.ts.values.3 <- matrix(c( NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,
@@ -151,8 +151,8 @@ test_that("Correctness of wasserstein single cell output", {
 
 
     # ONE STAGE TEST
-    res.os.3 <- wasserstein.sc(dat2, condition2, 10000, "OS")
-    res.os.dup.3 <- wasserstein.sc(sce.a, sce.a2, 10000, "OS")
+    res.os.3 <- wasserstein.sc(dat2, condition2, "OS")
+    res.os.dup.3 <- wasserstein.sc(sce.a, sce.a2, "OS")
     
     # reference results
     res.os.values.3 <- matrix(c(1.27496, 1.625523, 1.633163, 1.277952,
@@ -178,8 +178,8 @@ test_that("Correctness of wasserstein single cell output", {
     #########################################################################
     
     # TWO STAGE PROCEDURE
-    res.ts <- wasserstein.sc(dat3, condition3, 10, "TS")
-    res.ts.dup <- wasserstein.sc(sce.a2, sce.b2, 10, "TS")
+    res.ts <- wasserstein.sc(dat3, condition3, permnum=10)
+    res.ts.dup <- wasserstein.sc(sce.a2, sce.b2, permnum=10)
     res.ts.values2 <- matrix(c(NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,
                                NA, NA, NA, 1, 1, NA, 1, 1), nrow=1)
     colnames(res.ts.values2) <- ts.names
@@ -188,8 +188,8 @@ test_that("Correctness of wasserstein single cell output", {
     expect_equal(res.ts, res.ts.dup)
 
     # ONE STAGE PROCEDURE
-    res.os2 <- wasserstein.sc(dat3, condition3, 10, "OS")
-    res.os.dup2 <- wasserstein.sc(sce.a2, sce.b2, 10, "OS")
+    res.os2 <- wasserstein.sc(dat3, condition3, method="OS", permnum=10)
+    res.os.dup2 <- wasserstein.sc(sce.a2, sce.b2, method="OS", permnum=10)
     res.os.values2 <- matrix(c(0, 0, 0, 0, 0, 0, 0, 0, 1, NA, NA, NaN, NaN,
                                NaN, 0, 1), nrow=1)
     colnames(res.os.values2) <- os.names
@@ -201,12 +201,12 @@ test_that("Correctness of wasserstein single cell output", {
 
 test_that("Example run wasserstein single cell", {
 
-    expect_equal(   colnames(wasserstein.sc(dat, condition1, 10, "TS")), 
+    expect_equal(   colnames(wasserstein.sc(dat, condition1, permnum=10)), 
                     ts.names)
-    expect_equal(   colnames(wasserstein.sc(dat2, condition2, 10, "OS")),
+    expect_equal(   colnames(wasserstein.sc(dat2, condition2, "OS", 10)),
                     os.names)
-    expect_equal(   colnames(wasserstein.sc(sce.a, sce.b, 10, "OS")),
+    expect_equal(   colnames(wasserstein.sc(sce.a, sce.b, "OS", 10)),
                     os.names)
-    expect_equal(   colnames(wasserstein.sc(sce.a, sce.b2, 10, "TS")),
+    expect_equal(   colnames(wasserstein.sc(sce.a, sce.b2, permnum=10)),
                     ts.names)
 })
