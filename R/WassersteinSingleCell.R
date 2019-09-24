@@ -115,7 +115,7 @@ setMethod("testZeroes",
             x1 <- (x1[x1>0])
             x2 <- (x2[x2>0])
 
-            suppressWarnings(wasserstein.test.sp(x1,x2,permnum))
+            suppressWarnings(.wassersteinTestSp(x1,x2,permnum))
         }
 
         wass.res <- bplapply(seq_len(nrow(dat)), onegene, 
@@ -140,7 +140,7 @@ setMethod("testZeroes",
             x1 <- dat[x,][condition==unique(condition)[1]]
             x2 <- dat[x,][condition==unique(condition)[2]]
             
-            suppressWarnings(wasserstein.test.sp(x1,x2,permnum))
+            suppressWarnings(.wassersteinTestSp(x1,x2,permnum))
         }
         
         wass.res <- bplapply(seq_len(nrow(dat)), onegene, 

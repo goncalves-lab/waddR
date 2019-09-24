@@ -51,8 +51,8 @@ differential gene expression distributions in scRNAseq data }
   valid only if the samples can be assumed to come from continuous
   distributions.
 
-  See the documentation of these functions \code{?wasserstein.test.sp},
-  \code{?wasserstein.test.asy} for more details.
+  See the documentation of the function \code{?wasserstein.test} for more
+  details.
 }
 
 \section{Single Cell Test}{

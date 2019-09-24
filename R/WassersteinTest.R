@@ -25,7 +25,7 @@
 }
 
 
-#'wasserstein.test.sp
+#' .wassersteinTestSp
 #' 
 #' Two-sample test to check for differences between two distributions
 #' (conditions) using the 2-Wasserstein distance: Semi-parametric
@@ -33,7 +33,7 @@
 #' distribution (GPD) approximation to estimate small p-values accurately
 #' 
 #' This is the semi-parametric version of wasserstein.test, for the
-#' asymptotic procedure see wasserstein.test.asy
+#' asymptotic procedure see .wassersteinTestAsy
 #' 
 #'@details Details concerning the permutation testing procedure with GPD
 #' approximation to estimate small p-values accurately can be found in Schefzik
@@ -93,12 +93,9 @@
 #'set.seed(32)
 #'x<-rnorm(500)
 #'y<-rnorm(500,2,1.5)
-#'wasserstein.test.sp(x,y,10000)
+#'.wassersetinTestSp(x,y,10000)
 #'
-#'
-#'@export
-#'
-wasserstein.test.sp<-function(x,y,permnum=10000){
+.wassersteinTestSp <- function(x, y, permnum=10000){
     stopifnot(permnum>0)
     if (length(x) !=0 & length(y) != 0){
 
@@ -172,14 +169,14 @@ wasserstein.test.sp<-function(x,y,permnum=10000){
 }
 
 
-#'wasserstein.test.asy
+#'.wassersteinTestAsy
 #' 
 #' Two-sample test to check for differences between two distributions
 #' (conditions) using the 2-Wasserstein distance: Implementation using a test
 #' based on asymptotic theory
 #'
 #' This is the asymptotic version of wasserstein.test, for the
-#' semi-parametric procedure see wasserstein.test.sp
+#' semi-parametric procedure see .wassersteinTestSp
 #'
 #'@details Details concerning the testing procedure based on asymptotic theory
 #' can be found in Schefzik and Goncalves (2019).
@@ -229,12 +226,9 @@ wasserstein.test.sp<-function(x,y,permnum=10000){
 #'set.seed(32)
 #'x<-rnorm(500)
 #'y<-rnorm(500,2,1.5)
-#'wasserstein.test.asy(x,y)
+#'.wassersteinTestAsy(x,y)
 #'
-#'
-#'@export
-#'
-wasserstein.test.asy <- function(x, y){
+.wassersteinTestAsy <- function(x, y){
 
     if (length(x) != 0 & length(y) != 0) {
 
@@ -313,8 +307,50 @@ wasserstein.test.asy <- function(x, y){
 #' procedure (if method=”SP” is performed); default is 10000
 #'
 #'@return A vector concerning the testing results (see Schefzik and Goncalves
-#' (2019) for details), see the documentations for wasserstein.test.sp and
-#' wasserstein.test.asy, respectively, for detailed descriptions.
+#' (2019) for details).
+#' 
+#'@return A vector concerning the testing results, precisely (see Schefzik and
+#' Goncalves (2019) for details)
+#' \itemize{
+#' \item d.wass: 2-Wasserstein distance between the two samples computed by
+#' quantile approximation
+#' \item d.wass^2: squared 2-Wasserstein distance between the two samples
+#' computed by quantile approximation
+#' \item d.comp^2: squared 2-Wasserstein distance between the two samples
+#' computed by decomposition approximation
+#' \item d.comp: 2-Wasserstein distance between the two samples computed by
+#' decomposition approximation
+#' \item location: location term in the decomposition of the squared
+#' 2-Wasserstein distance between the two samples
+#' \item size: size term in the decomposition of the squared 2-Wasserstein
+#' distance between the two samples
+#' \item shape: shape term in the decomposition of the squared 2-Wasserstein
+#' distance between the two samples
+#' \item rho: correlation coefficient in the quantile-quantile plot
+#' \item pval: The p-value of the semi-parametric 2-Wasserstein distance-based
+#' test or p-value determined using asymptotic theory, depending on the method
+#' \item p.ad.gpd: in case the GPD fitting is performed: p-value of the
+#' Anderson-Darling test to check whether the GPD actually fits the data well
+#' (otherwise NA). This output is only returned when performing a
+#' semi-parametric test (method="SP")!
+#' \item N.exc: in case the GPD fitting is performed: number of exceedances
+#' (starting with 250 and iteratively decreased by 10 if necessary) that are
+#' required to obtain a good GPD fit (i.e. p-value of Anderson-Darling test
+#' greater or eqaul to 0.05) (otherwise NA). This output is only returned when
+#' performing a semi-parametric test (method="SP")!
+#' \item perc.loc: fraction (in %) of the location part with respect to the
+#' overall squared 2-Wasserstein distance obtained by the decomposition
+#' approximation
+#' \item perc.size: fraction (in %) of the size part with respect to the
+#' overall squared 2-Wasserstein distance obtained by the decomposition
+#' approximation
+#' \item perc.shape: fraction (in %) of the shape part with respect to the
+#' overall squared 2-Wasserstein distance obtained by the decomposition
+#' approximation
+#' \item decomp.error: relative error between the squared 2-Wasserstein
+#' distance computed by the quantile approximation and the squared
+#' 2-Wasserstein distance computed by the decomposition approximation
+#' }
 #'
 #'@references Schefzik, R. and Goncalves, A. (2019).
 #'
@@ -332,7 +368,7 @@ wasserstein.test.asy <- function(x, y){
 #'
 wasserstein.test <- function(x, y, method=c("SP", "ASY"), permnum=10000){
     switch(toupper(method),
-           "SP"=wasserstein.test.sp(x, y, permnum),
-           "ASY"=wasserstein.test.asy(x, y),
+           "SP"=.wassersteinTestSp(x, y, permnum),
+           "ASY"=.wassersteinTestAsy(x, y),
            stop("Argument 'method' must be one of {SP, ASY} : ", method))
 }

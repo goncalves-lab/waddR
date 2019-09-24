@@ -68,8 +68,8 @@ The second procedure (ASY) uses a test based on asymptotic theory which is
 valid only if the samples can be assumed to come from continuous
 distributions.
 
-See the documentation of these functions `?wasserstein.test`,
-`?wasserstein.test.sp`, `?wasserstein.test.asy` for more details.
+See the documentation of the function \code{?wasserstein.test} for more
+details.
 
 ### Single Cell Test:
 
