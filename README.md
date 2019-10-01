@@ -21,10 +21,13 @@ repository.
 
 ### From Github
 
-The latest package version can be installed with the `install_github` utility from the 
-`devtools` package.
-Simply run `devtools::install_github("goncalves-lab/waddR")` from an R session.
+The latest package version can be installed from Github using `BiocManager`:
 
+```
+if (!requireNamespace("BiocManager"))
+    install.packages("BiocManager")
+BiocManager::install("goncalves-lab/waddR")
+```
 
 ## Running Tests
 
