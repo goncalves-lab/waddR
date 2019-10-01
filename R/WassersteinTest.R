@@ -88,13 +88,6 @@
 #' }
 #'
 #'@references Schefzik, R. and Goncalves, A. (2019).
-#'
-#'@examples
-#'set.seed(32)
-#'x<-rnorm(500)
-#'y<-rnorm(500,2,1.5)
-#'.wassersetinTestSp(x,y,10000)
-#'
 .wassersteinTestSp <- function(x, y, permnum=10000){
     stopifnot(permnum>0)
     if (length(x) !=0 & length(y) != 0){
@@ -221,13 +214,6 @@
 #' }
 #'
 #'@references Schefzik, R. and Goncalves, A. (2019).
-#'
-#'@examples
-#'set.seed(32)
-#'x<-rnorm(500)
-#'y<-rnorm(500,2,1.5)
-#'.wassersteinTestAsy(x,y)
-#'
 .wassersteinTestAsy <- function(x, y){
 
     if (length(x) != 0 & length(y) != 0) {

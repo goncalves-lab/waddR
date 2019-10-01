@@ -72,13 +72,6 @@ Details concerning the permutation testing procedure with GPD
 approximation to estimate small p-values accurately can be found in Schefzik
 and Goncalves (2019).
 }
-\examples{
-set.seed(32)
-x<-rnorm(500)
-y<-rnorm(500,2,1.5)
-.wassersetinTestSp(x,y,10000)
-
-}
 \references{
 Schefzik, R. and Goncalves, A. (2019).
 }

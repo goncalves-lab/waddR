@@ -60,13 +60,6 @@ semi-parametric procedure see .wassersteinTestSp
 Details concerning the testing procedure based on asymptotic theory
 can be found in Schefzik and Goncalves (2019).
 }
-\examples{
-set.seed(32)
-x<-rnorm(500)
-y<-rnorm(500,2,1.5)
-.wassersteinTestAsy(x,y)
-
-}
 \references{
 Schefzik, R. and Goncalves, A. (2019).
 }
