@@ -45,8 +45,6 @@ terms (in \%) with respect to the (squared) 2-Wasserstein distance here, while
 the functions also provide additional output.
 
 
-
-
 ```{r setup}
 library(waddR)
 
@@ -56,12 +54,16 @@ spec.output <- c("pval", "d.wass^2", "perc.loc", "perc.size", "perc.shape")
 We start with an example, in which the two distributions (samples) only differ
 with respect to the location, and show the results for the two testing
 procedures (semi-parametric (SP) and asymptotic theory-based (ASY)).
+
+Please note that the method "SP" with the permnum 10000 is used by default in
+calls to `wasserstein.test` if nothing different is specified.
+
 ```{r diff_loc}
 set.seed(24)
 ctrl <- rnorm(300 ,0 ,1)
 set.seed(24)
 dd1 <- rnorm(300, 1, 1)
-wasserstein.test(ctrl, dd1, permnum=10000, method="SP")[spec.output]
+wasserstein.test(ctrl, dd1, method="SP", permnum=10000)[spec.output]
 wasserstein.test(ctrl, dd1, method="ASY")[spec.output]
 ```
 We obtain a very low p-value, pointing at the existence of a difference, and
@@ -76,8 +78,8 @@ set.seed(24)
 ctrl <- rnorm(300, 0, 1)
 set.seed(24)
 dd2 <- rnorm(300, 0, 2)
-wasserstein.test(ctrl, dd2, permnum=10000, method="SP")[spec.output]
-wasserstein.test(ctrl, dd2, method="ASY")[spec.output]
+wasserstein.test(ctrl, dd2)
+wasserstein.test(ctrl, dd2, method="ASY")
 ```
 
 
@@ -93,7 +95,7 @@ sam2 <- rnorm(300, 10, 1)
 dd3 <- sapply(seq(1:300), 
               function(n) {
                 sample(c(sam1[n], sam2[n]), 1, prob=c(0.5, 0.5))})
-wasserstein.test(ctrl, dd3, permnum=10000, method="SP")[spec.output]
+wasserstein.test(ctrl, dd3)[spec.output]
 wasserstein.test(ctrl, dd3, method="ASY")[spec.output]
 ```
 
@@ -106,7 +108,7 @@ set.seed(24)
 ctrl <- rnorm(300, 0, 1)
 set.seed(24)
 nodd <- rnorm(300, 0, 1)
-wasserstein.test(ctrl, nodd, permnum=10000, method="SP")[spec.output]
+wasserstein.test(ctrl, nodd)[spec.output]
 wasserstein.test(ctrl, nodd, method="ASY")[spec.output]
 ```
 
@@ -120,3 +122,9 @@ wasserstein.test(ctrl, nodd, method="ASY")[spec.output]
 * Detect 
 [differential gene expression distributions](wasserstein_singlecell.html)
 in scRNAseq data
+
+## Session Info
+
+```{r session-info}
+sessionInfo()
+```

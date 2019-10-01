@@ -125,3 +125,9 @@ Wasserstein distance between two distributions to check for differences
 * Detect 
 [differential gene expression distributions](wasserstein_singlecell.html)
 in scRNAseq data
+
+## Session Info
+
+```{r session-info}
+sessionInfo()
+```

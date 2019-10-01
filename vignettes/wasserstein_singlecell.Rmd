@@ -45,7 +45,6 @@ First, we will first load all required packages:
 ```{r}
 suppressPackageStartupMessages({
     library("waddR")
-    library("scater")
     library("SingleCellExperiment")
     library("BiocFileCache")
 })
@@ -105,7 +104,7 @@ The detailed processing steps performed on this data can be seen
 [here](https://github.com/goncalves-lab/waddr-data.git).
 
 ```{r}
-wsres <- wasserstein.sc(sce.blood, sce.decidua, permnum = 10000, "OS")
+wsres <- wasserstein.sc(sce.blood, sce.decidua, "OS")
 head(wsres, n=10L)
 ```
 
@@ -160,3 +159,9 @@ given.
 * [Two-sample test](wasserstein_test.html) to check for differences between two
 distributions
 
+
+## Session Info
+
+```{r session-info}
+sessionInfo()
+```
