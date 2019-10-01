@@ -24,10 +24,3 @@ pair of p-values into a combined p-value according to Fisher’s method.
 Applies the .fishersCombinedPval function to a whole set of N pairs of
 p-values.
 }
-\examples{
-r<-c(0.007,6e-23,0.77,0.23,2e-22)
-s<-c(1e-6,3e-54,0.55,0.001,4e-5)
-.combinePVal(r,s)
-
-
-}

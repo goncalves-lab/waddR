@@ -45,26 +45,7 @@ wasserstein1d <- function (a, b, p = 1, wa = NULL, wb = NULL) {
   uu0 <- c(0, uu)
   uu1 <- c(uu, 1)
   areap <- sum((uu1 - uu0) * abs(bb - aa)^p)^(1/p)
-  
-  #cat("a length = ",length(a))
-  #cat(" b length = ",length(b), "\n")
-  #cat("ua length = ", length(ua))
-  #cat(" ub length = ", length(ub), "\n")
-  #cat("cua length = ", length(cua))
-  #cat(" cub length = ", length(cub), "\n")
-  #cat("arep length = ", length(arep))
-  #cat(" brep length = ", length(brep), "\n")
-  #cat("cua  = ", paste(as.character(cua), collapse=", "), "\n")
-  #cat("cub  = ", paste(as.character(cua), collapse=", "), "\n")
-  
-  #cat("a_rep  = ", paste(as.character(arep), collapse=", "), "\n")
-  #cat("b_rep  = ", paste(as.character(brep), collapse=", "), "\n")
-  
-  #cat("aa  = ", paste(as.character(aa), collapse=", "), "\n")
-  #cat("bb  = ", paste(as.character(bb), collapse=", "), "\n")
-  
-  #cat("uu0  = ", paste(as.character(uu0), collapse=", "), "\n")
-  #cat("uu1  = ", paste(as.character(uu1), collapse=", ")+, "\n")
+
   return(areap)
 }
 

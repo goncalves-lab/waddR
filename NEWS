@@ -1,3 +1,15 @@
+Changes in 0.99.3 (2019-10-01)
++ Fixes: 
+    o Fixed a bug in .wassersteinTestSp where the names in the output vector were changed unexpectedly and added a test for this bug
++ Bioc Review I:
+    o vignette: Added SessionInfo() to each vignettes
+    o vignette/README: Changed the install instructions
+    o unit tests: removed unused and commented-out code
+    o R: Changed to switch statements to dispatch different methods in wasserstein.test and wasserstein.sc
+    o R: Changed the order of arguments in wasserstein.test and wasserstein.sc and added default methods
+    o R: wasserstein.test.sp has been renamed to .wassersteinTestSp; wassersetin.test.asy has been renamed to .wassersteinTestAsy -> both are now private 
+    o R/NAMESPACE: removed the previously private functions .fishersCombinedPval and .combinePVal from NAMESPACE by removing @export decorators
+
 Changes in 0.99.3 (2019-08-30)
 + Fixes:
 	o Fixed a bug in wasserstein.test that led to NAs during gpd fitting

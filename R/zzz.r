@@ -15,7 +15,7 @@ NULL
 #'
 #' An empirical cumulative distribution function of a simulated Brownian bridge
 #' distribution. It is used an empirical quantile function to determine 
-#' p-values in the asymptotic wasserstein test function wasserstein.test.asy
+#' p-values in the asymptotic wasserstein test function .wassersteinTestAsy
 #'
 #' @param v distribution funtion input value
 #' @return Value at x of the Brownian distribution
@@ -25,16 +25,16 @@ NULL
 
 
 # TODO: upload as data package
-#' .brownianBridgeEmpcdf.url
+#' brownianBridgeEmpcdf.url
 #'
 #' Url for downloading the simulated Brownian bridge distribution. 
 #' It is used an empirical quantile function to determine 
-#' p-values in the asymptotic wasserstein test function wasserstein.test.asy
+#' p-values in the asymptotic wasserstein test function .wassersteinTestAsy
 #' 
-#' @name .brownianBridgeEmpcdf.url
+#' @name brownianBridgeEmpcdf.url
 #' @docType data
 #' 
-.brownianBridgeEmpcdf.url <- paste0("https://github.com/goncalves-lab/",
+brownianBridgeEmpcdf.url <- paste0( "https://github.com/goncalves-lab/",
                                     "waddR-data/blob/master/data/",
                                     "empcdf_ref.RData?raw=true")
 
@@ -50,7 +50,7 @@ NONEXPORTS.AVAILABLE <- TRUE
     # Load the reference distributions from cache
     if (is.null(.brownianBridgeEmpcdf(0))) {
         brownianBridgeEmpcdf.path <- .cache.getOrDownload(
-            url=.brownianBridgeEmpcdf.url,
+            url=brownianBridgeEmpcdf.url,
             rname="empcdf.ref")
         empcdf.ref <- NULL # this variable will be loaded from the file
         load(brownianBridgeEmpcdf.path)

@@ -21,10 +21,13 @@ repository.
 
 ### From Github
 
-The latest package version can be installed with the `install_github` utility from the 
-`devtools` package.
-Simply run `devtools::install_github("goncalves-lab/waddR")` from an R session.
+The latest package version can be installed from Github using `BiocManager`:
 
+```
+if (!requireNamespace("BiocManager"))
+    install.packages("BiocManager")
+BiocManager::install("goncalves-lab/waddR")
+```
 
 ## Running Tests
 
@@ -68,8 +71,8 @@ The second procedure (ASY) uses a test based on asymptotic theory which is
 valid only if the samples can be assumed to come from continuous
 distributions.
 
-See the documentation of these functions `?wasserstein.test`,
-`?wasserstein.test.sp`, `?wasserstein.test.asy` for more details.
+See the documentation of the function \code{?wasserstein.test} for more
+details.
 
 ### Single Cell Test:
 

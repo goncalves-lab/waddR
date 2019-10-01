@@ -115,7 +115,7 @@ setMethod("testZeroes",
             x1 <- (x1[x1>0])
             x2 <- (x2[x2>0])
 
-            suppressWarnings(wasserstein.test.sp(x1,x2,permnum))
+            suppressWarnings(.wassersteinTestSp(x1,x2,permnum))
         }
 
         wass.res <- bplapply(seq_len(nrow(dat)), onegene, 
@@ -140,7 +140,7 @@ setMethod("testZeroes",
             x1 <- dat[x,][condition==unique(condition)[1]]
             x2 <- dat[x,][condition==unique(condition)[2]]
             
-            suppressWarnings(wasserstein.test.sp(x1,x2,permnum))
+            suppressWarnings(.wassersteinTestSp(x1,x2,permnum))
         }
         
         wass.res <- bplapply(seq_len(nrow(dat)), onegene, 
@@ -173,14 +173,15 @@ setMethod("testZeroes",
 #'@param x matrix of single-cell RNA-sequencing expression data with genes in
 #' rows and samples (cells) in columns
 #'@param y vector of condition labels
-#'@param permnum number of permutations used in the permutation testing
-#' procedure
 #'@param method method employed in the testing procedure: “OS” for the
 #' one-stage method (i.e. semi-parametric testing applied to all (zero and
 #' non-zero) expression values); “TS” for the two-stage method (i.e.
 #' semi-parametric testing applied to non-zero expression values only, combined
 #' with a separate testing for differential proportions of zero expression
-#' using logistic regression)
+#' using logistic regression). If this argument is not given, a two-sided test
+#' is run by default.
+#'@param permnum number of permutations used in the permutation testing
+#' procedure. If this argument is not given, 10000 is used as default
 #'
 #'@return See the corresponding values in the description of the function
 #' .testWass, where the argument inclZero=TRUE in .testWass has to be
@@ -292,14 +293,14 @@ setMethod("testZeroes",
 #'# and a vector denoting conditions
 #'dat <- cbind(cond1, cond2)
 #'condition <- c(rep(1, 100), rep(2, 100))
-#'wasserstein.sc(dat, condition, 100, method="TS")
+#'wasserstein.sc(dat, condition, "TS", 100)
 #'
 #'# call wasserstein.sc with two SingleCellExperiment objects
 #'sce1 <- SingleCellExperiment::SingleCellExperiment(
 #'            assays=list(counts=cond1, logcounts=log10(cond1)))
 #'sce2 <- SingleCellExperiment::SingleCellExperiment(
 #'            assays=list(counts=cond2, logcounts=log10(cond2)))
-#'wasserstein.sc(sce1, sce2, 100, method="TS")
+#'wasserstein.sc(sce1, sce2, "TS", 100)
 #'
 #'
 #' @name wasserstein.sc
@@ -307,23 +308,24 @@ setMethod("testZeroes",
 #' @docType methods
 #' @rdname wasserstein.sc-method
 setGeneric("wasserstein.sc",
-    function(x, y, permnum, method) standardGeneric("wasserstein.sc"))
+    function(x, y, method=c("TS", "OS"), permnum=10000)
+        standardGeneric("wasserstein.sc"))
 
 
 #'@rdname wasserstein.sc-method
 #'@aliases wasserstein.sc-method,matrix,vector,ANY,ANY-method
 setMethod("wasserstein.sc", 
     c(x="matrix", y="vector"),
-    function(x, y, permnum, method) {
-        method <- toupper(method)
+    function(x, y, method=c("TS", "OS"), permnum=10000) {
         stopifnot(length(unique(y)) == 2)
-        stopifnot(method %in% c("OS", "TS"))
         stopifnot(dim(x)[2] == length(y))
-
-        if(method == "OS")
-            return(.testWass(x, y, permnum, inclZero=TRUE))
-        if(method == "TS")
-            return(.testWass(x, y, permnum, inclZero=FALSE))
+        
+        method <- match.arg(method)
+        switch(toupper(method),
+               "TS"=.testWass(x, y, permnum, inclZero=FALSE),
+               "OS"=.testWass(x, y, permnum, inclZero=TRUE),
+               stop("Argument 'method' must be one of {TS, OS} : ", method)
+              )
     })
 
 
@@ -332,16 +334,16 @@ setMethod("wasserstein.sc",
 #'  wasserstein.sc,SingleCellExperiment,SingleCellExperiment,ANY,ANY-method
 setMethod("wasserstein.sc",
     c(x="SingleCellExperiment", y="SingleCellExperiment"),
-    function(x, y, permnum, method) {
-        method <- toupper(method)
-        stopifnot(method %in% c("OS", "TS"))
+    function(x, y, method=c("TS", "OS"), permnum=10000) {
         stopifnot(dim(counts(x))[1] == dim(counts(y))[1])
-
+        
+        method <- match.arg(method)
         dat <- cbind(counts(x), counts(y))
         condition <- c(rep(1, dim(counts(x))[2]), rep(2, dim(counts(y))[2]))
-        if(method == "OS")
-            return(.testWass(dat, condition, permnum, inclZero=TRUE))
-        if(method == "TS")
-            return(.testWass(dat, condition, permnum, inclZero=FALSE))
+        switch(toupper(method),
+               "TS"=.testWass(dat, condition, permnum, inclZero=FALSE),
+               "OS"=.testWass(dat, condition, permnum, inclZero=TRUE),
+               stop("Argument 'method' must be one of {TS, OS} : ", method)
+        )
     })
 

@@ -28,7 +28,7 @@ The wasserstein (transport) distance between x and y
 The order \code{p} Wasserstein metric (or distance) is defined as the 
 \code{p}-th root of the total cost of turning one pile of mass x into a new
 pile of mass y.
-The cost a single trnasport \eqn{x_i} into \eqn{y_i} is the \code{p}-th
+The cost a single transport \eqn{x_i} into \eqn{y_i} is the \code{p}-th
 power of the euclidean distance between \eqn{x_i} and \eqn{y_i}.
 }
 \details{

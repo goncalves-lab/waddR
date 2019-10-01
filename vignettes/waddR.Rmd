@@ -76,8 +76,7 @@ The second procedure (ASY) uses a test based on asymptotic theory which is
 valid only if the samples can be assumed to come from continuous
 distributions.
 
-See the documentation of these functions `?wasserstein.test`,
-`?wasserstein.test.sp`, `?wasserstein.test.asy` for more details.
+See `?wasserstein.test` for more details.
 
 ### Single Cell Test: The waddR package provides an adaptation of the
 
@@ -104,12 +103,10 @@ if (!requireNamespace("BiocManager"))
 BiocManager::install("MyPackage")
 ```
 
-The package can also be installed from github directly with the `devtools` package:
+Using `BiocManager`, the package can also be installed from github directly:
 
 ```{r install-github, eval=FALSE, echo=TRUE}
-if (!requireNamespace("devtools"))
- install.packages("devtools")
-devtools::install_github("goncalves-lab/waddR")
+BiocManager::install("goncalves-lab/waddR")
 ```
 
 The package `waddR` can then be used in R:

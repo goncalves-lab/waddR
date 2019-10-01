@@ -9,12 +9,13 @@
 \alias{wasserstein.sc,SingleCellExperiment,SingleCellExperiment,ANY,ANY-method}
 \title{wasserstein.sc}
 \usage{
-wasserstein.sc(x, y, permnum, method)
+wasserstein.sc(x, y, method = c("TS", "OS"), permnum = 10000)
 
-\S4method{wasserstein.sc}{matrix,vector}(x, y, permnum, method)
+\S4method{wasserstein.sc}{matrix,vector}(x, y, method = c("TS", "OS"),
+  permnum = 10000)
 
 \S4method{wasserstein.sc}{SingleCellExperiment,SingleCellExperiment}(x, y,
-  permnum, method)
+  method = c("TS", "OS"), permnum = 10000)
 }
 \arguments{
 \item{x}{matrix of single-cell RNA-sequencing expression data with genes in
@@ -22,15 +23,16 @@ rows and samples (cells) in columns}
 
 \item{y}{vector of condition labels}
 
-\item{permnum}{number of permutations used in the permutation testing
-procedure}
-
 \item{method}{method employed in the testing procedure: “OS” for the
 one-stage method (i.e. semi-parametric testing applied to all (zero and
 non-zero) expression values); “TS” for the two-stage method (i.e.
 semi-parametric testing applied to non-zero expression values only, combined
 with a separate testing for differential proportions of zero expression
-using logistic regression)}
+using logistic regression). If this argument is not given, a two-sided test
+is run by default.}
+
+\item{permnum}{number of permutations used in the permutation testing
+procedure. If this argument is not given, 10000 is used as default}
 }
 \value{
 See the corresponding values in the description of the function
@@ -155,14 +157,14 @@ cond2 <- matrix(rnorm(100, 45, 3), nrow=1)
 # and a vector denoting conditions
 dat <- cbind(cond1, cond2)
 condition <- c(rep(1, 100), rep(2, 100))
-wasserstein.sc(dat, condition, 100, method="TS")
+wasserstein.sc(dat, condition, "TS", 100)
 
 # call wasserstein.sc with two SingleCellExperiment objects
 sce1 <- SingleCellExperiment::SingleCellExperiment(
            assays=list(counts=cond1, logcounts=log10(cond1)))
 sce2 <- SingleCellExperiment::SingleCellExperiment(
            assays=list(counts=cond2, logcounts=log10(cond2)))
-wasserstein.sc(sce1, sce2, 100, method="TS")
+wasserstein.sc(sce1, sce2, "TS", 100)
 
 
 }

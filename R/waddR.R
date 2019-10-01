@@ -41,8 +41,8 @@
 #'   valid only if the samples can be assumed to come from continuous
 #'   distributions.
 #'
-#'   See the documentation of these functions \code{?wasserstein.test.sp},
-#'   \code{?wasserstein.test.asy} for more details.
+#'   See the documentation of the function \code{?wasserstein.test} for more
+#'   details.
 #'
 #' @section Single Cell Test: The waddR package provides an adaptation of the
 #'   semi-parametric testing procedure based on the 2-Wasserstein distance

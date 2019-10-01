@@ -15,5 +15,5 @@ Value at x of the Brownian distribution
 \description{
 An empirical cumulative distribution function of a simulated Brownian bridge
 distribution. It is used an empirical quantile function to determine 
-p-values in the asymptotic wasserstein test function wasserstein.test.asy
+p-values in the asymptotic wasserstein test function .wassersteinTestAsy
 }
