@@ -36,5 +36,14 @@ test_that("Example Run of Wasserstein Test", {
                expected=names.sp, ignore.order=TRUE)
   expect_named(wasserstein.test(v, w, method="ASY"),
                expected=names.asy, ignore.order=TRUE)
+  
+  # example from the wasserstein_test vignette that displayed an error
+  set.seed(24)
+  ctrl <- rnorm(300 ,0 ,1)
+  set.seed(24)
+  dd1 <- rnorm(300, 1, 1)
+  
+  expect_named(wasserstein.test(ctrl, dd1, method="SP", permnum=10000),
+               expected=names.sp, ignore.order=TRUE)
 
 })
