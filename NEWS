@@ -1,4 +1,4 @@
-Changes in 0.99.3 (2019-10-01)
+Changes in 0.99.4 (2019-10-01)
 + Fixes: 
     o Fixed a bug in .wassersteinTestSp where the names in the output vector were changed unexpectedly and added a test for this bug
 + Bioc Review I:
