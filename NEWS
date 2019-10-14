@@ -1,4 +1,10 @@
-Changes in 0.99.3 (2019-10-01)
+Changes in 0.99.5 (2019-10-14)
++ P-value reproducibility feature for the permutation procedure:
+    o as described [here](https://github.com/Bioconductor/Contributions/issues/1218#issuecomment-53710763), a seed argument has been added to the functions wasserstein.test and wasserstein.sc.
++ Fix:
+    o Checks for the validity of the "method" argument in wasserstein.sc and wasserstein.test that have become unnecessary with the use of match.arg have been removed
+
+Changes in 0.99.4 (2019-10-01)
 + Fixes: 
     o Fixed a bug in .wassersteinTestSp where the names in the output vector were changed unexpectedly and added a test for this bug
 + Bioc Review I:

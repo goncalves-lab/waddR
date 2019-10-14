@@ -8,12 +8,17 @@
 #' @param y numeric vector representing distribution B
 #' @param permnum integer interpreted as the number of permutations to be
 #'  performed
+#' @param seed number to be used as a seed for reproducibility of the
+#' permutation procedure. By default, NULL is given and no seed is set.
 #' 
 #' @return vector with squared 2-Wasserstein distances computed on random
 #'  shuffles of the two input vectors
 #'  
-.wassPermProcedure <- function(x, y, permnum) {
+.wassPermProcedure <- function(x, y, permnum, seed=NULL) {
     z <- c(x,y)
+    if (!is.null(seed)){
+        set.seed(seed)
+    }
     shuffle <- permutations(z, num_permutations=permnum)
     return(apply(   shuffle, 2, 
                     function (k) {
@@ -45,7 +50,8 @@
 #' condition B
 #'@param permnum number of permutations used in the permutation testing
 #' procedure
-#'
+#'@param seed number to be used as a seed for reproducibility of the
+#' permutation procedure. By default, NULL is given and no seed is set.
 #'@return A vector concerning the testing results, precisely (see Schefzik and
 #' Goncalves (2019) for details)
 #' \itemize{
@@ -88,7 +94,7 @@
 #' }
 #'
 #'@references Schefzik, R. and Goncalves, A. (2019).
-.wassersteinTestSp <- function(x, y, permnum=10000){
+.wassersteinTestSp <- function(x, y, permnum=10000, seed=NULL){
     stopifnot(permnum>0)
     if (length(x) !=0 & length(y) != 0){
 
@@ -99,7 +105,7 @@
         # permutation procedure to calculate the wasserstein distances of
         # random shuffles of x and y
         bsn <- permnum
-        wass.values <- .wassPermProcedure(x, y, bsn)
+        wass.values <- .wassPermProcedure(x, y, bsn, seed)
         wass.values.ordered <- sort(wass.values, decreasing=TRUE)
 
         # computation of an approximative p-value
@@ -291,7 +297,9 @@
 #' If no method is given, "SP" will be used by default.
 #'@param permnum number of permutations used in the permutation testing
 #' procedure (if method=”SP” is performed); default is 10000
-#'
+#'@param seed number to be used as a seed for reproducibility of the
+#' permutation procedure (if method="SP" is performed). By default, NULL is
+#' given and no seed is set.
 #'@return A vector concerning the testing results (see Schefzik and Goncalves
 #' (2019) for details).
 #' 
@@ -348,14 +356,14 @@
 #'wasserstein.test(x,y,method="ASY")
 #'# Run with default options: method="SP", permnum=10000
 #'wasserstein.test(x,y)
-#'
+#'# Run with a seed for the semi-parametric test ("SP")
+#'wasserstein.test(x,y, method="SP", seed=42)
 #'
 #'@export
 #'
-wasserstein.test <- function(x, y, method=c("SP", "ASY"), permnum=10000){
+wasserstein.test <- function(x, y, method=c("SP", "ASY"), permnum=10000, seed=NULL){
     method <- match.arg(method)
-    switch(toupper(method),
-           "SP"=.wassersteinTestSp(x, y, permnum),
-           "ASY"=.wassersteinTestAsy(x, y),
-           stop("Argument 'method' must be one of {SP, ASY} : ", method))
+    switch(method,
+           "SP"=.wassersteinTestSp(x, y, permnum, seed),
+           "ASY"=.wassersteinTestAsy(x, y))
 }
