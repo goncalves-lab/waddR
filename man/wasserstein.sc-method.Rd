@@ -170,6 +170,9 @@ sce2 <- SingleCellExperiment::SingleCellExperiment(
            assays=list(counts=cond2, logcounts=log10(cond2)))
 wasserstein.sc(sce1, sce2, "TS", 100)
 
+# for reproducible p-values
+wasserstein.sc(sce1, sce2, seed=42)
+
 
 }
 \references{

@@ -93,7 +93,8 @@ y<-rnorm(500,2,1.5)
 wasserstein.test(x,y,method="ASY")
 # Run with default options: method="SP", permnum=10000
 wasserstein.test(x,y)
-
+# Run with a seed for the semi-parametric test ("SP")
+wasserstein.test(x,y, method="SP", seed=42)
 
 }
 \references{
