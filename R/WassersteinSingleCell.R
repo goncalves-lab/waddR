@@ -323,11 +323,9 @@ setMethod("wasserstein.sc",
         stopifnot(dim(x)[2] == length(y))
         
         method <- match.arg(method)
-        switch(toupper(method),
+        switch(method,
                "TS"=.testWass(x, y, permnum, inclZero=FALSE, seed),
-               "OS"=.testWass(x, y, permnum, inclZero=TRUE, seed),
-               stop("Argument 'method' must be one of {TS, OS} : ", method)
-              )
+               "OS"=.testWass(x, y, permnum, inclZero=TRUE, seed))
     })
 
 
@@ -339,13 +337,11 @@ setMethod("wasserstein.sc",
     function(x, y, method=c("TS", "OS"), permnum=10000, seed=NULL) {
         stopifnot(dim(counts(x))[1] == dim(counts(y))[1])
         
-        method <- match.arg(method)
         dat <- cbind(counts(x), counts(y))
         condition <- c(rep(1, dim(counts(x))[2]), rep(2, dim(counts(y))[2]))
-        switch(toupper(method),
+        method <- match.arg(method)
+        switch(method,
                "TS"=.testWass(dat, condition, permnum, inclZero=FALSE, seed),
-               "OS"=.testWass(dat, condition, permnum, inclZero=TRUE, seed),
-               stop("Argument 'method' must be one of {TS, OS} : ", method)
-        )
+               "OS"=.testWass(dat, condition, permnum, inclZero=TRUE, seed))
     })
 

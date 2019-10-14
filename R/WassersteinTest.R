@@ -362,8 +362,7 @@
 #'
 wasserstein.test <- function(x, y, method=c("SP", "ASY"), permnum=10000, seed=NULL){
     method <- match.arg(method)
-    switch(toupper(method),
+    switch(method,
            "SP"=.wassersteinTestSp(x, y, permnum, seed),
-           "ASY"=.wassersteinTestAsy(x, y),
-           stop("Argument 'method' must be one of {SP, ASY} : ", method))
+           "ASY"=.wassersteinTestAsy(x, y))
 }
