@@ -95,7 +95,8 @@ setMethod("testZeroes",
 #' non-zero expression values only, combined with a separate testing for
 #' differential proportions of zero expression using logistic regression) is
 #' performed. Default is TRUE
-#'
+#'@param seed number to be used as a seed for reproducibility of the
+#' permutation procedure. By default, NULL is given and no seed is set.
 #'@return matrix with every row being the wasserstein test of one gene between
 #' the two conditions.
 #'  See the corresponding values in the description of the function
@@ -105,7 +106,7 @@ setMethod("testZeroes",
 #' 
 #'@references Schefzik and Goncalves 2019
 #'
-.testWass <- function(dat, condition, permnum, inclZero=TRUE){
+.testWass <- function(dat, condition, permnum, inclZero=TRUE, seed=NULL){
 
     if (!inclZero){
 
@@ -115,7 +116,7 @@ setMethod("testZeroes",
             x1 <- (x1[x1>0])
             x2 <- (x2[x2>0])
 
-            suppressWarnings(.wassersteinTestSp(x1,x2,permnum))
+            suppressWarnings(.wassersteinTestSp(x1, x2, permnum, seed))
         }
 
         wass.res <- bplapply(seq_len(nrow(dat)), onegene, 
@@ -140,7 +141,7 @@ setMethod("testZeroes",
             x1 <- dat[x,][condition==unique(condition)[1]]
             x2 <- dat[x,][condition==unique(condition)[2]]
             
-            suppressWarnings(.wassersteinTestSp(x1,x2,permnum))
+            suppressWarnings(.wassersteinTestSp(x1, x2, permnum, seed))
         }
         
         wass.res <- bplapply(seq_len(nrow(dat)), onegene, 
@@ -182,7 +183,8 @@ setMethod("testZeroes",
 #' is run by default.
 #'@param permnum number of permutations used in the permutation testing
 #' procedure. If this argument is not given, 10000 is used as default
-#'
+#'@param seed number to be used as a seed for reproducibility of the
+#' permutation procedure. By default, NULL is given and no seed is set.
 #'@return See the corresponding values in the description of the function
 #' .testWass, where the argument inclZero=TRUE in .testWass has to be
 #' identified with the argument method=”OS”, and the argument inclZero=FALSE in
@@ -308,22 +310,22 @@ setMethod("testZeroes",
 #' @docType methods
 #' @rdname wasserstein.sc-method
 setGeneric("wasserstein.sc",
-    function(x, y, method=c("TS", "OS"), permnum=10000)
+    function(x, y, method=c("TS", "OS"), permnum=10000, seed=NULL)
         standardGeneric("wasserstein.sc"))
 
 
 #'@rdname wasserstein.sc-method
-#'@aliases wasserstein.sc-method,matrix,vector,ANY,ANY-method
+#'@aliases wasserstein.sc-method,matrix,vector,ANY,ANY,ANY-method
 setMethod("wasserstein.sc", 
     c(x="matrix", y="vector"),
-    function(x, y, method=c("TS", "OS"), permnum=10000) {
+    function(x, y, method=c("TS", "OS"), permnum=10000, seed=NULL) {
         stopifnot(length(unique(y)) == 2)
         stopifnot(dim(x)[2] == length(y))
         
         method <- match.arg(method)
         switch(toupper(method),
-               "TS"=.testWass(x, y, permnum, inclZero=FALSE),
-               "OS"=.testWass(x, y, permnum, inclZero=TRUE),
+               "TS"=.testWass(x, y, permnum, inclZero=FALSE, seed),
+               "OS"=.testWass(x, y, permnum, inclZero=TRUE, seed),
                stop("Argument 'method' must be one of {TS, OS} : ", method)
               )
     })
@@ -331,18 +333,18 @@ setMethod("wasserstein.sc",
 
 #'@rdname wasserstein.sc-method
 #'@aliases
-#'  wasserstein.sc,SingleCellExperiment,SingleCellExperiment,ANY,ANY-method
+#'  wasserstein.sc,SingleCellExperiment,SingleCellExperiment,ANY,ANY,ANY-method
 setMethod("wasserstein.sc",
     c(x="SingleCellExperiment", y="SingleCellExperiment"),
-    function(x, y, method=c("TS", "OS"), permnum=10000) {
+    function(x, y, method=c("TS", "OS"), permnum=10000, seed=NULL) {
         stopifnot(dim(counts(x))[1] == dim(counts(y))[1])
         
         method <- match.arg(method)
         dat <- cbind(counts(x), counts(y))
         condition <- c(rep(1, dim(counts(x))[2]), rep(2, dim(counts(y))[2]))
         switch(toupper(method),
-               "TS"=.testWass(dat, condition, permnum, inclZero=FALSE),
-               "OS"=.testWass(dat, condition, permnum, inclZero=TRUE),
+               "TS"=.testWass(dat, condition, permnum, inclZero=FALSE, seed),
+               "OS"=.testWass(dat, condition, permnum, inclZero=TRUE, seed),
                stop("Argument 'method' must be one of {TS, OS} : ", method)
         )
     })
