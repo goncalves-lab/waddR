@@ -4,18 +4,19 @@
 \name{wasserstein.sc}
 \alias{wasserstein.sc}
 \alias{wasserstein.sc,matrix,vector-method}
-\alias{wasserstein.sc-method,matrix,vector,ANY,ANY-method}
+\alias{wasserstein.sc-method,matrix,vector,ANY,ANY,ANY-method}
 \alias{wasserstein.sc,SingleCellExperiment,SingleCellExperiment-method}
-\alias{wasserstein.sc,SingleCellExperiment,SingleCellExperiment,ANY,ANY-method}
+\alias{wasserstein.sc,SingleCellExperiment,SingleCellExperiment,ANY,ANY,ANY-method}
 \title{wasserstein.sc}
 \usage{
-wasserstein.sc(x, y, method = c("TS", "OS"), permnum = 10000)
+wasserstein.sc(x, y, method = c("TS", "OS"), permnum = 10000,
+  seed = NULL)
 
 \S4method{wasserstein.sc}{matrix,vector}(x, y, method = c("TS", "OS"),
-  permnum = 10000)
+  permnum = 10000, seed = NULL)
 
 \S4method{wasserstein.sc}{SingleCellExperiment,SingleCellExperiment}(x, y,
-  method = c("TS", "OS"), permnum = 10000)
+  method = c("TS", "OS"), permnum = 10000, seed = NULL)
 }
 \arguments{
 \item{x}{matrix of single-cell RNA-sequencing expression data with genes in
@@ -33,6 +34,9 @@ is run by default.}
 
 \item{permnum}{number of permutations used in the permutation testing
 procedure. If this argument is not given, 10000 is used as default}
+
+\item{seed}{number to be used as a seed for reproducibility of the
+permutation procedure. By default, NULL is given and no seed is set.}
 }
 \value{
 See the corresponding values in the description of the function

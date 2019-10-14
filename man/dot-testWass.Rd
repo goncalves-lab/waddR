@@ -4,7 +4,7 @@
 \alias{.testWass}
 \title{.testWass}
 \usage{
-.testWass(dat, condition, permnum, inclZero = TRUE)
+.testWass(dat, condition, permnum, inclZero = TRUE, seed = NULL)
 }
 \arguments{
 \item{dat}{matrix of single-cell RNA-sequencing expression data with genes in
@@ -21,6 +21,9 @@ if FALSE, the two-stage method (i.e. semi-parametric testing applied to
 non-zero expression values only, combined with a separate testing for
 differential proportions of zero expression using logistic regression) is
 performed. Default is TRUE}
+
+\item{seed}{number to be used as a seed for reproducibility of the
+permutation procedure. By default, NULL is given and no seed is set.}
 }
 \value{
 matrix with every row being the wasserstein test of one gene between

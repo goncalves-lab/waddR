@@ -4,7 +4,8 @@
 \alias{wasserstein.test}
 \title{wasserstein.test}
 \usage{
-wasserstein.test(x, y, method = c("SP", "ASY"), permnum = 10000)
+wasserstein.test(x, y, method = c("SP", "ASY"), permnum = 10000,
+  seed = NULL)
 }
 \arguments{
 \item{x}{univariate sample (vector) representing the distribution of
@@ -20,6 +21,10 @@ If no method is given, "SP" will be used by default.}
 
 \item{permnum}{number of permutations used in the permutation testing
 procedure (if method=”SP” is performed); default is 10000}
+
+\item{seed}{number to be used as a seed for reproducibility of the
+permutation procedure (if method="SP" is performed). By default, NULL is
+given and no seed is set.}
 }
 \value{
 A vector concerning the testing results (see Schefzik and Goncalves
