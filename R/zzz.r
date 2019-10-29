@@ -1,10 +1,11 @@
 #'@useDynLib waddR
 #'@importFrom Rcpp sourceCpp
+#'@importFrom parallel nextRNGStream
 #'@importFrom methods is
 #'@importFrom stats binomial cor ecdf p.adjust pchisq quantile sd na.exclude
 #'@importFrom arm bayesglm
 #'@importFrom eva gpdAd gpdFit pgpd
-#'@importFrom BiocParallel bplapply
+#'@importFrom BiocParallel bplapply bpmapply
 #'@importFrom BiocFileCache BiocFileCache bfcadd bfcquery bfcdownload
 #'@importFrom BiocFileCache bfcpath bfcrpath bfccount bfcneedsupdate
 #'@importFrom SingleCellExperiment SingleCellExperiment counts logcounts
