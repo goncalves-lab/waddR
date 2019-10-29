@@ -4,8 +4,7 @@
 \alias{wasserstein.test}
 \title{wasserstein.test}
 \usage{
-wasserstein.test(x, y, method = c("SP", "ASY"), permnum = 10000,
-  seed = NULL)
+wasserstein.test(x, y, method = c("SP", "ASY"), permnum = 10000)
 }
 \arguments{
 \item{x}{univariate sample (vector) representing the distribution of
@@ -21,10 +20,6 @@ If no method is given, "SP" will be used by default.}
 
 \item{permnum}{number of permutations used in the permutation testing
 procedure (if method=”SP” is performed); default is 10000}
-
-\item{seed}{number to be used as a seed for reproducibility of the
-permutation procedure (if method="SP" is performed). By default, NULL is
-given and no seed is set.}
 }
 \value{
 A vector concerning the testing results (see Schefzik and Goncalves
@@ -86,15 +81,15 @@ accurately and the test based on asymptotic theory) can be found in
 Schefzik and Goncalves (2019).
 }
 \examples{
-set.seed(32)
+# generate two input distributions
 x<-rnorm(500)
-set.seed(32)
-y<-rnorm(500,2,1.5)
+y<-rnorm(500,4,1.5)
 wasserstein.test(x,y,method="ASY")
 # Run with default options: method="SP", permnum=10000
 wasserstein.test(x,y)
 # Run with a seed for the semi-parametric test ("SP")
-wasserstein.test(x,y, method="SP", seed=42)
+set.seed(42)
+wasserstein.test(x,y, method="SP")
 
 }
 \references{

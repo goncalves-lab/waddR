@@ -95,8 +95,12 @@ setMethod("testZeroes",
 #' non-zero expression values only, combined with a separate testing for
 #' differential proportions of zero expression using logistic regression) is
 #' performed. Default is TRUE
-#'@param seed number to be used as a seed for reproducibility of the
-#' permutation procedure. By default, NULL is given and no seed is set.
+#'@param seed number to be used as a L'Ecuyer-CMRG seed, which itself
+#' seeds the generation of an nextRNGStream() for each gene. Internally, when
+#' this argument is given, a seed is specified by calling
+#' `RNGkind("L'Ecuyer-CMRG")` followed by `set.seed(seed)`.
+#' The `RNGkind` and `.Random.seed` will be reset on termination of this
+#' function. By default, NULL is given and no seed is set.
 #'@return matrix with every row being the wasserstein test of one gene between
 #' the two conditions.
 #'  See the corresponding values in the description of the function
@@ -107,51 +111,89 @@ setMethod("testZeroes",
 #'@references Schefzik and Goncalves 2019
 #'
 .testWass <- function(dat, condition, permnum, inclZero=TRUE, seed=NULL){
-
-    if (!inclZero){
-
-        onegene <- function(x, dat, condition){
-            x1 <- dat[x,][condition==unique(condition)[1]]
-            x2 <- dat[x,][condition==unique(condition)[2]]
+    ngenes <- nrow(dat)
+    seeds <- NULL
+    
+    if (!is.null(seed)) {
+        if (exists(".Random.seed")) {
+            oseed <- .Random.seed
+        } else {
+            oseed <- NULL
+        }
+        
+        # set a reproducible L'Ecuyer seed based on the previous seed.
+        # This way, the user doesn't have to worry about the RNGkind.
+        okind <- RNGkind("L'Ecuyer-CMRG")[1]
+        set.seed(seed)
+        
+        # Create seeds from RNGStream for each gene for Reproducibility
+        seed <- .Random.seed
+        seeds <- replicate(ngenes,
+                           { seed <<- nextRNGStream(seed) },
+                           simplify=FALSE)
+        on.exit({
+            if (is.null(oseed)) {
+                RNGkind(okind)
+                rm(.Random.seed)
+            } else {
+                # reset the RNGkind and seed, so the user environment is
+                # unaffected
+                RNGkind(okind)
+                .Random.seed <<- oseed
+            }
+        })
+    }
+    
+    # parallel worker 
+    onegene <- function(x, seed=NULL){
+        x1 <- dat[x,][condition==unique(condition)[1]]
+        x2 <- dat[x,][condition==unique(condition)[2]]
+        
+        if (!inclZero) {
             x1 <- (x1[x1>0])
             x2 <- (x2[x2>0])
-
-            suppressWarnings(.wassersteinTestSp(x1, x2, permnum, seed))
         }
+        
+        if (!is.null(seed)) {
+            .Random.seed <<- seed
+        }
+        
+        suppressWarnings(.wassersteinTestSp(x1, x2, permnum))
+    }
+    
+    # run worker
+    if (!is.null(seeds)) {
+        wass.res <- t(simplify2array({
+                            bpmapply(onegene, seq(ngenes), seeds)
+                        }))
+    } else {
+        wass.res <- t(simplify2array({
+                            bpmapply(onegene, seq(ngenes))
+                        }))
+    }
 
-        wass.res <- bplapply(seq_len(nrow(dat)), onegene, 
-                            condition=condition, dat=dat)
-        wass.res1 <- do.call(rbind, wass.res)
-
-        wass.pval.adj <- p.adjust(wass.res1[,9], method="BH")
+    #wass.res1 <- do.call(rbind, wass.res)
+    wass.pval.adj <- p.adjust(wass.res[,9], method="BH")
+    
+    if (!inclZero){
+        # zeroes were excluded => test them separately now
         pval.zero <- testZeroes(dat, condition)
         pval.adj.zero <- p.adjust(pval.zero, method="BH")
-        pval.combined <- .combinePVal(wass.res1[,9],pval.zero)
+        pval.combined <- .combinePVal(wass.res[,9],pval.zero)
         pval.adj.combined <- p.adjust(pval.combined,method="BH")
 
-        RES <- cbind(wass.res1,pval.zero,pval.combined,wass.pval.adj,
+        RES <- cbind(wass.res,pval.zero,pval.combined,wass.pval.adj,
                     pval.adj.zero,pval.adj.combined)
         row.names(RES) <- rownames(dat)
-        colnames(RES) <- c( colnames(wass.res1), "p.zero", "p.combined",
+        colnames(RES) <- c( colnames(wass.res), "p.zero", "p.combined",
                             "p.adj.nonzero","p.adj.zero","p.adj.combined")
         return(RES)
+    
     } else {
 
-        onegene <- function(x, dat, condition){
-            x1 <- dat[x,][condition==unique(condition)[1]]
-            x2 <- dat[x,][condition==unique(condition)[2]]
-            
-            suppressWarnings(.wassersteinTestSp(x1, x2, permnum, seed))
-        }
-        
-        wass.res <- bplapply(seq_len(nrow(dat)), onegene, 
-                        condition=condition, dat=dat)
-        wass.res1 <- do.call(rbind,wass.res)
-        wass.pval.adj <- p.adjust(wass.res1[,9], method="BH")
-        
-        RES <- cbind(wass.res1, wass.pval.adj)
+        RES <- cbind(wass.res, wass.pval.adj)
         row.names(RES) <- rownames(dat)
-        colnames(RES) <- c( colnames(wass.res1), "pval.adj")
+        colnames(RES) <- c( colnames(wass.res), "pval.adj")
         return(RES)
     }
 }
@@ -183,8 +225,9 @@ setMethod("testZeroes",
 #' is run by default.
 #'@param permnum number of permutations used in the permutation testing
 #' procedure. If this argument is not given, 10000 is used as default
-#'@param seed number to be used as a seed for reproducibility of the
-#' permutation procedure. By default, NULL is given and no seed is set.
+#'@param seed number to be used to generate a L'Ecuyer-CMRG seed, which itself
+#' seeds the generation of an nextRNGStream() for each gene to achieve
+#' reproducibility. By default, NULL is given and no seed is set.
 #'@return See the corresponding values in the description of the function
 #' .testWass, where the argument inclZero=TRUE in .testWass has to be
 #' identified with the argument method=”OS”, and the argument inclZero=FALSE in
@@ -305,8 +348,7 @@ setMethod("testZeroes",
 #'wasserstein.sc(sce1, sce2, "TS", 100)
 #'
 #'# for reproducible p-values
-#'wasserstein.sc(sce1, sce2, seed=42)
-#'
+#'wasserstein.sc(sce1, sce2, seed=123)
 #'
 #' @name wasserstein.sc
 #' @export
@@ -327,8 +369,8 @@ setMethod("wasserstein.sc",
         
         method <- match.arg(method)
         switch(method,
-               "TS"=.testWass(x, y, permnum, inclZero=FALSE, seed),
-               "OS"=.testWass(x, y, permnum, inclZero=TRUE, seed))
+               "TS"=.testWass(x, y, permnum, inclZero=FALSE, seed=seed),
+               "OS"=.testWass(x, y, permnum, inclZero=TRUE, seed=seed))
     })
 
 
@@ -340,11 +382,14 @@ setMethod("wasserstein.sc",
     function(x, y, method=c("TS", "OS"), permnum=10000, seed=NULL) {
         stopifnot(dim(counts(x))[1] == dim(counts(y))[1])
         
+        
         dat <- cbind(counts(x), counts(y))
         condition <- c(rep(1, dim(counts(x))[2]), rep(2, dim(counts(y))[2]))
         method <- match.arg(method)
         switch(method,
-               "TS"=.testWass(dat, condition, permnum, inclZero=FALSE, seed),
-               "OS"=.testWass(dat, condition, permnum, inclZero=TRUE, seed))
+               "TS"=.testWass(dat, condition, permnum, 
+                              inclZero=FALSE, seed=seed),
+               "OS"=.testWass(dat, condition, permnum, 
+                              inclZero=TRUE, seed=seed))
     })
 

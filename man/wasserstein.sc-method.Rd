@@ -35,8 +35,9 @@ is run by default.}
 \item{permnum}{number of permutations used in the permutation testing
 procedure. If this argument is not given, 10000 is used as default}
 
-\item{seed}{number to be used as a seed for reproducibility of the
-permutation procedure. By default, NULL is given and no seed is set.}
+\item{seed}{number to be used to generate a L'Ecuyer-CMRG seed, which itself
+seeds the generation of an nextRNGStream() for each gene to achieve
+reproducibility. By default, NULL is given and no seed is set.}
 }
 \value{
 See the corresponding values in the description of the function
@@ -171,8 +172,7 @@ sce2 <- SingleCellExperiment::SingleCellExperiment(
 wasserstein.sc(sce1, sce2, "TS", 100)
 
 # for reproducible p-values
-wasserstein.sc(sce1, sce2, seed=42)
-
+wasserstein.sc(sce1, sce2, seed=123)
 
 }
 \references{

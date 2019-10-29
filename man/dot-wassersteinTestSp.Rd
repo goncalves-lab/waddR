@@ -4,7 +4,7 @@
 \alias{.wassersteinTestSp}
 \title{.wassersteinTestSp}
 \usage{
-.wassersteinTestSp(x, y, permnum = 10000, seed = NULL)
+.wassersteinTestSp(x, y, permnum = 10000)
 }
 \arguments{
 \item{x}{univariate sample (vector) representing the distribution of
@@ -15,9 +15,6 @@ condition B}
 
 \item{permnum}{number of permutations used in the permutation testing
 procedure}
-
-\item{seed}{number to be used as a seed for reproducibility of the
-permutation procedure. By default, NULL is given and no seed is set.}
 }
 \value{
 A vector concerning the testing results, precisely (see Schefzik and

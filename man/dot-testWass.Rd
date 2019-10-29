@@ -22,8 +22,12 @@ non-zero expression values only, combined with a separate testing for
 differential proportions of zero expression using logistic regression) is
 performed. Default is TRUE}
 
-\item{seed}{number to be used as a seed for reproducibility of the
-permutation procedure. By default, NULL is given and no seed is set.}
+\item{seed}{number to be used as a L'Ecuyer-CMRG seed, which itself
+seeds the generation of an nextRNGStream() for each gene. Internally, when
+this argument is given, a seed is specified by calling
+`RNGkind("L'Ecuyer-CMRG")` followed by `set.seed(seed)`.
+The `RNGkind` and `.Random.seed` will be reset on termination of this
+function. By default, NULL is given and no seed is set.}
 }
 \value{
 matrix with every row being the wasserstein test of one gene between

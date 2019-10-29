@@ -4,7 +4,7 @@
 \alias{.wassPermProcedure}
 \title{.wassPermProcedure}
 \usage{
-.wassPermProcedure(x, y, permnum, seed = NULL)
+.wassPermProcedure(x, y, permnum)
 }
 \arguments{
 \item{x}{numeric vector representing distribution A}
@@ -13,9 +13,6 @@
 
 \item{permnum}{integer interpreted as the number of permutations to be
 performed}
-
-\item{seed}{number to be used as a seed for reproducibility of the
-permutation procedure. By default, NULL is given and no seed is set.}
 }
 \value{
 vector with squared 2-Wasserstein distances computed on random
