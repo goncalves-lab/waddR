@@ -1,3 +1,9 @@
+Changes in 0.99.6 (2019-10-28)
++ P-value reproducibility feature:
+	o Now using nextRNGstream to generate independent seeds for each gene
+	o Setting the seed (with set.seed()) only in .testWass
+	o Removed use of seeds and the seed argument everywhere in WassersteinTest.R
+
 Changes in 0.99.5 (2019-10-14)
 + P-value reproducibility feature for the permutation procedure:
     o as described [here](https://github.com/Bioconductor/Contributions/issues/1218#issuecomment-53710763), a seed argument has been added to the functions wasserstein.test and wasserstein.sc.
