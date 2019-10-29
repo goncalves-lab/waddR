@@ -118,6 +118,7 @@ conditions and genes in a model.
 It may yield incorrect results, if it is applied on only a subset of genes is
 given.
 
+Note: For reproducible p-values, see the "seed" argument.
 
 
 : 2-Wasserstein single cell test output 

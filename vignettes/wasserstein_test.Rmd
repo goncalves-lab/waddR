@@ -112,6 +112,22 @@ wasserstein.test(ctrl, nodd)[spec.output]
 wasserstein.test(ctrl, nodd, method="ASY")[spec.output]
 ```
 
+## Reproducibility of Results
+
+Using the method "SP" (default), the semi-parametric test is performed
+to obtain p-values.
+The permutation procedure is based on a random sampling of the input vectors
+and for the results to be reproducible, a seed can be set from the user
+environment.
+```{r reproduce}
+# set seed for reproducible p-values in re-runs
+set.seed(123)
+wasserstein.test(sam1, nodd)[spec.output]
+# reproduce the result
+set.seed(123)
+wasserstein.test(sam1, nodd)[spec.output]
+```
+
 ## See Also
 
 * The [`waddR` package](waddR.html)
