@@ -1,10 +1,10 @@
 
-#'.fishersCombinedPval
+#'Compute combined p-value using Fisher's method
 #'
 #'Aggregates two p-values into a combined p-value according to Fisher’s method 
 #'
 #'@details Aggregates two p-values into a combined p-value according to
-#' Fisher’s method.
+#' Fisher’s method
 #'
 #'@param x vector of the two p-values that are to be aggregated
 #'
@@ -23,20 +23,20 @@
 }
 
 
-#'.combinePVal
+#'Compute combined p-value using Fisher's method for several pairs of p-values
 #'
-#'For a given set of N pairs of p-values, aggregates each respective pair of 
+#'For a given set of \eqn{N} pairs of p-values, aggregates each respective pair of 
 #'p-values into a combined p-value according to Fisher’s method 
 #'
-#'@details For a given set of pairs of p-values, aggregates each respective 
+#'@details For a given set of \eqn{N} pairs of p-values, aggregates each respective 
 #' pair of p-values into a combined p-value according to Fisher’s method.
 #' Applies the .fishersCombinedPval function to a whole set of N pairs of
 #' p-values. 
 #'
-#'@param r vector of length N of the p-values corresponding to the first test
-#'@param s vector of length N of the p-values corresponding to the second test
+#'@param r vector of length \eqn{N} of the p-values corresponding to the first test
+#'@param s vector of length \eqn{N} of the p-values corresponding to the second test
 #'
-#'@return A vector of length N of the combined p-values
+#'@return A vector of length \eqn{N} of the combined p-values
 #'
 .combinePVal <- function(r,s){
     apply(cbind(r,s), 1, function(x)
