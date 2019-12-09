@@ -44,13 +44,13 @@
 }
 
 
-#'.gdpFittedPValue
+#' Compute p-value based on generalized Pareto distribution fitting
 #'
-#' Fitting Procedure to correct P a pvalue
+#' Computes a p-value based on a generalized Pareto distribution fitting. This procedure may be used in the semi-parametric, 2-Wasserstein distance-based test to estimate small p-values accurately, instead of obtaining the p-value from a permutation test.
 #' 
-#' @param val atomic result of an observation
-#' @param distr.ordered distribution of random atomic observations
-#' @return pvalue.adjusted, Anderson-Darling p-value of gdp fitting, number
+#' @param val value of a specific test statistic
+#' @param distr.ordered vector of values of the test statistics obtained by permuting group labels forming the basis of the calculation of \code{val}
+#' @return A vector of three: pvalue.adjusted, Anderson-Darling p-value of gdp fitting, number
 #'  of exceedances for calculating a pvalue from the empirical distribution
 #'  
 .gdpFittedPValue <- function(val, distr.ordered) {
