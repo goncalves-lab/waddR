@@ -1,7 +1,7 @@
 #' waddR: Statistical tests for detecting differential distributions based on
 #' the 2-Wasserstein distance
 #'
-#' The package offers statistical tests based on the 2-Wasserstein distance for detecting and characterizing differences between two distributions. Functions for calculating the 2-Wasserstein distance and testing for differential distributions are provided, as welll as specifically tailored test for differential expression in single-cell RNA sequencing data. 
+#' The package offers statistical tests based on the 2-Wasserstein distance for detecting and characterizing differences between two distributions given in the form of samples. Functions for calculating the 2-Wasserstein distance and testing for differential distributions are provided, as welll as specifically tailored test for differential expression in single-cell RNA sequencing data. 
 #'
 #' The waddR package provides tools to address the following tasks:
 #' \enumerate{ \item Computation of the 2-Wasserstein distance \item Two-sample
@@ -53,4 +53,5 @@
 #'
 #'   See \code{?wasserstein.sc} and \code{?testZeroes} for more details.
 #'   
+#'@section References: Schefzik, R., Flesch, J., and Goncalves, A. (2019). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
 "_PACKAGE"
