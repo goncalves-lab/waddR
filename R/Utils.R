@@ -1,16 +1,14 @@
 
-#' .relativeError
+#' Compute relative error
 #'
-#' Computes the relative error between two numericals (in the sense of
-#' is.numeric) x and y.
-#' If x and y are vectors, it is assumed that length(x) == length(y).
+#' Computes the relative error between two numbers \eqn{x} and \eqn{y}.
 #' 
-#' The relative error e is defined as: e = | 1 -  x/y |
+#' The relative error \eqn{e} is defined as \eqn{e = | 1 -  x/y |}
 #' 
-#' @param x numerical (in the sense of is.numeric)
-#' @param y numerical (in the sense of is.numeric)
+#' @param x a number
+#' @param y a number
 #' 
-#' @return The relative error between x and y
+#' @return The relative error between \eqn{x} and \eqn{y}
 #'
 .relativeError <- function(x,y) {
     if ((x == y) || ((x == 0) && (y == 0)))
@@ -22,16 +20,15 @@
 }
 
 
-#'.quantileCorrelation
+#' Compute the quantile-quantile correlation
 #'
-#' Computes the quantile-quantile correlation of x and y, using the quantile
-#' type 1 implementation in R and Pearson correlation.
+#' Computes the quantile-quantile correlation of two samples \eqn{x} and \eqn{y}, using the quantile
+#' type 1 implementation in R and the Pearson correlation.
 #' 
-#' @param x numeric vector representing distribution x
-#' @param y numeric vector representing distribution y
-#' @param pr probabilities for computing the quantiles of x and y. 
-#'  By default is set to 1000 equidistant quantiles starting at q_1 = 0.5/1000.
-#' @return quantile-quantile correlation of x and y
+#' @param x numeric vector 
+#' @param y numeric vector 
+#' @param pr levels at which the quantiles of \eqn{x} and \eqn{y} are computed; by default, 1000 equidistant quantiles at levels \eqn{\frac{k-0.5}{1000}}, where \eqn{k=1,\ldots,1000}, are used 
+#' @return quantile-quantile correlation of \eqn{x} and \eqn{y}
 #' 
 .quantileCorrelation <- function(x, y, pr=NULL) {
     stopifnot(length(x) != 0, length(y) != 0)
