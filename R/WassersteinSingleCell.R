@@ -71,34 +71,31 @@ setMethod("testZeroes",
     })
 
 
-#'.testWass
-#'
+#'Check for differential distributions in single-cell RNA sequencing data via a semi-paramteric test using the 2-Wasserstein distance
+           
 #'Two-sample test for single-cell RNA-sequencing data to check for differences
-#'between two distributions (conditions) using the 2-Wasserstein distance:
+#'between two distributions using the 2-Wasserstein distance:
 #'Semi-parametric implementation using a permutation test with a generalized 
 #'Pareto distribution (GPD) approximation to estimate small p-values accurately
 #'
 #'@details Details concerning the permutation testing procedures for
-#' single-cell RNA-sequencing data can be found in Schefzik and 
-#' Goncalves (2019).
+#' single-cell RNA-sequencing data can be found in Schefzik et al. (2019).
 #'
-#'@param dat matrix of single-cell RNA-sequencing expression data with genes in
-#' rows and samples (cells) in columns
+#'@param dat matrix of single-cell RNA-sequencing expression data, with rowas corresponding to genes and columns corresponding to cells (samples)
 #'@param condition vector of condition labels
 #'@param permnum number of permutations used in the permutation testing
 #' procedure
-#'@param inclZero logical; if TRUE, the one-stage method (i.e. semi-parametric
-#' testing applied to all (zero and non-zero) expression values) is performed;
-#' if FALSE, the two-stage method (i.e. semi-parametric testing applied to
-#' non-zero expression values only, combined with a separate testing for
-#' differential proportions of zero expression using logistic regression) is
-#' performed. Default is TRUE
-#'@param seed number to be used as a L'Ecuyer-CMRG seed, which itself
+#'@param inclZero logical; if TRUE, a one-stage method is performed, i.e. the semi-parametric
+#' test based on the 2-Wasserstein distance is applied to all (zero and non-zero) expression values;
+#' if FALSE, a two-stage method is performed, i.e. the semi-parametric test based on the 2-Wasserstein distance is applied to
+#' non-zero expression values only, and a separate test for
+#' differential proportions of zero expression using logistic regression is conducted; default is TRUE
+#'@param seed Number to be used as a L'Ecuyer-CMRG seed, which itself
 #' seeds the generation of an nextRNGStream() for each gene. Internally, when
 #' this argument is given, a seed is specified by calling
 #' `RNGkind("L'Ecuyer-CMRG")` followed by `set.seed(seed)`.
 #' The `RNGkind` and `.Random.seed` will be reset on termination of this
-#' function. By default, NULL is given and no seed is set.
+#' function. Default is NULL, and no seed is set.
 #'@return matrix with every row being the wasserstein test of one gene between
 #' the two conditions.
 #'  See the corresponding values in the description of the function
@@ -106,7 +103,7 @@ setMethod("testZeroes",
 #' identified with the argument method=”OS”, and the argument inclZero=FALSE in
 #' .testWass with the argument method=”TS”.
 #' 
-#'@references Schefzik and Goncalves 2019
+#'@references Schefzik, R., Flesch, J., and Goncalves, A. (2019). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
 #'
 .testWass <- function(dat, condition, permnum, inclZero=TRUE, seed=NULL){
     ngenes <- nrow(dat)
@@ -231,7 +228,8 @@ setMethod("testZeroes",
 #' identified with the argument method=”OS”, and the argument inclZero=FALSE in
 #' .testWass with the argument method=”TS”.
 #' A vector concerning the testing results, precisely (see Schefzik and
-#' Goncalves (2019) for details) in case of inclZero=TRUE:
+#' Goncalves (2019) for details)  
+#' In case of \code{inclZero=TRUE}:
 #' \itemize{
 #' \item d.wass: 2-Wasserstein distance between the two samples computed
 #'  by quantile approximation
@@ -250,20 +248,20 @@ setMethod("testZeroes",
 #' \item rho: correlation coefficient in the quantile-quantile plot
 #' \item pval: p-value of the semi-parametric 2-Wasserstein distance-based
 #'  test
-#' \item p.ad.gpd in case the GPD fitting is performed: p-value of the
-#'  Anderson-Darling test to check whether the GPD actually fits the data well
-#'  (otherwise NA)
+#' \item p.ad.gpd: in case the GPD fitting is performed: p-value of the
+#' Anderson-Darling test to check whether the GPD actually fits the data well
+#' (otherwise NA)
 #' \item N.exc: in case the GPD fitting is performed: number of exceedances
-#'  (starting with 250 and iteratively decreased by 10 if necessary) that are
-#'  required to obtain a good GPD fit (i.e. p-value of Anderson-Darling test
-#'  greater or eqaul to 0.05)(otherwise NA)
-#' \item perc.loc: fraction (in %) of the location part with respect to the
+#' (starting with 250 and iteratively decreased by 10 if necessary) that are
+#' required to obtain a good GPD fit, i.e. p-value of Anderson-Darling test
+#' \eqn{\geq 0.05} (otherwise NA)
+#' \item perc.loc: fraction (in \%) of the location part with respect to the
 #'  overall squared 2-Wasserstein distance obtained by the decomposition
 #'  approximation
-#' \item perc.size: fraction (in %) of the size part with respect to the
+#' \item perc.size: fraction (in \%) of the size part with respect to the
 #'  overall squared 2-Wasserstein distance obtained by the decomposition
 #'  approximation
-#' \item perc.shape: fraction (in %) of the shape part with respect to the
+#' \item perc.shape: fraction (in \%) of the shape part with respect to the
 #'  overall squared 2-Wasserstein distance obtained by the decomposition
 #'  approximation
 #' \item decomp.error: relative error between the squared 2-Wasserstein
@@ -272,7 +270,7 @@ setMethod("testZeroes",
 #' \item pval.adj: adjusted p-value of the semi-parametric 2-Wasserstein
 #'  distance-based test according to the method of Benjamini-Hochberg
 #' }
-#' In case of inclZero=FALSE:
+#' In case of \code{inclZero=FALSE}:
 #' \itemize{
 #' \item d.wass: 2-Wasserstein distance between the two samples computed
 #'  by quantile approximation
@@ -292,19 +290,19 @@ setMethod("testZeroes",
 #' \item p.nonzero: p-value of the semi-parametric 2-Wasserstein distance-based
 #'  test (based on non-zero expression only)
 #' \item p.ad.gpd: in case the GPD fitting is performed: p-value of the
-#'  Anderson-Darling test to check whether the GPD actually fits the data well
-#'  (otherwise NA)
+#' Anderson-Darling test to check whether the GPD actually fits the data well
+#' (otherwise NA)
 #' \item N.exc: in case the GPD fitting is performed: number of exceedances
-#'  (starting with 250 and iteratively decreased by 10 if necessary) that are
-#'  required to obtain a good GPD fit (i.e. p-value of Anderson-Darling test
-#'  greater or eqaul to 0.05)(otherwise NA)
-#' \item perc.loc: fraction (in %) of the location part with respect to the
+#' (starting with 250 and iteratively decreased by 10 if necessary) that are
+#' required to obtain a good GPD fit, i.e. p-value of Anderson-Darling test
+#' \eqn{\geq 0.05} (otherwise NA)
+#' \item perc.loc: fraction (in \%) of the location part with respect to the
 #'  overall squared 2-Wasserstein distance obtained by the decomposition
 #'  approximation
-#' \item perc.size: fraction (in %) of the size part with respect to the
+#' \item perc.size: fraction (in \%) of the size part with respect to the
 #'  overall squared 2-Wasserstein distance obtained by the decomposition
 #'  approximation
-#' \item perc.shape: fraction (in %) of the shape part with respect to the
+#' \item perc.shape: fraction (in \%) of the shape part with respect to the
 #'  overall squared 2-Wasserstein distance obtained by the decomposition
 #'  approximation
 #' \item decomp.error: relative error between the squared 2-Wasserstein
@@ -324,7 +322,7 @@ setMethod("testZeroes",
 #'  obtained by Fisher’s method according to the method of Benjamini-Hochberg
 #' }
 #'
-#'@references Schefzik and Goncalves (2019).
+#'@references Schefzik, R., Flesch, J., and Goncalves, A. (2019). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
 #'
 #'@examples
 #'
@@ -336,14 +334,14 @@ setMethod("testZeroes",
 #'# and a vector denoting conditions
 #'dat <- cbind(cond1, cond2)
 #'condition <- c(rep(1, 100), rep(2, 100))
-#'wasserstein.sc(dat, condition, "TS", 100)
+#'wasserstein.sc(dat, condition, method="TS", 100)
 #'
 #'# call wasserstein.sc with two SingleCellExperiment objects
 #'sce1 <- SingleCellExperiment::SingleCellExperiment(
 #'            assays=list(counts=cond1, logcounts=log10(cond1)))
 #'sce2 <- SingleCellExperiment::SingleCellExperiment(
 #'            assays=list(counts=cond2, logcounts=log10(cond2)))
-#'wasserstein.sc(sce1, sce2, "TS", 100)
+#'wasserstein.sc(sce1, sce2, method="TS", 100)
 #'
 #'# for reproducible p-values
 #'wasserstein.sc(sce1, sce2, seed=123)
