@@ -1,23 +1,21 @@
 
-#' testZeroes: Test for differential proportions of zero values
+#' Test for differential proportions of zero gene expression
 #'
 #' Test for differential proportions of zero expression between two conditions
-#' for a specified set of genes
+#' for a specified set of genes; adapted from the R/Bioconductor package \code{scDD} by Korthauer et al. (2106)
 #'
-#' Test for differential proportions of zero expression between two
-#' conditions that is not explained by the detection rate using a (Bayesian)
-#' logistic regression model. Adapted from the scDD package (Korthauer et al.
-#' 2016).
+#' Test for differential proportions of zero gene expression between two
+#' conditions using a logistic regression model accounting for the cellular detection rate. Adapted from the R/Bioconductor package \code{scDD} by Korthauer et al.(2016).
 #'
 #' @param x matrix of single-cell RNA-sequencing expression data with genes in
-#'   rows and samples (cells) in columns
+#'   rows and cells (samples) in columns
 #' @param y vector of condition labels
 #' @param these vector of row numbers (i.e. gene numbers) employed to test for
-#'   differential proportions of zero expression. Default is seq_len(nrow(dat))
+#'   differential proportions of zero expression; default is seq_len(nrow(dat))
 #'
 #' @return A vector of (unadjusted) p-values
 #'
-#' @references Korthauer et al. (2016).
+#' @references K.D. Korthauer, L.-F. Chu, M. A. Newton, Y. Li, J. Thomson, R. Stewart, and C. Kendziorski (2016). A statistical approach for identifying differential distributions in single-cell RNA-seq experiments. Genome Biology, 17:222.
 #'
 #' @examples
 #' x1 <- c(rnorm(100,42,1), rnorm(102,45,3))
