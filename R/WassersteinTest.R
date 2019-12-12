@@ -1,5 +1,6 @@
 
-#'.wassPermProcedure
+#' Permutation procedure that calculates the squared 2-Wasserstein distances for
+#' random shuffles of two input samples representing two conditions
 #'
 #' Permutation procedure that calculates the squared 2-Wasserstein distances for
 #' random shuffles of two input samples representing two conditions A and B, respectively (i.e. the elements of the pooled sample vector are randomly assigned to either condition A or condition B, where the sample sizes are as in the original samples).
@@ -268,7 +269,8 @@
 }
 
 
-#'wasserstein.test
+#'Two-sample test to check for differences between two distributions
+#'using the 2-Wasserstein distance
 #'
 #'Two-sample test to check for differences between two distributions
 #'using the 2-Wasserstein distance, either using the
