@@ -1,16 +1,11 @@
 # Statistical Test for Detecting Differential Distributions Based on the Wasserstein Metric
 
-`waddR` is an R package that provides a Wasserstein distance based statistical
-test for detecting and describing differential distributions in one-dimensional
-data.
-Functions for wasserstein distance calculation, differential distribution
-testing, and a specialized test for differential expression in scRNA data are
-provided.
+`waddR` is an R package that provides statistical tests based on the 2-Wasserstein distance for detecting and characterizing differences between two distributions given in the form of samples. Functions for calculating the 2-Wasserstein distance and testing for differential distributions are provided, as well as specifically tailored test for differential expression in single-cell RNA sequencing data.
 
-The package offers utilities for three distinct use cases:
-    * Computation of the 2-Wasserstein distance 
-    * Check for differences between two distributions
-    * Detect differential gene expression distributions in scRNAseq data
+The package provides tools to address the following tasks:
+1. Computation of the 2-Wasserstein distance 
+2. Two-sample tests to check for differences between two distributions
+3. Detection of differential gene expression distributions in single-cell RNA sequencing data
 
 ## Installation
 
@@ -100,5 +95,5 @@ following command:
 
 # References
 
-*Update this once the citation is final*: Schefzik and Goncalves 2019
+Schefzik, R., Flesch, J., and Goncalves, A. (2019). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
 
