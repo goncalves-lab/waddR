@@ -12,29 +12,31 @@
 NULL
 
 
-#' .brownianBridgeEmpcdf
+#' Compute value of the asymptotic CDF occuring in the asymptotic theory-based test
 #'
-#' An empirical cumulative distribution function of a simulated Brownian bridge
-#' distribution. It is used an empirical quantile function to determine 
-#' p-values in the asymptotic wasserstein test function .wassersteinTestAsy
+#' Computes the values of the cumulative distribution function (CDF) of the integral over the squared standard Brownian bridge in the unit interval, where the computation is based on Monte Carlo simulations.
+#' This CDF occurs as an asymptotic distribution in the asymptotic theory-based test using the 2-Wasserstein distance, see Schefzik et al. (2019) for details. 
+#' It is used to determine the corresponding p-values in the function \code{.wassersteinTestAsy}.
 #'
-#' @param v distribution funtion input value
-#' @return Value at x of the Brownian distribution
+#' @param v a number
+#' @return Value at \code{v} of the asymptotic CDF
 #' @name .brownianBridgeEmpcdf
 #' 
+#'@references Schefzik, R., Flesch, J., and Goncalves, A. (2019). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
 .brownianBridgeEmpcdf <- function(v) NULL # distribution loaded in .onLoad
 
 
 # TODO: upload as data package
-#' brownianBridgeEmpcdf.url
+#' URL for downloading the asymptotic CDF occuring in the asymptotic theory-based test
 #'
-#' Url for downloading the simulated Brownian bridge distribution. 
-#' It is used an empirical quantile function to determine 
-#' p-values in the asymptotic wasserstein test function .wassersteinTestAsy
+#' URL for downloading the cumulative distribution function (CDF) of the integral over the squared standard Brownian bridge in the unit interval, where the computation is based on Monte Carlo simulations.
+#' This CDF occurs as an asymptotic distribution in the asymptotic theory-based test using the 2-Wasserstein distance, see Schefzik et al. (2019) for details. 
+#' It is used to determine the corresponding p-values in the function \code{.wassersteinTestAsy}.
 #' 
 #' @name brownianBridgeEmpcdf.url
 #' @docType data
 #' 
+#'@references Schefzik, R., Flesch, J., and Goncalves, A. (2019). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
 brownianBridgeEmpcdf.url <- paste0( "https://github.com/goncalves-lab/",
                                     "waddR-data/blob/master/data/",
                                     "empcdf_ref.RData?raw=true")
