@@ -35,7 +35,7 @@
 #'   The first, semi-parametric (SP), procedure uses a permutation-based test combined with a generalized Pareto distribution approximation
 #'   to estimate small p-values accurately.
 #'
-#'   The second procedure uses a test based on asymptotic theory (Asy) which is
+#'   The second procedure uses a test based on asymptotic theory (ASY) which is
 #'   valid only if the samples can be assumed to come from continuous
 #'   distributions.
 #'
