@@ -72,7 +72,7 @@ setMethod("testZeroes",
 
 
 #'Check for differential distributions in single-cell RNA sequencing data via a semi-paramteric test using the 2-Wasserstein distance
-           
+#'           
 #'Two-sample test for single-cell RNA-sequencing data to check for differences
 #'between two distributions using the 2-Wasserstein distance:
 #'Semi-parametric implementation using a permutation test with a generalized 
@@ -192,7 +192,7 @@ setMethod("testZeroes",
 }
 
 
-#'wasserstein.sc
+#'Two-sample semi-parametric test for single-cell RNA-sequencing data to check for differences between two distributions using the 2-Wasserstein distance
 #'
 #' Two-sample test for single-cell RNA-sequencing data to check for differences
 #' between two distributions using the 2-Wasserstein distance:
@@ -219,7 +219,7 @@ setMethod("testZeroes",
 #'@param seed number to be used to generate a L'Ecuyer-CMRG seed, which itself
 #' seeds the generation of an nextRNGStream() for each gene to achieve
 #' reproducibility; default is NULL, and no seed is set
-#'@return Matrix, where each row contains the testing results of the respective gene from \code{dat}. The corresponding values of each row (gene) are as follows, see Schefzik et al. (2019) for details:    
+#'@return Matrix, where each row contains the testing results of the respective gene from \code{dat}. The corresponding values of each row (gene) are as follows, see Schefzik et al. (2019) for details.     
 #' In case of \code{inclZero=TRUE}:
 #' \itemize{
 #' \item d.wass: 2-Wasserstein distance between the two samples computed
