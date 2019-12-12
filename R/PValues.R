@@ -46,12 +46,23 @@
 
 #' Compute p-value based on generalized Pareto distribution fitting
 #'
-#' Computes a p-value based on a generalized Pareto distribution fitting. This procedure may be used in the semi-parametric, 2-Wasserstein distance-based test to estimate small p-values accurately, instead of obtaining the p-value from a permutation test.
+#' Computes a p-value based on a generalized Pareto distribution (GPD) fitting. This procedure may be used in the semi-parametric, 2-Wasserstein distance-based test to estimate small p-values accurately, instead of obtaining the p-value from a permutation test.
 #' 
 #' @param val value of a specific test statistic
 #' @param distr.ordered vector of values of the test statistics obtained by permuting group labels forming the basis of the calculation of \code{val}
-#' @return A vector of three: pvalue.adjusted, Anderson-Darling p-value of gdp fitting, number
-#'  of exceedances for calculating a pvalue from the empirical distribution
+#'@return A vector of three, see Schefzik et al. (2019) for details:
+#' \itemize{
+#' \item pvalue.gpd: p-value corresponding to the GPD fitting
+#' test
+#' \item ad.pval: p-value of the
+#' Anderson-Darling test to check whether the GPD actually fits the data well
+#' \item N.exc: number of exceedances
+#' (starting with 250 and iteratively decreased by 10 if necessary) that are
+#' required to obtain a good GPD fit, i.e. p-value of Anderson-Darling test
+#' \eqn{\geq 0.05}
+#' }
+#'
+#'@references Schefzik, R., Flesch, J., and Goncalves, A. (2019). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
 #'  
 .gdpFittedPValue <- function(val, distr.ordered) {
     
