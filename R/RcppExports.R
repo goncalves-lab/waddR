@@ -224,7 +224,7 @@ squared_wass_decomp <- function(x, y) {
     .Call('_waddR_squared_wass_decomp', PACKAGE = 'waddR', x, y)
 }
 
-#' Compute approximated squared 2-wasserstein distance
+#' Compute approximated squared 2-Wasserstein distance
 #'
 #' Calculates an approximated squared 2-Wasserstein distance based on the mean squared difference between 1000 equidistant
 #' quantiles corresponding to the empirical distributions of two input vectors \eqn{x} and \eqn{y}
