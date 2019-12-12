@@ -30,7 +30,7 @@
 #'
 #'@details For a given set of \eqn{N} pairs of p-values, aggregates each respective 
 #' pair of p-values into a combined p-value according to Fisher’s method.
-#' Applies the .fishersCombinedPval function to a whole set of N pairs of
+#' Applies the function \code{.fishersCombinedPval} to a whole set of \eqn{N} pairs of
 #' p-values. 
 #'
 #'@param r vector of length \eqn{N} of the p-values corresponding to the first test
