@@ -9,10 +9,18 @@ The package provides tools to address the following tasks:
 
 ## Installation
 
+### Requirements
+
+* R >= 3.6.0
+
 ### Via Package Repository
 
-The package is in development and not yet available via an official package
-repository.
+Available on [Bioconductor](https://bioconductor.org/packages/release/bioc/html/waddR.html):
+```
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("waddR")
+```
 
 ### From Github
 
