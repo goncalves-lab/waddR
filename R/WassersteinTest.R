@@ -68,11 +68,12 @@
 #' test
 #' \item p.ad.gpd: in case the GPD fitting is performed: p-value of the
 #' Anderson-Darling test to check whether the GPD actually fits the data well
-#' (otherwise NA)
+#' (otherwise NA). NOTE: GPD fitting is currently not supported!
 #' \item N.exc: in case the GPD fitting is performed: number of exceedances
 #' (starting with 250 and iteratively decreased by 10 if necessary) that are
 #' required to obtain a good GPD fit (i.e. p-value of Anderson-Darling test
-#' greater or eqaul to 0.05) (otherwise NA)
+#' greater or eqaul to 0.05) (otherwise NA) NOTE: GPD fitting is currently 
+#' not supported!
 #' \item perc.loc: fraction (in %) of the location part with respect to the
 #' overall squared 2-Wasserstein distance obtained by the decomposition
 #' approximation
@@ -113,17 +114,21 @@
         N.exc <- NA
         env <- environment()
         if (num.extr < 10) {
-            tryCatch({
-                    res <- .gdpFittedPValue(value.sq,
-                                            wass.values.ordered)
-                    assign("pvalue.wass", unname(res["pvalue.gpd"]), env)
-                    assign("pvalue.gdpfit", unname(res["ad.pva"]), env)
-                    assign("N.exc", unname(res["N.exc"]), env)
-                }, error=function(...) {
-                    assign("pvalue.wass", pvalue.ecdf.pseudo, env)
-                    assign("pvalue.gdpfit", NA, env)
-                    assign("N.exc", NA, env)
-                })
+            #TODO: Use .gdpFittedPValue again, once the issues with eva are fixed
+            #tryCatch({
+            #        res <- .gdpFittedPValue(value.sq,
+            #                                wass.values.ordered)
+            #        assign("pvalue.wass", unname(res["pvalue.gpd"]), env)
+            #        assign("pvalue.gdpfit", unname(res["ad.pva"]), env)
+            #        assign("N.exc", unname(res["N.exc"]), env)
+            #    }, error=function(...) {
+            #        assign("pvalue.wass", pvalue.ecdf.pseudo, env)
+            #        assign("pvalue.gdpfit", NA, env)
+            #        assign("N.exc", NA, env)
+            #    })
+            
+            # For now, just use pseudo pvalues
+            assign("pvalue.wass", pvalue.ecdf.pseudo, env)
         }
 
         # correlation of quantile-quantile plot

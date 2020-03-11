@@ -44,6 +44,7 @@
 }
 
 
+#TODO: Use .gdpFittedPValue again, once the issues with eva are fixed
 #'.gdpFittedPValue
 #'
 #' Fitting Procedure to correct P a pvalue
@@ -52,54 +53,55 @@
 #' @param distr.ordered distribution of random atomic observations
 #' @return pvalue.adjusted, Anderson-Darling p-value of gdp fitting, number
 #'  of exceedances for calculating a pvalue from the empirical distribution
-#'  
-.gdpFittedPValue <- function(val, distr.ordered) {
-    
-    # list of possible exceedance thresholds (decreasing)
-    poss.exc.num <- seq(from=250, to=10, by=-10)
-    
-    bsn <- length(distr.ordered)
-    r <- 1
-    repeat {
-        
-        # set threshold for exceedance according to paper
-        N.exc <- poss.exc.num[r]
-        
-        # compute set of N.exc exceedances
-        exceedances <- distr.ordered[seq_len(N.exc)]
-        
-        # check whether the N.exc largest permutation values follow 
-        # a GPD using an Anderson-Darling test
-        gpd.ad.check <- gpdAd(exceedances)
-        ad.pval <- gpd.ad.check$p.value
-        
-        r <- r + 1
-        if (ad.pval > 0.05) {break}
-    }
-    
-    # calculate exceedance threshold for so-obtained N.exc
-    t.exc <- (distr.ordered[N.exc] 
-              + distr.ordered[N.exc+1]) / 2
-    
-    # fit GPD distribution to the exceedances using maximum 
-    # likelihood estimation
-    gpd.fit <- gpdFit(  data=distr.ordered,
-                        threshold=t.exc,
-                        method="mle")
-    
-    # extract fitted parameters
-    fit.scale <- as.numeric(gpd.fit$par.ests[1])
-    fit.shape <- as.numeric(gpd.fit$par.ests[2])
-    
-    # compute GPD p-value (see paper)
-    pvalue.gpd <- (N.exc / bsn) * (1 - pgpd(q=val-t.exc,
-                                            loc=0,
-                                            scale=fit.scale,
-                                            shape=fit.shape))
-    
-    pvalue.gpd <- as.numeric(pvalue.gpd)
-    pvalue.wass <- c("pvalue.gpd"=pvalue.gpd,
-                     "ad.pval"=ad.pval,
-                     "N.exc"=N.exc)
-    return(pvalue.wass)
-}
+#'
+NULL
+#.gdpFittedPValue <- function(val, distr.ordered) {
+#    
+#    # list of possible exceedance thresholds (decreasing)
+#    poss.exc.num <- seq(from=250, to=10, by=-10)
+#    
+#    bsn <- length(distr.ordered)
+#    r <- 1
+#    repeat {
+#        
+#        # set threshold for exceedance according to paper
+#        N.exc <- poss.exc.num[r]
+#        
+#        # compute set of N.exc exceedances
+#        exceedances <- distr.ordered[seq_len(N.exc)]
+#        
+#        # check whether the N.exc largest permutation values follow 
+#        # a GPD using an Anderson-Darling test
+#        gpd.ad.check <- gpdAd(exceedances)
+#        ad.pval <- gpd.ad.check$p.value
+#        
+#        r <- r + 1
+#        if (ad.pval > 0.05) {break}
+#    }
+#    
+#    # calculate exceedance threshold for so-obtained N.exc
+#    t.exc <- (distr.ordered[N.exc] 
+#              + distr.ordered[N.exc+1]) / 2
+#    
+#    # fit GPD distribution to the exceedances using maximum 
+#    # likelihood estimation
+#    gpd.fit <- gpdFit(  data=distr.ordered,
+#                        threshold=t.exc,
+#                        method="mle")
+#    
+#    # extract fitted parameters
+#    fit.scale <- as.numeric(gpd.fit$par.ests[1])
+#    fit.shape <- as.numeric(gpd.fit$par.ests[2])
+#    
+#    # compute GPD p-value (see paper)
+#    pvalue.gpd <- (N.exc / bsn) * (1 - pgpd(q=val-t.exc,
+#                                            loc=0,
+#                                            scale=fit.scale,
+#                                            shape=fit.shape))
+#    
+#    pvalue.gpd <- as.numeric(pvalue.gpd)
+#    pvalue.wass <- c("pvalue.gpd"=pvalue.gpd,
+#                     "ad.pval"=ad.pval,
+#                     "N.exc"=N.exc)
+#    return(pvalue.wass)
+#}

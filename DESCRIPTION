@@ -1,7 +1,7 @@
 Package: waddR
 Type: Package
 Title: Statistical Test for Detecting Differential Distributions Based on the Wasserstein Metric
-Version: 1.1.1
+Version: 1.1.2
 Authors@R: c(
 	person("Roman", "Schefzik", email="r.schefzik@dkfz-heidelberg.de", role="aut"),
 	person("Julian", "Flesch", email="julianflesch@gmail.com", role="cre"))
@@ -11,9 +11,9 @@ biocViews: Software, StatisticalMethod, SingleCell, DifferentialExpression
 BugReports: https://github.com/goncalves-lab/waddR/issues
 URL: https://github.com/goncalves-lab/waddR.git
 Encoding: UTF-8
+Additional_repositories: https://www.bioconductor.org/
 Imports: 
 	Rcpp (>= 1.0.1),
-	eva (>= 0.2.5),
 	arm (>= 1.10-1),
 	BiocFileCache,
 	BiocParallel,
@@ -35,4 +35,4 @@ LinkingTo:
 	Rcpp,
 	RcppArmadillo,
 VignetteBuilder: knitr
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2

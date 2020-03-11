@@ -1,3 +1,7 @@
+Changes in 1.1.2 (2020-03-11)
++ Fixes critical bug:
+	o Removed the usage of the unavailable package 'eva', which caused builds to fail
+
 Changes in 1.1.1 (2019-10-28)
 + P-value reproducibility feature:
 	o Now using nextRNGstream to generate independent seeds for each gene

@@ -9,14 +9,11 @@
 \alias{wasserstein.sc,SingleCellExperiment,SingleCellExperiment,ANY,ANY,ANY-method}
 \title{wasserstein.sc}
 \usage{
-wasserstein.sc(x, y, method = c("TS", "OS"), permnum = 10000,
-  seed = NULL)
+wasserstein.sc(x, y, method = c("TS", "OS"), permnum = 10000, seed = NULL)
 
-\S4method{wasserstein.sc}{matrix,vector}(x, y, method = c("TS", "OS"),
-  permnum = 10000, seed = NULL)
+\S4method{wasserstein.sc}{matrix,vector}(x, y, method = c("TS", "OS"), permnum = 10000, seed = NULL)
 
-\S4method{wasserstein.sc}{SingleCellExperiment,SingleCellExperiment}(x, y,
-  method = c("TS", "OS"), permnum = 10000, seed = NULL)
+\S4method{wasserstein.sc}{SingleCellExperiment,SingleCellExperiment}(x, y, method = c("TS", "OS"), permnum = 10000, seed = NULL)
 }
 \arguments{
 \item{x}{matrix of single-cell RNA-sequencing expression data with genes in

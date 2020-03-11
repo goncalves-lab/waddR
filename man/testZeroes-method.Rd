@@ -11,8 +11,7 @@ testZeroes(x, y, these = seq_len(nrow(x)))
 
 \S4method{testZeroes}{matrix,vector,ANY}(x, y, these = seq_len(nrow(x)))
 
-\S4method{testZeroes}{SingleCellExperiment,SingleCellExperiment,vector}(x,
-  y, these = seq_len(nrow(x)))
+\S4method{testZeroes}{SingleCellExperiment,SingleCellExperiment,vector}(x, y, these = seq_len(nrow(x)))
 }
 \arguments{
 \item{x}{matrix of single-cell RNA-sequencing expression data with genes in
