@@ -1,10 +1,10 @@
 
-#'.fishersCombinedPval
+#'Compute combined p-value using Fisher's method
 #'
 #'Aggregates two p-values into a combined p-value according to Fisher’s method 
 #'
 #'@details Aggregates two p-values into a combined p-value according to
-#' Fisher’s method.
+#' Fisher’s method
 #'
 #'@param x vector of the two p-values that are to be aggregated
 #'
@@ -23,20 +23,20 @@
 }
 
 
-#'.combinePVal
+#'Compute combined p-value using Fisher's method for several pairs of p-values
 #'
-#'For a given set of N pairs of p-values, aggregates each respective pair of 
+#'For a given set of \eqn{N} pairs of p-values, aggregates each respective pair of 
 #'p-values into a combined p-value according to Fisher’s method 
 #'
-#'@details For a given set of pairs of p-values, aggregates each respective 
+#'@details For a given set of \eqn{N} pairs of p-values, aggregates each respective 
 #' pair of p-values into a combined p-value according to Fisher’s method.
-#' Applies the .fishersCombinedPval function to a whole set of N pairs of
+#' Applies the function \code{.fishersCombinedPval} to a whole set of \eqn{N} pairs of
 #' p-values. 
 #'
-#'@param r vector of length N of the p-values corresponding to the first test
-#'@param s vector of length N of the p-values corresponding to the second test
+#'@param r vector of length \eqn{N} of the p-values corresponding to the first test
+#'@param s vector of length \eqn{N} of the p-values corresponding to the second test
 #'
-#'@return A vector of length N of the combined p-values
+#'@return A vector of length \eqn{N} of the combined p-values
 #'
 .combinePVal <- function(r,s){
     apply(cbind(r,s), 1, function(x)
@@ -45,15 +45,25 @@
 
 
 #TODO: Use .gdpFittedPValue again, once the issues with eva are fixed
-#'.gdpFittedPValue
+#' Compute p-value based on generalized Pareto distribution fitting
 #'
-#' Fitting Procedure to correct P a pvalue
+#' Computes a p-value based on a generalized Pareto distribution (GPD) fitting. This procedure may be used in the semi-parametric, 2-Wasserstein distance-based test to estimate small p-values accurately, instead of obtaining the p-value from a permutation test.
 #' 
-#' @param val atomic result of an observation
-#' @param distr.ordered distribution of random atomic observations
-#' @return pvalue.adjusted, Anderson-Darling p-value of gdp fitting, number
-#'  of exceedances for calculating a pvalue from the empirical distribution
+#' @param val value of a specific test statistic
+#' @param distr.ordered vector of values of the test statistics obtained by permuting group labels forming the basis of the calculation of \code{val}
+#'@return A vector of three, see Schefzik et al. (2019) for details:
+#' \itemize{
+#' \item pvalue.gpd: p-value corresponding to the GPD fitting
+#' test
+#' \item ad.pval: p-value of the
+#' Anderson-Darling test to check whether the GPD actually fits the data well
+#' \item N.exc: number of exceedances
+#' (starting with 250 and iteratively decreased by 10 if necessary) that are
+#' required to obtain a good GPD fit, i.e. p-value of Anderson-Darling test
+#' \eqn{\geq 0.05}
+#' }
 #'
+#'@references Schefzik, R., Flesch, J., and Goncalves, A. (2019). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
 NULL
 #.gdpFittedPValue <- function(val, distr.ordered) {
 #    

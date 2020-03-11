@@ -1,3 +1,6 @@
+Changes in 1.1.3 (2020-03-12)
++ Updates to Documentation
+
 Changes in 1.1.2 (2020-03-11)
 + Fixes critical bug:
 	o Removed the usage of the unavailable package 'eva', which caused builds to fail
