@@ -1,3 +1,6 @@
+Changes in 1.1.4 (2020-03-16)
++ Fixes a build fail due to erronous merge in the previous commit 267f84b
+
 Changes in 1.1.3 (2020-03-12)
 + Updates to Documentation
 

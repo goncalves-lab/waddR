@@ -73,16 +73,10 @@
 #' (otherwise NA). NOTE: GPD fitting is currently not supported!
 #' \item N.exc: in case the GPD fitting is performed: number of exceedances
 #' (starting with 250 and iteratively decreased by 10 if necessary) that are
-<<<<<<< HEAD
-#' required to obtain a good GPD fit (i.e. p-value of Anderson-Darling test
-#' greater or eqaul to 0.05) (otherwise NA) NOTE: GPD fitting is currently 
-#' not supported!
-#' \item perc.loc: fraction (in %) of the location part with respect to the
-=======
 #' required to obtain a good GPD fit, i.e. p-value of Anderson-Darling test
-#' \eqn{\geq 0.05} (otherwise NA)
+#' \eqn{\geq 0.05} (otherwise NA). NOTE: GPD fitting is currently 
+#' not supported!
 #' \item perc.loc: fraction (in \%) of the location part with respect to the
->>>>>>> 988f3e9401c07aae38f7c082377ae38d93cedd38
 #' overall squared 2-Wasserstein distance obtained by the decomposition
 #' approximation
 #' \item perc.size: fraction (in \%) of the size part with respect to the
