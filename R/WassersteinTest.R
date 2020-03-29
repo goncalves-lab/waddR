@@ -3,7 +3,7 @@
 #' random shuffles of two input samples representing two conditions
 #'
 #' Permutation procedure that calculates the squared 2-Wasserstein distances for
-#' random shuffles of two input samples representing two conditions \eqn{A }and \eqn{B}, respectively (i.e. the elements of the pooled sample vector are randomly assigned to either condition \eqn{A} or condition \eqn{B}, where the sample sizes are as in the original samples).
+#' random shuffles of two input samples representing two conditions \eqn{A}and \eqn{B}, respectively (i.e. the elements of the pooled sample vector are randomly assigned to either condition \eqn{A} or condition \eqn{B}, where the sample sizes are as in the original samples).
 #'
 #' @param x sample (vector) representing the distribution of
 #' condition \eqn{A}
