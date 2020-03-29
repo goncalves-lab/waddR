@@ -63,7 +63,7 @@
 #' \eqn{\geq 0.05}
 #' }
 #'
-#'@references Schefzik, R., Flesch, J., and Goncalves, A. (2019). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
+#'@references Schefzik, R., Flesch, J., and Goncalves, A. (2020). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
 NULL
 #.gdpFittedPValue <- function(val, distr.ordered) {
 #    
