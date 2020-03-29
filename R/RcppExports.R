@@ -190,10 +190,10 @@ permutations <- function(x, num_permutations) {
 #' Compute the squared 2-Wasserstein distance based on a decomposition
 #'
 #' Computes the squared 2-Wasserstein distance between two vectors based on a decomposition into location, size and shape terms.
-#' For a detailed description of the (empirical) calculation of the invoved quantities, see Schefzik et al. (2019).
+#' For a detailed description of the (empirical) calculation of the invoved quantities, see Schefzik et al. (2020).
 #'
-#' @param x sample (vector) representing the distribution of condition A
-#' @param y sample (vector) representing the distribution of condition B
+#' @param x sample (vector) representing the distribution of condition \eqn{A}
+#' @param y sample (vector) representing the distribution of condition \eqn{B}
 #' @return A list of 4:
 #' \itemize{
 #' \item distance: the sum location+size+shape
@@ -203,7 +203,7 @@ permutations <- function(x, num_permutations) {
 #'}
 #' 
 #' @references 
-#'Schefzik, R., Flesch, J., and Goncalves, A. (2019). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
+#'Schefzik, R., Flesch, J., and Goncalves, A. (2020). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
 #'
 #' @seealso See the functions \code{wasserstein_metric} and \code{squared_wass_approx} for
 #' alternative implementations of the 2-Wasserstein distance
@@ -229,11 +229,11 @@ squared_wass_decomp <- function(x, y) {
 #' Calculates an approximated squared 2-Wasserstein distance based on the mean squared difference between 1000 equidistant
 #' quantiles corresponding to the empirical distributions of two input vectors \eqn{x} and \eqn{y}
 #'
-#' @param x sample (vector) representing the distribution of condition A
-#' @param y sample (vector) representing the distribution of condition B
+#' @param x sample (vector) representing the distribution of condition \eqn{A}
+#' @param y sample (vector) representing the distribution of condition \eqn{B}
 #' @return The approximated squared 2-Wasserstein distance between \eqn{x} and \eqn{y}
 #'
-#' @references Schefzik, R., Flesch, J., and Goncalves, A. (2019). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
+#' @references Schefzik, R., Flesch, J., and Goncalves, A. (2020). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
 #'
 #' @seealso See the functions \code{wasserstein_metric} and \code{squared_wass_decomp} for
 #' alternative implementations of the 2-Wasserstein distance
@@ -243,7 +243,7 @@ squared_wass_decomp <- function(x, y) {
 #' x <- rnorm(100, 42, 2)
 #' y <- c(rnorm(61, 20, 1), rnorm(41, 40,2))
 #' # output: The approximated squared 2-Wasserstein distance as described in
-#' # Schefzik et al. (2019)
+#' # Schefzik et al. (2020)
 #' d.wass.approx <- squared_wass_approx(x,y)
 #'
 #' @export
@@ -253,22 +253,22 @@ squared_wass_approx <- function(x, y) {
 
 #' Calculate the p-Wasserstein distance
 #'
-#' Calculates the \code{p}-Wasserstein distance (metric) between two vectors \eqn{x} and \eqn{y}
+#' Calculates the \eqn{p}-Wasserstein distance (metric) between two vectors \eqn{x} and \eqn{y}
 #'
-#' This implementation of the p-Wasserstein distance is a Rcpp reimplementation of
+#' This implementation of the \eqn{p}-Wasserstein distance is a Rcpp reimplementation of
 #' the \code{wasserstein1d} function from the R package \code{transport} by Schuhmacher et al.
 #' 
-#' @param x sample (vector) representing the distribution of condition A
-#' @param y sample (vector) representing the distribution of condition B
+#' @param x sample (vector) representing the distribution of condition \eqn{A}
+#' @param y sample (vector) representing the distribution of condition \eqn{B}
 #' @param p order of the Wasserstein distance
 #' @param wa_ optional vector of weights for \code{x}
 #' @param wb_ optional vector of weights for \code{y}
 #' @return The \eqn{p}-Wasserstein distance between \eqn{x} and \eqn{y}
 #'
-#' @references Schefzik, R., Flesch, J., and Goncalves, A. (2019). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
+#' @references Schefzik, R., Flesch, J., and Goncalves, A. (2020). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
 #'
 #' @seealso See the functions \code{squared_wass_approx} and \code{squared_wass_decomp} for
-#' alternative implementations of the 2-Wasserstein distance
+#' alternative implementations of the 2-Wasserstein distance.
 #'
 #' @examples
 #' # create input vectors
