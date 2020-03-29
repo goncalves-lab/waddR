@@ -29,13 +29,13 @@ NULL
 #' URL for downloading the asymptotic CDF occuring in the asymptotic theory-based test
 #'
 #' URL for downloading the cumulative distribution function (CDF) of the integral over the squared standard Brownian bridge in the unit interval, where the computation is based on Monte Carlo simulations.
-#' This CDF occurs as an asymptotic distribution in the asymptotic theory-based test using the 2-Wasserstein distance, see Schefzik et al. (2019) for details. 
+#' This CDF occurs as an asymptotic distribution in the asymptotic theory-based test using the 2-Wasserstein distance, see Schefzik et al. (2020) for details. 
 #' It is used to determine the corresponding p-values in the function \code{.wassersteinTestAsy}.
 #' 
 #' @name brownianBridgeEmpcdf.url
 #' @docType data
 #' 
-#'@references Schefzik, R., Flesch, J., and Goncalves, A. (2019). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
+#'@references Schefzik, R., Flesch, J., and Goncalves, A. (2020). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
 brownianBridgeEmpcdf.url <- paste0( "https://github.com/goncalves-lab/",
                                     "waddR-data/blob/master/data/",
                                     "empcdf_ref.RData?raw=true")
