@@ -3,12 +3,12 @@
 #' random shuffles of two input samples representing two conditions
 #'
 #' Permutation procedure that calculates the squared 2-Wasserstein distances for
-#' random shuffles of two input samples representing two conditions A and B, respectively (i.e. the elements of the pooled sample vector are randomly assigned to either condition A or condition B, where the sample sizes are as in the original samples).
+#' random shuffles of two input samples representing two conditions \eqn{A }and \eqn{B}, respectively (i.e. the elements of the pooled sample vector are randomly assigned to either condition \eqn{A} or condition \eqn{B}, where the sample sizes are as in the original samples).
 #'
 #' @param x sample (vector) representing the distribution of
-#' condition A
+#' condition \eqn{A}
 #' @param y sample (vector) representing the distribution of
-#' condition B
+#' condition \eqn{B}
 #' @param permnum number of permutations to be
 #'  performed
 #'
@@ -29,7 +29,7 @@
 }
 
 
-#' Semi-paramteric test using the 2-Wasserstein distance to check for differential distributions
+#' Semi-parametric test using the 2-Wasserstein distance to check for differential distributions
 #' 
 #' Two-sample test to check for differences between two distributions
 #' using the 2-Wasserstein distance: Semi-parametric
@@ -41,15 +41,15 @@
 #' 
 #'@details Details concerning the permutation testing procedure with GPD
 #' approximation to estimate small p-values accurately can be found in Schefzik
-#' et al. (2019).
+#' et al. (2020).
 #'
 #'@param x sample (vector) representing the distribution of
-#' condition A
+#' condition \eqn{A}
 #'@param y sample (vector) representing the distribution of
-#' condition B
+#' condition \eqn{B}
 #'@param permnum number of permutations used in the permutation testing
 #' procedure
-#'@return A vector of 15, see Schefzik et al. (2019) for details:
+#'@return A vector of 15, see Schefzik et al. (2020) for details:
 #' \itemize{
 #' \item d.wass: 2-Wasserstein distance between the two samples computed by
 #' quantile approximation
@@ -90,7 +90,7 @@
 #' 2-Wasserstein distance obtained by the decomposition approximation
 #' }
 #'
-#'@references Schefzik, R., Flesch, J., and Goncalves, A. (2019). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
+#'@references Schefzik, R., Flesch, J., and Goncalves, A. (2020). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
 .wassersteinTestSp <- function(x, y, permnum=10000){
     stopifnot(permnum>0)
     if (length(x) !=0 & length(y) != 0){
@@ -179,14 +179,14 @@
 #' semi-parametric procedure see \code{.wassersteinTestSp}.
 #'
 #'@details Details concerning the testing procedure based on asymptotic theory
-#' can be found in Schefzik et al (2019).
+#' can be found in Schefzik et al (2020). \cr Note that the asymptotic theory-based test should only be employed when the two samples \eqn{x} and \eqn{y} can be assumed to come from continuous distributions.
 #'
 #'@param x sample (vector) representing the distribution of
-#' condition A
+#' condition \eqn{A}
 #'@param y sample (vector) representing the distribution of
-#' condition B
+#' condition \eqn{B}
 #'
-#'@return A vector of 13, see Schefzik et al. (2019) for details:
+#'@return A vector of 13, see Schefzik et al. (2020) for details:
 #' \itemize{
 #' \item d.wass: 2-Wasserstein distance between the two samples computed
 #' by quantile approximation
@@ -219,7 +219,7 @@
 #' 2-Wasserstein distance obtained by the decomposition approximation
 #' }
 #'
-#'@references Schefzik, R., Flesch, J., and Goncalves, A. (2019). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
+#'@references Schefzik, R., Flesch, J., and Goncalves, A. (2020). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
 .wassersteinTestAsy <- function(x, y){
 
     if (length(x) != 0 & length(y) != 0) {
@@ -283,20 +283,20 @@
 #'estimate small p-values accurately or the test based on asymptotic theory
 #'
 #'@name wasserstein.test
-#'@details Details concerning the two testing procedures (i.e. the semi-paarmetric permutation
+#'@details Details concerning the two testing procedures (i.e. the semi-parametric permutation
 #' testing procedure with GPD approximation and the test based on asymptotic theory) can be found in
-#' Schefzik et al. (2019).
+#' Schefzik et al. (2020).\cr Note that the asymptotic theory-based test (\code{method="ASY}) should only be employed when the samples \eqn{x} and \eqn{y} can be assumed to come from continuous distributions. In contrast, the semi-parametric test (\code{method="SP"}) can be used for samples coming from continuous or discrete distributions.
 #'
 #'@param x sample (vector) representing the distribution of
-#' condition A
+#' condition \eqn{A}
 #'@param y sample (vector) representing the distribution of
-#' condition B
+#' condition \eqn{B}
 #'@param method testing procedure to be employed: "SP" for the semi-parametric
 #' permutation testing procedure with GPD approximation, "ASY" for the test based on asymptotic theory; if no method is specified, "SP" will be used by default.
 #'@param permnum number of permutations used in the permutation testing
 #' procedure (if method=”SP” is performed); default is 10000
 #' 
-#'@return A vector, see Schefzik et al. (2019) for details:
+#'@return A vector, see Schefzik et al. (2020) for details:
 #' \itemize{
 #' \item d.wass: 2-Wasserstein distance between the two samples computed by
 #' quantile approximation
@@ -337,7 +337,7 @@
 #' 2-Wasserstein distance computed by the decomposition approximation
 #' }
 #'
-#'@references Schefzik, R., Flesch, J., and Goncalves, A. (2019). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
+#'@references Schefzik, R., Flesch, J., and Goncalves, A. (2020). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
 #'
 #'@examples
 #'# generate two input distributions
