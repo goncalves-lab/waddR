@@ -180,7 +180,8 @@
 #'
 #'@details Details concerning the testing procedure based on asymptotic theory
 #' can be found in Schefzik et al (2020). 
-#'  Note that the asymptotic theory-based test should only be employed when the two samples \eqn{x} and \eqn{y} can be assumed to come from continuous distributions.
+#'
+#' Note that the asymptotic theory-based test should only be employed when the two samples \eqn{x} and \eqn{y} can be assumed to come from continuous distributions.
 #'
 #'@param x sample (vector) representing the distribution of
 #' condition \eqn{A}
@@ -287,7 +288,8 @@
 #'@details Details concerning the two testing procedures (i.e. the semi-parametric permutation
 #' testing procedure with GPD approximation and the test based on asymptotic theory) can be found in
 #' Schefzik et al. (2020).
-#'  Note that the asymptotic theory-based test (\code{method="ASY"}) should only be employed when the samples \eqn{x} and \eqn{y} can be assumed to come from continuous distributions. In contrast, the semi-parametric test (\code{method="SP"}) can be used for samples coming from continuous or discrete distributions.
+#'
+#' Note that the asymptotic theory-based test (\code{method="ASY"}) should only be employed when the samples \eqn{x} and \eqn{y} can be assumed to come from continuous distributions. In contrast, the semi-parametric test (\code{method="SP"}) can be used for samples coming from continuous or discrete distributions.
 #'
 #'@param x sample (vector) representing the distribution of
 #' condition \eqn{A}
