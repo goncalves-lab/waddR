@@ -14,14 +14,14 @@ NULL
 #' Compute value of the asymptotic CDF occuring in the asymptotic theory-based test
 #'
 #' Computes the values of the cumulative distribution function (CDF) of the integral over the squared standard Brownian bridge in the unit interval, where the computation is based on Monte Carlo simulations.
-#' This CDF occurs as an asymptotic distribution in the asymptotic theory-based test using the 2-Wasserstein distance, see Schefzik et al. (2019) for details. 
+#' This CDF occurs as an asymptotic distribution in the asymptotic theory-based test using the 2-Wasserstein distance, see Schefzik et al. (2020) for details. 
 #' It is used to determine the corresponding p-values in the function \code{.wassersteinTestAsy}.
 #'
 #' @param v a number
 #' @return Value at \code{v} of the asymptotic CDF
 #' @name .brownianBridgeEmpcdf
 #' 
-#'@references Schefzik, R., Flesch, J., and Goncalves, A. (2019). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
+#'@references Schefzik, R., Flesch, J., and Goncalves, A. (2020). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
 .brownianBridgeEmpcdf <- function(v) NULL # distribution loaded in .onLoad
 
 
