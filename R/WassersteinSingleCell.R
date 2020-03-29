@@ -2,10 +2,10 @@
 #' Test for differential proportions of zero gene expression
 #'
 #' Test for differential proportions of zero expression between two conditions
-#' for a specified set of genes; adapted from the R/Bioconductor package \code{scDD} by Korthauer et al. (2106)
+#' for a specified set of genes; adapted from the R/Bioconductor package \code{scDD} by Korthauer et al. (2016)
 #'
 #' Test for differential proportions of zero gene expression between two
-#' conditions using a logistic regression model accounting for the cellular detection rate. Adapted from the R/Bioconductor package \code{scDD} by Korthauer et al.(2016).
+#' conditions using a logistic regression model accounting for the cellular detection rate. Adapted from the R/Bioconductor package \code{scDD} by Korthauer et al. (2016).
 #'
 #' @param x matrix of single-cell RNA-sequencing expression data with genes in
 #'   rows and cells (samples) in columns
@@ -15,7 +15,7 @@
 #'
 #' @return A vector of (unadjusted) p-values
 #'
-#' @references K.D. Korthauer, L.-F. Chu, M. A. Newton, Y. Li, J. Thomson, R. Stewart, and C. Kendziorski (2016). A statistical approach for identifying differential distributions in single-cell RNA-seq experiments. Genome Biology, 17:222.
+#' @references Korthauer, K. D.,  Chu,L.-F.,  Newton,M. A.,  Li, Y.,  Thomson, J.,  Stewart,R., and Kendziorski, C. (2016). A statistical approach for identifying differential distributions in single-cell RNA-seq experiments. Genome Biology, 17:222.
 #'
 #' @examples
 #' x1 <- c(rnorm(100,42,1), rnorm(102,45,3))
@@ -78,8 +78,8 @@ setMethod("testZeroes",
 #'Semi-parametric implementation using a permutation test with a generalized 
 #'Pareto distribution (GPD) approximation to estimate small p-values accurately
 #'
-#'@details Details concerning the permutation testing procedures for
-#' single-cell RNA-sequencing data can be found in Schefzik et al. (2019).
+#'@details Details concerning the testing procedure for
+#' single-cell RNA-sequencing data can be found in Schefzik et al. (2020) and in the description of the details of the function \code{wasserstein.sc}.
 #'
 #'@param dat matrix of single-cell RNA-sequencing expression data, with rowas corresponding to genes and columns corresponding to cells (samples)
 #'@param condition vector of condition labels
@@ -101,7 +101,7 @@ setMethod("testZeroes",
 #' \code{wasserstein.sc}, where the argument \code{inclZero=TRUE} in \code{.testWass} has to be
 #' identified with the argument \code{method=”OS”}, and the argument \code{inclZero=FALSE} with the argument \code{method=”TS”}.
 #' 
-#'@references Schefzik, R., Flesch, J., and Goncalves, A. (2019). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
+#'@references Schefzik, R., Flesch, J., and Goncalves, A. (2020). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
 #'
 .testWass <- function(dat, condition, permnum, inclZero=TRUE, seed=NULL){
     ngenes <- nrow(dat)
@@ -200,16 +200,20 @@ setMethod("testZeroes",
 #' Pareto distribution (GPD) approximation to estimate small p-values
 #' accurately
 #'
-#' Details concerning the permutation testing procedures for
+#' @details Details concerning the testing procedure for
 #' single-cell RNA-sequencing data can be found in Schefzik et al.
-#' (2019). Corresponds to the function \code{.testWass} when identifying the argument
+#' (2020). Corresponds to the function \code{.testWass} when identifying the argument
 #' \code{inclZero=TRUE} in \code{.testWass} with the argument \code{method=”OS”} and the argument
 #' \code{inclZero=FALSE} with the argument \code{method=”TS”}.
+#' Note that the input data matrix \eqn{x} as the starting point of the test is supposed to contain the single-cell RNA-sequencing expression data after several quality control steps including for instance filtering, normalization or variance stabilization.
+#' The test is explicitly  designed for checking differences between two conditions, and in particular not between cell types.
+#' For the two-stage approach (\code{method="TS"}) according to Schefzik et al. (2020), two separate tests for differential proportions of zero expression (DPZ) and non-zero differential distributions (non-zero DD), respectively, are performed. In the DPZ test using logistic regression, the null hypothesis that there are no DPZ is tested against the alternative that there are DPZ. In the non-zero DD test using the semi-parametric 2-Wasserstein distance-based procedure, the null hypothesis that there is no difference in the non-zero expression distributions against the alternative that the two non-zero expression distributions are differential.
+#' The current implementation of the test assumes that the expression data matrix is based on one replicate per condition only. For approaches on how to address settings comprising multiple replicates per condition, see Schefzik et al. (2020).           
 #'
 #'@param x matrix of single-cell RNA-sequencing expression data with genes in
 #' rows and cells (samples) in columns
 #'@param y vector of condition labels
-#'@param method method employed in the testing procedure: if “OS” , a one-stage test is perofrmed, i.e. the semi-parametric test is applied to all (zero and
+#'@param method method employed in the testing procedure: if “OS”, a one-stage test is performed, i.e. the semi-parametric test is applied to all (zero and
 #' non-zero) expression values; if “TS”, a two-stage test is performed, i.e.
 #' the semi-parametric test is applied to non-zero expression values only and combined
 #' with a separate test for differential proportions of zero expression
@@ -219,7 +223,7 @@ setMethod("testZeroes",
 #'@param seed number to be used to generate a L'Ecuyer-CMRG seed, which itself
 #' seeds the generation of an nextRNGStream() for each gene to achieve
 #' reproducibility; default is NULL, and no seed is set
-#'@return Matrix, where each row contains the testing results of the respective gene from \code{dat}. The corresponding values of each row (gene) are as follows, see Schefzik et al. (2019) for details.     
+#'@return Matrix, where each row contains the testing results of the respective gene from \code{dat}. The corresponding values of each row (gene) are as follows, see Schefzik et al. (2020) for details.     
 #' In case of \code{inclZero=TRUE}:
 #' \itemize{
 #' \item d.wass: 2-Wasserstein distance between the two samples computed
@@ -313,7 +317,7 @@ setMethod("testZeroes",
 #'  obtained by Fisher’s method according to the method of Benjamini-Hochberg (i.e. adjusted p-value corresponding to p.combined)
 #' }
 #'
-#'@references Schefzik, R., Flesch, J., and Goncalves, A. (2019). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
+#'@references Schefzik, R., Flesch, J., and Goncalves, A. (2020). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
 #'
 #'@examples
 #'
