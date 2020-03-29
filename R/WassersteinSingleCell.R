@@ -73,7 +73,7 @@ setMethod("testZeroes",
 
 #'Check for differential distributions in single-cell RNA sequencing data via a semi-paramteric test using the 2-Wasserstein distance
 #'           
-#'Two-sample test for single-cell RNA-sequencing data to check for differences
+#'@description Two-sample test for single-cell RNA-sequencing data to check for differences
 #'between two distributions using the 2-Wasserstein distance:
 #'Semi-parametric implementation using a permutation test with a generalized 
 #'Pareto distribution (GPD) approximation to estimate small p-values accurately
