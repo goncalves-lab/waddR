@@ -203,12 +203,16 @@ setMethod("testZeroes",
 #' @details Details concerning the testing procedure for
 #' single-cell RNA-sequencing data can be found in Schefzik et al.
 #' (2020). Corresponds to the function \code{.testWass} when identifying the argument
-#' \code{inclZero=TRUE} in \code{.testWass} with the argument \code{method=”OS”} and the argument
-#' \code{inclZero=FALSE} with the argument \code{method=”TS”}.
-#'  Note that the input data matrix \eqn{x} as the starting point of the test is supposed to contain the single-cell RNA-sequencing expression data after several quality control steps including for instance filtering, normalization or variance stabilization.
-#'  The test is explicitly designed for checking differences between two conditions, and in particular not between cell types.
-#'  For the two-stage approach (\code{method="TS"}) according to Schefzik et al. (2020), two separate tests for differential proportions of zero expression (DPZ) and non-zero differential distributions (non-zero DD), respectively, are performed. In the DPZ test using logistic regression, the null hypothesis that there are no DPZ is tested against the alternative that there are DPZ. In the non-zero DD test using the semi-parametric 2-Wasserstein distance-based procedure, the null hypothesis that there is no difference in the non-zero expression distributions against the alternative that the two non-zero expression distributions are differential.
-#'  The current implementation of the test assumes that the expression data matrix is based on one replicate per condition only. For approaches on how to address settings comprising multiple replicates per condition, see Schefzik et al. (2020).           
+#' \code{inclZero=TRUE} in \code{.testWass} with the argument \code{method="OS"} and the argument
+#' \code{inclZero=FALSE} with the argument \code{method="TS"}.
+#'           
+#' Note that the input data matrix \eqn{x} as the starting point of the test is supposed to contain the single-cell RNA-sequencing expression data after several quality control steps including for instance filtering, normalization or variance stabilization.
+#'
+#' The test is explicitly designed for checking differences between two conditions, and in particular not between cell types.
+#'           
+#' For the two-stage approach (\code{method="TS"}) according to Schefzik et al. (2020), two separate tests for differential proportions of zero expression (DPZ) and non-zero differential distributions (non-zero DD), respectively, are performed. In the DPZ test using logistic regression, the null hypothesis that there are no DPZ is tested against the alternative that there are DPZ. In the non-zero DD test using the semi-parametric 2-Wasserstein distance-based procedure, the null hypothesis that there is no difference in the non-zero expression distributions against the alternative that the two non-zero expression distributions are differential.
+#'           
+#' The current implementation of the test assumes that the expression data matrix is based on one replicate per condition only. For approaches on how to address settings comprising multiple replicates per condition, see Schefzik et al. (2020).           
 #'
 #'@param x matrix of single-cell RNA-sequencing expression data with genes in
 #' rows and cells (samples) in columns
