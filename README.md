@@ -1,6 +1,6 @@
-# Statistical Test for Detecting Differential Distributions Based on the Wasserstein Metric
+# Statistical tests for detecting differential distributions based on the 2-Wasserstein distance
 
-`waddR` is an R package that provides statistical tests based on the 2-Wasserstein distance for detecting and characterizing differences between two distributions given in the form of samples. Functions for calculating the 2-Wasserstein distance and testing for differential distributions are provided, as well as specifically tailored test for differential expression in single-cell RNA sequencing data.
+The `waddR` package offers statistical tests based on the 2-Wasserstein distance for detecting and characterizing differences between two distributions given in the form of samples. Functions for calculating the 2-Wasserstein distance and testing for differential distributions are provided, as well as specifically tailored test for differential expression in single-cell RNA sequencing data.
 
 The package provides tools to address the following tasks:
 1. Computation of the 2-Wasserstein distance 
@@ -41,56 +41,52 @@ All tests are implemented using the `testthat` package and reside in `tests/test
 
 ## Using `waddR`
 
-### Wasserstein Distance functions
+### 2-Wasserstein distance functions
 
-The 2-Wasserstein distance is a metric to describe the distance between two
-distributions, representing two diferent conditions A and B. This package
-specifically considers the squared 2-Wasserstein distance d := W^2 which
-offers a decomposition into location, size, and shape terms.
+The 2-Wasserstein distance is a metric to quantify the distance between two
+distributions, representing two different conditions A and B. The `waddR` package
+specifically considers the squared 2-Wasserstein distance, which
+offers a decomposition into location, size, and shape terms, thus providing a characterization of potential differences.
 
-The package `waddR` offers three functions to calculate the 2-Wasserstein
-distance, all of which are implemented in Cpp and exported to R with Rcpp for
-better performance.
-The function `wasserstein_metric` is a Cpp reimplementation of the
-function `wasserstein1d` from the package `transport` and offers the most exact
-results.
+The `waddR` package offers three functions to calculate the 2-Wasserstein
+distance, which are implemented in C++ and exported to R with Rcpp for
+faster computation.
+The function `wasserstein_metric` is a C++ reimplementation of the
+function `wasserstein1d` from the R package `transport`.
 The functions `squared_wass_approx` and `squared_wass_decomp` compute
-approximations of the squared 2-Wasserstein distance with `squared_wass_decomp`
-also returning the decomosition terms for location, size, and shape. 
-See `?wasserstein_metric`, `?squared_wass_aprox`, and `?squared_wass_decomp`.
+approximations of the squared 2-Wasserstein distance, with `squared_wass_decomp`
+also returning the decomposition terms for location, size, and shape. 
+See `?wasserstein_metric`, `?squared_wass_aprox`, and `?squared_wass_decomp`, as well as the accompanying paper Schefzik et al. (2020).
 
-### Two-Sample Testing
+### Testing for differences between two distributions
 
-This package provides two testing procedures using the 2-Wasserstein distance
-to test whether two distributions F_A and F_B given in the form of samples are
-different ba specifically testing the null hypothesis H0: F_A = F_B against the
-alternative hypothesis H1: F_A != F_B.
+The `waddR` package provides two testing procedures using the 2-Wasserstein distance
+to test whether two distributions given in the form of samples are
+different by specifically testing the null hypothesis of no difference against the
+alternative hypothesis that the two distributions are different.
 
-The first, semi-parametric (SP), procedure uses a test based on permutations
-combined with a generalized pareto distribution approximation to estimate small
-pvalues accurately.
+The first, semi-parametric (SP), procedure uses a permutation-based test combined with a generalized Pareto distribution approximation to 
+estimate small p-values accurately.
 
-The second procedure (ASY) uses a test based on asymptotic theory which is
+The second procedure uses a test based on asymptotic theory (ASY) which is
 valid only if the samples can be assumed to come from continuous
 distributions.
 
-See the documentation of the function \code{?wasserstein.test} for more
-details.
+See `?wasserstein.test` for more details.
 
-### Single Cell Test:
+### Testing for differences between two distributions in the context of single-cell RNA sequencing data:
 
-The waddR package provides an adaptation of the
+The `waddR` package provides an adaptation of the
 semi-parametric testing procedure based on the 2-Wasserstein distance
 which is specifically tailored to identify differential distributions in
 single-cell RNA-seqencing (scRNA-seq) data. In particular, a two-stage
-(TS) approach has been implemented that takes account of the specific
+(TS) approach is implemented that takes account of the specific
 nature of scRNA-seq data by separately testing for differential
 proportions of zero gene expression (using a logistic regression model)
 and differences in non-zero gene expression (using the semi-parametric
 2-Wasserstein distance-based test) between two conditions.
 
-See the documentation of the Single Cell testing function `?wasserstein.sc`
-and the test for zero expression levels `?testZeroes` for more details.
+See `?wasserstein.sc` and `?testZeroes` for more details.
 
 ## Documentation
 
@@ -103,5 +99,5 @@ following command:
 
 # References
 
-Schefzik, R., Flesch, J., and Goncalves, A. (2019). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
+Schefzik, R., Flesch, J., and Goncalves, A. (2020). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
 
