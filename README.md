@@ -56,6 +56,7 @@ function `wasserstein1d` from the R package `transport`.
 The functions `squared_wass_approx` and `squared_wass_decomp` compute
 approximations of the squared 2-Wasserstein distance, with `squared_wass_decomp`
 also returning the decomposition terms for location, size, and shape. 
+
 See `?wasserstein_metric`, `?squared_wass_aprox`, and `?squared_wass_decomp`, as well as the accompanying paper Schefzik et al. (2020).
 
 ### Testing for differences between two distributions
@@ -90,7 +91,7 @@ See `?wasserstein.sc` and `?testZeroes` for more details.
 
 ## Documentation
 
-We have included detailed examples of how to use all functions provided with
+We have included detailed examples of how to use the functions provided with
 `waddR` in our vignettes.
 They are available online [here](https://github.com/goncalves-lab/waddR) 
 *(update this link once it is final)* or from an R session with the
