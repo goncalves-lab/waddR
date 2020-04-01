@@ -625,9 +625,8 @@ vector<int> interval_table(	const vector<double> & datavec,
 //'
 //' @examples
 //' x <- 1:10
-//' m <- permutations(x, 5)
-//' dim(m)
-//' #[1] 10  5
+//' set.seed(24)
+//' permutations(x, 5)
 //'
 //' @export
 // [[Rcpp::export]]
@@ -678,15 +677,15 @@ NumericMatrix permutations(const NumericVector x, const int num_permutations)
 //' alternative implementations of the 2-Wasserstein distance
 //'
 //' @examples
-//' # create input vectors
-//' x <- rnorm(100, 42, 2)
-//' y <- c(rnorm(61, 20, 1), rnorm(41, 40,2))
-//' # output: squared 2-Wasserstein distance based on decomposition 
-//' # into terms for location, size and shape
-//' d.wass.decomp <- squared_wass_decomp(x,y)
-//' d.wass.decomp$location
-//' d.wass.decomp$size
-//' d.wass.decomp$shape
+//' set.seed(24)
+//' x<-rnorm(100)
+//' y1<-rnorm(150)
+//' y2<-rexp(150,3)
+//' y3<-rpois(150,2)
+//'
+//' squared_wass_decomp(x,y1)
+//' squared_wass_decomp(x,y2)
+//' squared_wass_decomp(x,y3)
 //' 
 //' @export
 //[[Rcpp::export]]
@@ -748,12 +747,15 @@ Rcpp::List squared_wass_decomp(	const NumericVector & x,
 //' alternative implementations of the 2-Wasserstein distance
 //'
 //' @examples
-//' # input: one dimensional data in two conditions
-//' x <- rnorm(100, 42, 2)
-//' y <- c(rnorm(61, 20, 1), rnorm(41, 40,2))
-//' # output: The approximated squared 2-Wasserstein distance as described in
-//' # Schefzik et al. (2020)
-//' d.wass.approx <- squared_wass_approx(x,y)
+//' set.seed(24)
+//' x<-rnorm(100)
+//' y1<-rnorm(150)
+//' y2<-rexp(150,3)
+//' y3<-rpois(150,2)
+//'
+//' squared_wass_approx(x,y1)
+//' squared_wass_approx(x,y2)
+//' squared_wass_approx(x,y3)
 //'
 //' @export
 //[[Rcpp::export]]
@@ -800,14 +802,26 @@ double squared_wass_approx(	const NumericVector & x,
 //' alternative implementations of the 2-Wasserstein distance.
 //'
 //' @examples
-//' # create input vectors
-//' x <- rnorm(100, 42, 2)
-//' y <- c(rnorm(61, 20, 1), rnorm(41, 40, 2))
-//' # output: The p-Wasserstein distance between the two input
-//' # vectors. Reimplementation of the wasserstein1d function from 
-//' # the R packge transport by Schuhmacher et al.
-//' # Example for the 2-Wasserstein distance:
-//' d.wass <- wasserstein_metric(x,y,p=2)
+//' set.seed(24)
+//' x<-rnorm(100)
+//' y1<-rnorm(150)
+//' y2<-rexp(150,3)
+//' y3<-rpois(150,2)
+//'
+//' #calculate 2-Wasserstein distance between x and y1
+//' wasserstein_metric(x,y1,p=2)
+//' #calculate squared 2-Wasserstein distance between x and y1
+//' wasserstein_metric(x,y1,p=2)^2
+//'
+//' #calculate 2-Wasserstein distance between x and y2
+//' wasserstein_metric(x,y2,p=2)
+//' #calculate squared 2-Wasserstein distance between x and y2
+//' wasserstein_metric(x,y2,p=2)^2
+//'
+//' #calculate 2-Wasserstein distance between x and y3
+//' wasserstein_metric(x,y3,p=2)
+//' #calculate squared 2-Wasserstein distance between x and y3
+//' wasserstein_metric(x,y3,p=2)^2
 //'
 //' @export
 //[[Rcpp::export]]
