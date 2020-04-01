@@ -4,8 +4,10 @@
 #' Test for differential proportions of zero expression between two conditions
 #' for a specified set of genes; adapted from the R/Bioconductor package \code{scDD} by Korthauer et al. (2016)
 #'
-#' Test for differential proportions of zero gene expression between two
+#' @details Test for differential proportions of zero gene expression between two
 #' conditions using a logistic regression model accounting for the cellular detection rate. Adapted from the R/Bioconductor package \code{scDD} by Korthauer et al. (2016).
+#'
+#' In the test, the null hypothesis that there are no differential proportions of zero gene expression (DPZ) is tested against the alternative that there are DPZ.
 #'
 #' @param x matrix of single-cell RNA-sequencing expression data with genes in
 #'   rows and cells (samples) in columns
@@ -15,17 +17,28 @@
 #'
 #' @return A vector of (unadjusted) p-values
 #'
-#' @references Korthauer, K. D.,  Chu,L.-F.,  Newton,M. A.,  Li, Y.,  Thomson, J.,  Stewart,R., and Kendziorski, C. (2016). A statistical approach for identifying differential distributions in single-cell RNA-seq experiments. Genome Biology, 17:222.
+#' @references Korthauer, K. D.,  Chu, L.-F.,  Newton, M. A.,  Li, Y.,  Thomson, J.,  Stewart, R., and Kendziorski, C. (2016). A statistical approach for identifying differential distributions in single-cell RNA-seq experiments. Genome Biology, 17:222.
 #'
 #' @examples
-#' x1 <- c(rnorm(100,42,1), rnorm(102,45,3))
-#' x2 <- c(rnorm(100,0,1), rnorm(102,0,2))
-#' dat <- matrix(c(x1,x2), nrow=2, byrow=TRUE)
-#' condition <- c(rep(1,100), rep(2,102))
-#' # test over all rows
+#' #simulate scRNA-seq data
+#' set.seed(24)
+#' nb.sim1<-rnbinom(n=(750*250),1,0.7)
+#' dat1<-matrix(data=nb.sim1,nrow=750,ncol=250)
+#' nb.sim2a<-rnbinom(n=(250*100),1,0.7)
+#' dat2a<-matrix(data=nb.sim2a,nrow=250,ncol=100)
+#' nb.sim2b<-rnbinom(n=(250*150),5,0.2)
+#' dat2b<-matrix(data=nb.sim2b,nrow=250,ncol=150)
+#' dat2<-cbind(dat2a,dat2b)
+#' dat<-rbind(dat1,dat2)*0.25
+#' #randomly shuffle the rows of the matrix to create the input matrix
+#' set.seed(32)
+#' dat<-dat[sample(nrow(dat)),]
+#' condition<-c(rep("A",100),rep("B",150))
+#'
+#' # test for differential proportions of zero expression over all rows (genes)
 #' testZeroes(dat, condition)
-#' # only consider the second row
-#' testZeroes(dat, condition, these=c(2))
+#' # test for differential proportions of zero expression only for the second row (gene)
+#' testZeroes(dat, condition, these=2)
 #'
 #' @name testZeroes
 #' @export
@@ -210,7 +223,7 @@ setMethod("testZeroes",
 #'
 #' The test is explicitly designed for checking differences between two conditions, and in particular not between cell types.
 #'           
-#' For the two-stage approach (\code{method="TS"}) according to Schefzik et al. (2020), two separate tests for differential proportions of zero expression (DPZ) and non-zero differential distributions (non-zero DD), respectively, are performed. In the DPZ test using logistic regression, the null hypothesis that there are no DPZ is tested against the alternative that there are DPZ. In the non-zero DD test using the semi-parametric 2-Wasserstein distance-based procedure, the null hypothesis that there is no difference in the non-zero expression distributions against the alternative that the two non-zero expression distributions are differential.
+#' For the two-stage approach (\code{method="TS"}) according to Schefzik et al. (2020), two separate tests for differential proportions of zero expression (DPZ) and non-zero differential distributions (non-zero DD), respectively, are performed. In the DPZ test using logistic regression, the null hypothesis that there are no DPZ is tested against the alternative that there are DPZ. In the non-zero DD test using the semi-parametric 2-Wasserstein distance-based procedure, the null hypothesis that there is no difference in the non-zero expression distributions is tested against the alternative that the two non-zero expression distributions are differential.
 #'           
 #' The current implementation of the test assumes that the expression data matrix is based on one replicate per condition only. For approaches on how to address settings comprising multiple replicates per condition, see Schefzik et al. (2020).           
 #'
