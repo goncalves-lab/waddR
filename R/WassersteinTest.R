@@ -298,7 +298,7 @@
 #'@param method testing procedure to be employed: "SP" for the semi-parametric
 #' permutation testing procedure with GPD approximation, "ASY" for the test based on asymptotic theory; if no method is specified, "SP" will be used by default.
 #'@param permnum number of permutations used in the permutation testing
-#' procedure (if method="SP" is performed); default is 10000
+#' procedure (if \code{method="SP"} is performed); default is 10000
 #' 
 #'@return A vector, see Schefzik et al. (2020) for details:
 #' \itemize{
@@ -344,15 +344,24 @@
 #'@references Schefzik, R., Flesch, J., and Goncalves, A. (2020). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
 #'
 #'@examples
-#'# generate two input distributions
-#'x<-rnorm(500)
-#'y<-rnorm(500,4,1.5)
-#'wasserstein.test(x,y,method="ASY")
-#'# Run with default options: method="SP", permnum=10000
-#'wasserstein.test(x,y)
-#'# Run with a seed for the semi-parametric test ("SP")
-#'set.seed(42)
-#'wasserstein.test(x,y, method="SP")
+#' set.seed(24)
+#' x<-rnorm(100)
+#' y1<-rnorm(150)
+#' y2<-rexp(150,3)
+#' y3<-rpois(150,2)
+#'
+#' #for reproducibility, set a seed for the semi-parametric, permutation-based test
+#' set.seed(32)
+#' wasserstein.test(x,y1,method="SP",permnum=10000)
+#' wasserstein.test(x,y1,method="ASY")
+#' 
+#' set.seed(33)
+#' wasserstein.test(x,y2,method="SP",permnum=10000)
+#' wasserstein.test(x,y2,method="ASY")
+#' 
+#' set.seed(34)
+#' #only consider SP method, as Poisson distribution is discrete
+#' wasserstein.test(x,y3,method="SP",permnum=10000)
 #'
 #'@export
 #'
