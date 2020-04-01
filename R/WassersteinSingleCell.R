@@ -337,26 +337,39 @@ setMethod("testZeroes",
 #'@references Schefzik, R., Flesch, J., and Goncalves, A. (2020). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
 #'
 #'@examples
-#'
-#'# some data in two conditions
-#'cond1 <- matrix(rnorm(100, 42, 1), nrow=1)
-#'cond2 <- matrix(rnorm(100, 45, 3), nrow=1)
-#'
-#'# call wasserstein.sc with a matrix
-#'# and a vector denoting conditions
-#'dat <- cbind(cond1, cond2)
-#'condition <- c(rep(1, 100), rep(2, 100))
-#'wasserstein.sc(dat, condition, method="TS", 100)
-#'
-#'# call wasserstein.sc with two SingleCellExperiment objects
-#'sce1 <- SingleCellExperiment::SingleCellExperiment(
-#'            assays=list(counts=cond1, logcounts=log10(cond1)))
-#'sce2 <- SingleCellExperiment::SingleCellExperiment(
-#'            assays=list(counts=cond2, logcounts=log10(cond2)))
-#'wasserstein.sc(sce1, sce2, method="TS", 100)
-#'
-#'# for reproducible p-values
-#'wasserstein.sc(sce1, sce2, seed=123)
+#' #simulate scRNA-seq data
+#' set.seed(24)
+#' nb.sim1<-rnbinom(n=(750*250),1,0.7)
+#' dat1<-matrix(data=nb.sim1,nrow=750,ncol=250)
+#' nb.sim2a<-rnbinom(n=(250*100),1,0.7)
+#' dat2a<-matrix(data=nb.sim2a,nrow=250,ncol=100)
+#' nb.sim2b<-rnbinom(n=(250*150),5,0.2)
+#' dat2b<-matrix(data=nb.sim2b,nrow=250,ncol=150)
+#' dat2<-cbind(dat2a,dat2b)
+#' dat<-rbind(dat1,dat2)*0.25
+#' #randomly shuffle the rows of the matrix to create the input matrix
+#' set.seed(32)
+#' dat<-dat[sample(nrow(dat)),]
+#' condition<-c(rep("A",100),rep("B",150))  
+#' 
+#' #call wasserstein.sc with a matrix and a vector including conditions
+#' #set seed for reproducibility
+#' #two-stage method
+#' wasserstein.sc(dat,condition,method="TS",permnum=10000,seed=24)
+#' #one-stage method
+#' wasserstein.sc(dat,condition,method="OS",permnum=10000,seed=24)
+#' 
+#' #alternatively, call wasserstein.sc with two SingleCellExperiment objects
+#' #note that the possibly pre-processed and normalized expression matrices need to be included using the "counts" argument
+#' sce.A <- SingleCellExperiment::SingleCellExperiment(
+#'   assays=list(counts=dat[,1:100]))
+#' sce.B <- SingleCellExperiment::SingleCellExperiment(
+#'   assays=list(counts=dat[,101:250]))
+#' #set seed for reproducibility
+#' #two-stage method          
+#' wasserstein.sc(sce.A,sce.B,method="TS",permnum=10000,seed=24)
+#' #one-stage method          
+#' wasserstein.sc(sce.A,sce.B,method="OS",permnum=10000,seed=24)
 #'
 #' @name wasserstein.sc
 #' @export
