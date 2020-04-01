@@ -360,7 +360,8 @@ setMethod("testZeroes",
 #' wasserstein.sc(dat,condition,method="OS",permnum=10000,seed=24)
 #' 
 #' #alternatively, call wasserstein.sc with two SingleCellExperiment objects
-#' #note that the possibly pre-processed and normalized expression matrices need to be included using the "counts" argument
+#' #note that the possibly pre-processed and normalized expression matrices need to be
+#' #included using the "counts" argument
 #' sce.A <- SingleCellExperiment::SingleCellExperiment(
 #'   assays=list(counts=dat[,1:100]))
 #' sce.B <- SingleCellExperiment::SingleCellExperiment(
