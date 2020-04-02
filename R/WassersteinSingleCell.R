@@ -232,7 +232,7 @@ setMethod("testZeroes",
 #' \code{inclZero=TRUE} in \code{.testWass} with the argument \code{method="OS"} and the argument
 #' \code{inclZero=FALSE} with the argument \code{method="TS"}.
 #'           
-#' Note that the input data matrix \eqn{x} [alternatively, the input data matrices to form the \code{SingleCellExperiment} objects \eqn{x} and \eqn{y}, respectively] as the starting point of the test is supposed to contain the single-cell RNA-sequencing expression data after several quality control steps including for instance filtering, normalization or variance stabilization.
+#' The input data matrix \eqn{x} [alternatively, the input data matrices to form the \code{SingleCellExperiment} objects \eqn{x} and \eqn{y}, respectively] as the starting point of the test is supposed to contain the single-cell RNA-sequencing expression data after several quality control steps including for instance filtering, normalization or variance stabilization.
 #'
 #' The test is explicitly designed for checking differences between two conditions, and in particular not between cell types.
 #'           
