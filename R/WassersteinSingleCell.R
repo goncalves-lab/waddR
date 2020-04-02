@@ -10,8 +10,8 @@
 #' In the test, the null hypothesis that there are no differential proportions of zero gene expression (DPZ) is tested against the alternative that there are DPZ.
 #'
 #' @param x matrix of single-cell RNA-sequencing expression data with genes in
-#'   rows and cells (samples) in columns
-#' @param y vector of condition labels
+#'   rows and cells (samples) in columns [alternatively, a \code{SingleCellExperiment} object for condition \eqn{A}, where the matrix of the single-cell RNA sequencing expression data has to be supplied via the \code{counts} argument in \code{SingleCellExperiment}] 
+#' @param y vector of condition labels [alternatively, a \code{SingleCellExperiment} object for condition \eqn{B}, where the matrix of the single-cell RNA sequencing expression data has to be supplied via the \code{counts} argument in \code{SingleCellExperiment}] 
 #' @param these vector of row numbers (i.e. gene numbers) employed to test for
 #'   differential proportions of zero expression; default is seq_len(nrow(dat))
 #'
@@ -35,10 +35,23 @@
 #' dat<-dat[sample(nrow(dat)),]
 #' condition<-c(rep("A",100),rep("B",150))
 #'
-#' # test for differential proportions of zero expression over all rows (genes)
+#' #call testZeroes with a matrix and a vector including conditions
+#' #test for differential proportions of zero expression over all rows (genes)
 #' testZeroes(dat, condition)
-#' # test for differential proportions of zero expression only for the second row (gene)
+#' #test for differential proportions of zero expression only for the second row (gene)
 #' testZeroes(dat, condition, these=2)
+#'
+#' #alternatively, call testZeroes with two SingleCellExperiment objects
+#' #note that the possibly pre-processed and normalized expression matrices need to be
+#' #included using the "counts" argument
+#' sce.A <- SingleCellExperiment::SingleCellExperiment(
+#'   assays=list(counts=dat[,1:100]))
+#' sce.B <- SingleCellExperiment::SingleCellExperiment(
+#'   assays=list(counts=dat[,101:250]))
+#' #test for differential proportions of zero expression over all rows (genes)
+#' testZeroes(sce.A,sce.B,these=seq_len(nrow(sce.A)))
+#' #test for differential proportions of zero expression only for the second row (gene)
+#' testZeroes(sce.A,sce.B,these=2)
 #'
 #' @name testZeroes
 #' @export
@@ -219,7 +232,7 @@ setMethod("testZeroes",
 #' \code{inclZero=TRUE} in \code{.testWass} with the argument \code{method="OS"} and the argument
 #' \code{inclZero=FALSE} with the argument \code{method="TS"}.
 #'           
-#' Note that the input data matrix \eqn{x} as the starting point of the test is supposed to contain the single-cell RNA-sequencing expression data after several quality control steps including for instance filtering, normalization or variance stabilization.
+#' Note that the input data matrix \eqn{x} [alternatively, the input data matrices to form the \code{SingleCellExperiment} objects \eqn{x} and \eqn{y}, respectively] as the starting point of the test is supposed to contain the single-cell RNA-sequencing expression data after several quality control steps including for instance filtering, normalization or variance stabilization.
 #'
 #' The test is explicitly designed for checking differences between two conditions, and in particular not between cell types.
 #'           
@@ -228,8 +241,8 @@ setMethod("testZeroes",
 #' The current implementation of the test assumes that the expression data matrix is based on one replicate per condition only. For approaches on how to address settings comprising multiple replicates per condition, see Schefzik et al. (2020).           
 #'
 #'@param x matrix of single-cell RNA-sequencing expression data with genes in
-#' rows and cells (samples) in columns
-#'@param y vector of condition labels
+#' rows and cells (samples) in columns [alternatively, a \code{SingleCellExperiment} object for condition \eqn{A}, where the matrix of the single-cell RNA sequencing expression data has to be supplied via the \code{counts} argument in \code{SingleCellExperiment}] 
+#'@param y vector of condition labels [alternatively, a \code{SingleCellExperiment} object for condition \eqn{B}, where the matrix of the single-cell RNA sequencing expression data has to be supplied via the \code{counts} argument in \code{SingleCellExperiment}] 
 #'@param method method employed in the testing procedure: if “OS”, a one-stage test is performed, i.e. the semi-parametric test is applied to all (zero and
 #' non-zero) expression values; if “TS”, a two-stage test is performed, i.e.
 #' the semi-parametric test is applied to non-zero expression values only and combined
