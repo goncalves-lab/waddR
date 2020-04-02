@@ -51,7 +51,7 @@
 #' 
 #' @param val value of a specific test statistic
 #' @param distr.ordered vector of values of the test statistics obtained by permuting group labels forming the basis of the calculation of \code{val}
-#'@return A vector of three, see Schefzik et al. (2019) for details:
+#'@return A vector of three, see Schefzik et al. (2020) for details:
 #' \itemize{
 #' \item pvalue.gpd: p-value corresponding to the GPD fitting
 #' test
