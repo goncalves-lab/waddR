@@ -39,7 +39,7 @@ adaptation of the general two-sample test, which itself uses the 2-Wasserstein
 distance to compare two distributions.
 
 
-### 2-Wasserstein Distance functions
+### 2-Wasserstein distance functions
 
 The 2-Wasserstein distance is a metric to describe the distance between two
 distributions, representing e.g. two diferent conditions $A$ and $B$. The `waddR` package
@@ -106,7 +106,7 @@ The package `waddR` can then be used in R:
 library("waddR")
 ```
 
-## Session Info
+## Session info
 
 ```{r session-info}
 sessionInfo()
