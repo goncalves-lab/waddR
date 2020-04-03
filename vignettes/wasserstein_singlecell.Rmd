@@ -1,5 +1,5 @@
 ---
-title: "Detecting Differential Expression in Single-Cell RNAseq data"
+title: "Detection of differential gene expression distributions in single-cell RNA sequencing data"
 output: rmarkdown::html_vignette
 vignette: >
     %\VignetteIndexEntry{wasserstein_singlecell}
@@ -18,29 +18,24 @@ knitr::opts_chunk$set(
 
 The [`waddR`](waddR.html) package provides an adaptation of the semi-parametric
 testing procedure based on the 2-Wasserstein distance which is specifically
-tailored to identify differential distributions in single-cell RNA-seqencing
-(scRNA-seq) data. 
+tailored to identify differential distributions in single-cell RNA seqencing
+(scRNAseq) data. 
 
-
-In particular, a two-stage (TS) approach has been implemented that takes account
-of the specific nature of scRNA-seq data by separately testing for differential
+In particular, a two-stage (TS) approach is implemented that takes account
+of the specific nature of scRNAseq data by separately testing for differential
 proportions of zero gene expression (using a logistic regression model) and
 differences in non-zero gene expression (using the semi-parametric
 2-Wasserstein distance-based test) between two conditions.
 
 ## Application to an example data set
 
-
-This an example on how to analyse the expression of single cell data in two
-conditions.
-As example data we will look at single cell data from decidua and blood samples
-analysed by Vento-Tormo et al. 2018 
+As an example on how to analyze scRNAseq gene expression data for two different
+conditions, we look at decidua and blood samples from a data set by Vento-Tormo et al. (2018) 
 (https://doi.org/10.1038/s41586-018-0698-6).
-For this demonstration we use only one replicate of the two conditions that has
-been normalized, scaled and is available for download on
+For our purpose here, we use one a pre-processed and normalized replicate for the two conditions, which is available for download on
 [github](https://github.com/goncalves-lab/waddR-data/).
 
-First, we will first load all required packages:
+First, we load all required packages:
 
 ```{r}
 suppressPackageStartupMessages({
@@ -50,7 +45,7 @@ suppressPackageStartupMessages({
 })
 ```
 
-Download the example data set
+Then, we download the example data set:
 
 ```{r}
 url.base <- "https://github.com/goncalves-lab/waddR-data/blob/master/data/"
@@ -71,10 +66,9 @@ load(getCachedPath(sce.blood.url, "sce.blood"))
 load(getCachedPath(sce.decidua.url, "sce.decidua"))
 ```
 
-We have downloaded the two `SingleCellExperiment` objects `sce.blood` and
-`sce.decidua`.
-Next we will randomly select a subset of genes with which we will proceed, a
-whole analysis would be out of scope for this vignette.
+Having downloaded the two `SingleCellExperiment` objects `sce.blood` and
+`sce.decidua`, we randomly select a subset of genes which we proceed with, as a
+whole analysis would be out of the scope of this vignette.
 
 ```{r}
 set.seed(28)
@@ -83,13 +77,10 @@ sce.blood <- sce.blood[randgenes, ]
 sce.decidua <- sce.decidua[randgenes, ]
 ```
 
-The input data to `wasserstein.sc` always discriminates two conditions.
-It can be given either as a data matrix and a vector explaining the condition
-of each column, or a `SingleCellExperiment` for each condition.
+The input data to the main function `wasserstein.sc` can be supplied either as an overall data matrix and a vector specifying the condition
+of each column (cell), or in the form of two `SingleCellExperiment` objects, one for each condition.
 
-We will proceed to use the two `SingleCellExperiment` objects we loaded.
-The `SingleCellExperiment` objects passed to `wasserstein.sc` must contain a
-`counts` assay each.
+We here proceed with using the two loaded `SingleCellExperiment` objects. Note that the `SingleCellExperiment` objects supplied to `wasserstein.sc` must contain a `counts` assay each, which contains the corresponding expression data matrix.
 
 ```{r}
 assays(sce.blood)
@@ -149,19 +140,19 @@ Note: For reproducible p-values, see the "seed" argument.
 *\* only if GDP fitting is performed (NA otherwise);* 
 *\*\* only if the two-stage test is run*
 
+For further details of the testing procedure for scRNAseq data, see `?wasserstein.sc`.
 
-## See Also
+## See also
 
 * The [`waddR` package](waddR.html)
 
-* Fast and accurate 
-[calculation of the  Wasserstein distance](wasserstein_metric.html)
+* [Calculation of the  Wasserstein distance](wasserstein_metric.html)
 
-* [Two-sample test](wasserstein_test.html) to check for differences between two
+* [Two-sample tests](wasserstein_test.html) to check for differences between two
 distributions
 
 
-## Session Info
+## Session info
 
 ```{r session-info}
 sessionInfo()
