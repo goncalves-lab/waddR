@@ -78,23 +78,18 @@ sce.decidua <- sce.decidua[randgenes, ]
 ```
 
 The input data to the main function `wasserstein.sc` can be supplied either as an overall data matrix and a vector specifying the condition
-of each column (cell), or in the form of two `SingleCellExperiment` objects, one for each condition.
+of each column (cell), or in the form of two `SingleCellExperiment` objects, one for each condition. Note that the input data matrix or the input `SingleCellExperiment` objects should ideally contain data that has been normalized for cell- or gene-specific biases, as is the case for our example data here.
 
-We here proceed with using the two loaded `SingleCellExperiment` objects. Note that the `SingleCellExperiment` objects supplied to `wasserstein.sc` must contain a `counts` assay each, which contains the corresponding expression data matrix.
+We here proceed using the two loaded `SingleCellExperiment` objects. Note that the `SingleCellExperiment` objects supplied to `wasserstein.sc` must contain a `counts` assay each, which contains the corresponding (ideally normalized) expression data matrix.
 
 ```{r}
 assays(sce.blood)
 assays(sce.decidua)
 ```
-
-Before testing for differential expression in the two conditions, the counts
-should be normalized for cell or gene-specific biases.
-We can skip this here since the example data has already been normalized and
-an entire analysis would be out of scope for this vignette.
-The detailed processing steps performed on this data can be seen 
-[here](https://github.com/goncalves-lab/waddr-data.git).
+The test is then performed using the `wasserstein.sc` function. To obtain reproducible results, a seed is set before calling `wasserstein.sc`.
 
 ```{r}
+set.seed(24)
 wsres <- wasserstein.sc(sce.blood, sce.decidua, "OS")
 head(wsres, n=10L)
 ```
@@ -109,10 +104,8 @@ conditions and genes in a model.
 It may yield incorrect results, if it is applied on only a subset of genes is
 given.
 
-Note: For reproducible p-values, see the "seed" argument.
 
-
-: 2-Wasserstein single cell test output 
+: Output of the 2-Wasserstein distance-based test for scRNAseq data 
 
 | Output Column | Description                                                 |
 |:--------------|:------------------------------------------------------------|
