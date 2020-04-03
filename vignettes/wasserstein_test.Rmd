@@ -1,5 +1,5 @@
 ---
-title: "Two Sample Testing Based on The 2-Wasserstein Distance"
+title: "Two-sample tests based on the 2-Wasserstein distance"
 output: rmarkdown::html_vignette
 vignette: >
     %\VignetteIndexEntry{wasserstein_test}
@@ -15,13 +15,13 @@ knitr::opts_chunk$set(
 ```
 
 
-## Testing Procedures
+## Testing procedures
 
-The package `waddR` provides two testing procedures using the 2-Wasserstein
+The `waddR` package provides two testing procedures using the 2-Wasserstein
 distance to test whether two distributions $F_A$ and $F_B$ given in the form of
 samples are different by specifically testing the null hypothesis
-$\mathcal{H}_0: F_A = F_B$ against the alternative
-$\mathcal{H}_1: F_A \neq F_B$.
+$H_0: F_A = F_B$ against the alternative
+$H_1: F_A \neq F_B$.
 
 
 The first, semi-parametric (SP), procedure uses a test based on permutations
@@ -40,7 +40,7 @@ We exemplarily construct three cases in which two distributions (samples)
 differ with respect to location, size, and shape, respectively, and one case
 without a difference.
 For convenience, we focus on the p-value, the value of the (squared)
-2-wasserstein distance, and the fractions of the location, size, and shape
+2-Wasserstein distance, and the fractions of the location, size, and shape
 terms (in \%) with respect to the (squared) 2-Wasserstein distance here, while
 the functions also provide additional output.
 
@@ -53,10 +53,10 @@ spec.output <- c("pval", "d.wass^2", "perc.loc", "perc.size", "perc.shape")
 
 We start with an example, in which the two distributions (samples) only differ
 with respect to the location, and show the results for the two testing
-procedures (semi-parametric (SP) and asymptotic theory-based (ASY)).
+procedures (SP and ASY).
 
-Please note that the method "SP" with the permnum 10000 is used by default in
-calls to `wasserstein.test` if nothing different is specified.
+Note that the method "SP" with a permutation number of 10000 is used by default in 
+`wasserstein.test` if nothing else is specified.
 
 ```{r diff_loc}
 set.seed(24)
@@ -112,12 +112,11 @@ wasserstein.test(ctrl, nodd)[spec.output]
 wasserstein.test(ctrl, nodd, method="ASY")[spec.output]
 ```
 
-## Reproducibility of Results
+## Reproducibility of results
 
 Using the method "SP" (default), the semi-parametric test is performed
 to obtain p-values.
-The permutation procedure is based on a random sampling of the input vectors
-and for the results to be reproducible, a seed can be set from the user
+The permutation procedure uses a random group assignment step, and to obtain reproducible results, a seed can be set from the user
 environment.
 ```{r reproduce}
 # set seed for reproducible p-values in re-runs
@@ -128,18 +127,17 @@ set.seed(123)
 wasserstein.test(sam1, nodd)[spec.output]
 ```
 
-## See Also
+## See also
 
 * The [`waddR` package](waddR.html)
 
-* Fast and accurate 
-[calculation of the  Wasserstein distance](wasserstein_metric.html)
+* [Calculation of the  Wasserstein distance](wasserstein_metric.html)
 
-* Detect 
+* Detection of 
 [differential gene expression distributions](wasserstein_singlecell.html)
 in scRNAseq data
 
-## Session Info
+## Session info
 
 ```{r session-info}
 sessionInfo()
