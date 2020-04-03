@@ -60,7 +60,7 @@ use $K:=1000$ in our implementation.
 Moreover, $\hat{\mu}_A, \hat{\mu}_B, \hat{\sigma}_A, \hat{\sigma}_B$ and
 $\hat{\rho}_{A,B}$ denote the empirical versions of the corresponding quantities.
 
-## Three Implementations
+## Three implementations
 
 The `waddR` package offers three functions to compute the 2-Wasserstein
 distance in two-sample settings.
@@ -112,7 +112,7 @@ distributions differ with respect to location (mean), but not in terms of size
 and shape, thus confirming the underlying normal model.
 
 
-## See Also
+## See also
 
 * The [`waddR` package](waddR.html)
 
