@@ -1,5 +1,5 @@
 ---
-title: "2-Wasserstein Distance calculation"
+title: "2-Wasserstein distance calculation"
 output: rmarkdown::html_vignette
 vignette: >
     %\VignetteIndexEntry{wasserstein_metric}
@@ -17,8 +17,8 @@ knitr::opts_chunk$set(
 
 ## Background
 
-The 2-Wasserstein distance W is a metric to describe the distance
-between two distributions, representing two different conditions $A$ and $B$.
+The 2-Wasserstein distance $W$ is a metric to describe the distance
+between two distributions, representing e.g. two different conditions $A$ and $B$.
 
 For continuous distributions, it is given by
 
@@ -37,10 +37,9 @@ $$d := d(F_A, F_B)
 + \underbrace{\big(\sigma_A - \sigma_B\big)^2}_{\text{size}} 
 + \underbrace{2\sigma_A \sigma_B \big(1 - \rho^{A,B}\big)}_{\text{shape}},$$
 
-where $\mu_A$ and $\mu_B$ are the respective means, $\sigma_A$ and$\sigma_B$
+where $\mu_A$ and $\mu_B$ are the respective means, $\sigma_A$ and $\sigma_B$
 are the respective standard deviations, and $\rho^{A,B}$ is the Pearson
 correlation of the points in the quantile-quantile plot of $F_A$ and $F_B$.
-
 
 ## Usage in two-sample setting
 
@@ -56,16 +55,14 @@ $$d(\hat{F}_A, \hat{F}_B)
 + 2\hat{\sigma}_A \hat{\sigma}_B \big(1 - \hat{\rho}^{A,B}\big).$$
 
 Here, $Q_A$ and $Q_B$ denote equidistant quantiles of $F_A$ and $F_B$,
-respectively, at the levels $\alpha_k := \frac{k-0.5}{K}, k = 1, \dots , K$
-using $K=1000$ in our implementation.
-Moreover, $\hat{\mu}_A, \hat{\mu}_B, \hat{\sigma}_A, \hat{\sigma}_B,$ and
-$\hat{\rho}_{A,B}$ denote the empirical versions of the corresponding quantiles
-from the original decomposition of $d$.
+respectively, at the levels $\alpha_k := \frac{k-0.5}{K}, k = 1, \dots , K$, where we 
+use $K:=1000$ in our implementation.
+Moreover, $\hat{\mu}_A, \hat{\mu}_B, \hat{\sigma}_A, \hat{\sigma}_B$ and
+$\hat{\rho}_{A,B}$ denote the empirical versions of the corresponding quantities.
 
 ## Three Implementations
 
-
-The package `waddR` offers three functions to compute the 2-Wasserstein
+The `waddR` package offers three functions to compute the 2-Wasserstein
 distance in two-sample settings.
 
 We will use samples from normal distributions to illustrate them.
@@ -73,44 +70,44 @@ We will use samples from normal distributions to illustrate them.
 library(waddR)
 
 set.seed(24)
-x <- rnorm(100, mean=0, sd=1)
-y <- rnorm(100, mean=2, sd=1)
+x <- rnorm(100,mean=0,sd=1)
+y <- rnorm(100,mean=2,sd=1)
 ```
 
-The first function, `wasserstein_metric` offers a faster reimplementation in
-Cpp of the function `wasserstein1d` from the R package `transport`, which
-computes the original 2-Wasserstein distance $W$.
+The first function, `wasserstein_metric`, offers a faster reimplementation in
+C++ of the `wasserstein1d` function from the R package `transport`, which is able to
+compute general $p$-Wasserstein distances. For $p=2$, we obtain the 2-Wasserstein distance $W$.
 
 ```{r wasserstein_exact}
-wasserstein_metric(x, y)
+wasserstein_metric(x,y,p=2)
 ```
 
-The corresponding value of the squared 2-Wasserstein distance $d$ is then:
+The corresponding value of the squared 2-Wasserstein distance $d$ is then computed as:
 
 ```{r sq_wasserstein_exact}
-wasserstein_metric(x, y)**2
+wasserstein_metric(x,y,p=2)^2
 ```
 
 The second function, `squared_wass_approx`, computes the squared 2-Wasserstein
 distance by calculating the mean squared difference of the equidistant
 quantiles (first approximation in the previous formula).
-This function is currently used to compute the 2-Wasserstein distance in the
+This function is currently used to compute the 2-Wasserstein distances in the
 testing procedures.
 
 ```{r sq_wassersein_approx}
-squared_wass_approx(x, y)
+squared_wass_approx(x,y)
 ```
 
 The third function, `squared_wass_decomp`, approximates the squared
-2-Wasserstein distance by addding the location, size, and shape terms from the
+2-Wasserstein distance using the location, size, and shape terms from the
 above decomposition (second apporximation in the previous formula).
 It also returns the respective decomposition values.
 
 ```{r sq_wassersein_decomp}
-squared_wass_decomp(x, y)
+squared_wass_decomp(x,y)
 ```
 
-The decomposition results reflect that in the considered example, the two
+In the considered example, the decomposition results suggest that the two
 distributions differ with respect to location (mean), but not in terms of size
 and shape, thus confirming the underlying normal model.
 
@@ -119,10 +116,10 @@ and shape, thus confirming the underlying normal model.
 
 * The [`waddR` package](waddR.html)
 
-* [Two-sample test](wasserstein_test.html) based on a decomposition of the
-Wasserstein distance between two distributions to check for differences
+* [Two-sample tests](wasserstein_test.html) to check for differences between two
+distributions
 
-* Detect 
+* Detection of 
 [differential gene expression distributions](wasserstein_singlecell.html)
 in scRNAseq data
 
