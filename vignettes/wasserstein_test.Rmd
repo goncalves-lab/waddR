@@ -48,83 +48,65 @@ the functions also provide additional output.
 ```{r setup}
 library(waddR)
 
-spec.output <- c("pval", "d.wass^2", "perc.loc", "perc.size", "perc.shape")
+spec.output<-c("pval","d.wass^2","perc.loc","perc.size","perc.shape")
 ```
 
-We start with an example, in which the two distributions (samples) only differ
+We start with an example, in which the two distributions (samples) are supposed to only differ
 with respect to the location, and show the results for the two testing
 procedures (SP and ASY).
 
-Note that the method "SP" with a permutation number of 10000 is used by default in 
-`wasserstein.test` if nothing else is specified.
+Note that the semi-parametric method "SP" with a permutation number of 10000 is used by default in 
+`wasserstein.test` if nothing else is specified. The permutation procedure in the "SP" method uses a random group assignment step, and to obtain reproducible results, a seed can be set from the user environment before calling `wasserstein.test`.
 
 ```{r diff_loc}
 set.seed(24)
-ctrl <- rnorm(300 ,0 ,1)
-set.seed(24)
-dd1 <- rnorm(300, 1, 1)
-wasserstein.test(ctrl, dd1, method="SP", permnum=10000)[spec.output]
-wasserstein.test(ctrl, dd1, method="ASY")[spec.output]
+ctrl<-rnorm(300,0,1)
+dd1<-rnorm(300,1,1)
+set.seed(32)
+wasserstein.test(ctrl,dd1,method="SP",permnum=10000)[spec.output]
+wasserstein.test(ctrl,dd1,method="ASY")[spec.output]
 ```
-We obtain a very low p-value, pointing at the existence of a difference, and
-see that differences with respect to location make up by far the most part of
+We obtain a very low p-value, clearly pointing at the existence of a difference, and
+see that differences with respect to location make up by far the major part of
 the 2-Wasserstein distance.
 
 
-Analogously, we look at a case in which the two distributions (samples) only
+Analogously, we look at a case in which the two distributions (samples) are supposed to only
 differ with respect to the size.
+
 ```{r diff_size}
 set.seed(24)
-ctrl <- rnorm(300, 0, 1)
-set.seed(24)
-dd2 <- rnorm(300, 0, 2)
-wasserstein.test(ctrl, dd2)
-wasserstein.test(ctrl, dd2, method="ASY")
+ctrl<-rnorm(300,0,1)
+dd2<-rnorm(300,0,2)
+set.seed(32)
+wasserstein.test(ctrl,dd2)[spec.output]
+wasserstein.test(ctrl,dd2,method="ASY")[spec.output]
 ```
 
 
-Similarly, we consider an example in which the two distributions (samples) only
+Similarly, we consider an example in which the two distributions (samples) are supposed to only
 differ with respect to the shape.
 ```{r diff_shape}
 set.seed(24)
-ctrl <- rnorm(300, 6.5, sqrt(13.25))
-set.seed(24)
-sam1 <- rnorm(300, 3, 1)
-set.seed(24)
-sam2 <- rnorm(300, 10, 1)
-dd3 <- sapply(seq(1:300), 
+ctrl<-rnorm(300,6.5,sqrt(13.25))
+sam1<-rnorm(300,3,1)
+sam2<-rnorm(300,10,1)
+dd3<-sapply(1:300, 
               function(n) {
-                sample(c(sam1[n], sam2[n]), 1, prob=c(0.5, 0.5))})
-wasserstein.test(ctrl, dd3)[spec.output]
-wasserstein.test(ctrl, dd3, method="ASY")[spec.output]
+                sample(c(sam1[n],sam2[n]),1,prob=c(0.5, 0.5))})
+set.seed(32)                
+wasserstein.test(ctrl,dd3)[spec.output]
+wasserstein.test(ctrl,dd3,method="ASY")[spec.output]
 ```
 
-
-Finally, we show an example in which there is no difference between the
-distributions. We obtain a high p-value, indicating that the null hypothesis
-cannot be rejected.
+Finally, we show an example in which the two distributions (samples) are supposed to be equal. We obtain a high p-value, indicating that the null hypothesis cannot be rejected.
 ```{r no_diff}
 set.seed(24)
-ctrl <- rnorm(300, 0, 1)
-set.seed(24)
-nodd <- rnorm(300, 0, 1)
-wasserstein.test(ctrl, nodd)[spec.output]
-wasserstein.test(ctrl, nodd, method="ASY")[spec.output]
-```
-
-## Reproducibility of results
-
-Using the method "SP" (default), the semi-parametric test is performed
-to obtain p-values.
-The permutation procedure uses a random group assignment step, and to obtain reproducible results, a seed can be set from the user
-environment.
-```{r reproduce}
-# set seed for reproducible p-values in re-runs
-set.seed(123)
-wasserstein.test(sam1, nodd)[spec.output]
-# reproduce the result
-set.seed(123)
-wasserstein.test(sam1, nodd)[spec.output]
+ctrl<-rnorm(300,0,1)
+nodd<-rnorm(300,0,1)
+set.seed(32)
+wasserstein.test(ctrl,nodd)[spec.output]
+wasserstein.test(ctrl,nodd,method="ASY")[spec.output]
 ```
 
 ## See also
