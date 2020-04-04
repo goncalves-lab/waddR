@@ -86,24 +86,13 @@ We here proceed using the two loaded `SingleCellExperiment` objects. Note that t
 assays(sce.blood)
 assays(sce.decidua)
 ```
-The test is then performed using the `wasserstein.sc` function. To obtain reproducible results, a seed is set before calling `wasserstein.sc`.
+The test is then performed using the `wasserstein.sc` function. To obtain reproducible results, a seed is set before calling `wasserstein.sc`. For convenience with repect to computation time, we employ `permnum=1000` permutations in our example here, while typically the use of more than 1000 permutations is recommended. We specifically consider a two-stage (TS) procedure here (`method="TS"`),w hich includes a test for differential proportions of zero gene expression (DPZ) and a test for differential distributions for non-zero gene expression. The TS procedure is applied to all genes in the data set, with one row of the output corresponding to the test result of one specific gene. Note that the DPZ test in the TS procedure takes account of the cellular detection rate and thus depends on the number of considered genes. Hence, the DPZ test results for our exemplary subset of genes differ from that when the test is applied to the whole set of genes.  
 
 ```{r}
 set.seed(24)
-wsres <- wasserstein.sc(sce.blood, sce.decidua, "OS")
+wsres <- wasserstein.sc(sce.blood, sce.decidua, method="TS",permnum=1000)
 head(wsres, n=10L)
 ```
-
-The 2-Wasserstein single-cell testing procedure is performed on all genes in
-the data set -- one line of the output describes the result of testing one
-gene.
-
-Note: The two-stage (TS) procedure includes a test for differential proportions
-of zero gene expression, considering the proportion of zeroes over all
-conditions and genes in a model.
-It may yield incorrect results, if it is applied on only a subset of genes is
-given.
-
 
 : Output of the 2-Wasserstein distance-based test for scRNAseq data 
 
@@ -130,7 +119,7 @@ given.
 | p.adj.zero    | adjusted p-value of the test for differential proportions of zero expression (logistic regression model) according to the method of Benjamini-Hochberg \*\* |
 |  p.adj.combined | adjusted combined p-value of p.nonzero and p.zero obtained by Fisher’s method according to the method of Benjamini-Hochberg \*\* |
 
-*\* only if GDP fitting is performed (NA otherwise);* 
+*\* only if GPD fitting is performed (otherwise NA);* 
 *\*\* only if the two-stage test is run*
 
 For further details of the testing procedure for scRNAseq data, see `?wasserstein.sc`.
