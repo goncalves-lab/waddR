@@ -33,7 +33,7 @@ As an example on how to analyze scRNAseq gene expression data for two different
 conditions, we look at decidua and blood samples from a data set by Vento-Tormo et al. (2018) 
 (https://doi.org/10.1038/s41586-018-0698-6).
 For our purpose here, we use one a pre-processed and normalized replicate for the two conditions, which is available for download on
-[github](https://github.com/goncalves-lab/waddR-data/).
+[GitHub](https://github.com/goncalves-lab/waddR-data/).
 
 First, we load all required packages:
 
@@ -49,8 +49,8 @@ Then, we download the example data set:
 
 ```{r}
 url.base <- "https://github.com/goncalves-lab/waddR-data/blob/master/data/"
-sce.blood.url <- paste0(url.base, "sce_blood.RDa?raw=true")
-sce.decidua.url <- paste0(url.base, "sce_decidua.RDa?raw=true")
+sce.blood.url <- paste0(url.base, "data_blood.rda?raw=true")
+sce.decidua.url <- paste0(url.base, "data_decidua.rda?raw=true")
 
 getCachedPath <- function(url, rname){
     bfc <- BiocFileCache() # fire up cache
@@ -62,19 +62,19 @@ getCachedPath <- function(url, rname){
     cachedFilePath
 }
 
-load(getCachedPath(sce.blood.url, "sce.blood"))
-load(getCachedPath(sce.decidua.url, "sce.decidua"))
+load(getCachedPath(sce.blood.url, "data_blood"))
+load(getCachedPath(sce.decidua.url, "data_decidua"))
 ```
 
-Having downloaded the two `SingleCellExperiment` objects `sce.blood` and
-`sce.decidua`, we randomly select a subset of genes which we proceed with, as a
+Having downloaded the two `SingleCellExperiment` objects `data_blood` and
+`data_decidua`, we randomly select a subset of genes which we proceed with, as a
 whole analysis would be out of the scope of this vignette.
 
 ```{r}
 set.seed(28)
-randgenes <- sample(rownames(sce.blood), 2500, replace=FALSE)
-sce.blood <- sce.blood[randgenes, ]
-sce.decidua <- sce.decidua[randgenes, ]
+randgenes <- sample(rownames(data_blood), 2500, replace=FALSE)
+sce.blood <- data_blood[randgenes, ]
+sce.decidua <- data_decidua[randgenes, ]
 ```
 
 The input data to the main function `wasserstein.sc` can be supplied either as an overall data matrix and a vector specifying the condition
@@ -86,29 +86,29 @@ We here proceed using the two loaded `SingleCellExperiment` objects. Note that t
 assays(sce.blood)
 assays(sce.decidua)
 ```
-The test is then performed using the `wasserstein.sc` function. To obtain reproducible results, a seed is set before calling `wasserstein.sc`. For convenience with repect to computation time, we employ `permnum=1000` permutations in our example here, while typically the use of more than 1000 permutations is recommended. We specifically consider a two-stage (TS) procedure here (`method="TS"`),w hich includes a test for differential proportions of zero gene expression (DPZ) and a test for differential distributions for non-zero gene expression. The TS procedure is applied to all genes in the data set, with one row of the output corresponding to the test result of one specific gene. Note that the DPZ test in the TS procedure takes account of the cellular detection rate and thus depends on the number of considered genes. Hence, the DPZ test results for our exemplary subset of genes differ from that when the test is applied to the whole set of genes.  
+The test is then performed using the `wasserstein.sc` function. To obtain reproducible results, a seed is set before calling `wasserstein.sc`. For convenience with repect to computation time, we employ `permnum=1000` permutations in our example here, while typically the use of more than 1000 permutations is recommended. We specifically consider a two-stage (TS) procedure here (`method="TS"`), which includes a test for differential proportions of zero gene expression (DPZ) and a test for differential distributions for non-zero gene expression. The TS procedure is applied to all genes in the data set, with one row of the output corresponding to the test result of one specific gene. Note that the DPZ test in the TS procedure takes account of the cellular detection rate and thus depends on the number of considered genes. Hence, the DPZ test results for our exemplary subset of genes differ from that when the test is applied to the whole set of genes.  
 
 ```{r}
 set.seed(24)
-wsres <- wasserstein.sc(sce.blood, sce.decidua, method="TS",permnum=1000)
-head(wsres, n=10L)
+res <- wasserstein.sc(sce.blood, sce.decidua, method="TS",permnum=1000)
+head(res, n=10L)
 ```
 
 : Output of the 2-Wasserstein distance-based test for scRNAseq data 
 
-| Output Column | Description                                                 |
+| Output column | Description                                                 |
 |:--------------|:------------------------------------------------------------|
 | d.wass        | 2-Wasserstein distance between the two samples              |
 | d.wass^2      | squared 2-Wasserstein distance between the two samples      |
-| d.comp^2      | squared 2-Wasserstein distance (decomposition approx.)      |
-| d.comp        | 2-Wasserstein distance (decomposition approx.)              |
-| location      | location term in the squared 2-Wasserstein decomposition    |
-| size          | size term in the squared 2-Wasserstein decomposition        |
-| shape         | shape term in the squared 2-Wasserstein decomposition       |
+| d.comp^2      | squared 2-Wasserstein distance: decomposition approximation |
+| d.comp        | 2-Wasserstein distance: decomposition approximation         |
+| location      | location term in the decomposition of the squared 2-Wasserstein distance     |
+| size          | size term in the decomposition of the squared 2-Wasserstein distance        |
+| shape         | shape term in the decomposition of the squared 2-Wasserstein distance       |
 | rho           | correlation coefficient in the quantile-quantile plot       |
 | pval          | p-value of the semi-parametric test                         |
 | p.ad.gpd      | p-value of the Anderson-Darling test to check whether the GPD actually fits the data well \* |
-| N.exc         | number of exceedances (starting with 250 and iteratively decreased by 10 if necessary) that are required to obtain a good GPD fit (i.e. p-value of Anderson-Darling test  greater or eqaul to 0.05) \* |
+| N.exc         | number of exceedances (starting with 250 and iteratively decreased by 10 if necessary) that are required to obtain a good GPD fit (i.e. p-value of Anderson-Darling test greater than or equal to 0.05) \* |
 | perc.loc      | fraction (in %) of the location part with respect to the overall squared 2-Wasserstein distance obtained by the decomposition approximation |
 | perc.size     | fraction (in %) of the size part with respect to the overall squared 2-Wasserstein distance obtained by the decomposition approximation |
 | perc.shape    | fraction (in %) of the shape part with respect to the overall squared 2-Wasserstein distance obtained by the decomposition approximation |
