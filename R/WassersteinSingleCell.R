@@ -204,7 +204,7 @@ setMethod("testZeroes",
         RES <- cbind(wass.res,pval.zero,pval.combined,wass.pval.adj,
                     pval.adj.zero,pval.adj.combined)
         row.names(RES) <- rownames(dat)
-        colnames(RES) <- c( colnames(wass.res), "p.zero", "p.combined",
+        colnames(RES) <- c( colnames(wass.res)[1:8],"p.nonzero",colnames(wass.res)[10:15], "p.zero", "p.combined",
                             "p.adj.nonzero","p.adj.zero","p.adj.combined")
         return(RES)
     
