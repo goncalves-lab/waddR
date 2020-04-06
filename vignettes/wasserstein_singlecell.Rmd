@@ -67,12 +67,12 @@ load(getCachedPath(sce.decidua.url, "data_decidua"))
 ```
 
 Having downloaded the two `SingleCellExperiment` objects `data_blood` and
-`data_decidua`, we randomly select a subset of genes which we proceed with, as a
+`data_decidua`, we randomly select a subset of 1000 genes which we proceed with, as a
 whole analysis would be out of the scope of this vignette.
 
 ```{r}
 set.seed(28)
-randgenes <- sample(rownames(data_blood), 2500, replace=FALSE)
+randgenes <- sample(rownames(data_blood), 1000, replace=FALSE)
 sce.blood <- data_blood[randgenes, ]
 sce.decidua <- data_decidua[randgenes, ]
 ```
@@ -86,41 +86,39 @@ We here proceed using the two loaded `SingleCellExperiment` objects. Note that t
 assays(sce.blood)
 assays(sce.decidua)
 ```
-The test is then performed using the `wasserstein.sc` function. To obtain reproducible results, a seed is set before calling `wasserstein.sc`. For convenience with repect to computation time, we employ `permnum=1000` permutations in our example here, while typically the use of more than 1000 permutations is recommended. We specifically consider a two-stage (TS) procedure here (`method="TS"`), which includes a test for differential proportions of zero gene expression (DPZ) and a test for differential distributions for non-zero gene expression. The TS procedure is applied to all genes in the data set, with one row of the output corresponding to the test result of one specific gene. Note that the DPZ test in the TS procedure takes account of the cellular detection rate and thus depends on the number of considered genes. Hence, the DPZ test results for our exemplary subset of genes differ from that when the test is applied to the whole set of genes.  
+The test is then performed using the `wasserstein.sc` function. To obtain reproducible results, a `seed` is set when calling `wasserstein.sc`. For convenience with repect to computation time, we employ `permnum=1000` permutations in our example here, while typically the use of more than 1000 permutations is recommended. We specifically consider a two-stage (TS) procedure here (`method="TS"`), which includes a test for differential proportions of zero gene expression (DPZ) and a test for differential distributions for non-zero gene expression. The TS procedure is applied to all genes in the data set, with one row of the output corresponding to the test result of one specific gene. Note that the DPZ test in the TS procedure takes account of the cellular detection rate and thus depends on the number of considered genes. Hence, the DPZ test results for our exemplary subset of genes differ from that when the test is applied to the whole set of genes.  
 
 ```{r}
-set.seed(24)
-res <- wasserstein.sc(sce.blood, sce.decidua, method="TS",permnum=1000)
+res <- wasserstein.sc(sce.blood, sce.decidua, method="TS",permnum=1000,seed=24)
 head(res, n=10L)
 ```
 
-: Output of the 2-Wasserstein distance-based test for scRNAseq data 
+: Output of the 2-Wasserstein distance-based two-stage test for scRNAseq data 
 
 | Output column | Description                                                 |
 |:--------------|:------------------------------------------------------------|
-| d.wass        | 2-Wasserstein distance between the two samples              |
-| d.wass^2      | squared 2-Wasserstein distance between the two samples      |
+| d.wass        | 2-Wasserstein distance between the two samples: quantile approximation              |
+| d.wass^2      | squared 2-Wasserstein distance between the two samples: quantile approximation      |
 | d.comp^2      | squared 2-Wasserstein distance: decomposition approximation |
 | d.comp        | 2-Wasserstein distance: decomposition approximation         |
 | location      | location term in the decomposition of the squared 2-Wasserstein distance     |
 | size          | size term in the decomposition of the squared 2-Wasserstein distance        |
 | shape         | shape term in the decomposition of the squared 2-Wasserstein distance       |
 | rho           | correlation coefficient in the quantile-quantile plot       |
-| pval          | p-value of the semi-parametric test                         |
+| p.nonzero          | p-value of the semi-parametric 2-Wasserstein distance-based test                         |
 | p.ad.gpd      | p-value of the Anderson-Darling test to check whether the GPD actually fits the data well \* |
 | N.exc         | number of exceedances (starting with 250 and iteratively decreased by 10 if necessary) that are required to obtain a good GPD fit (i.e. p-value of Anderson-Darling test greater than or equal to 0.05) \* |
 | perc.loc      | fraction (in %) of the location part with respect to the overall squared 2-Wasserstein distance obtained by the decomposition approximation |
 | perc.size     | fraction (in %) of the size part with respect to the overall squared 2-Wasserstein distance obtained by the decomposition approximation |
 | perc.shape    | fraction (in %) of the shape part with respect to the overall squared 2-Wasserstein distance obtained by the decomposition approximation |
 | decomp.error | relative error between the squared 2-Wasserstein distance computed by the quantile approximation and the squared 2-Wasserstein distance computed by the decomposition approximation |
-| p.zero        | p-value of the test for differential proportions of zero expression (logistic regression model) \*\* |
-| p.combined    | combined p-value of p.nonzero and p.zero obtained by Fisher’s method \*\* |
+| p.zero        | p-value of the test for differential proportions of zero expression (logistic regression model) |
+| p.combined    | combined p-value of p.nonzero and p.zero obtained by Fisher’s method |
 | pval.adj      | adjusted p-value of the semi-parametric 2-Wasserstein distance-based test according to the method of Benjamini-Hochberg |
-| p.adj.zero    | adjusted p-value of the test for differential proportions of zero expression (logistic regression model) according to the method of Benjamini-Hochberg \*\* |
-|  p.adj.combined | adjusted combined p-value of p.nonzero and p.zero obtained by Fisher’s method according to the method of Benjamini-Hochberg \*\* |
+| p.adj.zero    | adjusted p-value of the test for differential proportions of zero expression (logistic regression model) according to the method of Benjamini-Hochberg |
+|  p.adj.combined | adjusted combined p-value of p.nonzero and p.zero obtained by Fisher’s method according to the method of Benjamini-Hochberg |
 
-*\* only if GPD fitting is performed (otherwise NA);* 
-*\*\* only if the two-stage test is run*
+*\* only if GPD fitting is performed (otherwise NA)* 
 
 For further details of the testing procedure for scRNAseq data, see `?wasserstein.sc`.
 
