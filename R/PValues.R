@@ -12,7 +12,6 @@
 #'
 .fishersCombinedPval <- function(x) {
     if(sum(is.na(x)) == 0) {
-        ifelse(x==0,1e-100,x)
         p.comb <- pchisq(-2 * sum(log(x)), df=2*length(x), lower.tail=FALSE)
     } else if (sum(is.na(x)) == 1){
         p.comb <- x[!is.na(x)]
