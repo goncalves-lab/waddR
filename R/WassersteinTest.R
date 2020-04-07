@@ -110,22 +110,22 @@
         pvalue.ecdf <- num.extr/bsn
         pvalue.ecdf.pseudo <- (1 + num.extr) / (bsn + 1)
 
-        # gdp fitting needed
+        # gpd fitting needed
         pvalue.wass <- pvalue.ecdf
-        pvalue.gdpfit <- NA
+        pvalue.gpdfit <- NA
         N.exc <- NA
         env <- environment()
         if (num.extr < 10) {
-            #TODO: Use .gdpFittedPValue again, once the issues with eva are fixed
+            #TODO: Use .gpdFittedPValue again, once the issues with eva are fixed
             #tryCatch({
-            #        res <- .gdpFittedPValue(value.sq,
+            #        res <- .gpdFittedPValue(value.sq,
             #                                wass.values.ordered)
             #        assign("pvalue.wass", unname(res["pvalue.gpd"]), env)
-            #        assign("pvalue.gdpfit", unname(res["ad.pva"]), env)
+            #        assign("pvalue.gpdfit", unname(res["ad.pva"]), env)
             #        assign("N.exc", unname(res["N.exc"]), env)
             #    }, error=function(...) {
             #        assign("pvalue.wass", pvalue.ecdf.pseudo, env)
-            #        assign("pvalue.gdpfit", NA, env)
+            #        assign("pvalue.gpdfit", NA, env)
             #        assign("N.exc", NA, env)
             #    })
             
@@ -154,14 +154,14 @@
         output <- c("d.wass"=value, "d.wass^2"=value.sq, "d.comp^2"=d.comp.sq,
                     "d.comp"=d.comp, "location"=location, "size"=size,
                     "shape"=shape, "rho"=rho.xy, "pval"=pvalue.wass,
-                    "p.ad.gdp"=pvalue.gdpfit, "N.exc"=N.exc,
+                    "p.ad.gpd"=pvalue.gpdfit, "N.exc"=N.exc,
                     "perc.loc"=perc.loc, "perc.size"=perc.size,
                     "perc.shape"=perc.shape, "decomp.error"=decomp.error)
 
     } else { output <- c("d.wass"=NA, "d.wass^2"=NA, "d.comp^2"=NA,
                          "d.comp"=NA, "location"=NA, "size"=NA,
                          "shape"=NA, "rho"=NA, "pval"=NA,
-                         "p.ad.gdp"=NA, "N.exc"=NA,
+                         "p.ad.gpd"=NA, "N.exc"=NA,
                          "perc.loc"=NA, "perc.size"=NA,
                          "perc.shape"=NA, "decomp.error"=NA) }
 
