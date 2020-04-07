@@ -43,7 +43,7 @@
 }
 
 
-#TODO: Use .gdpFittedPValue again, once the issues with eva are fixed
+#TODO: Use .gpdFittedPValue again, once the issues with eva are fixed
 #' Compute p-value based on generalized Pareto distribution fitting
 #'
 #' Computes a p-value based on a generalized Pareto distribution (GPD) fitting. This procedure may be used in the semi-parametric, 2-Wasserstein distance-based test to estimate small p-values accurately, instead of obtaining the p-value from a permutation test.
@@ -64,7 +64,7 @@
 #'
 #'@references Schefzik, R., Flesch, J., and Goncalves, A. (2020). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
 NULL
-#.gdpFittedPValue <- function(val, distr.ordered) {
+#.gpdFittedPValue <- function(val, distr.ordered) {
 #    
 #    # list of possible exceedance thresholds (decreasing)
 #    poss.exc.num <- seq(from=250, to=10, by=-10)
