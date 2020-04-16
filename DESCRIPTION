@@ -15,6 +15,7 @@ Additional_repositories: https://www.bioconductor.org/
 Imports: 
 	Rcpp (>= 1.0.1),
 	arm (>= 1.10-1),
+	eva,
 	BiocFileCache,
 	BiocParallel,
 	SingleCellExperiment,
@@ -23,6 +24,7 @@ Imports:
 	stats
 Depends:
 	R (>= 3.6.0)
+Remotes: url::https://cran.r-project.org/src/contrib/Archive/eva/eva_0.2.5.tar.gz	
 Suggests:
     knitr,
     devtools,
