@@ -70,12 +70,11 @@
 #' test
 #' \item p.ad.gpd: in case the GPD fitting is performed: p-value of the
 #' Anderson-Darling test to check whether the GPD actually fits the data well
-#' (otherwise NA). NOTE: GPD fitting is currently not supported!
+#' (otherwise NA). 
 #' \item N.exc: in case the GPD fitting is performed: number of exceedances
 #' (starting with 250 and iteratively decreased by 10 if necessary) that are
 #' required to obtain a good GPD fit, i.e. p-value of Anderson-Darling test
-#' \eqn{\geq 0.05} (otherwise NA). NOTE: GPD fitting is currently 
-#' not supported!
+#' \eqn{\geq 0.05} (otherwise NA). 
 #' \item perc.loc: fraction (in \%) of the location part with respect to the
 #' overall squared 2-Wasserstein distance obtained by the decomposition
 #' approximation
