@@ -43,7 +43,6 @@
 }
 
 
-#TODO: Use .gpdFittedPValue again, once the issues with eva are fixed
 #' Compute p-value based on generalized Pareto distribution fitting
 #'
 #' Computes a p-value based on a generalized Pareto distribution (GPD) fitting. This procedure may be used in the semi-parametric, 2-Wasserstein distance-based test to estimate small p-values accurately, instead of obtaining the p-value from a permutation test.
@@ -63,54 +62,54 @@
 #' }
 #'
 #'@references Schefzik, R., Flesch, J., and Goncalves, A. (2020). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
-NULL
-#.gpdFittedPValue <- function(val, distr.ordered) {
-#    
-#    # list of possible exceedance thresholds (decreasing)
-#    poss.exc.num <- seq(from=250, to=10, by=-10)
-#    
-#    bsn <- length(distr.ordered)
-#    r <- 1
-#    repeat {
-#        
-#        # set threshold for exceedance according to paper
-#        N.exc <- poss.exc.num[r]
-#        
-#        # compute set of N.exc exceedances
-#        exceedances <- distr.ordered[seq_len(N.exc)]
-#        
-#        # check whether the N.exc largest permutation values follow 
-#        # a GPD using an Anderson-Darling test
-#        gpd.ad.check <- gpdAd(exceedances)
-#        ad.pval <- gpd.ad.check$p.value
-#        
-#        r <- r + 1
-#        if (ad.pval > 0.05) {break}
-#    }
-#    
-#    # calculate exceedance threshold for so-obtained N.exc
-#    t.exc <- (distr.ordered[N.exc] 
-#              + distr.ordered[N.exc+1]) / 2
-#    
-#    # fit GPD distribution to the exceedances using maximum 
-#    # likelihood estimation
-#    gpd.fit <- gpdFit(  data=distr.ordered,
-#                        threshold=t.exc,
-#                        method="mle")
-#    
-#    # extract fitted parameters
-#    fit.scale <- as.numeric(gpd.fit$par.ests[1])
-#    fit.shape <- as.numeric(gpd.fit$par.ests[2])
-#    
-#    # compute GPD p-value (see paper)
-#    pvalue.gpd <- (N.exc / bsn) * (1 - pgpd(q=val-t.exc,
-#                                            loc=0,
-#                                            scale=fit.scale,
-#                                            shape=fit.shape))
-#    
-#    pvalue.gpd <- as.numeric(pvalue.gpd)
-#    pvalue.wass <- c("pvalue.gpd"=pvalue.gpd,
-#                     "ad.pval"=ad.pval,
-#                     "N.exc"=N.exc)
-#    return(pvalue.wass)
-#}
+#'
+.gpdFittedPValue <- function(val, distr.ordered) {
+    
+    # list of possible exceedance thresholds (decreasing)
+    poss.exc.num <- seq(from=250, to=10, by=-10)
+    
+    bsn <- length(distr.ordered)
+    r <- 1
+    repeat {
+        
+        # set threshold for exceedance according to paper
+        N.exc <- poss.exc.num[r]
+        
+        # compute set of N.exc exceedances
+        exceedances <- distr.ordered[seq_len(N.exc)]
+        
+        # check whether the N.exc largest permutation values follow 
+        # a GPD using an Anderson-Darling test
+        gpd.ad.check <- gpdAd(exceedances)
+        ad.pval <- gpd.ad.check$p.value
+        
+        r <- r + 1
+        if (ad.pval > 0.05) {break}
+    }
+    
+    # calculate exceedance threshold for so-obtained N.exc
+    t.exc <- (distr.ordered[N.exc] 
+              + distr.ordered[N.exc+1]) / 2
+    
+    # fit GPD distribution to the exceedances using maximum 
+    # likelihood estimation
+    gpd.fit <- gpdFit(  data=distr.ordered,
+                        threshold=t.exc,
+                        method="mle")
+    
+    # extract fitted parameters
+    fit.scale <- as.numeric(gpd.fit$par.ests[1])
+    fit.shape <- as.numeric(gpd.fit$par.ests[2])
+    
+    # compute GPD p-value (see paper)
+    pvalue.gpd <- (N.exc / bsn) * (1 - pgpd(q=val-t.exc,
+                                            loc=0,
+                                            scale=fit.scale,
+                                            shape=fit.shape))
+   
+    pvalue.gpd <- as.numeric(pvalue.gpd)
+    pvalue.wass <- c("pvalue.gpd"=pvalue.gpd,
+                     "ad.pval"=ad.pval,
+                     "N.exc"=N.exc)
+    return(pvalue.wass)
+}
