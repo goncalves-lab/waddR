@@ -116,21 +116,19 @@
         N.exc <- NA
         env <- environment()
         if (num.extr < 10) {
-            #TODO: Use .gpdFittedPValue again, once the issues with eva are fixed
-            #tryCatch({
-            #        res <- .gpdFittedPValue(value.sq,
-            #                                wass.values.ordered)
-            #        assign("pvalue.wass", unname(res["pvalue.gpd"]), env)
-            #        assign("pvalue.gpdfit", unname(res["ad.pva"]), env)
-            #        assign("N.exc", unname(res["N.exc"]), env)
-            #    }, error=function(...) {
-            #        assign("pvalue.wass", pvalue.ecdf.pseudo, env)
-            #        assign("pvalue.gpdfit", NA, env)
-            #        assign("N.exc", NA, env)
-            #    })
-            
+            tryCatch({
+                    res <- .gpdFittedPValue(value.sq,
+                                            wass.values.ordered)
+                    assign("pvalue.wass", unname(res["pvalue.gpd"]), env)
+                    assign("pvalue.gpdfit", unname(res["ad.pval"]), env)
+                    assign("N.exc", unname(res["N.exc"]), env)
+                }, error=function(...) {
+                    assign("pvalue.wass", pvalue.ecdf.pseudo, env)
+                    assign("pvalue.gpdfit", NA, env)
+                    assign("N.exc", NA, env)
+                })       
             # For now, just use pseudo pvalues
-            assign("pvalue.wass", pvalue.ecdf.pseudo, env)
+            #assign("pvalue.wass", pvalue.ecdf.pseudo, env)
         }
 
         # correlation of quantile-quantile plot
