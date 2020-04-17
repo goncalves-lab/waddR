@@ -45,13 +45,13 @@
 
 #' Compute p-value based on generalized Pareto distribution fitting
 #'
-#' Computes a p-value based on a generalized Pareto distribution (GPD) fitting. This procedure may be used in the semi-parametric, 2-Wasserstein distance-based test to estimate small p-values accurately, instead of obtaining the p-value from a permutation test.
+#' Computes a p-value based on a generalized Pareto distribution (GPD) fitting. This procedure may be used in the semi-parametric 2-Wasserstein distance-based test to estimate small p-values accurately, instead of obtaining the p-value from a permutation test.
 #' 
 #' @param val value of a specific test statistic, based on original group labels
-#' @param distr.ordered vector of values of the test statistic obtained by repeatedly permuting the original group labels
+#' @param distr.ordered vector of values, in decreasing order, of the test statistic obtained by repeatedly permuting the original group labels
 #'@return A vector of three, see Schefzik et al. (2020) for details:
 #' \itemize{
-#' \item pvalue.gpd: p-value corresponding to the GPD fitting
+#' \item pvalue.gpd: p-value obtained when using the GPD fitting
 #' test
 #' \item ad.pval: p-value of the
 #' Anderson-Darling test to check whether the GPD actually fits the data well
