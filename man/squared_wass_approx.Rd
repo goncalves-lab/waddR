@@ -2,38 +2,38 @@
 % Please edit documentation in R/RcppExports.R
 \name{squared_wass_approx}
 \alias{squared_wass_approx}
-\title{squared_wass_approx}
+\title{Compute approximated squared 2-Wasserstein distance}
 \usage{
 squared_wass_approx(x, y)
 }
 \arguments{
-\item{x}{Vector representing an empirical distribution under condition A}
+\item{x}{sample (vector) representing the distribution of condition \eqn{A}}
 
-\item{y}{Vector representing an empirical distribution under condition B}
+\item{y}{sample (vector) representing the distribution of condition \eqn{B}}
 }
 \value{
-The approximated squared wasserstein distance between x and y
+The approximated squared 2-Wasserstein distance between \eqn{x} and \eqn{y}
 }
 \description{
-Approximation of the squared wasserstein distance.
-Calculation based on the mean squared difference between the equidistant
-empirical quantiles of the two input vectors a and b.
-As an approximation of the quantile function, 1000 quantiles are computed
-for each vector.
+Calculates an approximated squared 2-Wasserstein distance based on the mean squared difference between 1000 equidistant
+quantiles corresponding to the empirical distributions of two input vectors \eqn{x} and \eqn{y}
 }
 \examples{
-# input: one dimensional data in two conditions
-x <- rnorm(100, 42, 2)
-y <- c(rnorm(61, 20, 1), rnorm(41, 40,2))
-# output: The squared Wasserstein distance approximated as described in
-# Schefzik and Goncalves 2019
-d.wass.approx <- squared_wass_approx(x,y)
+set.seed(24)
+x<-rnorm(100)
+y1<-rnorm(150)
+y2<-rexp(150,3)
+y3<-rpois(150,2)
+
+squared_wass_approx(x,y1)
+squared_wass_approx(x,y2)
+squared_wass_approx(x,y3)
 
 }
 \references{
-Schefzik and Goncalves 2019
+Schefzik, R., Flesch, J., and Goncalves, A. (2020). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
 }
 \seealso{
-[wasserstein_metric()], [squared_wass_decomp()] for
-different implementations of the wasserstein distance
+See the functions \code{wasserstein_metric} and \code{squared_wass_decomp} for
+alternative implementations of the 2-Wasserstein distance
 }

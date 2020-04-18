@@ -2,23 +2,21 @@
 % Please edit documentation in R/Utils.R
 \name{.relativeError}
 \alias{.relativeError}
-\title{.relativeError}
+\title{Compute relative error}
 \usage{
 .relativeError(x, y)
 }
 \arguments{
-\item{x}{numerical (in the sense of is.numeric)}
+\item{x}{a number}
 
-\item{y}{numerical (in the sense of is.numeric)}
+\item{y}{a number}
 }
 \value{
-The relative error between x and y
+The relative error between \eqn{x} and \eqn{y}
 }
 \description{
-Computes the relative error between two numericals (in the sense of
-is.numeric) x and y.
-If x and y are vectors, it is assumed that length(x) == length(y).
+Computes the relative error between two numbers \eqn{x} and \eqn{y}.
 }
 \details{
-The relative error e is defined as: e = | 1 -  x/y |
+The relative error \eqn{e} is defined as \eqn{e = | 1 -  x/y |}
 }

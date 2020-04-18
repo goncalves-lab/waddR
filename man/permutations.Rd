@@ -2,28 +2,24 @@
 % Please edit documentation in R/RcppExports.R
 \name{permutations}
 \alias{permutations}
-\title{permutations}
+\title{Return permutations of a given vector as columns in a matrix}
 \usage{
 permutations(x, num_permutations)
 }
 \arguments{
-\item{x}{NumericVector representing a vector that is to be permutated}
+\item{x}{vector that is to be permutated}
 
-\item{num_permutations}{Integer representing the number of permutations
-that are to be performed.}
+\item{num_permutations}{number of permutations to be performed}
 }
 \value{
-a matrix containing in every column one permutations of the
-input vector
+a matrix, where each of the \code{num_permutations} columns represents one permutation of the input vector
 }
 \description{
-Returns permutations of a given NumericVector as columns in a NumericMatrix
-object.
+Returns permutations of a given vector as columns in a matrix
 }
 \examples{
-x <- seq(1:10)
-m <- permutations(x, 5)
-dim(m)
-#[1] 10  5
+x <- 1:10
+set.seed(24)
+permutations(x, 5)
 
 }

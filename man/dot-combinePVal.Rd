@@ -2,25 +2,25 @@
 % Please edit documentation in R/PValues.R
 \name{.combinePVal}
 \alias{.combinePVal}
-\title{.combinePVal}
+\title{Compute combined p-value using Fisher's method for several pairs of p-values}
 \usage{
 .combinePVal(r, s)
 }
 \arguments{
-\item{r}{vector of length N of the p-values corresponding to the first test}
+\item{r}{vector of length \eqn{N} of the p-values corresponding to the first test}
 
-\item{s}{vector of length N of the p-values corresponding to the second test}
+\item{s}{vector of length \eqn{N} of the p-values corresponding to the second test}
 }
 \value{
-A vector of length N of the combined p-values
+A vector of length \eqn{N} of the combined p-values
 }
 \description{
-For a given set of N pairs of p-values, aggregates each respective pair of 
+For a given set of \eqn{N} pairs of p-values, aggregates each respective pair of 
 p-values into a combined p-value according to Fisher’s method
 }
 \details{
-For a given set of pairs of p-values, aggregates each respective 
+For a given set of \eqn{N} pairs of p-values, aggregates each respective 
 pair of p-values into a combined p-value according to Fisher’s method.
-Applies the .fishersCombinedPval function to a whole set of N pairs of
+Applies the function \code{.fishersCombinedPval} to a whole set of \eqn{N} pairs of
 p-values.
 }

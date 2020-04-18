@@ -5,7 +5,7 @@
 \alias{testZeroes}
 \alias{testZeroes,matrix,vector,ANY-method}
 \alias{testZeroes,SingleCellExperiment,SingleCellExperiment,vector-method}
-\title{testZeroes: Test for differential proportions of zero values}
+\title{Test for differential proportions of zero gene expression}
 \usage{
 testZeroes(x, y, these = seq_len(nrow(x)))
 
@@ -15,37 +15,61 @@ testZeroes(x, y, these = seq_len(nrow(x)))
 }
 \arguments{
 \item{x}{matrix of single-cell RNA-sequencing expression data with genes in
-rows and samples (cells) in columns}
+rows and cells (samples) in columns [alternatively, a \code{SingleCellExperiment} object for condition \eqn{A}, where the matrix of the single-cell RNA sequencing expression data has to be supplied via the \code{counts} argument in \code{SingleCellExperiment}]}
 
-\item{y}{vector of condition labels}
+\item{y}{vector of condition labels [alternatively, a \code{SingleCellExperiment} object for condition \eqn{B}, where the matrix of the single-cell RNA sequencing expression data has to be supplied via the \code{counts} argument in \code{SingleCellExperiment}]}
 
 \item{these}{vector of row numbers (i.e. gene numbers) employed to test for
-differential proportions of zero expression. Default is seq_len(nrow(dat))}
+differential proportions of zero expression; default is seq_len(nrow(dat))}
 }
 \value{
 A vector of (unadjusted) p-values
 }
 \description{
 Test for differential proportions of zero expression between two conditions
-for a specified set of genes
+for a specified set of genes; adapted from the R/Bioconductor package \code{scDD} by Korthauer et al. (2016)
 }
 \details{
-Test for differential proportions of zero expression between two
-conditions that is not explained by the detection rate using a (Bayesian)
-logistic regression model. Adapted from the scDD package (Korthauer et al.
-2016).
+Test for differential proportions of zero gene expression between two
+conditions using a logistic regression model accounting for the cellular detection rate. Adapted from the R/Bioconductor package \code{scDD} by Korthauer et al. (2016).
+
+In the test, the null hypothesis that there are no differential proportions of zero gene expression (DPZ) is tested against the alternative that there are DPZ.
 }
 \examples{
-x1 <- c(rnorm(100,42,1), rnorm(102,45,3))
-x2 <- c(rnorm(100,0,1), rnorm(102,0,2))
-dat <- matrix(c(x1,x2), nrow=2, byrow=TRUE)
-condition <- c(rep(1,100), rep(2,102))
-# test over all rows
+#simulate scRNA-seq data
+set.seed(24)
+nb.sim1<-rnbinom(n=(750*250),1,0.7)
+dat1<-matrix(data=nb.sim1,nrow=750,ncol=250)
+nb.sim2a<-rnbinom(n=(250*100),1,0.7)
+dat2a<-matrix(data=nb.sim2a,nrow=250,ncol=100)
+nb.sim2b<-rnbinom(n=(250*150),5,0.2)
+dat2b<-matrix(data=nb.sim2b,nrow=250,ncol=150)
+dat2<-cbind(dat2a,dat2b)
+dat<-rbind(dat1,dat2)*0.25
+#randomly shuffle the rows of the matrix to create the input matrix
+set.seed(32)
+dat<-dat[sample(nrow(dat)),]
+condition<-c(rep("A",100),rep("B",150))
+
+#call testZeroes with a matrix and a vector including conditions
+#test for differential proportions of zero expression over all rows (genes)
 testZeroes(dat, condition)
-# only consider the second row
-testZeroes(dat, condition, these=c(2))
+#test for differential proportions of zero expression only for the second row (gene)
+testZeroes(dat, condition, these=2)
+
+#alternatively, call testZeroes with two SingleCellExperiment objects
+#note that the possibly pre-processed and normalized expression matrices need to be
+#included using the "counts" argument
+sce.A <- SingleCellExperiment::SingleCellExperiment(
+  assays=list(counts=dat[,1:100]))
+sce.B <- SingleCellExperiment::SingleCellExperiment(
+  assays=list(counts=dat[,101:250]))
+#test for differential proportions of zero expression over all rows (genes)
+testZeroes(sce.A,sce.B,these=seq_len(nrow(sce.A)))
+#test for differential proportions of zero expression only for the second row (gene)
+testZeroes(sce.A,sce.B,these=2)
 
 }
 \references{
-Korthauer et al. (2016).
+Korthauer, K. D.,  Chu, L.-F.,  Newton, M. A.,  Li, Y.,  Thomson, J.,  Stewart, R., and Kendziorski, C. (2016). A statistical approach for identifying differential distributions in single-cell RNA-seq experiments. Genome Biology, 17:222.
 }

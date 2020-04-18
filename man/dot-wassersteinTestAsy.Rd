@@ -2,24 +2,23 @@
 % Please edit documentation in R/WassersteinTest.R
 \name{.wassersteinTestAsy}
 \alias{.wassersteinTestAsy}
-\title{.wassersteinTestAsy}
+\title{Asymptotic theory-based test using the 2-Wasserstein distance to check for differential distributions}
 \usage{
 .wassersteinTestAsy(x, y)
 }
 \arguments{
-\item{x}{univariate sample (vector) representing the distribution of
-condition A}
+\item{x}{sample (vector) representing the distribution of
+condition \eqn{A}}
 
-\item{y}{univariate sample (vector) representing the distribution of
-condition B}
+\item{y}{sample (vector) representing the distribution of
+condition \eqn{B}}
 }
 \value{
-A vector concerning the testing results, precisely (see Schefzik and
-Goncalves (2019) for details)
+A vector of 13, see Schefzik et al. (2020) for details:
 \itemize{
 \item d.wass: 2-Wasserstein distance between the two samples computed
 by quantile approximation
-\item d.wass^2 squared 2-Wasserstein distance between the two samples
+\item d.wass^2: squared 2-Wasserstein distance between the two samples
 computed by quantile approximation
 \item d.comp^2: squared 2-Wasserstein distance between the two samples
 computed by decomposition approximation
@@ -34,32 +33,34 @@ distance between the two samples
 \item rho: correlation coefficient in the quantile-quantile plot
 \item pval: p-value of the 2-Wasserstein distance-based test using
 asymptotic theory
-\item perc.loc: fraction (in %) of the location part with respect to the
+\item perc.loc: fraction (in \%) of the location part with respect to the
 overall squared 2-Wasserstein distance obtained by the decomposition
 approximation
-\item perc.size: fraction (in %) of the size part with respect to the
+\item perc.size: fraction (in \%) of the size part with respect to the
 overall squared 2-Wasserstein distance obtained by the decomposition
 approximation
-\item perc.shape: fraction (in %) of the shape part with respect to the
+\item perc.shape: fraction (in \%) of the shape part with respect to the
 overall squared 2-Wasserstein distance obtained by the decomposition
 approximation
 \item decomp.error: relative error between the squared 2-Wasserstein
-distance computed by the quantile approximation and the squared
-2-Wasserstein distance computed by the decomposition approximation
+distance obtained by the quantile approximation and the squared
+2-Wasserstein distance obtained by the decomposition approximation
 }
 }
 \description{
 Two-sample test to check for differences between two distributions
-(conditions) using the 2-Wasserstein distance: Implementation using a test
+using the 2-Wasserstein distance: Implementation using a test
 based on asymptotic theory
 }
 \details{
-This is the asymptotic version of wasserstein.test, for the
-semi-parametric procedure see .wassersteinTestSp
+This is the asymptotic version of \code{wasserstein.test}, for the
+semi-parametric procedure see \code{.wassersteinTestSp}.
 
 Details concerning the testing procedure based on asymptotic theory
-can be found in Schefzik and Goncalves (2019).
+can be found in Schefzik et al (2020). 
+
+Note that the asymptotic theory-based test should only be employed when the two samples \eqn{x} and \eqn{y} can be assumed to come from continuous distributions.
 }
 \references{
-Schefzik, R. and Goncalves, A. (2019).
+Schefzik, R., Flesch, J., and Goncalves, A. (2020). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
 }

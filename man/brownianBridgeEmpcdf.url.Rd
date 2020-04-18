@@ -3,14 +3,19 @@
 \docType{data}
 \name{brownianBridgeEmpcdf.url}
 \alias{brownianBridgeEmpcdf.url}
-\title{brownianBridgeEmpcdf.url}
-\format{An object of class \code{character} of length 1.}
+\title{URL for downloading the asymptotic CDF occuring in the asymptotic theory-based test}
+\format{
+An object of class \code{character} of length 1.
+}
 \usage{
 brownianBridgeEmpcdf.url
 }
 \description{
-Url for downloading the simulated Brownian bridge distribution. 
-It is used an empirical quantile function to determine 
-p-values in the asymptotic wasserstein test function .wassersteinTestAsy
+URL for downloading the cumulative distribution function (CDF) of the integral over the squared standard Brownian bridge in the unit interval, where the computation is based on Monte Carlo simulations.
+This CDF occurs as an asymptotic distribution in the asymptotic theory-based test using the 2-Wasserstein distance, see Schefzik et al. (2020) for details. 
+It is used to determine the corresponding p-values in the function \code{.wassersteinTestAsy}.
+}
+\references{
+Schefzik, R., Flesch, J., and Goncalves, A. (2020). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
 }
 \keyword{datasets}

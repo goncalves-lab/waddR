@@ -2,23 +2,22 @@
 % Please edit documentation in R/WassersteinTest.R
 \name{.wassersteinTestSp}
 \alias{.wassersteinTestSp}
-\title{.wassersteinTestSp}
+\title{Semi-parametric test using the 2-Wasserstein distance to check for differential distributions}
 \usage{
 .wassersteinTestSp(x, y, permnum = 10000)
 }
 \arguments{
-\item{x}{univariate sample (vector) representing the distribution of
-condition A}
+\item{x}{sample (vector) representing the distribution of
+condition \eqn{A}}
 
-\item{y}{univariate sample (vector) representing the distribution of
-condition B}
+\item{y}{sample (vector) representing the distribution of
+condition \eqn{B}}
 
 \item{permnum}{number of permutations used in the permutation testing
 procedure}
 }
 \value{
-A vector concerning the testing results, precisely (see Schefzik and
-Goncalves (2019) for details)
+A vector of 15, see Schefzik et al. (2020) for details:
 \itemize{
 \item d.wass: 2-Wasserstein distance between the two samples computed by
 quantile approximation
@@ -39,40 +38,39 @@ distance between the two samples
 test
 \item p.ad.gpd: in case the GPD fitting is performed: p-value of the
 Anderson-Darling test to check whether the GPD actually fits the data well
-(otherwise NA). NOTE: GPD fitting is currently not supported!
+(otherwise NA). 
 \item N.exc: in case the GPD fitting is performed: number of exceedances
 (starting with 250 and iteratively decreased by 10 if necessary) that are
-required to obtain a good GPD fit (i.e. p-value of Anderson-Darling test
-greater or eqaul to 0.05) (otherwise NA) NOTE: GPD fitting is currently 
-not supported!
-\item perc.loc: fraction (in %) of the location part with respect to the
+required to obtain a good GPD fit, i.e. p-value of Anderson-Darling test
+\eqn{\geq 0.05} (otherwise NA). 
+\item perc.loc: fraction (in \%) of the location part with respect to the
 overall squared 2-Wasserstein distance obtained by the decomposition
 approximation
-\item perc.size: fraction (in %) of the size part with respect to the
+\item perc.size: fraction (in \%) of the size part with respect to the
 overall squared 2-Wasserstein distance obtained by the decomposition
 approximation
-\item perc.shape: fraction (in %) of the shape part with respect to the
+\item perc.shape: fraction (in \%) of the shape part with respect to the
 overall squared 2-Wasserstein distance obtained by the decomposition
 approximation
 \item decomp.error: relative error between the squared 2-Wasserstein
-distance computed by the quantile approximation and the squared
-2-Wasserstein distance computed by the decomposition approximation
+distance obtained by the quantile approximation and the squared
+2-Wasserstein distance obtained by the decomposition approximation
 }
 }
 \description{
 Two-sample test to check for differences between two distributions
-(conditions) using the 2-Wasserstein distance: Semi-parametric
+using the 2-Wasserstein distance: Semi-parametric
 implementation using a permutation test with a generalized Pareto
 distribution (GPD) approximation to estimate small p-values accurately
 }
 \details{
-This is the semi-parametric version of wasserstein.test, for the
-asymptotic procedure see .wassersteinTestAsy
+This is the semi-parametric version of \code{wasserstein.test}, for the
+asymptotic theory-based procedure see \code{.wassersteinTestAsy}.
 
 Details concerning the permutation testing procedure with GPD
 approximation to estimate small p-values accurately can be found in Schefzik
-and Goncalves (2019).
+et al. (2020).
 }
 \references{
-Schefzik, R. and Goncalves, A. (2019).
+Schefzik, R., Flesch, J., and Goncalves, A. (2020). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
 }

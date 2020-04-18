@@ -2,23 +2,26 @@
 % Please edit documentation in R/WassersteinTest.R
 \name{.wassPermProcedure}
 \alias{.wassPermProcedure}
-\title{.wassPermProcedure}
+\title{Permutation procedure that calculates the squared 2-Wasserstein distances for
+random shuffles of two input samples representing two conditions}
 \usage{
 .wassPermProcedure(x, y, permnum)
 }
 \arguments{
-\item{x}{numeric vector representing distribution A}
+\item{x}{sample (vector) representing the distribution of
+condition \eqn{A}}
 
-\item{y}{numeric vector representing distribution B}
+\item{y}{sample (vector) representing the distribution of
+condition \eqn{B}}
 
-\item{permnum}{integer interpreted as the number of permutations to be
+\item{permnum}{number of permutations to be
 performed}
 }
 \value{
-vector with squared 2-Wasserstein distances computed on random
- shuffles of the two input vectors
+Vector with squared 2-Wasserstein distances computed for random
+ shuffles of the two input samples
 }
 \description{
-Permutation Procedure that calculates the squared 2-Wasserstein distance for
-random shuffles of two input distributions and returns them as a vector.
+Permutation procedure that calculates the squared 2-Wasserstein distances for
+random shuffles of two input samples representing two conditions \eqn{A} and \eqn{B}, respectively (i.e. the elements of the pooled sample vector are randomly assigned to either condition \eqn{A} or condition \eqn{B}, where the sample sizes are as in the original samples).
 }

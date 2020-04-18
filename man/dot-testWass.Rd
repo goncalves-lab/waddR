@@ -2,52 +2,47 @@
 % Please edit documentation in R/WassersteinSingleCell.R
 \name{.testWass}
 \alias{.testWass}
-\title{.testWass}
+\title{Check for differential distributions in single-cell RNA sequencing data via a semi-paramteric test using the 2-Wasserstein distance}
 \usage{
 .testWass(dat, condition, permnum, inclZero = TRUE, seed = NULL)
 }
 \arguments{
-\item{dat}{matrix of single-cell RNA-sequencing expression data with genes in
-rows and samples (cells) in columns}
+\item{dat}{matrix of single-cell RNA-sequencing expression data, with rowas corresponding to genes and columns corresponding to cells (samples)}
 
 \item{condition}{vector of condition labels}
 
 \item{permnum}{number of permutations used in the permutation testing
 procedure}
 
-\item{inclZero}{logical; if TRUE, the one-stage method (i.e. semi-parametric
-testing applied to all (zero and non-zero) expression values) is performed;
-if FALSE, the two-stage method (i.e. semi-parametric testing applied to
-non-zero expression values only, combined with a separate testing for
-differential proportions of zero expression using logistic regression) is
-performed. Default is TRUE}
+\item{inclZero}{logical; if TRUE, a one-stage method is performed, i.e. the semi-parametric
+test based on the 2-Wasserstein distance is applied to all (zero and non-zero) expression values;
+if FALSE, a two-stage method is performed, i.e. the semi-parametric test based on the 2-Wasserstein distance is applied to
+non-zero expression values only, and a separate test for
+differential proportions of zero expression using logistic regression is conducted; default is TRUE}
 
-\item{seed}{number to be used as a L'Ecuyer-CMRG seed, which itself
+\item{seed}{Number to be used as a L'Ecuyer-CMRG seed, which itself
 seeds the generation of an nextRNGStream() for each gene. Internally, when
 this argument is given, a seed is specified by calling
 `RNGkind("L'Ecuyer-CMRG")` followed by `set.seed(seed)`.
 The `RNGkind` and `.Random.seed` will be reset on termination of this
-function. By default, NULL is given and no seed is set.}
+function. Default is NULL, and no seed is set.}
 }
 \value{
-matrix with every row being the wasserstein test of one gene between
-the two conditions.
- See the corresponding values in the description of the function
-wasserstein.sc, where the argument inclZero=TRUE in .testWass has to be
-identified with the argument method=”OS”, and the argument inclZero=FALSE in
-.testWass with the argument method=”TS”.
+Matrix, where each row contains the testing results of the respective gene from \code{dat}.
+ For the corresponding values of each row (gene), see the description of the function
+\code{wasserstein.sc}, where the argument \code{inclZero=TRUE} in \code{.testWass} has to be
+identified with the argument \code{method=”OS”}, and the argument \code{inclZero=FALSE} with the argument \code{method=”TS”}.
 }
 \description{
 Two-sample test for single-cell RNA-sequencing data to check for differences
-between two distributions (conditions) using the 2-Wasserstein distance:
+between two distributions using the 2-Wasserstein distance:
 Semi-parametric implementation using a permutation test with a generalized 
 Pareto distribution (GPD) approximation to estimate small p-values accurately
 }
 \details{
-Details concerning the permutation testing procedures for
-single-cell RNA-sequencing data can be found in Schefzik and 
-Goncalves (2019).
+Details concerning the testing procedure for
+single-cell RNA-sequencing data can be found in Schefzik et al. (2020) and in the description of the details of the function \code{wasserstein.sc}.
 }
 \references{
-Schefzik and Goncalves 2019
+Schefzik, R., Flesch, J., and Goncalves, A. (2020). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
 }

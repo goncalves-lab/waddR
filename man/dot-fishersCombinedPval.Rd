@@ -2,7 +2,7 @@
 % Please edit documentation in R/PValues.R
 \name{.fishersCombinedPval}
 \alias{.fishersCombinedPval}
-\title{.fishersCombinedPval}
+\title{Compute combined p-value using Fisher's method}
 \usage{
 .fishersCombinedPval(x)
 }
@@ -17,5 +17,5 @@ Aggregates two p-values into a combined p-value according to Fisher’s method
 }
 \details{
 Aggregates two p-values into a combined p-value according to
-Fisher’s method.
+Fisher’s method
 }

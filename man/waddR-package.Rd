@@ -4,71 +4,70 @@
 \name{waddR-package}
 \alias{waddR}
 \alias{waddR-package}
-\title{waddR: Statistical Test for Detecting Differential Distributions Based on
-the Wasserstein Distance}
+\title{waddR: Statistical tests for detecting differential distributions based on
+the 2-Wasserstein distance}
 \description{
-Wasserstein distance based statistical test for detecting and describing
-differential distributions in one-dimensional data. Functions for
-wasserstein distance calculation, differential distribution testing, and a
-specialized test for differential expression in scRNA data are provided.
+The package offers statistical tests based on the 2-Wasserstein distance for detecting and characterizing differences between two distributions given in the form of samples. Functions for calculating the 2-Wasserstein distance and testing for differential distributions are provided, as well as a specifically tailored test for differential expression in single-cell RNA sequencing data.
 }
 \details{
-The Wasserstein package offers utilities for three distinct use cases:
-\itemize{ \item Computation of the 2-Wasserstein distance \item Two-sample
-test to check for differences between two distributions \item Detect
-differential gene expression distributions in scRNAseq data }
+The \code{waddR} package provides tools to address the following tasks:
+\enumerate{ \item Computation of the 2-Wasserstein distance \item Two-sample
+tests to check for differences between two distributions \item Detection of 
+differential gene expression distributions in single-cell RNA sequencing data }
 }
-\section{Wasserstein Distance functions}{
+\section{1. 2-Wasserstein distance functions}{
  The 2-Wasserstein distance is a
-  metric to describe the distance between two distributions, representing
-  two diferent conditions A and B. This package specifically considers the
-  squared 2-Wasserstein distance d := W^2 which offers a decomposition into
-  location, size, and shape terms. It offers three functions to calculate
-  the 2-Wasserstein distance, all of which are implemented in Cpp and
-  exported to R with Rcpp for better performance. \code{wasserstein_metric}
-  is a Cpp reimplementation of the wasserstein1d method from the package
-  \code{transport} and offers the most exact results. The functions
+  metric to quantify the difference between two distributions, representing e.g. 
+  two different conditions \eqn{A} and \eqn{B}. The \code{waddR} package specifically considers the
+  squared 2-Wasserstein distance which can be decomposed into
+  location, size, and shape terms, thus providing a characterization of potential differences. It offers three functions to calculate
+  the (squared) 2-Wasserstein distance, which are implemented in C++ and
+  exported to R with Rcpp for faster computation. \code{wasserstein_metric}
+  is a C++ reimplementation of the \code{wasserstein1d} function from the R package
+  \code{transport}. The functions
   \code{squared_wass_approx} and \code{squared_wass_decomp} compute
-  approximations of the squared 2-Wasserstein distance with
-  \code{suared_wass_decomp} also returning the decomosition terms for
-  location, size, and shape. See \code{?wasserstein_metric},
+  approximations of the squared 2-Wasserstein distance, with
+  \code{squared_wass_decomp} also returning the decomposition terms for
+  location, size, and shape. 
+
+See \code{?wasserstein_metric},
   \code{?squared_wass_aprox}, and \code{?squared_wass_decomp} as well as the
-  accompanying paper Schefzik and Goncalves 2019.
+  accompanying paper Schefzik et al. (2020).
 }
 
-\section{Two-Sample Testing}{
- This package provides two testing procedures
-  using the 2-Wasserstein distance to test whether two distributions F_A and
-  F_B given in the form of samples are different ba specifically testing the
-  null hypothesis H0: F_A = F_B against the alternative hypothesis H1: F_A
-  != F_B.
+\section{2. Testing for differences between two distributions}{
+ The \code{waddR} package provides two testing procedures
+  using the 2-Wasserstein distance to test whether two distributions \eqn{F_A} and
+  \eqn{F_B} given in the form of samples are different by testing the
+  null hypothesis \eqn{H_0: F_A = F_B} against the alternative hypothesis \eqn{H_1: F_A
+  \neq F_B}.
 
-  The first, semi-parametric (SP), procedure uses a test based on
-  permutations combined with a generalized pareto distribution approximation
-  to estimate small pvalues accurately.
+  The first, semi-parametric (SP), procedure uses a permutation-based test combined with a generalized Pareto distribution approximation
+  to estimate small p-values accurately.
 
-  The second procedure (ASY) uses a test based on asymptotic theory which is
+  The second procedure uses a test based on asymptotic theory (ASY) which is
   valid only if the samples can be assumed to come from continuous
   distributions.
 
-  See the documentation of the function \code{?wasserstein.test} for more
+  See \code{?wasserstein.test} for more
   details.
 }
 
-\section{Single Cell Test}{
- The waddR package provides an adaptation of the
+\section{3. Testing for differences between two distributions in the context of single-cell RNA sequencing (scRNA-seq) data}{
+ The \code{waddR} package provides an adaptation of the
   semi-parametric testing procedure based on the 2-Wasserstein distance
-  which is specifically tailored to identify differential distributions in
-  single-cell RNA-seqencing (scRNA-seq) data. In particular, a two-stage
-  (TS) approach has been implemented that takes account of the specific
+  which is specifically tailored to identify differential distributions in scRNA-seq data. In particular, a two-stage
+  (TS) approach is implemented that takes account of the specific
   nature of scRNA-seq data by separately testing for differential
   proportions of zero gene expression (using a logistic regression model)
   and differences in non-zero gene expression (using the semi-parametric
   2-Wasserstein distance-based test) between two conditions.
 
-  See the documentation of the Single Cell testing function
-  \code{?wasserstein.sc} and the test for zero expression levels
-  \code{?testZeroes} for more details.
+  See \code{?wasserstein.sc} and \code{?testZeroes} for more details.
+}
+
+\section{References}{
+ Schefzik, R., Flesch, J., and Goncalves, A. (2020). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
 }
 
 \seealso{
@@ -84,7 +83,7 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Roman Schefzik \email{r.schefzik@dkfz-heidelberg.de}
+  \item Roman Schefzik \email{roman.schefzik@medma.uni-heidelberg.de}
 }
 
 }

@@ -2,44 +2,44 @@
 % Please edit documentation in R/RcppExports.R
 \name{squared_wass_decomp}
 \alias{squared_wass_decomp}
-\title{squared_wass_decomp}
+\title{Compute the squared 2-Wasserstein distance based on a decomposition}
 \usage{
 squared_wass_decomp(x, y)
 }
 \arguments{
-\item{x}{Vector representing an empirical distribution under condition A}
+\item{x}{sample (vector) representing the distribution of condition \eqn{A}}
 
-\item{y}{Vector representing an empirical distribution under condition B}
+\item{y}{sample (vector) representing the distribution of condition \eqn{B}}
 }
 \value{
-An named Rcpp::List with the wasserstein distance between x and y,
-decomposed into terms for size, location, and shape
+A list of 4:
+\itemize{
+\item distance: the sum location+size+shape
+\item location: location part in the decoposition of the 2-Wasserstein distance
+\item size: size part in the decoposition of the 2-Wasserstein distance
+\item shape: shape part in the decoposition of the 2-Wasserstein distance
+}
 }
 \description{
-Approximation of the squared Wasserstein distance \eqn{d_g}{W_g} between
-two vectors decomposed into size, location and shape.
-Calculation based on the mean squared difference between the equidistant
-quantiles of the two input vectors a and b.
-As an approximation of the distribution, 1000 quantiles are computed for
-each vector.
+Computes the squared 2-Wasserstein distance between two vectors based on a decomposition into location, size and shape terms.
+For a detailed description of the (empirical) calculation of the invoved quantities, see Schefzik et al. (2020).
 }
 \examples{
-# input: one dimensional data in two conditions
-x <- rnorm(100, 42, 2)
-y <- c(rnorm(61, 20, 1), rnorm(41, 40,2))
-# output: squared Wasserstein distance decomposed into terms for location,
-# shape, size
-d.wass.decomp <- squared_wass_decomp(x,y)
-d.wass.decomp$location
-d.wass.decomp$size
-d.wass.decomp$shape
+set.seed(24)
+x<-rnorm(100)
+y1<-rnorm(150)
+y2<-rexp(150,3)
+y3<-rpois(150,2)
+
+squared_wass_decomp(x,y1)
+squared_wass_decomp(x,y2)
+squared_wass_decomp(x,y3)
 
 }
 \references{
-Schefzik and Goncalves 2019
-Irpino and Verde (2015)
+Schefzik, R., Flesch, J., and Goncalves, A. (2020). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
 }
 \seealso{
-[wasserstein_metric()], [squared_wass_approx()] for
-different implementations of the wasserstein distance
+See the functions \code{wasserstein_metric} and \code{squared_wass_approx} for
+alternative implementations of the 2-Wasserstein distance
 }

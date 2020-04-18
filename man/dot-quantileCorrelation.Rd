@@ -2,22 +2,21 @@
 % Please edit documentation in R/Utils.R
 \name{.quantileCorrelation}
 \alias{.quantileCorrelation}
-\title{.quantileCorrelation}
+\title{Compute the quantile-quantile correlation}
 \usage{
 .quantileCorrelation(x, y, pr = NULL)
 }
 \arguments{
-\item{x}{numeric vector representing distribution x}
+\item{x}{numeric vector}
 
-\item{y}{numeric vector representing distribution y}
+\item{y}{numeric vector}
 
-\item{pr}{probabilities for computing the quantiles of x and y. 
-By default is set to 1000 equidistant quantiles starting at q_1 = 0.5/1000.}
+\item{pr}{levels at which the quantiles of \eqn{x} and \eqn{y} are computed; by default, 1000 equidistant quantiles at levels \eqn{\frac{k-0.5}{1000}}, where \eqn{k=1,\ldots,1000}, are used}
 }
 \value{
-quantile-quantile correlation of x and y
+quantile-quantile correlation of \eqn{x} and \eqn{y}
 }
 \description{
-Computes the quantile-quantile correlation of x and y, using the quantile
-type 1 implementation in R and Pearson correlation.
+Computes the quantile-quantile correlation of two samples \eqn{x} and \eqn{y}, using the quantile
+type 1 implementation in R and the Pearson correlation.
 }

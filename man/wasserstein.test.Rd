@@ -2,31 +2,26 @@
 % Please edit documentation in R/WassersteinTest.R
 \name{wasserstein.test}
 \alias{wasserstein.test}
-\title{wasserstein.test}
+\title{Two-sample test to check for differences between two distributions
+using the 2-Wasserstein distance}
 \usage{
 wasserstein.test(x, y, method = c("SP", "ASY"), permnum = 10000)
 }
 \arguments{
-\item{x}{univariate sample (vector) representing the distribution of
-condition A}
+\item{x}{sample (vector) representing the distribution of
+condition \eqn{A}}
 
-\item{y}{univariate sample (vector) representing the distribution of
-condition B}
+\item{y}{sample (vector) representing the distribution of
+condition \eqn{B}}
 
 \item{method}{testing procedure to be employed: "SP" for the semi-parametric
-permutation testing procedure with GPD approximation to estimate small
-p-values accurately; "ASY" for the test based on asymptotic theory.
-If no method is given, "SP" will be used by default.}
+permutation testing procedure with GPD approximation, "ASY" for the test based on asymptotic theory; if no method is specified, "SP" will be used by default.}
 
 \item{permnum}{number of permutations used in the permutation testing
-procedure (if method=”SP” is performed); default is 10000}
+procedure (if \code{method="SP"} is performed); default is 10000}
 }
 \value{
-A vector concerning the testing results (see Schefzik and Goncalves
-(2019) for details).
-
-A vector concerning the testing results, precisely (see Schefzik and
-Goncalves (2019) for details)
+A vector, see Schefzik et al. (2020) for details:
 \itemize{
 \item d.wass: 2-Wasserstein distance between the two samples computed by
 quantile approximation
@@ -43,24 +38,23 @@ distance between the two samples
 \item shape: shape term in the decomposition of the squared 2-Wasserstein
 distance between the two samples
 \item rho: correlation coefficient in the quantile-quantile plot
-\item pval: The p-value of the semi-parametric 2-Wasserstein distance-based
-test or p-value determined using asymptotic theory, depending on the method
+\item pval: The p-value of the semi-parametric or the asymptotic theory-based test, depending on the specified method
 \item p.ad.gpd: in case the GPD fitting is performed: p-value of the
 Anderson-Darling test to check whether the GPD actually fits the data well
-(otherwise NA). This output is only returned when performing a
+(otherwise NA). This output is only returned when performing the
 semi-parametric test (method="SP")!
 \item N.exc: in case the GPD fitting is performed: number of exceedances
 (starting with 250 and iteratively decreased by 10 if necessary) that are
-required to obtain a good GPD fit (i.e. p-value of Anderson-Darling test
-greater or eqaul to 0.05) (otherwise NA). This output is only returned when
-performing a semi-parametric test (method="SP")!
-\item perc.loc: fraction (in %) of the location part with respect to the
+required to obtain a good GPD fit, i.e. p-value of Anderson-Darling test
+\eqn{\geq 0.05} (otherwise NA). This output is only returned when
+performing the semi-parametric test (method="SP")!
+\item perc.loc: fraction (in \%) of the location part with respect to the
 overall squared 2-Wasserstein distance obtained by the decomposition
 approximation
-\item perc.size: fraction (in %) of the size part with respect to the
+\item perc.size: fraction (in \%) of the size part with respect to the
 overall squared 2-Wasserstein distance obtained by the decomposition
 approximation
-\item perc.shape: fraction (in %) of the shape part with respect to the
+\item perc.shape: fraction (in \%) of the shape part with respect to the
 overall squared 2-Wasserstein distance obtained by the decomposition
 approximation
 \item decomp.error: relative error between the squared 2-Wasserstein
@@ -70,28 +64,38 @@ distance computed by the quantile approximation and the squared
 }
 \description{
 Two-sample test to check for differences between two distributions
-(conditions) using the 2-Wasserstein distance, either using the
-semi-parametric permutation testing procedure with GPD approximation to
+using the 2-Wasserstein distance, either using the
+semi-parametric permutation testing procedure with a generalized Pareto distribution (GPD) approximation to
 estimate small p-values accurately or the test based on asymptotic theory
 }
 \details{
-Details concerning the two testing procedures (i.e. the permutation
-testing procedure with GPD approximation to estimate small p-values
-accurately and the test based on asymptotic theory) can be found in
-Schefzik and Goncalves (2019).
+Details concerning the two testing procedures (i.e. the semi-parametric permutation
+testing procedure with GPD approximation and the test based on asymptotic theory) can be found in
+Schefzik et al. (2020).
+
+Note that the asymptotic theory-based test (\code{method="ASY"}) should only be employed when the samples \eqn{x} and \eqn{y} can be assumed to come from continuous distributions. In contrast, the semi-parametric test (\code{method="SP"}) can be used for samples coming from continuous or discrete distributions.
 }
 \examples{
-# generate two input distributions
-x<-rnorm(500)
-y<-rnorm(500,4,1.5)
-wasserstein.test(x,y,method="ASY")
-# Run with default options: method="SP", permnum=10000
-wasserstein.test(x,y)
-# Run with a seed for the semi-parametric test ("SP")
-set.seed(42)
-wasserstein.test(x,y, method="SP")
+set.seed(24)
+x<-rnorm(100)
+y1<-rnorm(150)
+y2<-rexp(150,3)
+y3<-rpois(150,2)
+
+#for reproducibility, set a seed for the semi-parametric, permutation-based test
+set.seed(32)
+wasserstein.test(x,y1,method="SP",permnum=10000)
+wasserstein.test(x,y1,method="ASY")
+
+set.seed(33)
+wasserstein.test(x,y2,method="SP",permnum=10000)
+wasserstein.test(x,y2,method="ASY")
+
+set.seed(34)
+#only consider SP method, as Poisson distribution is discrete
+wasserstein.test(x,y3,method="SP",permnum=10000)
 
 }
 \references{
-Schefzik, R. and Goncalves, A. (2019).
+Schefzik, R., Flesch, J., and Goncalves, A. (2020). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
 }
