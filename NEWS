@@ -1,3 +1,7 @@
+Changes in 1.3.1 (2020-03-16)
++ Re-introduction of the eva package (archived version)
++ Updates to Documentation
+
 Changes in 1.1.4 (2020-03-16)
 + Fixes a build fail due to erronous merge in the previous commit 267f84b
 
