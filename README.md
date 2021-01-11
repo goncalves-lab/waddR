@@ -1,4 +1,5 @@
-<img src="bioconductor_sticker.png" width="100" height="100">
+<img src="bioconductor_sticker.png" height="200">
+
 # Statistical tests for detecting differential distributions based on the 2-Wasserstein distance
 
 The `waddR` package offers statistical tests based on the 2-Wasserstein distance for detecting and characterizing differences between two distributions given in the form of samples. Functions for calculating the 2-Wasserstein distance and testing for differential distributions are provided, as well as specifically tailored test for differential expression in single-cell RNA sequencing data.
