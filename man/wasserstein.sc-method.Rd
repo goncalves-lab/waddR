@@ -21,8 +21,8 @@ rows and cells (samples) in columns [alternatively, a \code{SingleCellExperiment
 
 \item{y}{vector of condition labels [alternatively, a \code{SingleCellExperiment} object for condition \eqn{B}, where the matrix of the single-cell RNA sequencing expression data has to be supplied via the \code{counts} argument in \code{SingleCellExperiment}]}
 
-\item{method}{method employed in the testing procedure: if “OS”, a one-stage test is performed, i.e. the semi-parametric test is applied to all (zero and
-non-zero) expression values; if “TS”, a two-stage test is performed, i.e.
+\item{method}{method employed in the testing procedure: if "OS", a one-stage test is performed, i.e. the semi-parametric test is applied to all (zero and
+non-zero) expression values; if "TS", a two-stage test is performed, i.e.
 the semi-parametric test is applied to non-zero expression values only and combined
 with a separate test for differential proportions of zero expression
 using logistic regression}
@@ -35,7 +35,7 @@ seeds the generation of an nextRNGStream() for each gene to achieve
 reproducibility; default is NULL, and no seed is set}
 }
 \value{
-Matrix, where each row contains the testing results of the respective gene from \code{dat}. The corresponding values of each row (gene) are as follows, see Schefzik et al. (2020) for details.     
+Matrix, where each row contains the testing results of the respective gene from \code{dat}. The corresponding values of each row (gene) are as follows, see Schefzik et al. (2021) for details.     
 In case of \code{inclZero=TRUE}:
 \itemize{
 \item d.wass: 2-Wasserstein distance between the two samples computed
@@ -118,7 +118,7 @@ required to obtain a good GPD fit, i.e. p-value of Anderson-Darling test
 \item p.zero: p-value of the test for differential proportions of zero
  expression (logistic regression model)
 \item p.combined: combined p-value of p.nonzero and p.zero obtained by
- Fisher’s method
+ Fisher's method
 \item p.adj.nonzero: adjusted p-value of the semi-parametric 2-Wasserstein
  distance-based test based on non-zero expression only according to the
  method of Benjamini-Hochberg (i.e. adjusted p-value corresponding to p.nonzero)
@@ -126,7 +126,7 @@ required to obtain a good GPD fit, i.e. p-value of Anderson-Darling test
  of zero expression (logistic regression model) according to the method of
  Benjamini-Hochberg (i.e. adjusted p-value corresponding to p.zero)
 \item p.adj.combined: adjusted combined p-value of p.nonzero and p.zero
- obtained by Fisher’s method according to the method of Benjamini-Hochberg (i.e. adjusted p-value corresponding to p.combined)
+ obtained by Fisher's method according to the method of Benjamini-Hochberg (i.e. adjusted p-value corresponding to p.combined)
 }
 }
 \description{
@@ -143,13 +143,11 @@ single-cell RNA-sequencing data can be found in Schefzik et al.
 \code{inclZero=TRUE} in \code{.testWass} with the argument \code{method="OS"} and the argument
 \code{inclZero=FALSE} with the argument \code{method="TS"}.
           
-The input data matrix \eqn{x} [alternatively, the input data matrices to form the \code{SingleCellExperiment} objects \eqn{x} and \eqn{y}, respectively] as the starting point of the test is supposed to contain the single-cell RNA-sequencing expression data after several quality control steps including for instance filtering, normalization or variance stabilization.
-
-The test is explicitly designed for checking differences between two conditions, and in particular not between cell types.
+The input data matrix \eqn{x} [alternatively, the input data matrices to form the \code{SingleCellExperiment} objects \eqn{x} and \eqn{y}, respectively] as the starting point of the test is supposed to contain the single-cell RNA-sequencing expression data after several pre-processing steps. In particular, note that as input for scRNA-seq analysis, waddR expects a table of pre-filtered and normalised count data. As filtering and normalisation are important steps that can have a profound impact in a scRNA-seq workflow (Cole et al., 2019), these should be tailored to the specific question of interest before applying waddR. waddR is applicable to data from any scRNA-seq platform (demonstrated in our paper for 10x Genomics and Fluidigm C1 Smart-Seq2) normalised using most common methods, such as those implemented in the Seurat (Butler et al., 2018) or scran (Lun et al., 2016) packages. Normalisation approaches that change the shape of the gene distributions (such as quantile normalisation) and gene-wise scaling or standardizing should be avoided when using waddR.
           
-For the two-stage approach (\code{method="TS"}) according to Schefzik et al. (2020), two separate tests for differential proportions of zero expression (DPZ) and non-zero differential distributions (non-zero DD), respectively, are performed. In the DPZ test using logistic regression, the null hypothesis that there are no DPZ is tested against the alternative that there are DPZ. In the non-zero DD test using the semi-parametric 2-Wasserstein distance-based procedure, the null hypothesis that there is no difference in the non-zero expression distributions is tested against the alternative that the two non-zero expression distributions are differential.
+For the two-stage approach (\code{method="TS"}) according to Schefzik et al. (2021), two separate tests for differential proportions of zero expression (DPZ) and non-zero differential distributions (non-zero DD), respectively, are performed. In the DPZ test using logistic regression, the null hypothesis that there are no DPZ is tested against the alternative that there are DPZ. In the non-zero DD test using the semi-parametric 2-Wasserstein distance-based procedure, the null hypothesis that there is no difference in the non-zero expression distributions is tested against the alternative that the two non-zero expression distributions are differential.
           
-The current implementation of the test assumes that the expression data matrix is based on one replicate per condition only. For approaches on how to address settings comprising multiple replicates per condition, see Schefzik et al. (2020).
+The current implementation of the test assumes that the expression data matrix is based on one replicate per condition only. For approaches on how to address settings comprising multiple replicates per condition, see Schefzik et al. (2021).
 }
 \examples{
 #simulate scRNA-seq data
@@ -189,5 +187,11 @@ wasserstein.sc(sce.A,sce.B,method="OS",permnum=10000,seed=24)
 
 }
 \references{
-Schefzik, R., Flesch, J., and Goncalves, A. (2020). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
+Butler, A., Hoffman, P., Smibert, P., Papalexi, E., and Satija, R. (2018). Integrating single-cell transcriptomic data across different conditions, technologies, and species. Nature Biotechnology, 36, 411-420.
+
+Cole, M. B., Risso, D., Wagner, A., De Tomaso, D., Ngai, J., Purdom, E., Dudoit, S., and Yosef, N. (2019). Performance assessment and selection of normalization procedures for single-cell RNA-seq. Cell Systems, 8, 315-328.
+
+Lun, A. T. L., Bach, K., and Marioni, J. C. (2016). Pooling across cells to normalize single-cell RNA sequencing data with many zero counts. Genome Biology, 17, 75.
+
+Schefzik, R., Flesch, J., and Goncalves, A. (2021). Fast identification of differential distributions in single-cell RNA-sequencing data with waddR.
 }
