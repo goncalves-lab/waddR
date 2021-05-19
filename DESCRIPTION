@@ -1,7 +1,7 @@
 Package: waddR
 Type: Package
 Title: Statistical tests for detecting differential distributions based on the 2-Wasserstein distance
-Version: 1.5.0
+Version: 1.6.0
 Authors@R: c(
 	person("Roman", "Schefzik", email="r.schefzik@dkfz-heidelberg.de", role="aut"),
 	person("Julian", "Flesch", email="julianflesch@gmail.com", role="cre"))
