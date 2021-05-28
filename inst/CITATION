@@ -1,0 +1,14 @@
+citHeader("To cite the 'waddR' package in publications, please use:")
+
+citEntry(
+  entry = 'Article',
+  title = 'Fast identification of differential distributions in single-cell RNA-sequencing data with waddR',
+  author = c("Roman Schefzik", "Julian Flesch", "Angela Goncalves"),
+  journal = 'Bioinformatics',
+  year = '2021',
+  textVersion = paste('Schefzik, R., Flesch, J. and Goncalves, A., 2021.',
+        'Fast identification of differential distributions in single-cell',
+        'RNA-sequencing data with waddR. Bioinformatics.'
+  ),
+  doi = "10.1093/bioinformatics/btab226"
+)
