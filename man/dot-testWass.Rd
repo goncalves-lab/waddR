@@ -31,7 +31,7 @@ function. Default is NULL, and no seed is set.}
 Matrix, where each row contains the testing results of the respective gene from \code{dat}.
  For the corresponding values of each row (gene), see the description of the function
 \code{wasserstein.sc}, where the argument \code{inclZero=TRUE} in \code{.testWass} has to be
-identified with the argument \code{method=”OS”}, and the argument \code{inclZero=FALSE} with the argument \code{method=”TS”}.
+identified with the argument \code{method="OS"}, and the argument \code{inclZero=FALSE} with the argument \code{method="TS"}.
 }
 \description{
 Two-sample test for single-cell RNA-sequencing data to check for differences
@@ -41,8 +41,8 @@ Pareto distribution (GPD) approximation to estimate small p-values accurately
 }
 \details{
 Details concerning the testing procedure for
-single-cell RNA-sequencing data can be found in Schefzik et al. (2020) and in the description of the details of the function \code{wasserstein.sc}.
+single-cell RNA-sequencing data can be found in Schefzik et al. (2021) and in the description of the details of the function \code{wasserstein.sc}.
 }
 \references{
-Schefzik, R., Flesch, J., and Goncalves, A. (2020). waddR: Using the 2-Wasserstein distance to identify differences between distributions in two-sample testing, with application to single-cell RNA-sequencing data.
+Schefzik, R., Flesch, J., and Goncalves, A. (2021). Fast identification of differential distributions in single-cell RNA-sequencing data with waddR.
 }
