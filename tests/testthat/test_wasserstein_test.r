@@ -26,7 +26,7 @@ test_that("Example Run of Wasserstein Test", {
   v<-rnorm(500)
   w<-rnorm(500,1,2)
   names.sp <- c("d.wass", "d.wass^2", "d.comp^2", "d.comp", "location", "size",
-                "shape", "rho", "pval", "p.ad.gdp", "N.exc", "perc.loc",
+                "shape", "rho", "pval", "p.ad.gpd", "N.exc", "perc.loc",
                 "perc.size", "perc.shape", "decomp.error")
   names.asy <- c("d.wass","d.wass^2","d.comp^2","d.comp",
                  "location","size","shape","rho","pval","perc.loc",

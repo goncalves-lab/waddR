@@ -3,13 +3,13 @@ library("waddR")
 library("SingleCellExperiment")
 
 ts.names <- c(  "d.wass", "d.wass^2", "d.comp^2", "d.comp", "location",
-                "size", "shape", "rho", "pval", "p.ad.gdp", "N.exc",
+                "size", "shape", "rho", "p.nonzero", "p.ad.gpd", "N.exc",
                 "perc.loc", "perc.size", "perc.shape", "decomp.error",
                 "p.zero", "p.combined", "p.adj.nonzero","p.adj.zero",
                 "p.adj.combined")
 
 os.names <-  c( "d.wass", "d.wass^2", "d.comp^2", "d.comp", "location",
-                "size", "shape", "rho", "pval", "p.ad.gdp", "N.exc",
+                "size", "shape", "rho", "pval", "p.ad.gpd", "N.exc",
                 "perc.loc", "perc.size", "perc.shape", "decomp.error",
                 "pval.adj")
 
