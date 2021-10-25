@@ -4,7 +4,7 @@
 
 > For more details on the methods and further information, please have a look at our paper:  
 > Schefzik, R., Flesch, J., and Goncalves, A. (2021). Fast identification of differential distributions in
-single-cell RNA-sequencing data with waddR. To appear in *Bioinformatics*. DOI: https://doi.org/10.1093/bioinformatics/btab226
+single-cell RNA-sequencing data with waddR. *Bioinformatics*, 37, 3204-3211. DOI: https://doi.org/10.1093/bioinformatics/btab226
 
 The `waddR` package offers statistical tests based on the 2-Wasserstein distance for detecting and characterizing differences between two distributions given in the form of samples. Functions for calculating the 2-Wasserstein distance and testing for differential distributions are provided, as well as specifically tailored test for differential expression in single-cell RNA sequencing data.
 
