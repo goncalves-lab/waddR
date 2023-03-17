@@ -6,7 +6,7 @@
 #'@importFrom arm bayesglm
 #'@importFrom BiocParallel bplapply bpmapply
 #'@importFrom BiocFileCache BiocFileCache bfcadd bfcquery bfcdownload
-#'@importFrom BiocFileCache bfcpath bfcrpath bfccount bfcneedsupdate
+#'@importFrom BiocFileCache bfcpath bfcrpath bfccount bfcneedsupdate getBFCOption
 #'@importFrom SingleCellExperiment SingleCellExperiment counts logcounts
 NULL
 

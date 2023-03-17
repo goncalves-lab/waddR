@@ -1,6 +1,6 @@
 
 .cache.getOrDownload <- function(url, rname) {
-    bfc <- BiocFileCache(ask = FALSE)
+    bfc <- BiocFileCache(ask = FALSE, cache = getBFCOption("CACHE"))
 
     # check if url is tracked in local cache
     result <- bfcquery(bfc, url, field="fpath", exact=TRUE)
