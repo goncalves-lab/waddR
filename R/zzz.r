@@ -8,6 +8,7 @@
 #'@importFrom BiocFileCache BiocFileCache bfcadd bfcquery bfcdownload
 #'@importFrom BiocFileCache bfcpath bfcrpath bfccount bfcneedsupdate getBFCOption
 #'@importFrom SingleCellExperiment SingleCellExperiment counts logcounts
+#'@importFrom eva gpdAd gpdFit pgpd
 NULL
 
 
