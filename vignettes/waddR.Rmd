@@ -91,7 +91,7 @@ To install `waddR` from Bioconductor, use `BiocManager` with the following comma
 ```{r install, eval=FALSE, echo=TRUE}
 if (!requireNamespace("BiocManager"))
  install.packages("BiocManager")
-BiocManager::install("MyPackage")
+BiocManager::install("waddR")
 ```
 
 Using `BiocManager`, the package can also be installed from GitHub directly:
