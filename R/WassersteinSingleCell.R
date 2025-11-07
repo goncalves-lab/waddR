@@ -14,6 +14,17 @@
 #' @param y vector of condition labels [alternatively, a \code{SingleCellExperiment} object for condition \eqn{B}, where the matrix of the single-cell RNA sequencing expression data has to be supplied via the \code{counts} argument in \code{SingleCellExperiment}] 
 #' @param these vector of row numbers (i.e. gene numbers) employed to test for
 #'   differential proportions of zero expression; default is seq_len(nrow(dat))
+#' @param BPPARAM A \link[BiocParallel]{BiocParallelParam} object specifying
+#'   the parallel back-end to use for computation. By default,
+#'   \code{\link[BiocParallel]{bpparam}()} is used, which automatically
+#'   selects an appropriate back-end depending on the operating system and
+#'   whether R is running interactively. This typically resolves
+#'   to \code{MulticoreParam()} on Unix-like systems in interactive sessions,
+#'   and \code{SerialParam()} on Windows or non-interactive build environments
+#'   (e.g., Bioconductor build machines). Users may override this by passing a
+#'   custom parameter object such as \code{SnowParam()} or
+#'   \code{MulticoreParam(workers = 4)} to control the level and type of
+#'   parallelism.
 #'
 #' @return A vector of (unadjusted) p-values
 #'
@@ -58,14 +69,14 @@
 #' @docType methods
 #' @rdname testZeroes-method
 setGeneric("testZeroes",
-    function(x, y, these=seq_len(nrow(x))) standardGeneric("testZeroes"))
+    function(x, y, these=seq_len(nrow(x)), BPPARAM=BiocParallel::bpparam()) standardGeneric("testZeroes"))
 
 
 #'@rdname testZeroes-method
 #'@aliases testZeroes,matrix,vector,ANY-method
 setMethod("testZeroes",
     c(x="matrix", y="vector"),
-    function(x, y, these=seq_len(nrow(x))) {
+    function(x, y, these=seq_len(nrow(x), BPPARAM=BiocParallel::bpparam())) {
         detection <- colSums(x > 0) / nrow(x)
         onegene <- function(j, dat, detection, cond, these) {
             trow = dat[these[j], ]
@@ -81,7 +92,7 @@ setMethod("testZeroes",
         }
         
         pval <- unlist(bplapply(seq_along(these), onegene, dat=x,
-                                detection=detection, cond=y, these=these))
+                                detection=detection, cond=y, these=these, BPPARAM=BPPARAM))
         return(pval)
     })
 
@@ -90,10 +101,10 @@ setMethod("testZeroes",
 #'@aliases testZeroes,SingleCellExperiment,SingleCellExperiment,vector-method
 setMethod("testZeroes",
     c(x="SingleCellExperiment", y="SingleCellExperiment", these="vector"),
-    function(x, y, these=seq_len(nrow(x))) {
+    function(x, y, these=seq_len(nrow(x)), BPPARAM=BiocParallel::bpparam()) {
         dat <- cbind(counts(x), counts(y))
         condition <- c(rep(1, dim(counts(x))[2]), rep(2, dim(counts(y))[2]))
-        return(testZeroes(dat, condition, these))
+        return(testZeroes(dat, condition, these, BPPARAM))
     })
 
 
@@ -122,6 +133,17 @@ setMethod("testZeroes",
 #' `RNGkind("L'Ecuyer-CMRG")` followed by `set.seed(seed)`.
 #' The `RNGkind` and `.Random.seed` will be reset on termination of this
 #' function. Default is NULL, and no seed is set.
+#'@param BPPARAM A \link[BiocParallel]{BiocParallelParam} object specifying
+#' the parallel back-end to use for computation. By default,
+#' \code{\link[BiocParallel]{bpparam}()} is used, which automatically
+#' selects an appropriate back-end depending on the operating system and
+#' whether R is running interactively. This typically resolves
+#' to \code{MulticoreParam()} on Unix-like systems in interactive sessions,
+#' and \code{SerialParam()} on Windows or non-interactive build environments
+#' (e.g., Bioconductor build machines). Users may override this by passing a
+#' custom parameter object such as \code{SnowParam()} or
+#' \code{MulticoreParam(workers = 4)} to control the level and type of
+#' parallelism.
 #'@return Matrix, where each row contains the testing results of the respective gene from \code{dat}.
 #'  For the corresponding values of each row (gene), see the description of the function
 #' \code{wasserstein.sc}, where the argument \code{inclZero=TRUE} in \code{.testWass} has to be
@@ -129,7 +151,7 @@ setMethod("testZeroes",
 #' 
 #'@references Schefzik, R., Flesch, J., and Goncalves, A. (2021). Fast identification of differential distributions in single-cell RNA-sequencing data with waddR.
 #'
-.testWass <- function(dat, condition, permnum, inclZero=TRUE, seed=NULL){
+.testWass <- function(dat, condition, permnum, inclZero=TRUE, seed=NULL, BPPARAM=BiocParallel::bpparam()){
     ngenes <- nrow(dat)
     seeds <- NULL
     
@@ -183,11 +205,11 @@ setMethod("testZeroes",
     # run worker
     if (!is.null(seeds)) {
         wass.res <- t(simplify2array({
-                            bpmapply(onegene, seq(ngenes), seeds)
+                            bpmapply(onegene, seq(ngenes), seeds, BPPARAM=BPPARAM)
                         }))
     } else {
         wass.res <- t(simplify2array({
-                            bpmapply(onegene, seq(ngenes))
+                            bpmapply(onegene, seq(ngenes), BPPARAM=BPPARAM)
                         }))
     }
 
@@ -251,6 +273,17 @@ setMethod("testZeroes",
 #'@param seed number to be used to generate a L'Ecuyer-CMRG seed, which itself
 #' seeds the generation of an nextRNGStream() for each gene to achieve
 #' reproducibility; default is NULL, and no seed is set
+#'@param BPPARAM A \link[BiocParallel]{BiocParallelParam} object specifying
+#'  the parallel back-end to use for computation. By default,
+#'  \code{\link[BiocParallel]{bpparam}()} is used, which automatically
+#'  selects an appropriate back-end depending on the operating system and
+#'  whether R is running interactively. This typically resolves
+#'  to \code{MulticoreParam()} on Unix-like systems in interactive sessions,
+#'  and \code{SerialParam()} on Windows or non-interactive build environments
+#'  (e.g., Bioconductor build machines). Users may override this by passing a
+#'  custom parameter object such as \code{SnowParam()} or
+#'  \code{MulticoreParam(workers = 4)} to control the level and type of
+#'  parallelism.
 #'@return Matrix, where each row contains the testing results of the respective gene from \code{dat}. The corresponding values of each row (gene) are as follows, see Schefzik et al. (2021) for details.     
 #' In case of \code{inclZero=TRUE}:
 #' \itemize{
@@ -394,7 +427,7 @@ setMethod("testZeroes",
 #' @docType methods
 #' @rdname wasserstein.sc-method
 setGeneric("wasserstein.sc",
-    function(x, y, method=c("TS", "OS"), permnum=10000, seed=NULL)
+    function(x, y, method=c("TS", "OS"), permnum=10000, seed=NULL, BPPARAM=BiocParallel::bpparam())
         standardGeneric("wasserstein.sc"))
 
 
@@ -402,14 +435,14 @@ setGeneric("wasserstein.sc",
 #'@aliases wasserstein.sc-method,matrix,vector,ANY,ANY,ANY-method
 setMethod("wasserstein.sc", 
     c(x="matrix", y="vector"),
-    function(x, y, method=c("TS", "OS"), permnum=10000, seed=NULL) {
+    function(x, y, method=c("TS", "OS"), permnum=10000, seed=NULL, BPPARAM=BiocParallel::bpparam()) {
         stopifnot(length(unique(y)) == 2)
         stopifnot(dim(x)[2] == length(y))
         
         method <- match.arg(method)
         switch(method,
-               "TS"=.testWass(x, y, permnum, inclZero=FALSE, seed=seed),
-               "OS"=.testWass(x, y, permnum, inclZero=TRUE, seed=seed))
+               "TS"=.testWass(x, y, permnum, inclZero=FALSE, seed=seed, BPPARAM=BPPARAM),
+               "OS"=.testWass(x, y, permnum, inclZero=TRUE, seed=seed, BPPARAM=BPPARAM))
     })
 
 
@@ -418,7 +451,7 @@ setMethod("wasserstein.sc",
 #'  wasserstein.sc,SingleCellExperiment,SingleCellExperiment,ANY,ANY,ANY-method
 setMethod("wasserstein.sc",
     c(x="SingleCellExperiment", y="SingleCellExperiment"),
-    function(x, y, method=c("TS", "OS"), permnum=10000, seed=NULL) {
+    function(x, y, method=c("TS", "OS"), permnum=10000, seed=NULL, BPPARAM=BiocParallel::bpparam()) {
         stopifnot(dim(counts(x))[1] == dim(counts(y))[1])
         
         
@@ -427,8 +460,8 @@ setMethod("wasserstein.sc",
         method <- match.arg(method)
         switch(method,
                "TS"=.testWass(dat, condition, permnum, 
-                              inclZero=FALSE, seed=seed),
+                              inclZero=FALSE, seed=seed, BPPARAM=BPPARAM),
                "OS"=.testWass(dat, condition, permnum, 
-                              inclZero=TRUE, seed=seed))
+                              inclZero=TRUE, seed=seed, BPPARAM=BPPARAM))
     })
 
