@@ -104,7 +104,7 @@ setMethod("testZeroes",
     function(x, y, these=seq_len(nrow(x)), BPPARAM=BiocParallel::bpparam()) {
         dat <- cbind(counts(x), counts(y))
         condition <- c(rep(1, dim(counts(x))[2]), rep(2, dim(counts(y))[2]))
-        return(testZeroes(dat, condition, these, BPPARAM))
+        return(testZeroes(dat, condition, these, BPPARAM=BPPARAM))
     })
 
 
